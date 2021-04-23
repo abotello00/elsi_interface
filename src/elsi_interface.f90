@@ -144,6 +144,31 @@ module ELSI
    public :: elsi_extrapolate_dm_complex
    public :: elsi_extrapolate_dm_real_sparse
    public :: elsi_extrapolate_dm_complex_sparse
+   !KL: new routines for extended langrangian MD approach
+   public :: elsi_get_ccdm_real
+   public :: elsi_get_ccdm_complex
+   public :: elsi_get_dm_from_ccdm_real
+   public :: elsi_get_dm_from_ccdm_complex
+   public :: elsi_residual_ccdm_real
+   public :: elsi_residual_ccdm_complex
+   public :: elsi_ccdm_scaled_delta_approx_real
+   public :: elsi_ccdm_scaled_delta_approx_complex
+   public :: elsi_ccdm_dissipation_real
+   public :: elsi_ccdm_dissipation_complex
+   public :: elsi_init_ccdm_dissipation
+   public :: elsi_ccdm_integration_real
+   public :: elsi_ccdm_integration_complex
+   public :: elsi_trace_glob_dm_real
+   public :: elsi_trace_glob_dm_complex
+   public :: elsi_norm_residual_real
+   public :: elsi_norm_residual_complex
+   public :: elsi_edm_from_dm_real
+   public :: elsi_edm_from_dm_complex
+   public :: elsi_get_inverse_ovlp_real_2
+   public :: elsi_get_inverse_ovlp_complex_2
+   public :: elsi_inv_ovlp_response_real 
+   public :: elsi_inv_ovlp_response_complex
+   !
    public :: elsi_compute_dm_real
    public :: elsi_compute_dm_complex
    public :: elsi_compute_edm_real
