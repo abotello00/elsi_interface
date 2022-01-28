@@ -8852,7 +8852,7 @@ int elpa_index_is_printing_mpi_rank(elpa_index_t index);
 
 int max_threads_glob;
 int set_max_threads_glob=0;
-int const default_max_stored_rows = 256;   
+const int default_max_stored_rows = 256;   
 
 static int enumerate_identity(elpa_index_t index, int i);
 static int cardinality_bool(elpa_index_t index);
