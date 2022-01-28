@@ -78,11 +78,11 @@ done
 
 cp $elpa_dir/src/elpa_generalized/cannon.c .
 cp $elpa_dir/src/helpers/check_thread_affinity.c .
+cp $elpa_dir/src/elpa_index.c .
 
 elpa_dir=/home/yy244/elsi/elpa-2021.11.001/src
 for file in \
-  elpa_c_interface.c \
-  elpa_index.c 
+  elpa_c_interface.c
 do
 echo $file
 origin_file=`ls $elpa_dir/$file | tail -n 1`
