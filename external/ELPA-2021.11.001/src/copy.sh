@@ -75,10 +75,27 @@ origin_file=`ls $elpa_dir/*$prefix.F90* | tail -n 1`
 #echo $origin_file
 cp $origin_file $file
 done 
-
 cp $elpa_dir/src/elpa_generalized/cannon.c .
 cp $elpa_dir/src/helpers/check_thread_affinity.c .
 cp $elpa_dir/src/elpa_index.c .
+
+elpa_dir=/home/yy244/elsi/elpa-2021.11.001/build_cuda_3
+for file in \
+  mod_cuda.f90 \
+  interface_c_cuda_kernel.f90 \
+  interface_c_gpu_kernel.f90 \
+  test_gpu_vendor_agnostic_layer.f90 \
+  cholesky_cuda.f90 \
+  invert_trm_cuda.f90 \
+  test_cuda.f90
+do
+prefix=${file%.*}
+echo $prefix
+origin_file=`ls $elpa_dir/*$prefix.F90* | tail -n 1`
+#echo $origin_file
+cp $origin_file $file
+done 
+
 
 elpa_dir=/home/yy244/elsi/elpa-2021.11.001/src
 for file in \
@@ -116,6 +133,7 @@ elpa_dir=/home/yy244/elsi/elpa-2021.11.001/build_generic_2
 elpa_dir_avx=/home/yy244/elsi/elpa-2021.11.001/build_AVX_2
 elpa_dir_avx2=/home/yy244/elsi/elpa-2021.11.001/build_AVX2_2
 elpa_dir_avx512=/home/yy244/elsi/elpa-2021.11.001/build_AVX512_2
+elpa_dir_cuda=/home/yy244/elsi/elpa-2021.11.001/build_cuda_2
 
 origin_file=`ls $elpa_dir/*mod_compute_hh_trafo* | tail -n 1`
 cp $origin_file mod_compute_hh_trafo.f90
@@ -129,6 +147,9 @@ cp $origin_file mod_compute_hh_trafo_avx2.f90
 origin_file=`ls $elpa_dir_avx512/*mod_compute_hh_trafo* | tail -n 1`
 cp $origin_file mod_compute_hh_trafo_avx512.f90
 
+origin_file=`ls $elpa_dir_cuda/*mod_compute_hh_trafo* | tail -n 1`
+cp $origin_file mod_compute_hh_trafo_cuda.f90
+
 origin_file=`ls $elpa_dir/*elpa_generated_fortran_interfaces* | tail -n 1`
 cp $origin_file elpa_generated_fortran_interfaces.f90
 
@@ -140,6 +161,18 @@ cp $origin_file elpa_generated_fortran_interfaces_avx2.f90
 
 origin_file=`ls $elpa_dir_avx512/*elpa_generated_fortran_interfaces* | tail -n 1`
 cp $origin_file elpa_generated_fortran_interfaces_avx512.f90
+
+origin_file=`ls $elpa_dir_cuda/*elpa_generated_fortran_interfaces* | tail -n 1`
+cp $origin_file elpa_generated_fortran_interfaces_cuda.f90
+
+
+origin_file=`ls $elpa_dir_cuda/*mod_cuda* | tail -n 1`
+cp $origin_file mod_cuda.f90
+
+cp $elpa_dir_cuda/config-f90.h .
+
+elpa_dir_cuda_src=/home/yy244/elsi/elpa-2021.11.001/src/GPU/CUDA
+cp $elpa_dir_cuda_src/*.cu .
 
 elpa_dir_elpa=/home/yy244/elsi/elpa-2021.11.001/build_generic_2/elpa
 cp -r $elpa_dir_elpa .
@@ -155,3 +188,12 @@ cp $origin_file kernels/kernels_real.f90
 cp $elpa_dir_avx/src/elpa2/kernels/*.c kernels
 cp $elpa_dir_avx2/src/elpa2/kernels/*.c kernels
 cp $elpa_dir_avx512/src/elpa2/kernels/*.c kernels
+
+cp $elpa_dir_cuda/../src/GPU/CUDA/elpa_index_nvidia_gpu.cu  .
+cp $elpa_dir_cuda/../src/GPU/CUDA/cudaFunctions.cu  .
+cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils.cu  .
+cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils_template.cu  .
+cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_real.cu  .
+cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_complex.cu  .
+cp $elpa_dir_cuda/../src/invert_trm/GPU/CUDA/elpa_invert_trm_cuda.cu  .
+cp $elpa_dir_cuda/../src/cholesky/GPU/CUDA/elpa_cholesky_cuda.cu  .

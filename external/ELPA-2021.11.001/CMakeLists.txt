@@ -49,8 +49,6 @@ LIST(APPEND elpa_src
   src/elpa_cholesky.f90                     
   src/elpa_invert_trm.f90                   
   src/solve_tridi.f90
-  src/cholesky_cuda_stub.f90 
-  src/invert_trm_cuda_stub.f90
   src/mod_thread_affinity.f90
   src/elpa_pdgeqrf.f90                  
   src/elpa_pdlarfb.f90
@@ -76,16 +74,27 @@ SET(HAVE_GPU_KERNELS "0")
 IF(USE_GPU_CUDA)
   MESSAGE(STATUS "Enabling GPU (CUDA) support in ELPA")
   LIST(APPEND elpa_src
+    src/elpa_generated_fortran_interfaces.f90
     src/cudaFunctions.cu
     src/cuUtils.cu
-    src/elpa_generated_fortran_interfaces.f90
-    src/ev_tridi_band_gpu_complex.cu
-    src/ev_tridi_band_gpu_real.cu
-    src/interface_c_kernel.f90
+    src/elpa_cholesky_cuda.cu
+    src/elpa_index_nvidia_gpu.cu
+    src/elpa_invert_trm_cuda.cu
+    src/ev_tridi_band_nvidia_gpu_complex.cu
+    src/ev_tridi_band_nvidia_gpu_real.cu
+    src/interface_c_cuda_kernel.f90 
+    src/interface_c_gpu_kernel.f90 
+    src/interface_c_hip_kernel_stub.f90 
+    src/mod_mkl_offload_stub.f90 
+    src/mod_hip_stub.f90 
     src/kernels/kernels_complex.f90
     src/kernels/kernels_real.f90
     src/mod_compute_hh_trafo_cuda.f90
-    src/mod_cuda.f90)
+    src/mod_cuda.f90
+    src/test_cuda.f90
+    src/cholesky_cuda.f90 
+    src/invert_trm_cuda.f90
+    src/test_gpu_vendor_agnostic_layer.f90)
 
   SET(ELPA_REAL_DEFAULT "ELPA_2STAGE_REAL_GENERIC")
   SET(ELPA_COMPLEX_DEFAULT "ELPA_2STAGE_COMPLEX_GENERIC")
@@ -99,6 +108,8 @@ ELSE()
     src/interface_c_cuda_kernel_stub.f90 
     src/interface_c_gpu_kernel_stub.f90 
     src/interface_c_hip_kernel_stub.f90 
+    src/cholesky_cuda_stub.f90 
+    src/invert_trm_cuda_stub.f90
     src/test_gpu_vendor_agnostic_layer_stub.f90)
 
   IF(ELPA2_KERNEL STREQUAL "AVX512")

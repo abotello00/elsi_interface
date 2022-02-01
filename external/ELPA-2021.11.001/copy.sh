@@ -42,13 +42,20 @@ for file in \
   solve_secular_equation.f90            \
   elpa_cholesky.f90                     \
   elpa_invert_trm.f90                   \
-  solve_tridi.f90
+  solve_tridi.f90                       \
+  mod_thread_affinity.f90               \
+  elpa_pdgeqrf.f90                      \
+  elpa_pdlarfb.f90                      \
+  qr_utils.f90                          \
+  elpa_qrkernels.f90                    \
+  tests_variable_definitions.f90
 do
 prefix=${file%.*}
 echo $prefix
 origin_file=`ls $elpa_dir/*$prefix.F90* | tail -n 1`
 cp $origin_file $file
 done 
+cp $elpa_dir/config.h .
 
 elpa_dir=/home/yy244/elsi/elpa-2021.11.001/build_generic_2
 for file in \
@@ -58,7 +65,9 @@ for file in \
   interface_c_cuda_kernel_stub.f90 \
   interface_c_gpu_kernel_stub.f90 \
   interface_c_hip_kernel_stub.f90 \
-  test_gpu_vendor_agnostic_layer_stub.f90 
+  test_gpu_vendor_agnostic_layer_stub.f90 \
+  cholesky_cuda_stub.f90 \
+  invert_trm_cuda_stub.f90
 do
 prefix=${file%_stub.*}
 echo $prefix
@@ -67,16 +76,20 @@ origin_file=`ls $elpa_dir/*$prefix.F90* | tail -n 1`
 cp $origin_file $file
 done 
 
+cp $elpa_dir/src/elpa_generalized/cannon.c .
+cp $elpa_dir/src/helpers/check_thread_affinity.c .
+cp $elpa_dir/src/elpa_index.c .
+
 elpa_dir=/home/yy244/elsi/elpa-2021.11.001/src
 for file in \
-  elpa_c_interface.c \
-  elpa_index.c 
+  elpa_c_interface.c
 do
 echo $file
 origin_file=`ls $elpa_dir/$file | tail -n 1`
 #echo $origin_file
 cp $origin_file $file
 done 
+cp $elpa_dir/elpa_index.h .
 
 elpa_dir=/home/yy244/elsi/elpa-2021.11.001/src/ftimings
 for file in \
@@ -93,6 +106,8 @@ done
 
 elpa_dir=/home/yy244/elsi/elpa-2021.11.001/elpa
 cp $elpa_dir/elpa_constants.h.in elpa
+cp $elpa_dir/elpa.h elpa
+cp $elpa_dir/elpa_generic.h elpa
 
 cp ../../ELPA/src/mod_mpi.f90 .
 cp ../../ELPA/src/mod_mpifh.f90 .
