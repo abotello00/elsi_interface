@@ -1179,12 +1179,17 @@ end subroutine
 !>
 !! Set the non Aufbau occupation
 !!
-subroutine elsi_set_occ_non_aufbau(eh,occ_non_aufbau)
+subroutine elsi_set_occ_non_aufbau(eh,occ_non_aufbau,n_constraint,constr_state,&
+        constr_spin,constr_occ)
 
    implicit none
 
    type(elsi_handle), intent(inout) :: eh !< Handle
    logical, intent(in) :: occ_non_aufbau !< whether to use non Aufbau occupation
+   integer(kind=i4), intent(in) :: n_constraint
+   integer(kind=i4), intent(in) :: constr_state(:,:)
+   integer(kind=i4), intent(in) :: constr_spin(:)
+   real(kind=r8), intent(in) :: constr_occ(:)
 
    character(len=200) :: msg
 
@@ -1193,6 +1198,10 @@ subroutine elsi_set_occ_non_aufbau(eh,occ_non_aufbau)
    call elsi_check_init(eh%bh,eh%handle_init,caller)
 
    eh%ph%occ_non_aufbau = occ_non_aufbau
+   eh%ph%n_constraint = n_constraint
+   eh%ph%constr_state = constr_state
+   eh%ph%constr_spin = constr_spin
+   eh%ph%constr_occ = constr_occ
 
 end subroutine
 

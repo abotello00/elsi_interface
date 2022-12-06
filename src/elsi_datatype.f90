@@ -116,7 +116,13 @@ module ELSI_DATATYPE
       logical :: eval_ready = .false.
       logical :: evec_ready = .false.
       logical :: occ_ready = .false.
-      logical :: occ_non_aufbau = .false. ! occ for lowest excited state ( ...222000... => ...221100... )
+
+      ! Non-Aufbau occupations
+      logical :: occ_non_aufbau = .false. ! Logical to turn on occ_non_aufbau
+      integer(kind=i4) :: n_constraint ! Number of occupation constraints
+      integer(kind=i4), allocatable :: constr_state(:,:) ! KS-state and k-point
+      integer(kind=i4), allocatable :: constr_spin(:) ! Spin channel
+      real(kind=r8), allocatable :: constr_occ(:) ! Electron occupation
 
       ! Chemical potential 
       real(kind=r8) :: mu ! Fermi level
