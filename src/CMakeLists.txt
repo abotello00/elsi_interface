@@ -35,7 +35,8 @@ LIST(APPEND elsi_src
   elsi_solver.f90
   elsi_sort.f90
   elsi_util.f90
-  elsi_inverse_slate.f90)
+  elsi_inverse_slate.f90
+  elsi_chase.f90)
 
 #### add the header files
 ADD_SUBDIRECTORY(include)
@@ -142,6 +143,10 @@ IF(ENABLE_BSEPACK)
     TARGET_LINK_LIBRARIES(elsi PUBLIC bsepack sseig)
   ENDIF()
 ENDIF()
+
+ADD_DEPENDENCIES(elsi chase_f)
+TARGET_LINK_LIBRARIES(elsi PRIVATE chase_f )
+
 TARGET_LINK_LIBRARIES(elsi PUBLIC
   fortjson
   ${LIBS})

@@ -191,7 +191,11 @@ subroutine elsi_reset_param(ph)
    ph%bse_n_lrow = UNSET
    ph%bse_n_lcol = UNSET
    ph%bse_desc(:) = UNSET
-
+   ph%chase_tol = 1.0e-8_r8
+   ph%chase_filter_deg = 20
+   ph%chase_extra_space = 2.5e-1_r8
+   ph%chase_min_extra_space = 10
+   ph%chase_started = .false.
 end subroutine
 
 !>

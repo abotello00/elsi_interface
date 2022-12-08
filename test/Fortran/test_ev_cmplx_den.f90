@@ -77,6 +77,8 @@ subroutine test_ev_cmplx_den(comm,solver,h_file,s_file)
          write(*,"(2X,A)") "Now start testing  elsi_ev_complex + ELPA"
       else if(solver == 7) then
          write(*,"(2X,A)") "Now start testing  elsi_ev_complex + MAGMA"
+      else if(solver == 9) then
+         write(*,"(2X,A)") "Now start testing  elsi_ev_complex + ChASE"      
       end if
       write(*,*)
    end if
