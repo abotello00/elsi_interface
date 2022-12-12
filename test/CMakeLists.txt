@@ -187,10 +187,10 @@ IF(ENABLE_BSEPACK)
 ENDIF()
 
 ### Parallel Fortran tests: ev + ChASE ###
-#IF(ENABLE_CHASE)
-#  test_fortran(01_chase e 0 r 9 ${h_real} ${s_real})
-#  test_fortran(02_chase e 0 c 9 ${h_cmplx} ${s_cmplx})   
-#ENDIF()	
+IF(ENABLE_CHASE)
+  test_fortran(01_chase e 0 r 9 ${h_real} ${s_real})
+  test_fortran(02_chase e 0 c 9 ${h_cmplx} ${s_cmplx})   
+ENDIF()	
 
 ### Serial Fortran tests: ev + LAPACK ###
 ADD_TEST(test_serial_01_lapack
