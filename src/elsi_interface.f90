@@ -85,7 +85,6 @@ module ELSI
    public :: elsi_set_ntpoly_max_iter
    public :: elsi_set_magma_solver
    public :: elsi_set_chase_tol
-   public :: elsi_set_chase_tol
    public :: elsi_set_chase_filter_deg
    public :: elsi_set_chase_extra_space
    public :: elsi_set_chase_min_extra_space   
