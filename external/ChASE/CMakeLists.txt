@@ -1,12 +1,8 @@
-message("hello from ChASE")
-
 include( FortranCInterface )
 FortranCInterface_HEADER( ${CMAKE_BINARY_DIR}/fortran_mangle.h
   MACRO_NAMESPACE "FC_"
   SYMBOL_NAMESPACE "FC_"
   )
-
-#option( CHASE_OUTPUT "ChASE will provide output at each iteration" ON)
 
 list(APPEND includePath ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -22,11 +18,10 @@ set_target_properties(
   POSITION_INDEPENDENT_CODE TRUE
 )
 
-#if( CHASE_OUTPUT )
-#  target_compile_definitions( chase_f  INTERFACE "-DCHASE_OUTPUT" )
-#endif()
+TARGET_LINK_LIBRARIES(chase_f PRIVATE ${LIBS})
 
 TARGET_INCLUDE_DIRECTORIES(chase_f PRIVATE
+  ${INC_PATHS}	
   "$<BUILD_INTERFACE:${includePath}>"
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 

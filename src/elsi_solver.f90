@@ -48,7 +48,7 @@ module ELSI_SOLVER
    use ELSI_SIPS, only: elsi_init_sips,elsi_solve_sips,elsi_build_dm_edm_sips
    use ELSI_UTIL, only: elsi_check,elsi_check_init,elsi_reduce_energy,&
        elsi_build_dm_edm
-   use ELSI_CHASE, only: elsi_solve_chase_sp
+   use ELSI_CHASE, only: elsi_solve_chase_sp, elsi_solve_chase_mp
 
    implicit none
 
@@ -322,14 +322,15 @@ subroutine elsi_ev_real(eh,ham,ovlp,eval,evec)
             call elsi_do_fc_elpa(eh%ph,eh%bh,ham,ovlp,evec,eh%perm_fc,&
                  eh%ham_real_v,eh%ovlp_real_v,eh%evec_real_v)
             call elsi_init_elpa(eh%ph,eh%bh)
-            call elsi_solve_elpa(eh%ph,eh%bh,eh%ham_real_v,eh%ovlp_real_v,&
+            call elsi_solve_chase_mp(eh%ph,eh%bh,eh%ham_real_v,eh%ovlp_real_v,&
                  eval(eh%ph%n_basis_c+1:eh%ph%n_basis_c+eh%ph%n_basis_v),&
                  eh%evec_real_v)
             call elsi_undo_fc_elpa(eh%ph,eh%bh,ham,ovlp,evec,eh%perm_fc,&
                  eval(1:eh%ph%n_basis_c),eh%evec_real_v)
          else
             call elsi_init_elpa(eh%ph,eh%bh)
-            call elsi_solve_elpa(eh%ph,eh%bh,ham,ovlp,eval,evec)
+            !call elsi_solve_elpa(eh%ph,eh%bh,ham,ovlp,eval,evec)
+            call elsi_solve_chase_mp(eh%ph,eh%bh,ham,ovlp,eval,evec)
          end if
       end if   
    case default
@@ -449,14 +450,14 @@ subroutine elsi_ev_complex(eh,ham,ovlp,eval,evec)
             call elsi_do_fc_elpa(eh%ph,eh%bh,ham,ovlp,evec,eh%perm_fc,&
                  eh%ham_cmplx_v,eh%ovlp_cmplx_v,eh%evec_cmplx_v)
             call elsi_init_elpa(eh%ph,eh%bh)
-            call elsi_solve_elpa(eh%ph,eh%bh,eh%ham_cmplx_v,eh%ovlp_cmplx_v,&
+            call elsi_solve_chase_mp(eh%ph,eh%bh,eh%ham_cmplx_v,eh%ovlp_cmplx_v,&
                  eval(eh%ph%n_basis_c+1:eh%ph%n_basis_c+eh%ph%n_basis_v),&
                  eh%evec_cmplx_v)
             call elsi_undo_fc_elpa(eh%ph,eh%bh,ham,ovlp,evec,eh%perm_fc,&
                  eval(1:eh%ph%n_basis_c),eh%evec_cmplx_v)
          else
             call elsi_init_elpa(eh%ph,eh%bh)
-            call elsi_solve_elpa(eh%ph,eh%bh,ham,ovlp,eval,evec)
+            call elsi_solve_chase_mp(eh%ph,eh%bh,ham,ovlp,eval,evec)
          end if
       end if      
    case default

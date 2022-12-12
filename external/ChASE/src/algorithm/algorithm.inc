@@ -250,13 +250,13 @@ std::size_t Algorithm<T>::lanczos(Chase<T>* single, int N, int numvec,
     }
   }
 
-#ifdef CHASE_OUTPUT
+//#ifdef CHASE_OUTPUT
   {
     std::ostringstream oss;
     oss << "extracted " << idx << " vectors from DoS\n";
     single->Output(oss.str());
   }
-#endif
+//#endif
 
   if (idx > 0) {
     // cast to (generally complex T)
@@ -355,7 +355,7 @@ void Algorithm<T>::solve(Chase<T>* single) {
       lowerb = (lowerb + tmp) / 2;
       lowerb = tmp;
     }
-#ifdef CHASE_OUTPUT
+//#ifdef CHASE_OUTPUT
     {
       std::ostringstream oss;
 
@@ -366,7 +366,7 @@ void Algorithm<T>::solve(Chase<T>* single) {
 
       single->Output(oss.str());
     }
-#endif
+//#endif
     //    assert( lowerb < upperb );
     if (lowerb > upperb) {
       std::cout << "ASSERTION FAILURE lowerb > upperb\n";
@@ -377,7 +377,7 @@ void Algorithm<T>::solve(Chase<T>* single) {
       deg = calc_degrees(single, N, unconverged, nex, upperb, lowerb, tol,
                          ritzv, resid, residLast, degrees, locked);
     }
-#ifdef CHASE_OUTPUT
+//#ifdef CHASE_OUTPUT
     {
       std::ostringstream oss;
       oss << "degrees\tresid\tresidLast\tritzv\n";
@@ -393,7 +393,7 @@ void Algorithm<T>::solve(Chase<T>* single) {
             std::cout << degrees[k] << "\t" << resid[k] << "\t" << ritzv[k] <<
    "\n";
 */
-#endif
+//#endif
     //------------------------------- FILTER -------------------------------
     std::size_t Av =
         filter(single, N, unconverged, deg, degrees, lambda, lowerb, upperb);

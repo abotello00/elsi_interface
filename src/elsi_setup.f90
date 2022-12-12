@@ -673,6 +673,14 @@ subroutine elsi_cleanup(eh)
       call elsi_deallocate(eh%bh,eh%ph%pre_evec_cmplx,"pre_evec_cmplx")
    end if
 
+   if(allocated(eh%ph%htmp_r)) then
+      call elsi_deallocate(eh%bh,eh%ph%htmp_r,"htmp_r")
+   end if
+
+   if(allocated(eh%ph%htmp_c)) then
+      call elsi_deallocate(eh%bh,eh%ph%htmp_c,"htmp_c")
+   end if
+
    ! Sparse
    if(allocated(eh%ham_real_sp)) then
       call elsi_deallocate(eh%bh,eh%ham_real_sp,"ham_real_sp")

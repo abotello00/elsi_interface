@@ -370,26 +370,17 @@ void chase_solve(T* H, int *LDH, T* V, Base<T>* ritzv, int* deg, double* tol, ch
   auto N = config.GetN();
   auto nev = config.GetNev();
   auto nex = config.GetNex();
-
-  if (!config.UseApprox())
-    for (std::size_t k = 0; k < N * (nev + nex); ++k)
-      V[k] = getRandomT<T>([&]() { return d(gen); });
-/*
-  for(auto j = 0; j < n; j++ ){
-      for(auto i = 0; i < m; i++){
-          H_[m * j + i] = H[j * ldh + i];
-      }
-  }
-*/  
-
+  
   t_lacpy('A', m, n, H, ldh, H_, m);
-
-  //std::cout << myRank << ": m = " << m << ", n = " << n << ", ldh = " << ldh << std::endl;  
   
   config.SetTol(*tol);
   config.SetDeg(*deg);
   config.SetOpt(*opt == 'S');
   config.SetApprox(*mode == 'A');
+
+  if (!config.UseApprox())
+    for (std::size_t k = 0; k < N * (nev + nex); ++k)
+      V[k] = getRandomT<T>([&]() { return d(gen); });
 
   PerformanceDecoratorChase<T> performanceDecorator(&single);
   start_times[2] = std::chrono::high_resolution_clock::now();

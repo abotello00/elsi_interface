@@ -251,6 +251,9 @@ module ELSI_DATATYPE
       real(kind=r8), allocatable :: pre_evec_real(:,:)
       complex(kind=r8), allocatable :: pre_evec_cmplx(:,:)
       real(kind=r8), allocatable :: pre_eval(:)
+      real(kind=r8), allocatable :: htmp_r(:,:)
+      complex(kind=r8), allocatable :: htmp_c(:,:)
+      
    end type
 
    type, public :: elsi_handle
