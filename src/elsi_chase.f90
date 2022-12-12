@@ -92,8 +92,8 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
       call dchase(ham, ph%n_good,ph%pre_evec_real, ph%pre_eval,nev, nex, ph%chase_filter_deg, ph%chase_tol, 'R', 'S')   
    end if
 
-   evec(1:ph%n_good,1:nev+nex) = ph%pre_evec_real(1:ph%n_good,1:nev+nex)
-   eval(1:nev+nex) = ph%pre_eval(1:nev+nex)
+   evec(1:ph%n_good,1:nev) = ph%pre_evec_real(1:ph%n_good,1:nev)
+   eval(1:nev) = ph%pre_eval(1:nev)
    
    call elsi_get_time(t1)
    write(msg,"(A)") "Finished solving standard eigenproblem"
@@ -182,8 +182,8 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
       call zchase(ham, ph%n_good,ph%pre_evec_cmplx, ph%pre_eval,nev, nex, ph%chase_filter_deg, ph%chase_tol, 'R', 'S')
    end if
 
-   evec(1:ph%n_good,1:nev+nex) = ph%pre_evec_cmplx(1:ph%n_good,1:nev+nex)
-   eval(1:nev+nex) = ph%pre_eval(1:nev+nex)
+   evec(1:ph%n_good,1:nev) = ph%pre_evec_cmplx(1:ph%n_good,1:nev)
+   eval(1:nev) = ph%pre_eval(1:nev)
 
    call elsi_get_time(t1)
    write(msg,"(A)") "Finished solving standard eigenproblem"
@@ -283,7 +283,7 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
                    ph%chase_filter_deg, ph%chase_tol, 'A', 'S' )
    end if        
 
-   eval(1:nev+nex) = ph%pre_eval(1:nev+nex)
+   eval(1:nev) = ph%pre_eval(1:nev)
 
    ! Dummy eigenvalues for correct chemical potential, no physical meaning!
    if(ph%n_good < ph%n_basis) then
@@ -400,7 +400,7 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
                    ph%chase_filter_deg, ph%chase_tol, 'A', 'S' )
    end if
 
-   eval(1:nev+nex) = ph%pre_eval(1:nev+nex)
+   eval(1:nev) = ph%pre_eval(1:nev)
 
    ! Dummy eigenvalues for correct chemical potential, no physical meaning!
    if(ph%n_good < ph%n_basis) then
