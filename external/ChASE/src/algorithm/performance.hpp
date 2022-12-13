@@ -378,9 +378,9 @@ class PerformanceDecoratorChase : public chase::Chase<T> {
   ChaseConfig<T> &GetConfig() { return chase_->GetConfig(); }
   ChasePerfData &GetPerfData() { return perf_; }
 
-//#ifdef CHASE_OUTPUT
+#ifdef CHASE_OUTPUT
   void Output(std::string str) { chase_->Output(str); }
-//#endif
+#endif
 
  private:
   Chase<T> *chase_;

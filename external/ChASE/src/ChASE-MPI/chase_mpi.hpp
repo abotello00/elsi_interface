@@ -618,11 +618,11 @@ class ChaseMpi : public chase::Chase<T> {
     return norm;
   }
 
-//#ifdef CHASE_OUTPUT
+#ifdef CHASE_OUTPUT
   void Output(std::string str) override {
     if (rank_ == 0) std::cout << str;
   }
-//#endif
+#endif
 
   //! \return `H_`: A pointer to the memory allocated to store (local part if applicable) of matrix `A`. 
   T *GetMatrixPtr() { return dla_->get_H(); }

@@ -17,10 +17,10 @@
 
 #include <chrono>
 
-#include "blas_cuda_wrapper.hpp"
-#include "blas_templates.hpp"
-#include "chase_mpidla_interface.hpp"
-#include "mgpu_cudaDLA.hpp"
+#include "ChASE-MPI/blas_cuda_wrapper.hpp"
+#include "ChASE-MPI/blas_templates.hpp"
+#include "ChASE-MPI/chase_mpidla_interface.hpp"
+#include "ChASE-MPI/impl/mgpu_cudaDLA.hpp"
 
 void chase_shift_mgpu_matrix(float* A, std::size_t* off_m, std::size_t* off_n,
                             std::size_t offsize, std::size_t ldH, float shift,

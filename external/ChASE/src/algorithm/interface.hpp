@@ -38,9 +38,9 @@ class Chase {
   virtual Base<T> *GetResid() = 0;
   virtual ChaseConfig<T> &GetConfig() = 0;
   virtual int get_nprocs() = 0;
-//#ifdef CHASE_OUTPUT
+#ifdef CHASE_OUTPUT
   virtual void Output(std::string str) = 0;
-//#endif
+#endif
 };
 }  // namespace chase
 

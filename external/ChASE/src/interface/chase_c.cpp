@@ -23,6 +23,7 @@
 
 #ifdef HAS_GPU
   #include "ChASE-MPI/impl/chase_mpidla_mgpu.hpp"
+  #include "ChASE-MPI/impl/chase_mpidla_cuda_seq.hpp"
 #endif
 
 using namespace chase;
@@ -290,7 +291,11 @@ ChaseMpiProperties<std::complex<float>>* ChASE_State::getProperties() {
 template <typename T>
 void chase_seq(T* H, int* N, T* V, Base<T>* ritzv, int* nev, int* nex,
                 int* deg, double* tol, char* mode, char* opt) {
+#ifdef HAS_GPU
+  typedef ChaseMpi<ChaseMpiDLACudaSeq, T> SEQ_CHASE;
+#else	
   typedef ChaseMpi<ChaseMpiDLABlaslapackSeq, T> SEQ_CHASE;
+#endif
 
   std::vector<std::chrono::duration<double>> timings(3);
   std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>> start_times(3);
@@ -317,8 +322,10 @@ void chase_seq(T* H, int* N, T* V, Base<T>* ritzv, int* nev, int* nex,
   chase::Solve(&performanceDecorator);
   timings[2] = std::chrono::high_resolution_clock::now() - start_times[2];
   timings[1] = std::chrono::high_resolution_clock::now() - start_times[1];
-  performanceDecorator.GetPerfData().print();  
+#ifdef CHASE_OUTPUT
+  performanceDecorator.GetPerfData().print();    
   std::cout << "    ChASE]> total time in ChASE: " << timings[1].count() << "\n";
+#endif
 }
 
 template <typename T>
@@ -346,8 +353,11 @@ void chase_setup(MPI_Fint* fcomm, int* N, int *nev, int *nex ){
 template <typename T>
 void chase_solve(T* H, int *LDH, T* V, Base<T>* ritzv, int* deg, double* tol, char* mode,
                  char* opt) {
+#ifdef HAS_GPU  
+  typedef ChaseMpi<ChaseMpiDLAMultiGPU, T> CHASE;
+#else
   typedef ChaseMpi<ChaseMpiDLABlaslapack, T> CHASE;
-
+#endif
   std::vector<std::chrono::duration<double>> timings(3);
   std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>> start_times(3);
 
@@ -388,74 +398,14 @@ void chase_solve(T* H, int *LDH, T* V, Base<T>* ritzv, int* deg, double* tol, ch
 
   timings[2] = std::chrono::high_resolution_clock::now() - start_times[2];
   timings[1] = std::chrono::high_resolution_clock::now() - start_times[1];
+#ifdef CHASE_OUTPUT
   if(myRank == 0){
       std::cout << "ChASE-MPI]> ChASE Solve done in: " << timings[2].count() << "\n";
       performanceDecorator.GetPerfData().print();
       std::cout << "ChASE-MPI]> total time in ChASE: " << timings[1].count() << "\n";      
   }
+#endif  
 }
-
-#ifdef HAS_GPU
-template <typename T>
-void chase_solve_mgpu(T* H, int *LDH, T* V, Base<T>* ritzv, int* deg, double* tol, char* mode,
-                 char* opt) {
-  
-  typedef ChaseMpi<ChaseMpiDLAMultiGPU, T> CHASE;	
-  
-  int ldh = *LDH;
-  std::vector<std::chrono::duration<double>> timings(3);
-  std::vector<std::chrono::time_point<std::chrono::high_resolution_clock>> start_times(3);
-
-  std::mt19937 gen(2342.0);
-  std::normal_distribution<> d;
-  ChaseMpiProperties<T>* props = ChASE_State::getProperties<T>();
-
-  int myRank = props->get_my_rank();
-
-  CHASE single(props, V, ritzv);
-
-  T* H_ = single.GetMatrixPtr();
-  std::size_t m, n;
-  m = props->get_m();
-  n = props->get_n();
-
-  ChaseConfig<T>& config = single.GetConfig();
-  auto N = config.GetN();
-  auto nev = config.GetNev();
-  auto nex = config.GetNex();
-
-  if (!config.UseApprox())
-    for (std::size_t k = 0; k < N * (nev + nex); ++k)
-      V[k] = getRandomT<T>([&]() { return d(gen); });
-/*
-  for(auto j = 0; j < n; j++ ){
-      for(auto i = 0; i < m; i++){
-          H_[m * j + i] = H[j * ldh + i];
-      }
-  }
-*/
-  t_lacpy('A', m, n, H, ldh, H_, m);
-  config.SetTol(*tol);
-  config.SetDeg(*deg);
-  config.SetOpt(*opt == 'S');
-  config.SetApprox(*mode == 'A');
-
-  PerformanceDecoratorChase<T> performanceDecorator(&single);
-  start_times[2] = std::chrono::high_resolution_clock::now();
-  chase::Solve(&performanceDecorator);
-
-  timings[2] = std::chrono::high_resolution_clock::now() - start_times[2];
-  timings[1] = std::chrono::high_resolution_clock::now() - start_times[1];
-#ifdef INFO_PRINT
-  if(myRank == 0){
-      std::cout << "ChASE-MGPU]> ChASE Solve done in: " << timings[2].count() << "\n";
-      performanceDecorator.GetPerfData().print();
-      std::cout << "ChASE-MGPU]> total time in ChASE: " << timings[1].count() << "\n";
-  }
-#endif
-
-}
-#endif
 
 extern "C" {
 /** @defgroup chasc-c ChASE C Interface
@@ -673,27 +623,6 @@ void pschase_(float* H, int *ldh, float* V, float* ritzv, int* deg, double* tol,
   chase_solve<float>(H, ldh, V, ritzv, deg, tol, mode, opt);
 }
 
-#ifdef HAS_GPU
-void pzchase_mgpu_(std::complex<double>* H, int *ldh, std::complex<double>* V,
-                  double* ritzv, int* deg, double* tol, char* mode, char* opt) {
-  chase_solve_mgpu<std::complex<double>>(H, ldh, V, ritzv, deg, tol, mode, opt);
-}
-
-void pdchase_mgpu_(double* H, int *ldh, double* V, double* ritzv, int* deg, double* tol,
-                  char* mode, char* opt) {
-  chase_solve_mgpu<double>(H, ldh, V, ritzv, deg, tol, mode, opt);
-}
-
-void pcchase_mgpu_(std::complex<float>* H, int *ldh, std::complex<float>* V,
-                  float* ritzv, int* deg, double* tol, char* mode, char* opt) {
-  chase_solve_mgpu<std::complex<float>>(H, ldh, V, ritzv, deg, tol, mode, opt);
-}
-
-void pschase_mgpu_(float* H, int *ldh, float* V, float* ritzv, int* deg, double* tol,
-                  char* mode, char* opt) {
-  chase_solve_mgpu<float>(H, ldh, V, ritzv, deg, tol, mode, opt);
-}
-#endif
 /** @} */ // end of chasc-c
 
 }  // extern C 
