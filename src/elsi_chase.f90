@@ -232,6 +232,8 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j
    integer(kind=i4) :: desc_ev(9)
+   real(kind=r8) :: v
+   v = 0.5_r8
 
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%elpa_first .and. ph%ill_check) then
@@ -269,8 +271,8 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
    ph%htmp_r(:,:) = ham(:,:)
-   call pdgeadd('T', ph%n_basis, ph%n_basis, 0.5_r8, ph%htmp_r, 1, 1, bh%desc, &
-                 0.5_r8, ham, 1, 1, bh%desc)   
+   call pdgeadd('T', ph%n_basis, ph%n_basis, v, ph%htmp_r, 1, 1, bh%desc, &
+                 v, ham, 1, 1, bh%desc)   
 
    call pdchase_init_blockcyclic( bh%comm, ph%n_basis, bh%blk,bh%blk, nev, nex, &
                                       bh%n_prow, bh%n_pcol, 'R', 0, 0)
@@ -348,7 +350,9 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j
    integer(kind=i4) :: desc_ev(9)
-
+   complex(kind=r8) :: v
+   v = (0.5_r8, 0.0_r8)
+   
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%elpa_first .and. ph%ill_check) then
       call elsi_check_ovlp_elpa(ph,bh,ovlp,eval,evec)
@@ -385,8 +389,8 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
    ph%htmp_c(:,:) = ham(:,:)
-   call pzgeadd('C', ph%n_basis, ph%n_basis, 0.5_r8,  ph%htmp_c, 1, 1, bh%desc, &
-                 0.5_r8, ham, 1, 1, bh%desc)   
+   call pzgeadd('C', ph%n_basis, ph%n_basis, v,  ph%htmp_c, 1, 1, bh%desc, &
+                 v, ham, 1, 1, bh%desc)   
          
    ! Solve
    call pzchase_init_blockcyclic( bh%comm, ph%n_basis, bh%blk,bh%blk, nev, nex, &
