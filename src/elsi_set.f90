@@ -1190,7 +1190,7 @@ subroutine elsi_set_chase_same_ovlp(eh, is_same_ovlp)
    implicit none
 
    type(elsi_handle), intent(inout) :: eh !< Handle
-   logical, intent(in) :: is_same_ovlp !< whether to work with a same overlap matrix
+   integer(kind=i4), intent(in) :: is_same_ovlp !< whether to work with a same overlap matrix
 
    character(len=200) :: msg
 
@@ -1198,7 +1198,11 @@ subroutine elsi_set_chase_same_ovlp(eh, is_same_ovlp)
 
    call elsi_check_init(eh%bh,eh%handle_init,caller)
 
-   eh%ph%chase_same_ovlp = is_same_ovlp
+   if(is_same_ovlp == 0) then
+      eh%ph%chase_same_ovlp = .false.
+   else
+      eh%ph%chase_same_ovlp = .true.
+   end if
 
 end subroutine
 
@@ -1211,7 +1215,7 @@ subroutine elsi_set_chase_deg_opt(eh, is_deg_opt)
    implicit none
 
    type(elsi_handle), intent(inout) :: eh !< Handle
-   logical, intent(in) :: is_deg_opt !< whether to work with degree optimization
+   integer(kind=i4), intent(in) :: is_deg_opt !< whether to work with degree optimization
 
    character(len=200) :: msg
 
@@ -1219,7 +1223,11 @@ subroutine elsi_set_chase_deg_opt(eh, is_deg_opt)
 
    call elsi_check_init(eh%bh,eh%handle_init,caller)
 
-   eh%ph%chase_deg_opt = is_deg_opt
+   if(is_deg_opt == 0) then
+      eh%ph%chase_deg_opt = .false.
+   else
+      eh%ph%chase_deg_opt = .true.
+   end if
 
 end subroutine
 
@@ -1233,7 +1241,7 @@ subroutine elsi_set_chase_evecs_recycl(eh, is_recycl)
    implicit none
 
    type(elsi_handle), intent(inout) :: eh !< Handle
-   logical, intent(in) :: is_recycl !< whether to re-use eigenvectors from previous solution
+   integer(kind=i4), intent(in) :: is_recycl !< whether to re-use eigenvectors from previous solution
 
    character(len=200) :: msg
 
@@ -1241,7 +1249,11 @@ subroutine elsi_set_chase_evecs_recycl(eh, is_recycl)
 
    call elsi_check_init(eh%bh,eh%handle_init,caller)
 
-   eh%ph%chase_evecs_recycl = is_recycl
+   if(is_recycl == 0) then
+      eh%ph%chase_evecs_recycl = .false.
+   else
+      eh%ph%chase_evecs_recycl = .true.
+   end if
 
 end subroutine
 

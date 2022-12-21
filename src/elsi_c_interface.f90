@@ -1354,11 +1354,8 @@ subroutine c_elsi_set_chase_same_ovlp(h_c, issame) bind(C)
 
     call c_f_pointer(h_c,h_f)
 
-    if(issame == 0) then
-       call elsi_set_chase_same_ovlp(h_f, .false.)
-    else
-       call elsi_set_chase_same_ovlp(h_f, .true.)
-    end if  
+    call elsi_set_chase_same_ovlp(h_f, issame)
+
 
 end subroutine        
 
@@ -1373,11 +1370,7 @@ subroutine c_elsi_set_chase_deg_opt(h_c, isopt) bind(C)
 
     call c_f_pointer(h_c,h_f)
 
-    if(isopt == 0) then
-       call elsi_set_chase_deg_opt(h_f, .false.)
-    else
-       call elsi_set_chase_deg_opt(h_f, .true.) 
-    end if
+    call elsi_set_chase_deg_opt(h_f, isopt)
 
 end subroutine
 
@@ -1392,11 +1385,7 @@ subroutine c_elsi_set_chase_evecs_recycl(h_c, isrecycl) bind(C)
 
     call c_f_pointer(h_c,h_f)
 
-    if(isrecycl == 0) then
-       call elsi_set_chase_evecs_recycl(h_f, .false.)
-    else
-       call elsi_set_chase_evecs_recycl(h_f, .true.)
-    end if
+    call elsi_set_chase_evecs_recycl(h_f, isrecycl)
 
 end subroutine
 
