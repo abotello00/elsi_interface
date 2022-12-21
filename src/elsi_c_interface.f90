@@ -1343,6 +1343,63 @@ subroutine c_elsi_set_chase_min_extra_space(h_c,min_s) bind(C)
 
 end subroutine
 
+subroutine c_elsi_set_chase_same_ovlp(h_c, issame) bind(C)
+ 
+    implicit none
+
+    type(c_ptr), value, intent(in) :: h_c
+    integer(kind=c_int), value, intent(in) :: issame
+
+    type(elsi_handle), pointer :: h_f
+
+    call c_f_pointer(h_c,h_f)
+
+    if(issame == 0) then
+       call elsi_set_chase_same_ovlp(h_f, .false.)
+    else
+       call elsi_set_chase_same_ovlp(h_f, .true.)
+    end if  
+
+end subroutine        
+
+subroutine c_elsi_set_chase_deg_opt(h_c, isopt) bind(C)
+
+    implicit none
+
+    type(c_ptr), value, intent(in) :: h_c
+    integer(kind=c_int), value, intent(in) :: isopt
+
+    type(elsi_handle), pointer :: h_f
+
+    call c_f_pointer(h_c,h_f)
+
+    if(isopt == 0) then
+       call elsi_set_chase_deg_opt(h_f, .false.)
+    else
+       call elsi_set_chase_deg_opt(h_f, .true.) 
+    end if
+
+end subroutine
+
+subroutine c_elsi_set_chase_evecs_recycl(h_c, isrecycl) bind(C)
+
+    implicit none
+
+    type(c_ptr), value, intent(in) :: h_c
+    integer(kind=c_int), value, intent(in) :: isrecycl
+
+    type(elsi_handle), pointer :: h_f
+
+    call c_f_pointer(h_c,h_f)
+
+    if(isrecycl == 0) then
+       call elsi_set_chase_evecs_recycl(h_f, .false.)
+    else
+       call elsi_set_chase_evecs_recycl(h_f, .true.)
+    end if
+
+end subroutine
+
 subroutine c_elsi_set_mu_broaden_scheme(h_c,broaden_scheme) bind(C)
 
    implicit none

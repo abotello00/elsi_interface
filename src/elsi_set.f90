@@ -67,6 +67,9 @@ module ELSI_SET
    public :: elsi_set_chase_filter_deg
    public :: elsi_set_chase_extra_space
    public :: elsi_set_chase_min_extra_space   
+   public :: elsi_set_chase_same_ovlp
+   public :: elsi_set_chase_deg_opt
+   public :: elsi_set_chase_evecs_recycl
    public :: elsi_set_mu_broaden_scheme
    public :: elsi_set_mu_broaden_width
    public :: elsi_set_mu_tol
@@ -1176,6 +1179,69 @@ subroutine elsi_set_chase_extra_space(eh, percent)
    end if
 
    eh%ph%chase_extra_space = percent 
+
+end subroutine
+
+!>
+!! Set if ChASE is always working with a same overlap matrix
+!!
+subroutine elsi_set_chase_same_ovlp(eh, is_same_ovlp)
+
+   implicit none
+
+   type(elsi_handle), intent(inout) :: eh !< Handle
+   logical, intent(in) :: is_same_ovlp !< whether to work with a same overlap matrix
+
+   character(len=200) :: msg
+
+   character(len=*), parameter :: caller = "elsi_set_chase_ovlp"
+
+   call elsi_check_init(eh%bh,eh%handle_init,caller)
+
+   eh%ph%chase_same_ovlp = is_same_ovlp
+
+end subroutine
+
+!>
+!! Set if the degree optimization mechanism of Cheby. polynomimal is 
+!! used in ChASE. Default is true.
+!!
+subroutine elsi_set_chase_deg_opt(eh, is_deg_opt)
+
+   implicit none
+
+   type(elsi_handle), intent(inout) :: eh !< Handle
+   logical, intent(in) :: is_deg_opt !< whether to work with degree optimization
+
+   character(len=200) :: msg
+
+   character(len=*), parameter :: caller = "elsi_set_chase_deg_opt"
+
+   call elsi_check_init(eh%bh,eh%handle_init,caller)
+
+   eh%ph%chase_deg_opt = is_deg_opt
+
+end subroutine
+
+!>
+!! Set if the eigevectors of previous eigenproblem is recycled in ChASE whenever
+!! it is possible: e.g, same problem size and same or smaller number of
+!! eigenpairs to be computed. Default is true.
+!!
+subroutine elsi_set_chase_evecs_recycl(eh, is_recycl)
+
+   implicit none
+
+   type(elsi_handle), intent(inout) :: eh !< Handle
+   logical, intent(in) :: is_recycl !< whether to re-use eigenvectors from previous solution
+
+   character(len=200) :: msg
+
+   character(len=*), parameter :: caller = "elsi_set_chase_evecs_recycl"
+
+   call elsi_check_init(eh%bh,eh%handle_init,caller)
+
+   eh%ph%chase_evecs_recycl = is_recycl
 
 end subroutine
 

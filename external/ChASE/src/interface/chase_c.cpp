@@ -289,7 +289,7 @@ ChaseMpiProperties<std::complex<float>>* ChASE_State::getProperties() {
 }
 
 template <typename T>
-void chase_seq(T* H, int* N, T* V, Base<T>* ritzv, int* nev, int* nex,
+void chase_seq(int *N, T* H, int* ldh, T* V, Base<T>* ritzv, int* nev, int* nex,
                 int* deg, double* tol, char* mode, char* opt) {
 #ifdef HAS_GPU
   typedef ChaseMpi<ChaseMpiDLACudaSeq, T> SEQ_CHASE;
@@ -305,13 +305,17 @@ void chase_seq(T* H, int* N, T* V, Base<T>* ritzv, int* nev, int* nex,
   std::mt19937 gen(2342.0);
   std::normal_distribution<> d;
 
-  SEQ_CHASE single(*N, *nev, *nex, V, ritzv, H);
+  SEQ_CHASE single(*N, *nev, *nex, V, ritzv);
+
+  T* H_ = single.GetMatrixPtr();
 
   ChaseConfig<T>& config = single.GetConfig();
   config.SetTol(*tol);
   config.SetDeg(*deg);
   config.SetOpt(*opt == 'S');
   config.SetApprox(*mode == 'A');
+
+  t_lacpy('A', *N, *N, H, *ldh, H_, *N);
 
   if (!config.UseApprox())
     for (std::size_t k = 0; k < *N * (*nev + *nex); ++k)
@@ -323,7 +327,8 @@ void chase_seq(T* H, int* N, T* V, Base<T>* ritzv, int* nev, int* nex,
   timings[2] = std::chrono::high_resolution_clock::now() - start_times[2];
   timings[1] = std::chrono::high_resolution_clock::now() - start_times[1];
 #ifdef CHASE_OUTPUT
-  performanceDecorator.GetPerfData().print();    
+  std::cout << "    ChASE]> ChASE Solve done in: " << timings[2].count() << "\n";
+  performanceDecorator.GetPerfData().print();   
   std::cout << "    ChASE]> total time in ChASE: " << timings[1].count() << "\n";
 #endif
 }
@@ -380,7 +385,7 @@ void chase_solve(T* H, int *LDH, T* V, Base<T>* ritzv, int* deg, double* tol, ch
   auto N = config.GetN();
   auto nev = config.GetNev();
   auto nex = config.GetNex();
-  
+ 
   t_lacpy('A', m, n, H, ldh, H_, m);
   
   config.SetTol(*tol);
@@ -426,10 +431,10 @@ extern "C" {
  * @param[int] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.
  * @param[int] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.
  */  
-void zchase_(std::complex<double>* H, int* N, std::complex<double>* V,
+void zchase_(int *N, std::complex<double>* H, int* ldh, std::complex<double>* V,
              double* ritzv, int* nev, int* nex, int* deg, double* tol,
              char* mode, char* opt) {
-  chase_seq<std::complex<double>>(H, N, V, ritzv, nev, nex, deg, tol, mode,
+  chase_seq<std::complex<double>>(N, H, ldh, V, ritzv, nev, nex, deg, tol, mode,
                                    opt);
 }
 
@@ -446,9 +451,9 @@ void zchase_(std::complex<double>* H, int* N, std::complex<double>* V,
  * @param[int] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.
  * @param[int] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.
  */  
-void dchase_(double* H, int* N, double* V, double* ritzv, int* nev, int* nex,
+void dchase_(int *N, double* H, int* ldh, double* V, double* ritzv, int* nev, int* nex,
              int* deg, double* tol, char* mode, char* opt) {
-  chase_seq<double>(H, N, V, ritzv, nev, nex, deg, tol, mode, opt);
+  chase_seq<double>(N, H, ldh, V, ritzv, nev, nex, deg, tol, mode, opt);
 }
 
 //! shard-memory version of ChASE with complex scalar in single precison
@@ -464,10 +469,10 @@ void dchase_(double* H, int* N, double* V, double* ritzv, int* nev, int* nex,
  * @param[int] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.
  * @param[int] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.
  */  
-void cchase_(std::complex<float>* H, int* N, std::complex<float>* V,
+void cchase_(int *N, std::complex<float>* H, int *ldh, std::complex<float>* V,
              float* ritzv, int* nev, int* nex, int* deg, double* tol,
              char* mode, char* opt) {
-  chase_seq<std::complex<float>>(H, N, V, ritzv, nev, nex, deg, tol, mode,
+  chase_seq<std::complex<float>>(N, H, ldh, V, ritzv, nev, nex, deg, tol, mode,
                                    opt);
 }
 
@@ -484,9 +489,9 @@ void cchase_(std::complex<float>* H, int* N, std::complex<float>* V,
  * @param[int] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.
  * @param[int] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.
  */  
-void schase_(float* H, int* N, float* V, float* ritzv, int* nev, int* nex,
+void schase_(int *N, float* H, int* ldh, float* V, float* ritzv, int* nev, int* nex,
              int* deg, double* tol, char* mode, char* opt) {
-  chase_seq<float>(H, N, V, ritzv, nev, nex, deg, tol, mode, opt);
+  chase_seq<float>(N, H, ldh, V, ritzv, nev, nex, deg, tol, mode, opt);
 }
 
 //! an initialisation of environment for distributed ChASE for complex scalar in double precision
