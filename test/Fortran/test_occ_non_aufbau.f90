@@ -46,7 +46,7 @@ subroutine test_occ_non_aufbau(comm,mu_width)
    real(kind=r8), allocatable :: k_wt(:)
    real(kind=r8), allocatable :: eval(:,:,:)
    real(kind=r8), allocatable :: test_occ(:,:,:)
-   real(kind=r8), allocatable  :: occ(:,:,:) !< Occupation members
+   real(kind=r8), allocatable  :: occ(:,:,:) !< Occupation numbers
    real(kind=r8)  :: mu !< Chemical potential
 
    real(kind=r8) :: n_electrons
@@ -86,6 +86,7 @@ subroutine test_occ_non_aufbau(comm,mu_width)
    end if
 
    n_kpt = 1
+   n_spin = 1
    n_basis = 100
    n_electrons = 100
 
@@ -128,7 +129,7 @@ subroutine test_occ_non_aufbau(comm,mu_width)
    call elsi_set_output_log(eh,1)
 
    ! Run ELSI occupations
-   call elsi_compute_mu_and_occ(eh,n_electrons,n_basis,1,n_kpt,k_wt,eval,occ,mu)
+   call elsi_compute_mu_and_occ(eh,n_electrons,n_basis,n_spin,n_kpt,k_wt,eval,occ,mu)
 
    ! Print out occupaitons
    if(myid == 0) then
@@ -155,9 +156,12 @@ subroutine test_occ_non_aufbau(comm,mu_width)
       test_occ(i_count,n_spin,n_kpt) = 0.0
    end do
 
+   test_occ(eh%ph%constr_state(1,1),n_spin,n_kpt) = eh%ph%constr_occ(1)
+
    ! Check occupations are correct
    if (all(test_occ .eq. occ)) then
        write(*,"(2X,A)") "Pass single constraint"
+       test_1 = .true.
    else
        write(*,"(2X,A)") "Fail single constraint"
    end if

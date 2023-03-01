@@ -483,15 +483,15 @@ subroutine elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
    integer(kind=i4) :: i_spin
    integer(kind=i4) :: i_val
 
-   real(kind=r8), allocatable :: eval_tmp(:)
-   integer(kind=i4), allocatable :: occ_tmp(:)
+   integer(kind=i4), allocatable :: eval_tmp(:)
+   real(kind=r8), allocatable :: occ_tmp(:)
 
    character(len=*), parameter :: caller = "elsi_adjust_occ"
 
    n_total = n_state*n_spin*n_kpt
 
-   call elsi_allocate(bh,eval_tmp,n_total,"tmp",caller)
-   call elsi_allocate(bh,occ_tmp,n_total,"perm",caller)
+   call elsi_allocate(bh,eval_tmp,n_total,"eval_tmp",caller)
+   call elsi_allocate(bh,occ_tmp,n_total,"occ_tmp",caller)
 
    ! Put eval into a 1D array
    i_val = 0
@@ -518,7 +518,7 @@ subroutine elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
    end do
 
    ! Remove error
-   do i_val = 1,n_total,-1
+   do i_val = n_total,1,-1
       i_kpt = (eval_tmp(i_val)-1)/(n_spin*n_state)+1
 
       if(occ_tmp(i_val) > 0.0_r8) then
@@ -548,8 +548,8 @@ subroutine elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
       end do
    end do
 
-   call elsi_deallocate(bh,eval_tmp,"tmp")
-   call elsi_deallocate(bh,occ_tmp,"perm")
+   call elsi_deallocate(bh,eval_tmp,"eval_tmp")
+   call elsi_deallocate(bh,occ_tmp,"occ_tmp")
 
 end subroutine
 
