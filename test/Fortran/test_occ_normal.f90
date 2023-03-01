@@ -5,7 +5,7 @@
 ! which may be found in the LICENSE file in the ELSI root directory.
 
 !>
-!! This subroutine tests occ number under normal occupation.
+!! This subroutine tests the occ numbers under normal occupation.
 !!
 subroutine test_occ_normal(comm,mu_width)
 
@@ -50,7 +50,7 @@ subroutine test_occ_normal(comm,mu_width)
    logical :: file_exist
 
    real(kind=r8), allocatable :: eval(:,:,:)
-   real(kind=r8) :: e_constraint(1,3,0)
+   real(kind=r8) :: e_constraints(1,3,0)
 
    type(elsi_handle) :: eh
 
@@ -78,8 +78,8 @@ subroutine test_occ_normal(comm,mu_width)
    n_kpt = 1
    n_basis = 100
    n_electrons = 100
-   allocate(eval(n_basis,1,1))
 
+   allocate(eval(n_basis,1,1))
    do i_state = 1, 100
      eval(i_state,1,1) = dble(i_state)
    end do
@@ -90,7 +90,7 @@ subroutine test_occ_normal(comm,mu_width)
    ! Initialize ELSI
    call elsi_init(eh,1,1,0,n_basis,n_electrons,n_basis)
    call elsi_set_mpi(eh,comm)
-
+   
    ! Customize ELSI
    call elsi_set_output(eh,2)
    call elsi_set_output_log(eh,1)
@@ -110,19 +110,19 @@ subroutine test_occ_normal(comm,mu_width)
    end if
 
    ! Set up test occupation array
-   do i_count = 1, 50
+   do i_count = 1,50
       test_occ(i_count,1,1) = 2.0
    end do
 
-   do i_count = 51, 100
+   do i_count = 51,100
       test_occ(i_count,1,1) = 0.0
    end do
 
    ! Check occupations are correct
    if (all(test_occ .eq. occ)) then
-       write(*,"(2X,A)") "Passed."
+      write(*,"(2X,A)") "Passed."
    else
-       write(*,"(2X,A)") "Failed."
+      write(*,"(2X,A)") "Failed."
    end if
 
    ! Finalize ELSI

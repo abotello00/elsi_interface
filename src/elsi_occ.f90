@@ -32,8 +32,8 @@ contains
 !>
 !! Compute the chemical potential and occupation numbers.
 !!
-subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-   mu)
+subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+   occ,mu)
 
    implicit none
 
@@ -53,16 +53,28 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
    real(kind=r8) :: mu1
    real(kind=r8) :: mu2
 
-
-   call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,&
-        eval,occ,mu)
+   !if (ph%occ_non_aufbau) then
+     ! YY: This is for non Aufbau distribution occ number.
+     ! YY: Used for (lowest excited state) delta SCF
+     ! YY: normal occ_number    :  2 2 2 2 0 0 0 0
+     ! YY: non-Aufbau occ_number:  2 2 2 1 1 0 0 0
+      !call elsi_mu_and_occ_normal(ph,bh,n_electron-2,n_state,n_spin,n_kpt,k_wt,&
+       !    eval,occ1,mu1)
+      !call elsi_mu_and_occ_normal(ph,bh,n_electron+2,n_state,n_spin,n_kpt,k_wt,&
+        !   eval,occ2,mu2)
+      !occ = (occ1 + occ2) / 2
+      !mu = (mu1 + mu2) / 2
+   !else
+   call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+        occ,mu)
+   !end if
 
 end subroutine
 !>
 !! Compute the chemical potential and occupation numbers normal distribution.
 !!
-subroutine elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-   mu)
+subroutine elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+   occ,mu)
 
    implicit none
 
@@ -128,13 +140,14 @@ subroutine elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eva
 
       if(diff_min*diff_max < 0.0_r8) then
          found_interval = .true.
-
+      
          exit
       end if
-
+      
       ! Enlarge interval if solution not found
       mu_min = mu_min-buf
       mu_max = mu_max+buf
+
    end do
 
    if(.not. found_interval .and. .not. found_mu) then
@@ -187,8 +200,8 @@ subroutine elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eva
 
    if(found_interval .and. .not. found_mu) then
       ! Perform bisection
-      call elsi_find_mu(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-           mu_min,mu_max,mu)
+      call elsi_find_mu(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+           occ,mu_min,mu_max,mu)
    end if
 
 end subroutine
@@ -226,13 +239,14 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
    integer(kind=i4) :: i_kpt
    integer(kind=i4) :: i_spin
    integer(kind=i4) :: i_mp
-   integer(kind=i4) :: i_constraint
 
    character(len=*), parameter :: caller = "elsi_check_electrons"
 
+   integer(kind=i4) :: i_constraints
+
    invert_width = 1.0_r8/ph%mu_width
    diff = 0.0_r8
-
+   
    if(.not. ph%spin_is_set) then
       if(n_spin == 2) then
          spin_degen = 1.0_r8
@@ -242,7 +256,7 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
    else
       spin_degen = ph%spin_degen
    end if
-
+   
    select case(ph%mu_scheme)
    case(GAUSSIAN)
       do i_kpt = 1,n_kpt
@@ -257,7 +271,7 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
       end do
    case(FERMI)
       max_exp = maxexponent(mu)*log(2.0_r8)
-
+      
       do i_kpt = 1,n_kpt
          do i_spin = 1,n_spin
             do i_state = 1,n_state
@@ -344,36 +358,30 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
          end do
       end do
    end select
-
-   ! If chose to run a calculation using a non-Aufbau occupation
+   
+   ! If chose to run a calculation if using a non-Aufbau occupation 
    if (ph%occ_non_aufbau) then
-       do i_constraint = 1, ph%n_constraint, 1
-          do i_kpt = 1, n_kpt, 1
-             ! Calculate an initial electron difference
-             diff = diff + occ(ph%constr_state(i_constraint,i_kpt),&
-                             ph%constr_spin(i_constraint),i_kpt)&
-                             * k_wt(i_kpt)
-             ! Apply occupations from the property arrays
-             occ(ph%constr_state(i_constraint,i_kpt),&
-                 ph%constr_spin(i_constraint),i_kpt) =&
-                 ph%constr_occ(i_constraint)
-             ! Check electron difference with constraint applied
-             diff = diff + occ(ph%constr_state(i_constraint,i_kpt),&
-                               ph%constr_spin(i_constraint),i_kpt)&
-                               * k_wt(i_kpt)
-          end do
-       end do
-   end if
+      do i_constraints = 1, ph%n_constraints, 1
+         do i_kpt = 1, n_kpt, 1
+            ! Calculate an inital electron difference 
+            diff = diff - occ(ph%constr_state(i_constraints,i_kpt),ph%constr_spin(i_constraints),i_kpt) * k_wt(i_kpt)
+            ! Apply occupations from the property arrays 
+            occ(ph%constr_state(i_constraints,i_kpt),ph%constr_spin(i_constraints),i_kpt) = ph%constr_occ(i_constraints)
+            ! Check electron difference with constraint applied
+            diff = diff + occ(ph%constr_state(i_constraints,i_kpt),ph%constr_spin(i_constraints),i_kpt) * k_wt(i_kpt)
+         end do
+      end do 
+   end if 
 
    diff = diff-n_electron
-
+   
 end subroutine
 
 !>
 !! Compute the chemical potential using a bisection algorithm.
 !!
-subroutine elsi_find_mu(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-   mu_min,mu_max,mu)
+subroutine elsi_find_mu(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+           occ,mu_min,mu_max,mu)
 
    implicit none
 
@@ -407,10 +415,10 @@ subroutine elsi_find_mu(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
    mu_left = mu_min
    mu_right = mu_max
 
-   call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-        mu_left,diff_left)
-   call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-        mu_right,diff_right)
+   call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+        occ,mu_left,diff_left)
+   call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+        occ,mu_right,diff_right)
 
    if(abs(diff_left) < ph%mu_tol) then
       mu = mu_left
@@ -495,7 +503,7 @@ subroutine elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
 
    ! Put eval into a 1D array
    i_val = 0
-
+ 
    do i_kpt = 1,n_kpt
       do i_spin = 1,n_spin
          do i_state = 1,n_state
@@ -504,10 +512,10 @@ subroutine elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
          end do
       end do
    end do
-
+   
    ! Put occ into a 1D array
    i_val = 0
-
+ 
    do i_kpt = 1,n_kpt
       do i_spin = 1,n_spin
          do i_state = 1,n_state
@@ -516,7 +524,7 @@ subroutine elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
          end do
       end do
    end do
-
+   
    ! Remove error
    do i_val = n_total,1,-1
       i_kpt = (eval_tmp(i_val)-1)/(n_spin*n_state)+1

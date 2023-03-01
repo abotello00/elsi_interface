@@ -117,12 +117,12 @@ module ELSI_DATATYPE
       logical :: evec_ready = .false.
       logical :: occ_ready = .false.
 
-      ! Non-Aufbau occupations
-      logical :: occ_non_aufbau = .false. ! Logical to turn on occ_non_aufbau
-      integer(kind=i4) :: n_constraint ! Number of occupation constraints
-      integer(kind=i4), allocatable :: constr_state(:,:) ! KS-state and k-point
-      integer(kind=i4), allocatable :: constr_spin(:) ! Spin channel
-      real(kind=r8), allocatable :: constr_occ(:) ! Electron occupation
+      ! Variables for non aufbau occupations
+      logical :: occ_non_aufbau = .false. ! Value to turn on occ_non_aufbau code
+      integer(kind=i4) :: n_constraints ! Number of occupation constraints
+      integer(kind=i4), allocatable :: constr_state(:,:) ! KS state to apply constraint to
+      integer(kind=i4), allocatable :: constr_spin(:) ! Spin channel of electron to constrain
+      real(kind=r8), allocatable :: constr_occ(:) ! Occupation of orbital to constrain
 
       ! Chemical potential 
       real(kind=r8) :: mu ! Fermi level
@@ -248,22 +248,6 @@ module ELSI_DATATYPE
       integer(kind=i4) :: bse_n_lcol
       integer(kind=i4) :: bse_desc(9)
 
-      ! ChASE
-      real(kind=r8) :: chase_tol
-      integer(kind=i4) :: chase_filter_deg
-      real(kind=r8) :: chase_extra_space
-      integer(kind=i4) :: chase_min_extra_space
-      logical :: chase_started = .false.
-      real(kind=r8), allocatable :: pre_evec_real(:,:)
-      complex(kind=r8), allocatable :: pre_evec_cmplx(:,:)
-      real(kind=r8), allocatable :: pre_eval(:)
-      real(kind=r8), allocatable :: htmp_r(:,:)
-      complex(kind=r8), allocatable :: htmp_c(:,:)
-      integer(kind=i4) :: chase_pre_n_good
-      integer(kind=i4) :: chase_pre_n_states
-      logical :: chase_same_ovlp = .false.
-      logical :: chase_deg_opt = .true.
-      logical :: chase_evecs_recycl = .true. 
    end type
 
    type, public :: elsi_handle

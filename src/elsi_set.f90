@@ -63,13 +63,6 @@ module ELSI_SET
    public :: elsi_set_ntpoly_filter
    public :: elsi_set_ntpoly_max_iter
    public :: elsi_set_magma_solver
-   public :: elsi_set_chase_tol
-   public :: elsi_set_chase_filter_deg
-   public :: elsi_set_chase_extra_space
-   public :: elsi_set_chase_min_extra_space   
-   public :: elsi_set_chase_same_ovlp
-   public :: elsi_set_chase_deg_opt
-   public :: elsi_set_chase_evecs_recycl
    public :: elsi_set_mu_broaden_scheme
    public :: elsi_set_mu_broaden_width
    public :: elsi_set_mu_tol
@@ -1107,177 +1100,6 @@ subroutine elsi_set_magma_solver(eh,solver)
 end subroutine
 
 !>
-!! Set the tolerance of residuals to stop in ChASE.
-!!
-subroutine elsi_set_chase_tol(eh,resid_tol)
-
-   implicit none
-
-   type(elsi_handle), intent(inout) :: eh !< Handle
-   real(kind=r8), intent(in) :: resid_tol !< Stopping criterion
-
-   character(len=200) :: msg
-
-   character(len=*), parameter :: caller = "elsi_set_chase_tol"
-
-   call elsi_check_init(eh%bh,eh%handle_init,caller)
-
-   if(resid_tol <= 0.0_r8) then
-      write(msg,"(A)") "Input value should be positive"
-      call elsi_stop(eh%bh,msg,caller)
-   end if
-
-   eh%ph%chase_tol = resid_tol
-
-end subroutine
-
-!>
-!! Set the initial degree of Chebyshev polynomial in ChASE.
-!!
-subroutine elsi_set_chase_filter_deg(eh, deg)
-
-   implicit none
-
-   type(elsi_handle), intent(inout) :: eh !< Handle
-   integer(kind=i4), intent(in) :: deg       !< deg of Chebyshev polynomial
-
-   character(len=200) :: msg
-
-   character(len=*), parameter :: caller = "elsi_set_chase_filter_deg"
-
-   call elsi_check_init(eh%bh,eh%handle_init,caller)
-
-   if(deg <= 2) then
-      write(msg,"(A)") "Input value should be larger than 2"
-      call elsi_stop(eh%bh,msg,caller)
-   end if
-
-   eh%ph%chase_filter_deg = deg
-
-end subroutine
-
-!>
-!! Set the extral searching space of Chebyshev polynomial in ChASE.
-!! It is the percentage of the number of eigenpairs to be computed.
-!!
-subroutine elsi_set_chase_extra_space(eh, percent)
-
-   implicit none
-
-   type(elsi_handle), intent(inout) :: eh !< Handle
-   real(kind=r8), intent(in) :: percent   !< extral space in percentage
-
-   character(len=200) :: msg
-
-   character(len=*), parameter :: caller = "elsi_set_chase_extra_space"
-
-   call elsi_check_init(eh%bh,eh%handle_init,caller)
-
-   if(percent <= 0.0_r8 .or. percent >= 0.5_r8) then
-      write(msg,"(A)") "Input value should be in interval (0,0.5)"
-      call elsi_stop(eh%bh,msg,caller)
-   end if
-
-   eh%ph%chase_extra_space = percent 
-
-end subroutine
-
-!>
-!! Set if ChASE is always working with a same overlap matrix
-!!
-subroutine elsi_set_chase_same_ovlp(eh, is_same_ovlp)
-
-   implicit none
-
-   type(elsi_handle), intent(inout) :: eh !< Handle
-   integer(kind=i4), intent(in) :: is_same_ovlp !< whether to work with a same overlap matrix
-
-   character(len=200) :: msg
-
-   character(len=*), parameter :: caller = "elsi_set_chase_ovlp"
-
-   call elsi_check_init(eh%bh,eh%handle_init,caller)
-
-   if(is_same_ovlp == 0) then
-      eh%ph%chase_same_ovlp = .false.
-   else
-      eh%ph%chase_same_ovlp = .true.
-   end if
-
-end subroutine
-
-!>
-!! Set if the degree optimization mechanism of Cheby. polynomimal is 
-!! used in ChASE. Default is true.
-!!
-subroutine elsi_set_chase_deg_opt(eh, is_deg_opt)
-
-   implicit none
-
-   type(elsi_handle), intent(inout) :: eh !< Handle
-   integer(kind=i4), intent(in) :: is_deg_opt !< whether to work with degree optimization
-
-   character(len=200) :: msg
-
-   character(len=*), parameter :: caller = "elsi_set_chase_deg_opt"
-
-   call elsi_check_init(eh%bh,eh%handle_init,caller)
-
-   if(is_deg_opt == 0) then
-      eh%ph%chase_deg_opt = .false.
-   else
-      eh%ph%chase_deg_opt = .true.
-   end if
-
-end subroutine
-
-!>
-!! Set if the eigevectors of previous eigenproblem is recycled in ChASE whenever
-!! it is possible: e.g, same problem size and same or smaller number of
-!! eigenpairs to be computed. Default is true.
-!!
-subroutine elsi_set_chase_evecs_recycl(eh, is_recycl)
-
-   implicit none
-
-   type(elsi_handle), intent(inout) :: eh !< Handle
-   integer(kind=i4), intent(in) :: is_recycl !< whether to re-use eigenvectors from previous solution
-
-   character(len=200) :: msg
-
-   character(len=*), parameter :: caller = "elsi_set_chase_evecs_recycl"
-
-   call elsi_check_init(eh%bh,eh%handle_init,caller)
-
-   if(is_recycl == 0) then
-      eh%ph%chase_evecs_recycl = .false.
-   else
-      eh%ph%chase_evecs_recycl = .true.
-   end if
-
-end subroutine
-
-!>
-!! Set the minimal extral searching space of Chebyshev polynomial in ChASE.
-!!
-subroutine elsi_set_chase_min_extra_space(eh, min_s)
-
-   implicit none
-
-   type(elsi_handle), intent(inout) :: eh !< Handle
-   integer(kind=i4), intent(in) :: min_s       !< min extral searching space
-
-   character(len=200) :: msg
-
-   character(len=*), parameter :: caller = "elsi_set_chase_min_extra_space"
-
-   call elsi_check_init(eh%bh,eh%handle_init,caller)
-
-   eh%ph%chase_min_extra_space = min_s
-
-end subroutine
-
-!>
 !! Set the broadening scheme to determine the chemical potential and the
 !! occupation numbers.
 !!
@@ -1357,15 +1179,15 @@ end subroutine
 !>
 !! Set the non Aufbau occupation
 !!
-subroutine elsi_set_occ_non_aufbau(eh,occ_non_aufbau,n_constraint,constr_state,&
-        constr_spin,constr_occ)
+subroutine elsi_set_occ_non_aufbau(eh,occ_non_aufbau,n_constraints,constr_state,&
+    constr_spin,constr_occ)
 
    implicit none
 
    type(elsi_handle), intent(inout) :: eh !< Handle
    logical, intent(in) :: occ_non_aufbau !< whether to use non Aufbau occupation
-   integer(kind=i4), intent(in) :: n_constraint
-   integer(kind=i4), intent(in) :: constr_state(:,:)
+   integer(kind=i4), intent(in) :: n_constraints
+   integer(kind=i4), intent(in) ::  constr_state(:,:)
    integer(kind=i4), intent(in) :: constr_spin(:)
    real(kind=r8), intent(in) :: constr_occ(:)
 
@@ -1376,7 +1198,7 @@ subroutine elsi_set_occ_non_aufbau(eh,occ_non_aufbau,n_constraint,constr_state,&
    call elsi_check_init(eh%bh,eh%handle_init,caller)
 
    eh%ph%occ_non_aufbau = occ_non_aufbau
-   eh%ph%n_constraint = n_constraint
+   eh%ph%n_constraints = n_constraints
    eh%ph%constr_state = constr_state
    eh%ph%constr_spin = constr_spin
    eh%ph%constr_occ = constr_occ
