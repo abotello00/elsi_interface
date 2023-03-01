@@ -110,7 +110,7 @@ test_fortran(16_elpa d 3 c 1 ${h_cmplx} ${s_cmplx})
 
 ### Parallel Fortran tests: occupation tests ###
 test_fortran(01_occ o 1 0 0 ${h_cmplx} ${s_real})
-test_fortran(02_occ o 1 0 0 ${h_cmplx} ${s_real})
+test_fortran(02_occ o 2 0 0 ${h_cmplx} ${s_real})
 
 ### Parallel Fortran tests: dm + libOMM ###
 test_fortran(01_omm d 0 r 2 ${h_real} ${s_real})
