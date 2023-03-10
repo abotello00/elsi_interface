@@ -199,6 +199,10 @@ subroutine elsi_reset_param(ph)
    ph%chase_same_ovlp = .false.
    ph%chase_deg_opt = .true.
    ph%chase_evecs_recycl = .true.
+   ph%dchase_init = 0
+   ph%zchase_init = 0   
+   ph%pdchase_init = 0
+   ph%pzchase_init = 0
 end subroutine
 
 !>
