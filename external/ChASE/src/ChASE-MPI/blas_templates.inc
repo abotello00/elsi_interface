@@ -188,7 +188,7 @@ double t_dot(const std::size_t n, const double* x, const std::size_t incx,
 
     return FC_GLOBAL(ddot, DDOT)(&n_, x, &incx_, y, &incy_);
 }
-
+/*
 template <>
 std::complex<float> t_dot(const std::size_t n, const std::complex<float>* x,
                           const std::size_t incx, const std::complex<float>* y,
@@ -222,7 +222,7 @@ std::complex<double> t_dot(const std::size_t n, const std::complex<double>* x,
     return std::complex<double>(r->r, r->i);
 }
 
-/*
+*/
 // Dot is not worth the trouble to link to a blas function
 template <typename T>
 std::complex<T> t_dot(const std::size_t n, const std::complex<T>* x,
@@ -247,7 +247,7 @@ T t_dot(const std::size_t n, const T* x, const std::size_t incx, const T* y,
   }
   return alpha;
 }
-*/
+
 
 template <>
 double t_lange(char norm, std::size_t m, std::size_t n, double* A,
