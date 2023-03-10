@@ -237,17 +237,6 @@ std::complex<T> t_dot(const std::size_t n, const std::complex<T>* x,
   return alpha;
 }
 
-template <typename T>
-T t_dot(const std::size_t n, const T* x, const std::size_t incx, const T* y,
-        const std::size_t incy) {
-  T gamma;
-  T alpha = 0;
-  for (BlasInt i = 0; i < n; ++i) {
-    alpha += (x[i * incx]) * y[i * incy];
-  }
-  return alpha;
-}
-
 
 template <>
 double t_lange(char norm, std::size_t m, std::size_t n, double* A,
