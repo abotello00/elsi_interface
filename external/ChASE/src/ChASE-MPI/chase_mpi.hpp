@@ -14,10 +14,6 @@
 #include "mpi.h"
 #include <random>
 
-#ifdef HAS_OMP
-#include <omp.h>
-#endif
-
 #include "algorithm/chase.hpp"
 
 #include "blas_templates.hpp"
