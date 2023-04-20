@@ -188,41 +188,7 @@ double t_dot(const std::size_t n, const double* x, const std::size_t incx,
 
     return FC_GLOBAL(ddot, DDOT)(&n_, x, &incx_, y, &incy_);
 }
-/*
-template <>
-std::complex<float> t_dot(const std::size_t n, const std::complex<float>* x,
-                          const std::size_t incx, const std::complex<float>* y,
-                          const std::size_t incy)
-{
 
-    BlasInt n_ = n;
-    BlasInt incy_ = incy;
-    BlasInt incx_ = incx;
-
-    struct complex result;
-    result = FC_GLOBAL(cdotc, CDOTC)(&n_, x, &incx_, y, &incy_);
-    struct complex* r = &result;
-    return std::complex<float>(r->r, r->i);
-}
-
-template <>
-std::complex<double> t_dot(const std::size_t n, const std::complex<double>* x,
-                           const std::size_t incx,
-                           const std::complex<double>* y,
-                           const std::size_t incy)
-{
-
-    BlasInt n_ = n;
-    BlasInt incy_ = incy;
-    BlasInt incx_ = incx;
-
-    struct zcomplex result;
-    result = FC_GLOBAL(zdotc, ZDOTC)(&n_, x, &incx_, y, &incy_);
-    struct zcomplex* r = &result;
-    return std::complex<double>(r->r, r->i);
-}
-
-*/
 // Dot is not worth the trouble to link to a blas function
 template <typename T>
 std::complex<T> t_dot(const std::size_t n, const std::complex<T>* x,
@@ -236,7 +202,6 @@ std::complex<T> t_dot(const std::size_t n, const std::complex<T>* x,
 
   return alpha;
 }
-
 
 template <>
 double t_lange(char norm, std::size_t m, std::size_t n, double* A,
@@ -1383,6 +1348,123 @@ void t_trsm(const char side, const char uplo, const char trans, const char diag,
     FC_GLOBAL(ztrsm, ZTRSM)
     (&side, &uplo, &trans, &diag, &m_, &n_, alpha, a, &lda_, b, &ldb_);
 }
+
+template<>
+void t_gesvd(const char jobu, const char jobvt, const std::size_t m, const std::size_t n, float *A,
+                const std::size_t lda, float *S, float *U, const std::size_t ldu, float *Vt, const std::size_t ldvt){
+    using T = std::remove_reference<decltype((A[0]))>::type;
+    BlasInt m_ = m;
+    BlasInt n_ = n;
+    BlasInt lda_ = lda;
+    BlasInt ldu_ = ldu;
+    BlasInt ldvt_ = ldvt;
+
+    T* work;
+    Base<T> *rwork = new Base<T>[5 * std::min(m, n)];
+    T numwork;
+    BlasInt lwork, info;
+
+    lwork = -1;
+    FC_GLOBAL(sgesvd, SGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, &numwork, &lwork, rwork, &info);
+    assert(info == 0);
+
+
+    lwork = static_cast<std::size_t>((numwork));
+    auto ptr = std::unique_ptr<T[]>{new T[lwork]};
+    work = ptr.get();
+
+    FC_GLOBAL(sgesvd, SGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, work, &lwork, rwork, &info);
+    assert(info == 0);
+}
+
+template<>
+void t_gesvd(const char jobu, const char jobvt, const std::size_t m, const std::size_t n, double *A,
+                const std::size_t lda, double *S, double *U, const std::size_t ldu, double *Vt, const std::size_t ldvt){
+    using T = std::remove_reference<decltype((A[0]))>::type;
+    BlasInt m_ = m;
+    BlasInt n_ = n;
+    BlasInt lda_ = lda;
+    BlasInt ldu_ = ldu;
+    BlasInt ldvt_ = ldvt;
+
+    T* work;
+    Base<T> *rwork = new Base<T>[5 * std::min(m, n)];
+    T numwork;
+    BlasInt lwork, info;
+
+    lwork = -1;
+    FC_GLOBAL(dgesvd, DGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, &numwork, &lwork, rwork, &info);
+    assert(info == 0);
+
+
+    lwork = static_cast<std::size_t>((numwork));
+    auto ptr = std::unique_ptr<T[]>{new T[lwork]};
+    work = ptr.get();
+
+    FC_GLOBAL(dgesvd, DGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, work, &lwork, rwork, &info);
+    assert(info == 0);
+
+}
+
+template<>
+void t_gesvd(const char jobu, const char jobvt, const std::size_t m, const std::size_t n, std::complex<float> *A,
+                const std::size_t lda, float *S, std::complex<float> *U, const std::size_t ldu, std::complex<float> *Vt, const std::size_t ldvt){
+    using T = std::remove_reference<decltype((A[0]))>::type;
+    BlasInt m_ = m;
+    BlasInt n_ = n;
+    BlasInt lda_ = lda;
+    BlasInt ldu_ = ldu;
+    BlasInt ldvt_ = ldvt;
+
+    T* work;
+    Base<T> *rwork = new Base<T>[5 * std::min(m, n)];
+    T numwork;
+    BlasInt lwork, info;
+
+    lwork = -1;
+    FC_GLOBAL(cgesvd, CGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, &numwork, &lwork, rwork, &info);
+    assert(info == 0);
+
+
+    lwork = static_cast<std::size_t>(real(numwork));
+    auto ptr = std::unique_ptr<T[]>{new T[lwork]};
+    work = ptr.get();
+
+    FC_GLOBAL(cgesvd, CGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, work, &lwork, rwork, &info);
+    assert(info == 0);
+}
+
+template<>
+void t_gesvd(const char jobu, const char jobvt, const std::size_t m, const std::size_t n, std::complex<double> *A,
+                const std::size_t lda, double *S, std::complex<double> *U, const std::size_t ldu, std::complex<double> *Vt, const std::size_t ldvt){
+    using T = std::remove_reference<decltype((A[0]))>::type;
+    BlasInt m_ = m;
+    BlasInt n_ = n;
+    BlasInt lda_ = lda;
+    BlasInt ldu_ = ldu;
+    BlasInt ldvt_ = ldvt;
+
+    T* work;
+    Base<T> *rwork = new Base<T>[5 * std::min(m, n)];
+    T numwork;
+    BlasInt lwork, info;
+
+    lwork = -1;
+    FC_GLOBAL(zgesvd, ZGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, &numwork, &lwork, rwork, &info);
+    assert(info == 0);
+
+
+    lwork = static_cast<std::size_t>(real(numwork));
+    auto ptr = std::unique_ptr<T[]>{new T[lwork]};
+    work = ptr.get();
+
+    FC_GLOBAL(zgesvd, ZGESVD)(&jobu, &jobvt, &m_, &n_, A, &lda_, S, U, &ldu_, Vt, &ldvt_, work, &lwork, rwork, &info);
+    assert(info == 0);
+
+    delete[] rwork;
+
+}
+
 
 #if defined(HAS_SCALAPACK)
 // SCALAPACK
