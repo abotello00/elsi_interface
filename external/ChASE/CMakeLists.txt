@@ -8,6 +8,7 @@ list(APPEND includePath ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/src)
 list(APPEND inc_install ${CMAKE_CURRENT_SOURCE_DIR}/src/ChASE-MPI ${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm)
 
 add_compile_definitions(HAS_SCALAPACK=1)
+add_compile_definitions(USE_MPI=1)
 
 option( CHASE_OUTPUT "ChASE will provide output at each iteration" OFF)
 if( CHASE_OUTPUT )

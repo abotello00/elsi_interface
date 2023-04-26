@@ -19,6 +19,6 @@ SET(MPIEXEC_NP "srun -n 4" CACHE STRING "Command to run parallel tests with mult
 SET(MPIEXEC_1P "srun -n 1" CACHE STRING "Command to run serial tests with 1 MPI task")
 
 SET(LIB_PATHS "$ENV{MKLROOT}/lib/intel64 $ENV{CUDA_HOME}/lib64" CACHE STRING "External library paths")
-SET(LIBS "mkl_scalapack_lp64 mkl_blacs_openmpi_lp64 mkl_gf_lp64 mkl_sequential mkl_core cublas cusolver cudart" CACHE STRING "External libraries")
+SET(LIBS "mkl_scalapack_lp64 mkl_blacs_openmpi_lp64 mkl_gf_lp64 mkl_sequential mkl_core cublas cusolver cudart curand" CACHE STRING "External libraries")
 
 

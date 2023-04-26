@@ -54,9 +54,12 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
    !chase
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j
+   real(kind=r8)    :: v
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
+
+   v = 0.5_r8
 
    if(ph%chase_deg_opt) then
      degOpt = 'S'
@@ -120,7 +123,7 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
       if(ph%dchase_init == 1) then
         call dchase_finalize(ph%dchase_init)
       end if 
-      call dchase_init(ph%n_good, nev, nex, ham, ph%pre_evec_real, ph%pre_eval, ph%dchase_init)   
+      call dchase_init(ph%n_good, nev, nex, ham, ph%n_basis, ph%pre_evec_real, ph%pre_eval, ph%dchase_init)   
    end if
 
    call dchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt)
@@ -183,7 +186,7 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    else
      degOpt = 'N'
    end if
-
+   
    v = (0.5_r8, 0.0_r8)
 
    ! Ill-conditioning check
@@ -239,12 +242,13 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
          ham(j, i) = conjg(ham(i,j))
       end do
    end do
+   
    ! solve
    if(.not. ph%chase_started) then
       if(ph%zchase_init == 1) then
         call zchase_finalize(ph%zchase_init)
       end if
-      call zchase_init(ph%n_good, nev, nex, ham, ph%pre_evec_cmplx, ph%pre_eval, ph%zchase_init)
+      call zchase_init(ph%n_good, nev, nex, ham, ph%n_basis, ph%pre_evec_cmplx, ph%pre_eval, ph%zchase_init)
    end if
 
    call zchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt)
