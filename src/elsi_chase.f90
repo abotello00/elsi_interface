@@ -550,13 +550,6 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    ph%htmp_c(:,:) = ham(:,:)
    call pzgeadd('C', ph%n_basis, ph%n_basis, v,  ph%htmp_c, 1, 1, bh%desc, &
                  v, ham, 1, 1, bh%desc)   
-         
-   ! Solve
-   !call pzchase_init_blockcyclic( bh%comm, ph%n_good, bh%blk,bh%blk, nev, nex, &
-   !                                   bh%n_prow, bh%n_pcol, 'R', 0, 0)
-
-   !call pzchase(ham, bh%n_lrow, ph%pre_evec_cmplx, ph%pre_eval, &
-   !                ph%chase_filter_deg, ph%chase_tol, Approx, degOpt )
 
    if(.not. ph%chase_started) then
       if(ph%pzchase_init == 1) then
@@ -576,16 +569,10 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
       eval(ph%n_good+1:ph%n_basis) = eval(ph%n_good)+10.0_r8
    end if
 
-   !call descinit(desc_ev,ph%n_good, nev, ph%n_good, nev, 0, 0, &
-   !              bh%blacs_ctxt, ph%n_basis,ierr)
-
-   !call pzgemr2d(ph%n_good, nev, ph%pre_evec_cmplx, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)
    call descinit(desc_ev,ph%n_good, nev, bh%blk, nev, 0, 0, &
                  bh%blacs_ctxt, ph%n_basis,ierr)
 
    call pzgemr2d(ph%n_good, nev, ph%pre_evec_cmplx, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)
-
-
    call elsi_get_time(t1)
 
    write(msg,"(A)") "Finished solving standard eigenproblem"
