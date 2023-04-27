@@ -583,7 +583,7 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    call descinit(desc_ev,ph%n_good, nev, bh%blk, nev, 0, 0, &
                  bh%blacs_ctxt, ph%n_basis,ierr)
 
-   call pdgemr2d(ph%n_good, nev, ph%pre_evec_cmplx, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)
+   call pzgemr2d(ph%n_good, nev, ph%pre_evec_cmplx, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)
 
 
    call elsi_get_time(t1)
