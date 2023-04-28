@@ -58,7 +58,7 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
-
+   character        :: QRImpl
    v = 0.5_r8
 
    if(ph%chase_deg_opt) then
@@ -66,6 +66,12 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
    else
      degOpt = 'N'
    end if
+
+   if(ph%chase_cholqr) then
+      QRImpl = 'C'
+   else
+      QRImpl = 'H'
+   end if   
 
    if(.not. ph%unit_ovlp .and. ph%ill_check) then
       call elsi_check_ovlp_sp(ph,bh,ovlp,eval,evec)
@@ -126,7 +132,7 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
       call dchase_init(ph%n_good, nev, nex, ham, ph%n_basis, ph%pre_evec_real, ph%pre_eval, ph%dchase_init)   
    end if
 
-   call dchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt)
+   call dchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt, QRImpl)
    
    evec(1:ph%n_good,1:nev) = ph%pre_evec_real(1:ph%n_good,1:nev)
    eval(1:nev) = ph%pre_eval(1:nev)
@@ -180,6 +186,13 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
+   character        :: QRImpl
+
+   if(ph%chase_cholqr) then
+      QRImpl = 'C'
+   else
+      QRImpl = 'H'
+   end if
 
    if(ph%chase_deg_opt) then
      degOpt = 'S'
@@ -251,7 +264,7 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
       call zchase_init(ph%n_good, nev, nex, ham, ph%n_basis, ph%pre_evec_cmplx, ph%pre_eval, ph%zchase_init)
    end if
 
-   call zchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt)
+   call zchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt, QRImpl)
 
    evec(1:ph%n_good,1:nev) = ph%pre_evec_cmplx(1:ph%n_good,1:nev)
    eval(1:nev) = ph%pre_eval(1:nev)
@@ -310,6 +323,13 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    real(kind=r8) :: v
    character        :: degOpt
    character        :: gridMajor
+   character        :: QRImpl
+
+   if(ph%chase_cholqr) then
+      QRImpl = 'C'
+   else
+      QRImpl = 'H'
+   end if
 
    if(bh%my_prow == (bh%myid / bh%n_pcol) .and. bh%my_pcol == mod(bh%myid, bh%n_pcol) ) then
         gridMajor = 'R'
@@ -398,7 +418,7 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
                                     bh%n_prow, bh%n_pcol, gridMajor, 0, 0, bh%comm, ph%pdchase_init)
    end if
 
-   call pdchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt)
+   call pdchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt, QRImpl)
 
    eval(1:nev) = ph%pre_eval(1:nev)
 
@@ -472,6 +492,13 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    character        :: Approx
    character        :: degOpt
    character        :: gridMajor
+   character        :: QRImpl
+
+   if(ph%chase_cholqr) then
+      QRImpl = 'C'
+   else
+      QRImpl = 'H'
+   end if
 
    if(bh%my_prow == (bh%myid / bh%n_pcol) .and. bh%my_pcol == mod(bh%myid, bh%n_pcol) ) then
         gridMajor = 'R'
@@ -560,7 +587,7 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
                                     bh%n_prow, bh%n_pcol, gridMajor, 0, 0, bh%comm, ph%pzchase_init)
    end if
 
-   call pzchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt)
+   call pzchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt, QRImpl)
 
    eval(1:nev) = ph%pre_eval(1:nev)
 

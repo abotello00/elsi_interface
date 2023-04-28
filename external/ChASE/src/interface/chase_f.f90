@@ -20,6 +20,7 @@ MODULE chase_diag
       !> @param[in] nev number of desired eigenpairs
       !> @param[in] nex extra searching space size      
       !> @param[in] h pointer to the matrix to be diagonalized
+      !> @param[in] ldh a leading dimension of h
       !> @param[in,out] v `(nx(nev+nex))` matrix, input is the initial guess eigenvectors, and for output, the first `nev` columns are overwritten by the desired eigenvectors
       !> @param[in,out] ritzv an array of size `nev` which contains the desired eigenvalues
       !> @param[in,out] init a flag to indicate if ChASE has been initialized
@@ -44,7 +45,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE 
-        SUBROUTINE dchase(deg, tol, mode, opt) bind( c, name = 'dchase_' )
+        SUBROUTINE dchase(deg, tol, mode, opt, qr) bind( c, name = 'dchase_' )
       !> Solve the eigenvalue by the previously constructed shared-memory ChASE (real scalar in double precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -53,10 +54,11 @@ MODULE chase_diag
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
       !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.         
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                       
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_double)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE dchase    
     END INTERFACE
@@ -71,6 +73,7 @@ MODULE chase_diag
       !> @param[in] nev number of desired eigenpairs
       !> @param[in] nex extra searching space size      
       !> @param[in] h pointer to the matrix to be diagonalized
+      !> @param[in] ldh a leading dimension of h      
       !> @param[in,out] v `(nx(nev+nex))` matrix, input is the initial guess eigenvectors, and for output, the first `nev` columns are overwritten by the desired eigenvectors
       !> @param[in,out] ritzv an array of size `nev` which contains the desired eigenvalues
       !> @param[in,out] init a flag to indicate if ChASE has been initialized            
@@ -95,7 +98,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE     
-        SUBROUTINE schase(deg, tol, mode, opt) bind( c, name = 'schase_' )
+        SUBROUTINE schase(deg, tol, mode, opt, qr) bind( c, name = 'schase_' )
       !> Solve the eigenvalue by the previously constructed shared-memory ChASE (real scalar in single precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -104,10 +107,11 @@ MODULE chase_diag
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
       !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.         
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                                   
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_float)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE schase    
     END INTERFACE
@@ -122,6 +126,7 @@ MODULE chase_diag
       !> @param[in] nev number of desired eigenpairs
       !> @param[in] nex extra searching space size      
       !> @param[in] h pointer to the matrix to be diagonalized
+      !> @param[in] ldh a leading dimension of h      
       !> @param[in,out] v `(nx(nev+nex))` matrix, input is the initial guess eigenvectors, and for output, the first `nev` columns are overwritten by the desired eigenvectors
       !> @param[in,out] ritzv an array of size `nev` which contains the desired eigenvalues
       !> @param[in,out] init a flag to indicate if ChASE has been initialized            
@@ -146,7 +151,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE     
-        SUBROUTINE cchase(deg, tol, mode, opt) bind( c, name = 'cchase_' )
+        SUBROUTINE cchase(deg, tol, mode, opt, qr) bind( c, name = 'cchase_' )
       !> Solve the eigenvalue by the previously constructed shared-memory ChASE (complex scalar in single precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -154,11 +159,12 @@ MODULE chase_diag
       !> @param[in] deg initial degree of Cheyshev polynomial filter
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
-      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.         
+      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.   
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                                   
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_float)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE cchase    
     END INTERFACE
@@ -174,6 +180,7 @@ MODULE chase_diag
       !> @param[in] nev number of desired eigenpairs
       !> @param[in] nex extra searching space size      
       !> @param[in] h pointer to the matrix to be diagonalized
+      !> @param[in] ldh a leading dimension of h      
       !> @param[in,out] v `(nx(nev+nex))` matrix, input is the initial guess eigenvectors, and for output, the first `nev` columns are overwritten by the desired eigenvectors
       !> @param[in,out] ritzv an array of size `nev` which contains the desired eigenvalues
       !> @param[in,out] init a flag to indicate if ChASE has been initialized         
@@ -198,7 +205,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE     
-        SUBROUTINE zchase(deg, tol, mode, opt) bind( c, name = 'zchase_' )
+        SUBROUTINE zchase(deg, tol, mode, opt, qr) bind( c, name = 'zchase_' )
       !> Solve the eigenvalue by the previously constructed shared-memory ChASE (complex scalar in double precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -206,11 +213,12 @@ MODULE chase_diag
       !> @param[in] deg initial degree of Cheyshev polynomial filter
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
-      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.          
+      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.  
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                                     
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_double)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE zchase    
     END INTERFACE
@@ -292,7 +300,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE   
-        SUBROUTINE pdchase(deg, tol, mode, opt) bind( c, name = 'pdchase_' )
+        SUBROUTINE pdchase(deg, tol, mode, opt, qr) bind( c, name = 'pdchase_' )
       !> Solve the eigenvalue by the previously constructed distributed-memory ChASE (real scalar in double precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -300,11 +308,12 @@ MODULE chase_diag
       !> @param[in] deg initial degree of Cheyshev polynomial filter
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
-      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.           
+      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.   
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                               
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_double)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE pdchase    
     END INTERFACE
@@ -386,7 +395,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE   
-        SUBROUTINE pschase(deg, tol, mode, opt) bind( c, name = 'pschase_' )
+        SUBROUTINE pschase(deg, tol, mode, opt, qr) bind( c, name = 'pschase_' )
       !> Solve the eigenvalue by the previously constructed distributed-memory ChASE (real scalar in single precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -394,11 +403,12 @@ MODULE chase_diag
       !> @param[in] deg initial degree of Cheyshev polynomial filter
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
-      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.          
+      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.     
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                                  
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_float)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE pschase    
     END INTERFACE
@@ -479,7 +489,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE     
-        SUBROUTINE pzchase(deg, tol, mode, opt) bind( c, name = 'pzchase_' )
+        SUBROUTINE pzchase(deg, tol, mode, opt, qr) bind( c, name = 'pzchase_' )
       !> Solve the eigenvalue by the previously constructed distributed-memory ChASE (complex scalar in double precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -487,11 +497,12 @@ MODULE chase_diag
       !> @param[in] deg initial degree of Cheyshev polynomial filter
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
-      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.              
+      !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no. 
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                       
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_double)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE pzchase    
     END INTERFACE
@@ -572,7 +583,7 @@ MODULE chase_diag
     END INTERFACE
 
     INTERFACE       
-        SUBROUTINE pcchase(deg, tol, mode, opt) bind( c, name = 'pcchase_' )
+        SUBROUTINE pcchase(deg, tol, mode, opt, qr) bind( c, name = 'pcchase_' )
       !> Solve the eigenvalue by the previously constructed distributed-memory ChASE (complex scalar in single precision).
       !> The buffer of matrix to be diagonalized, of ritz pairs have provided during the initialization of solver.
       !>    
@@ -581,10 +592,11 @@ MODULE chase_diag
       !> @param[in] tol desired absolute tolerance of computed eigenpairs
       !> @param[in] mode for sequences of eigenproblems, if reusing the eigenpairs obtained from last system. If `mode = A`, reuse, otherwise, not.  
       !> @param[in] opt determining if using internal optimization of Chebyshev polynomial degree. If `opt=S`, use, otherwise, no.            
+      !> @param[in] qr determining if flexible CholeskyQR, if `qr=C` use, otherwise, no use.                                   
             USE, INTRINSIC :: iso_c_binding
             INTEGER(c_int)      :: deg
             REAL(c_float)      :: tol
-            CHARACTER(len=1,kind=c_char)  :: mode, opt
+            CHARACTER(len=1,kind=c_char)  :: mode, opt, qr
 
         END SUBROUTINE pcchase    
     END INTERFACE

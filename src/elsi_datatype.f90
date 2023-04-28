@@ -268,6 +268,7 @@ module ELSI_DATATYPE
       integer(kind=i4) :: zchase_init = 0
       integer(kind=i4) :: pdchase_init = 0
       integer(kind=i4) :: pzchase_init = 0
+      logical :: chase_cholqr = .true.
    end type
 
    type, public :: elsi_handle

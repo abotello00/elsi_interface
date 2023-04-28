@@ -203,6 +203,7 @@ subroutine elsi_reset_param(ph)
    ph%zchase_init = 0   
    ph%pdchase_init = 0
    ph%pzchase_init = 0
+   ph%chase_cholqr = .true.
 end subroutine
 
 !>
