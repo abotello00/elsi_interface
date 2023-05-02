@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2019)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: elsi_manual.aux
+The style file: elsarticle-num.bst
+Database file #1: elsi_manual.bib
+Warning--empty pages in chase_pasc22
+You've used 33 entries,
+            2952 wiz_defined-function locations,
+            862 strings with 12044 characters,
+and the built_in function-call counts, 10660 in all, are:
+= -- 914
+> -- 492
+< -- 3
++ -- 186
+- -- 153
+* -- 790
+:= -- 1537
+add.period$ -- 33
+call.type$ -- 33
+change.case$ -- 32
+chr.to.int$ -- 0
+cite$ -- 34
+duplicate$ -- 298
+empty$ -- 1134
+format.name$ -- 183
+if$ -- 2703
+int.to.chr$ -- 0
+int.to.str$ -- 33
+missing$ -- 34
+newline$ -- 107
+num.names$ -- 33
+pop$ -- 196
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 638
+stack$ -- 0
+substring$ -- 663
+swap$ -- 51
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 68
+width$ -- 35
+write$ -- 272
+(There was 1 warning)
