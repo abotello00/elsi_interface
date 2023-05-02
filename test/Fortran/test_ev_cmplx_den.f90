@@ -158,6 +158,7 @@ subroutine test_ev_cmplx_den(comm,solver,h_file,s_file)
    call elsi_set_chase_same_ovlp(eh, 1)
    !call elsi_set_chase_deg_opt(eh, 0)
    !call elsi_set_chase_evecs_recycl(eh, 0)
+   call elsi_set_chase_cholqr(eh, 0)
 
    inquire(file=file_name,exist=file_exist)
 

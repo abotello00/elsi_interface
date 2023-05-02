@@ -3,7 +3,7 @@ module ELSI_CHASE
                          zchase_init, zchase, zchase_finalize, &
                          pdchase_init_blockcyclic, pdchase, pdchase_finalize, &
                          pzchase_init_blockcyclic, pzchase, pzchase_finalize
-   use ELSI_CONSTANT, only: FC_BASIC,FC_PLUS_V
+   use ELSI_CONSTANT, only: FC_BASIC,FC_PLUS_V,UT_MAT,LT_MAT,FULL_MAT
    use ELSI_DATATYPE, only: elsi_param_t,elsi_basic_t
    use ELSI_ELPA, only: elsi_elpa_tridiag
    use ELSI_MALLOC, only: elsi_allocate,elsi_deallocate
@@ -14,6 +14,8 @@ module ELSI_CHASE
    use ELSI_LAPACK, only: elsi_factor_ovlp_sp,elsi_reduce_evp_sp,elsi_back_ev_sp,elsi_check_ovlp_sp
    use ELSI_ELPA, only: elsi_factor_ovlp_elpa, elsi_reduce_evp_elpa, elsi_back_ev_elpa, &
                         elsi_check_ovlp_elpa, elsi_elpa_evec, elsi_elpa_setup
+
+   use ELSI_UTIL, only: elsi_set_full_mat
 
    implicit none
    private
@@ -380,12 +382,12 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
       call elsi_allocate(bh,ph%pre_eval, nev+nex,"pre_eval",caller)
    end if
 
-   if(.not. ph%chase_started) then
-      if(allocated(ph%htmp_r) ) then
-         call elsi_deallocate(bh,ph%htmp_r,"htmp_r")
-      end if           
-      call elsi_allocate(bh, ph%htmp_r, bh%n_lrow,bh%n_lcol, "htmp_r",caller)
-   end if
+   !if(.not. ph%chase_started) then
+   !   if(allocated(ph%htmp_r) ) then
+   !      call elsi_deallocate(bh,ph%htmp_r,"htmp_r")
+   !   end if           
+   !   call elsi_allocate(bh, ph%htmp_r, bh%n_lrow,bh%n_lcol, "htmp_r",caller)
+   !end if
    
    ! Transform to standard form
    if(.not. ph%unit_ovlp) then
@@ -405,9 +407,10 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    ! Solve
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
-   ph%htmp_r(:,:) = ham(:,:)
-   call pdgeadd('T', ph%n_basis, ph%n_basis, v, ph%htmp_r, 1, 1, bh%desc, &
-                 v, ham, 1, 1, bh%desc)   
+   !ph%htmp_r(:,:) = ham(:,:)
+   !call pdgeadd('T', ph%n_basis, ph%n_basis, v, ph%htmp_r, 1, 1, bh%desc, &
+   !              v, ham, 1, 1, bh%desc)   
+   call elsi_set_full_mat(ph, bh, UT_MAT, ham)
 
    if(.not. ph%chase_started) then
       if(ph%pdchase_init == 1) then
@@ -549,12 +552,12 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
       call elsi_allocate(bh,ph%pre_eval, nev+nex,"pre_eval",caller)
    end if
 
-   if(.not. ph%chase_started) then
-      if(allocated(ph%htmp_c) ) then
-         call elsi_deallocate(bh,ph%htmp_c,"htmp_c")
-      end if           
-      call elsi_allocate(bh, ph%htmp_c, bh%n_lrow,bh%n_lcol, "htmp_c",caller)
-   end if
+   !if(.not. ph%chase_started) then
+   !   if(allocated(ph%htmp_c) ) then
+   !      call elsi_deallocate(bh,ph%htmp_c,"htmp_c")
+   !   end if           
+   !   call elsi_allocate(bh, ph%htmp_c, bh%n_lrow,bh%n_lcol, "htmp_c",caller)
+   !end if
 
    ! Transform to standard form
    if(.not. ph%unit_ovlp) then
@@ -574,9 +577,10 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    ! Solve
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
-   ph%htmp_c(:,:) = ham(:,:)
-   call pzgeadd('C', ph%n_basis, ph%n_basis, v,  ph%htmp_c, 1, 1, bh%desc, &
-                 v, ham, 1, 1, bh%desc)   
+   !ph%htmp_c(:,:) = ham(:,:)
+   !call pzgeadd('C', ph%n_basis, ph%n_basis, v,  ph%htmp_c, 1, 1, bh%desc, &
+   !              v, ham, 1, 1, bh%desc)   
+   call elsi_set_full_mat(ph, bh, UT_MAT, ham)
 
    if(.not. ph%chase_started) then
       if(ph%pzchase_init == 1) then
