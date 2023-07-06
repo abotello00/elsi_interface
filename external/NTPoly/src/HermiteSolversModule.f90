@@ -12,7 +12,8 @@ MODULE HermiteSolversModule
   USE PSMatrixModule, ONLY : Matrix_ps, ConstructEmptyMatrix, CopyMatrix, &
        & DestructMatrix, FillMatrixIdentity, PrintMatrixInformation
   USE SolverParametersModule, ONLY : SolverParameters_t, PrintParameters, &
-       & DestructSolverParameters
+       & DestructSolverParameters, ConstructSolverParameters, &
+       & CopySolverParameters
   IMPLICIT NONE
   PRIVATE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -87,7 +88,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Parameters for the solver
     TYPE(SolverParameters_t), INTENT(in), OPTIONAL :: solver_parameters_in
     !! Handling Solver Parameters
-    TYPE(SolverParameters_t) :: solver_parameters
+    TYPE(SolverParameters_t) :: params
     !! Local Matrices
     TYPE(Matrix_ps) :: Identity
     TYPE(Matrix_ps) :: BalancedInput
@@ -98,36 +99,36 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(MatrixMemoryPool_p) :: pool
     !! Local Variables
     INTEGER :: degree
-    INTEGER :: counter
+    INTEGER :: II
 
     !! Handle The Optional Parameters
     IF (PRESENT(solver_parameters_in)) THEN
-       solver_parameters = solver_parameters_in
+       CALL CopySolverParameters(solver_parameters_in, params)
     ELSE
-       solver_parameters = SolverParameters_t()
+       CALL ConstructSolverParameters(params)
     END IF
 
     degree = SIZE(poly%coefficients)
 
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL WriteHeader("Hermite Solver")
        CALL EnterSubLog
-       CALL WriteElement(key="Method", VALUE="Standard")
-       CALL WriteElement(key="Degree", VALUE=degree-1)
-       CALL PrintParameters(solver_parameters)
+       CALL WriteElement(key = "Method", VALUE = "Standard")
+       CALL WriteElement(key = "Degree", VALUE = degree - 1)
+       CALL PrintParameters(params)
     END IF
 
     !! Initial values for matrices
     CALL ConstructEmptyMatrix(Identity, InputMat)
     CALL FillMatrixIdentity(Identity)
-    CALL CopyMatrix(InputMat,BalancedInput)
+    CALL CopyMatrix(InputMat, BalancedInput)
 
     !! Load Balancing Step
-    IF (solver_parameters%do_load_balancing) THEN
+    IF (params%do_load_balancing) THEN
        CALL PermuteMatrix(Identity, Identity, &
-            & solver_parameters%BalancePermutation, memorypool_in=pool)
+            & params%BalancePermutation, memorypool_in = pool)
        CALL PermuteMatrix(BalancedInput, BalancedInput, &
-            & solver_parameters%BalancePermutation, memorypool_in=pool)
+            & params%BalancePermutation, memorypool_in = pool)
     END IF
 
     !! Recursive expansion
@@ -136,41 +137,39 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL ScaleMatrix(OutputMat, poly%coefficients(1))
     IF (degree .GT. 1) THEN
        CALL CopyMatrix(BalancedInput, Hk)
-       CALL ScaleMatrix(Hk, REAL(2.0,KIND=NTREAL))
+       CALL ScaleMatrix(Hk, 2.0_NTREAL)
        CALL IncrementMatrix(Hk, OutputMat, &
-            & alpha_in=poly%coefficients(2))
+            & alpha_in = poly%coefficients(2))
        IF (degree .GT. 2) THEN
           CALL CopyMatrix(Hkminus1, Hkprime)
-          CALL ScaleMatrix(Hkprime, REAL(2.0,NTREAL))
-          DO counter = 3, degree
+          CALL ScaleMatrix(Hkprime, 2.0_NTREAL)
+          DO II = 3, degree
              CALL MatrixMultiply(BalancedInput, Hk, Hkplus1, &
-                  & alpha_in=REAL(2.0,NTREAL), &
-                  & threshold_in=solver_parameters%threshold, &
-                  & memory_pool_in=pool)
+                  & alpha_in = 2.0_NTREAL, threshold_in = params%threshold, &
+                  & memory_pool_in = pool)
              CALL IncrementMatrix(Hkprime, Hkplus1, &
-                  & alpha_in=REAL(-1.0,NTREAL))
+                  & alpha_in = -1.0_NTREAL)
              CALL CopyMatrix(Hk, Hkprime)
-             CALL ScaleMatrix(Hkprime, &
-                  & REAL(2*(counter-1),KIND=NTREAL))
+             CALL ScaleMatrix(Hkprime, REAL(2 * (II - 1), KIND = NTREAL))
              CALL CopyMatrix(Hk, Hkminus1)
              CALL CopyMatrix(Hkplus1, Hk)
              CALL IncrementMatrix(Hk, OutputMat, &
-                  & alpha_in=poly%coefficients(counter))
+                  & alpha_in = poly%coefficients(II))
           END DO
        END IF
     END IF
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL PrintMatrixInformation(OutputMat)
     END IF
 
     !! Undo Load Balancing Step
-    IF (solver_parameters%do_load_balancing) THEN
+    IF (params%do_load_balancing) THEN
        CALL UndoPermuteMatrix(OutputMat, OutputMat, &
-            & solver_parameters%BalancePermutation, memorypool_in=pool)
+            & params%BalancePermutation, memorypool_in = pool)
     END IF
 
     !! Cleanup
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL ExitSubLog
     END IF
     CALL DestructMatrix(Identity)
@@ -180,7 +179,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL DestructMatrix(Hkprime)
     CALL DestructMatrix(BalancedInput)
     CALL DestructMatrixMemoryPool(pool)
-    CALL DestructSolverParameters(solver_parameters)
+    CALL DestructSolverParameters(params)
   END SUBROUTINE Compute_horner
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 END MODULE HermiteSolversModule

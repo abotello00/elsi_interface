@@ -1,14 +1,17 @@
 ### Source files ###
 LIST(APPEND ntpoly_src
-  src/AnalysisModule.f90 
+  src/AnalysisModule.f90
   src/ChebyshevSolversModule.f90
-  src/CholeskySolversModule.f90 
+  src/CholeskySolversModule.f90
   src/DataTypesModule.f90
   src/DensityMatrixSolversModule.f90
   src/DMatrixModule.f90
   src/EigenBoundsModule.f90
+  src/EigenExaModule.f90
+  src/EigenSolversModule.f90
   src/ErrorModule.f90
   src/ExponentialSolversModule.f90
+  src/FermiOperatorModule.f90
   src/GemmTasksModule.f90
   src/GeometryOptimizationModule.f90
   src/HermiteSolversModule.f90
@@ -22,6 +25,8 @@ LIST(APPEND ntpoly_src
   src/MatrixMarketModule.f90
   src/MatrixMemoryPoolModule.f90
   src/MatrixReduceModule.f90
+  src/NTMPIFH.f90
+  src/NTMPIModule.f90
   src/PermutationModule.f90
   src/PMatrixMemoryPoolModule.f90
   src/PolynomialSolversModule.f90
@@ -30,6 +35,7 @@ LIST(APPEND ntpoly_src
   src/PSMatrixModule.f90
   src/RootSolversModule.f90
   src/SignSolversModule.f90
+  src/SingularValueSolversModule.f90
   src/SMatrixAlgebraModule.f90
   src/SMatrixModule.f90
   src/SolverParametersModule.f90
