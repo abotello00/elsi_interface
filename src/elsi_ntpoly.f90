@@ -23,7 +23,8 @@ module ELSI_NTPOLY
        ConstructRandomPermutation,DestructPermutation,InverseSquareRoot,&
        SolverParameters_t,Triplet_r,Triplet_c,TripletList_r,TripletList_c,&
        ConstructTripletList,AppendToTripletList,DestructTripletList,&
-       ActivateLogger,DeactivateLogger
+       ActivateLogger,DeactivateLogger,ConstructSolverParameters,&
+       DestructSolverParameters
 
    implicit none
 
@@ -121,7 +122,7 @@ subroutine elsi_solve_ntpoly(ph,bh,ham,ovlp,dm)
 
    real(kind=r8) :: t0
    real(kind=r8) :: t1
-   integer(kind=i4) :: ne
+   real(kind=r8) :: ne
    character(len=200) :: msg
 
    type(Matrix_ps) :: ovlp_isr
@@ -138,8 +139,8 @@ subroutine elsi_solve_ntpoly(ph,bh,ham,ovlp,dm)
       call ConstructRandomPermutation(ph%nt_perm,ovlp%logical_matrix_dimension,&
            ph%nt_pgrid)
 
-      ph%nt_options = SolverParameters_t(ph%nt_tol,ph%nt_filter,ph%nt_max_iter,&
-         ph%nt_output,ph%nt_perm)
+      call ConstructSolverParameters(ph%nt_options,ph%nt_tol,ph%nt_filter,&
+           ph%nt_max_iter,ph%nt_output,ph%nt_perm)
 
       ! Overlap seems more difficult to converge
       ph%nt_options%threshold = max(0.01_r8*ph%nt_filter,1.0e-15_r8)
@@ -160,7 +161,7 @@ subroutine elsi_solve_ntpoly(ph,bh,ham,ovlp,dm)
 
    call elsi_get_time(t0)
 
-   ne = 2*nint(ph%n_electrons/(ph%n_spins*ph%spin_degen),kind=i4)
+   ne = ph%n_electrons/(ph%n_spins*ph%spin_degen)
 
    select case(ph%nt_method)
    case(NTPOLY_PM)
@@ -174,6 +175,7 @@ subroutine elsi_solve_ntpoly(ph,bh,ham,ovlp,dm)
    end select
 
    call ScaleMatrix(dm,ph%spin_degen)
+   ph%ebs = ph%ebs * ph%spin_degen
 
    call elsi_get_time(t1)
 
@@ -243,7 +245,7 @@ subroutine elsi_update_dm_ntpoly(ph,bh,ovlp0,ovlp1,dm0,dm1)
    real(kind=r8) :: factor
    real(kind=r8) :: t0
    real(kind=r8) :: t1
-   integer(kind=i4) :: ne
+   real(kind=r8) :: ne
    character(len=200) :: msg
 
    character(len=*), parameter :: caller = "elsi_update_dm_ntpoly"
@@ -255,8 +257,8 @@ subroutine elsi_update_dm_ntpoly(ph,bh,ovlp0,ovlp1,dm0,dm1)
       call ConstructRandomPermutation(ph%nt_perm,&
            ovlp0%logical_matrix_dimension,ph%nt_pgrid)
 
-      ph%nt_options = SolverParameters_t(ph%nt_tol,ph%nt_filter,ph%nt_max_iter,&
-         ph%nt_output,ph%nt_perm)
+      call ConstructSolverParameters(ph%nt_options,ph%nt_tol,ph%nt_filter,&
+           ph%nt_max_iter,ph%nt_output,ph%nt_perm)
    end if
 
    select case(ph%extrapolation)
@@ -264,7 +266,7 @@ subroutine elsi_update_dm_ntpoly(ph,bh,ovlp0,ovlp1,dm0,dm1)
       call LowdinExtrapolate(dm0,ovlp0,ovlp1,dm1,ph%nt_options)
    case(EXTRA_TRS2)
       factor = 1.0_r8/ph%spin_degen
-      ne = 2*nint(ph%n_electrons/(ph%n_spins*ph%spin_degen),kind=i4)
+      ne = ph%n_electrons/(ph%n_spins*ph%spin_degen)
 
       call ScaleMatrix(dm0,factor)
       call PurificationExtrapolate(dm0,ovlp1,ne,dm1,ph%nt_options)
@@ -294,6 +296,7 @@ subroutine elsi_cleanup_ntpoly(ph)
    if(ph%nt_started) then
       call DeactivateLogger()
       call DestructPermutation(ph%nt_perm)
+      call DestructSolverParameters(ph%nt_options)
       call DestructProcessGrid(ph%nt_pgrid)
    end if
 

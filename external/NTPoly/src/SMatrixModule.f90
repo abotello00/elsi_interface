@@ -52,16 +52,6 @@ MODULE SMatrixModule
   PUBLIC :: PrintMatrix
   PUBLIC :: MatrixToTripletList
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  INTERFACE Matrix_lsr
-     MODULE PROCEDURE ConstructEmptyMatrix_lsr
-     MODULE PROCEDURE ConstructMatrixFromFile_lsr
-     MODULE PROCEDURE ConstructMatrixFromTripletList_lsr
-  END INTERFACE Matrix_lsr
-  INTERFACE Matrix_lsc
-     MODULE PROCEDURE ConstructEmptyMatrix_lsc
-     MODULE PROCEDURE ConstructMatrixFromFile_lsc
-     MODULE PROCEDURE ConstructMatrixFromTripletList_lsc
-  END INTERFACE Matrix_lsc
   INTERFACE ConstructEmptyMatrix
      MODULE PROCEDURE ConstructEmptyMatrixSub_lsr
      MODULE PROCEDURE ConstructEmptyMatrixSub_lsc
@@ -145,12 +135,20 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Whether to set the matrix to zero.
     LOGICAL, INTENT(IN), OPTIONAL :: zero_in
 
-    IF (PRESENT(zero_in)) THEN
-       this = ConstructEmptyMatrix_lsr(rows, columns, zero_in)
-    ELSE
-       this = ConstructEmptyMatrix_lsr(rows, columns)
-    ENDIF
 
+    CALL DestructMatrix(this)
+
+    this%rows = rows
+    this%columns = columns
+    ALLOCATE(this%outer_index(this%columns + 1))
+    this%outer_index = 0
+
+    IF (PRESENT(zero_in)) THEN
+       IF (zero_in) THEN
+          ALLOCATE(this%inner_index(0))
+          ALLOCATE(this%values(0))
+       END IF
+    END IF
   END SUBROUTINE ConstructEmptyMatrixSub_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> A subroutine type wrapper for the constructor.
@@ -164,67 +162,21 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Whether to set the matrix to zero.
     LOGICAL, INTENT(IN), OPTIONAL :: zero_in
 
-    IF (PRESENT(zero_in)) THEN
-       this = ConstructEmptyMatrix_lsc(rows, columns, zero_in)
-    ELSE
-       this = ConstructEmptyMatrix_lsc(rows, columns)
-    ENDIF
 
+    CALL DestructMatrix(this)
+
+    this%rows = rows
+    this%columns = columns
+    ALLOCATE(this%outer_index(this%columns + 1))
+    this%outer_index = 0
+
+    IF (PRESENT(zero_in)) THEN
+       IF (zero_in) THEN
+          ALLOCATE(this%inner_index(0))
+          ALLOCATE(this%values(0))
+       END IF
+    END IF
   END SUBROUTINE ConstructEmptyMatrixSub_lsc
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> Create a sparse matrix with a certain number of columns
-  !> and rows. Will allocate storage for the outer values, nothing else unless
-  !> you set zero_in to true.
-  PURE FUNCTION ConstructEmptyMatrix_lsr(rows, columns, zero_in) RESULT(this)
-    !> The matrix to construct.
-    TYPE(Matrix_lsr) :: this
-    !> The number of matrix columns.
-    INTEGER, INTENT(IN) :: columns
-    !> The number of matrix rows.
-    INTEGER, INTENT(IN) :: rows
-    !> Whether to set the matrix to zero.
-    LOGICAL, INTENT(IN), OPTIONAL :: zero_in
-
-
-    this%rows = rows
-    this%columns = columns
-    ALLOCATE(this%outer_index(this%columns+1))
-    this%outer_index = 0
-
-    IF (PRESENT(zero_in)) THEN
-       IF (zero_in) THEN
-          ALLOCATE(this%inner_index(0))
-          ALLOCATE(this%values(0))
-       END IF
-    END IF
-  END FUNCTION ConstructEmptyMatrix_lsr
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> Create a sparse matrix with a certain number of columns
-  !> and rows. Will allocate storage for the outer values, nothing else unless
-  !> you set zero_in to true.
-  PURE FUNCTION ConstructEmptyMatrix_lsc(rows, columns, zero_in) RESULT(this)
-    !> The matrix to construct.
-    TYPE(Matrix_lsc) :: this
-    !> The number of matrix columns.
-    INTEGER, INTENT(IN) :: columns
-    !> The number of matrix rows.
-    INTEGER, INTENT(IN) :: rows
-    !> Whether to set the matrix to zero.
-    LOGICAL, INTENT(IN), OPTIONAL :: zero_in
-
-
-    this%rows = rows
-    this%columns = columns
-    ALLOCATE(this%outer_index(this%columns+1))
-    this%outer_index = 0
-
-    IF (PRESENT(zero_in)) THEN
-       IF (zero_in) THEN
-          ALLOCATE(this%inner_index(0))
-          ALLOCATE(this%values(0))
-       END IF
-    END IF
-  END FUNCTION ConstructEmptyMatrix_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Subroutine wrapper for the construct from file function.
   SUBROUTINE ConstructMatrixFromFileSub_lsr(this, file_name)
@@ -232,8 +184,60 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Matrix_lsr), INTENT(INOUT) :: this
     !> Name of the file.
     CHARACTER(len=*), INTENT(IN) :: file_name
+    !! About the matrix market file.
+    INTEGER :: sparsity_type, data_type, pattern_type
+    !! Local Data
+    TYPE(TripletList_r) :: tlist
+    TYPE(TripletList_r) :: sorted_tlist
+    TYPE(Triplet_r) :: temp
 
-    this = ConstructMatrixFromFile_lsr(file_name)
+
+    !! Local Data
+    INTEGER :: rows, columns, total_values
+    CHARACTER(LEN = 81) :: input_buffer
+    INTEGER, PARAMETER :: file_handler = 16
+    LOGICAL :: found_comment_line
+    LOGICAL :: error_occured
+    INTEGER :: II
+
+    OPEN(file_handler, file = file_name, status='old')
+
+    !! Parse the header.
+    READ(file_handler,fmt='(A)') input_buffer
+    error_occured = ParseMMHeader(input_buffer, sparsity_type, data_type, &
+         & pattern_type)
+
+    !! Extra Comment Lines
+    found_comment_line = .TRUE.
+    DO WHILE(found_comment_line)
+       READ(file_handler, fmt = '(A)') input_buffer
+       IF (.NOT. input_buffer(1:1) .EQ. '%') THEN
+          found_comment_line = .FALSE.
+       END IF
+    END DO
+
+    !! Main data
+    READ(input_buffer,*) rows, columns, total_values
+    CALL ConstructTripletList(tlist)
+
+    !! Read Values
+    DO II = 1, total_values
+
+
+
+
+       READ(file_handler,*) temp%index_row, temp%index_column, temp%point_value
+
+       CALL AppendToTripletList(tlist, temp)
+    END DO
+
+    CLOSE(file_handler)
+    CALL SymmetrizeTripletList(tlist, pattern_type)
+    CALL SortTripletList(tlist, columns, rows, sorted_tlist)
+    CALL ConstructMatrixFromTripletList(this, sorted_tlist, rows, columns)
+
+    CALL DestructTripletList(tlist)
+    CALL DestructTripletList(sorted_tlist)
   END SUBROUTINE ConstructMatrixFromFileSub_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE ConstructMatrixFromFileSub_lsc(this, file_name)
@@ -241,104 +245,25 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Matrix_lsc), INTENT(INOUT) :: this
     !> Name of the file.
     CHARACTER(len=*), INTENT(IN) :: file_name
-
-    this = ConstructMatrixFromFile_lsc(file_name)
-  END SUBROUTINE ConstructMatrixFromFileSub_lsc
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> Create a sparse matrix by reading in a matrix market file.
-  FUNCTION ConstructMatrixFromFile_lsr(file_name) RESULT(this)
-    !> The matrix being constructed.
-    TYPE(Matrix_lsr) :: this
-    !> Name of the file.
-    CHARACTER(len=*), INTENT(IN) :: file_name
     !! About the matrix market file.
     INTEGER :: sparsity_type, data_type, pattern_type
     !! Local Data
-    TYPE(TripletList_r) :: triplet_list
-    TYPE(TripletList_r) :: sorted_triplet_list
-    TYPE(Triplet_r) :: temporary
-
-
-    !! Local Data
-    INTEGER :: temp_rows, temp_columns, temp_total_values
-    CHARACTER(len=81) :: input_buffer
-    INTEGER :: file_handler
-    INTEGER :: counter
-    LOGICAL :: found_comment_line
-    LOGICAL :: error_occured
-    file_handler = 16
-
-    OPEN(file_handler,file=file_name,status='old')
-
-    !! Parse the header.
-    READ(file_handler,fmt='(A)') input_buffer
-    error_occured = ParseMMHeader(input_buffer, sparsity_type, data_type, &
-         & pattern_type)
-
-    !! Extra Comment Lines
-    found_comment_line = .TRUE.
-    DO WHILE(found_comment_line)
-       !read(file_handler,*) input_buffer
-       READ(file_handler,fmt='(A)') input_buffer
-       IF (.NOT. input_buffer(1:1) .EQ. '%') THEN
-          found_comment_line = .FALSE.
-       END IF
-    END DO
-
-    !! Main data
-    READ(input_buffer,*) temp_rows, temp_columns, temp_total_values
-    CALL ConstructTripletList(triplet_list)
-
-    !! Read Values
-    DO counter = 1, temp_total_values
-
-
-
-
-
-       READ(file_handler,*) temporary%index_row, temporary%index_column, &
-            & temporary%point_value
-
-       CALL AppendToTripletList(triplet_list,temporary)
-    END DO
-
-    CLOSE(file_handler)
-    CALL SymmetrizeTripletList(triplet_list, pattern_type)
-    CALL SortTripletList(triplet_list, temp_columns, temp_rows, &
-         & sorted_triplet_list)
-    CALL ConstructMatrixFromTripletList(this, sorted_triplet_list, temp_rows, &
-         & temp_columns)
-
-    CALL DestructTripletList(triplet_list)
-    CALL DestructTripletList(sorted_triplet_list)
-  END FUNCTION ConstructMatrixFromFile_lsr
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> Create a sparse matrix by reading in a matrix market file.
-  FUNCTION ConstructMatrixFromFile_lsc(file_name) RESULT(this)
-    !> The matrix being constructed.
-    TYPE(Matrix_lsc) :: this
-    !> Name of the file.
-    CHARACTER(len=*), INTENT(IN) :: file_name
-    !! About the matrix market file.
-    INTEGER :: sparsity_type, data_type, pattern_type
-    !! Local Data
-    TYPE(TripletList_c) :: triplet_list
-    TYPE(TripletList_c) :: sorted_triplet_list
-    TYPE(Triplet_c) :: temporary
+    TYPE(TripletList_c) :: tlist
+    TYPE(TripletList_c) :: sorted_tlist
+    TYPE(Triplet_c) :: temp
     REAL(NTREAL) :: real_val, comp_val
 
 
 
     !! Local Data
-    INTEGER :: temp_rows, temp_columns, temp_total_values
-    CHARACTER(len=81) :: input_buffer
-    INTEGER :: file_handler
-    INTEGER :: counter
+    INTEGER :: rows, columns, total_values
+    CHARACTER(LEN = 81) :: input_buffer
+    INTEGER, PARAMETER :: file_handler = 16
     LOGICAL :: found_comment_line
     LOGICAL :: error_occured
-    file_handler = 16
+    INTEGER :: II
 
-    OPEN(file_handler,file=file_name,status='old')
+    OPEN(file_handler, file = file_name, status='old')
 
     !! Parse the header.
     READ(file_handler,fmt='(A)') input_buffer
@@ -348,42 +273,36 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Extra Comment Lines
     found_comment_line = .TRUE.
     DO WHILE(found_comment_line)
-       !read(file_handler,*) input_buffer
-       READ(file_handler,fmt='(A)') input_buffer
+       READ(file_handler, fmt = '(A)') input_buffer
        IF (.NOT. input_buffer(1:1) .EQ. '%') THEN
           found_comment_line = .FALSE.
        END IF
     END DO
 
     !! Main data
-    READ(input_buffer,*) temp_rows, temp_columns, temp_total_values
-    CALL ConstructTripletList(triplet_list)
+    READ(input_buffer,*) rows, columns, total_values
+    CALL ConstructTripletList(tlist)
 
     !! Read Values
-    DO counter = 1, temp_total_values
+    DO II = 1, total_values
 
-       READ(file_handler,*) temporary%index_row, temporary%index_column, &
-            & real_val, comp_val
-       temporary%point_value = CMPLX(real_val, comp_val, KIND=NTCOMPLEX)
-
+       READ(file_handler,*) temp%index_row, temp%index_column, real_val, comp_val
+       temp%point_value = CMPLX(real_val, comp_val, KIND = NTCOMPLEX)
 
 
 
-       CALL AppendToTripletList(triplet_list,temporary)
+       CALL AppendToTripletList(tlist, temp)
     END DO
 
     CLOSE(file_handler)
-    CALL SymmetrizeTripletList(triplet_list, pattern_type)
-    CALL SortTripletList(triplet_list, temp_columns, temp_rows, &
-         & sorted_triplet_list)
-    CALL ConstructMatrixFromTripletList(this, sorted_triplet_list, temp_rows, &
-         & temp_columns)
+    CALL SymmetrizeTripletList(tlist, pattern_type)
+    CALL SortTripletList(tlist, columns, rows, sorted_tlist)
+    CALL ConstructMatrixFromTripletList(this, sorted_tlist, rows, columns)
 
-    CALL DestructTripletList(triplet_list)
-    CALL DestructTripletList(sorted_triplet_list)
+    CALL DestructTripletList(tlist)
+    CALL DestructTripletList(sorted_tlist)
 
-
-  END FUNCTION ConstructMatrixFromFile_lsc
+  END SUBROUTINE ConstructMatrixFromFileSub_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> A subroutine wrapper for the triplet list based constructor.
   PURE SUBROUTINE ConstructMatrixFromTripletListSub_lsr(this, triplet_list, &
@@ -397,7 +316,40 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Number of matrix columns
     INTEGER, INTENT(IN) :: columns
 
-    this = ConstructMatrixFromTripletList_lsr(triplet_list, rows, columns)
+
+
+    !! Local Data
+    INTEGER :: II, outer_idx
+
+    CALL DestructMatrix(this)
+
+    this%rows = rows
+    this%columns = columns
+
+    !! Allocate
+    ALLOCATE(this%outer_index(this%columns + 1))
+    this%outer_index = 0
+    ALLOCATE(this%inner_index(triplet_list%CurrentSize))
+    ALLOCATE(this%values(triplet_list%CurrentSize))
+
+    !! Insert Values
+    outer_idx = 1
+    DO II = 1, triplet_list%CurrentSize
+       !! Moving on to the next column?
+       DO WHILE(.NOT. triplet_list%DATA(II)%index_column .EQ. outer_idx)
+          outer_idx = outer_idx + 1
+          this%outer_index(outer_idx + 1) = this%outer_index(outer_idx)
+       END DO
+       this%outer_index(outer_idx + 1)=this%outer_index(outer_idx + 1) + 1
+       !! Insert inner index and value
+       this%inner_index(II) = triplet_list%DATA(II)%index_row
+       this%values(II) = triplet_list%DATA(II)%point_value
+    END DO
+
+    !! Fill In The Rest Of The Outer Values
+    DO outer_idx = outer_idx + 2, this%columns + 1
+       this%outer_index(outer_idx) = this%outer_index(outer_idx - 1)
+    END DO
 
   END SUBROUTINE ConstructMatrixFromTripletListSub_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -413,114 +365,40 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Number of matrix columns
     INTEGER, INTENT(IN) :: columns
 
-    this = ConstructMatrixFromTripletList_lsc(triplet_list, rows, columns)
 
+    !! Local Data
+    INTEGER :: II, outer_idx
+
+    CALL DestructMatrix(this)
+
+    this%rows = rows
+    this%columns = columns
+
+    !! Allocate
+    ALLOCATE(this%outer_index(this%columns + 1))
+    this%outer_index = 0
+    ALLOCATE(this%inner_index(triplet_list%CurrentSize))
+    ALLOCATE(this%values(triplet_list%CurrentSize))
+
+    !! Insert Values
+    outer_idx = 1
+    DO II = 1, triplet_list%CurrentSize
+       !! Moving on to the next column?
+       DO WHILE(.NOT. triplet_list%DATA(II)%index_column .EQ. outer_idx)
+          outer_idx = outer_idx + 1
+          this%outer_index(outer_idx + 1) = this%outer_index(outer_idx)
+       END DO
+       this%outer_index(outer_idx + 1)=this%outer_index(outer_idx + 1) + 1
+       !! Insert inner index and value
+       this%inner_index(II) = triplet_list%DATA(II)%index_row
+       this%values(II) = triplet_list%DATA(II)%point_value
+    END DO
+
+    !! Fill In The Rest Of The Outer Values
+    DO outer_idx = outer_idx + 2, this%columns + 1
+       this%outer_index(outer_idx) = this%outer_index(outer_idx - 1)
+    END DO
   END SUBROUTINE ConstructMatrixFromTripletListSub_lsc
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> Construct a sparse matrix from a \b SORTED triplet list.
-  !> The triplet list must be sorted to efficiently fill in the matrix. This
-  !> constructor assumes \b you have already sorted the triplet list.
-  PURE FUNCTION ConstructMatrixFromTripletList_lsr(triplet_list,rows,columns) &
-       & RESULT(this)
-    !> The matrix being constructed
-    TYPE(Matrix_lsr) :: this
-    !> A list of triplet values. They must be sorted.
-    TYPE(TripletList_r), INTENT(IN) :: triplet_list
-    !> Number of matrix rows
-    INTEGER, INTENT(IN) :: rows
-    !> Number of matrix columns
-    INTEGER, INTENT(IN) :: columns
-
-
-
-    !! Local Data
-    INTEGER :: outer_array_ptr
-    INTEGER :: values_counter
-
-    this%rows = rows
-    this%columns = columns
-
-    !! Allocate
-    ALLOCATE(this%outer_index(this%columns+1))
-    this%outer_index = 0
-    ALLOCATE(this%inner_index(triplet_list%CurrentSize))
-    ALLOCATE(this%values(triplet_list%CurrentSize))
-
-    !! Insert Values
-    outer_array_ptr = 1
-    DO values_counter = 1, triplet_list%CurrentSize
-       !! Moving on to the next column?
-       DO WHILE(.NOT. triplet_list%DATA(values_counter)%index_column .EQ. &
-            & outer_array_ptr)
-          outer_array_ptr = outer_array_ptr + 1
-          this%outer_index(outer_array_ptr+1) = this%outer_index(outer_array_ptr)
-       END DO
-       this%outer_index(outer_array_ptr+1)=this%outer_index(outer_array_ptr+1)+1
-       !! Insert inner index and value
-       this%inner_index(values_counter) = &
-            & triplet_list%DATA(values_counter)%index_row
-       this%values(values_counter) = &
-            & triplet_list%DATA(values_counter)%point_value
-    END DO
-
-    !! Fill In The Rest Of The Outer Values
-    DO outer_array_ptr = outer_array_ptr+2, this%columns+1
-       this%outer_index(outer_array_ptr) = this%outer_index(outer_array_ptr-1)
-    END DO
-
-
-  END FUNCTION ConstructMatrixFromTripletList_lsr
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !> Construct a sparse matrix from a \b SORTED triplet list.
-  !> The triplet list must be sorted to efficiently fill in the matrix. This
-  !> constructor assumes \b you have already sorted the triplet list.
-  PURE FUNCTION ConstructMatrixFromTripletList_lsc(triplet_list,rows,columns) &
-       & RESULT(this)
-    !> The matrix being constructed
-    TYPE(Matrix_lsc) :: this
-    !> A list of triplet values. They must be sorted.
-    TYPE(TripletList_c), INTENT(IN) :: triplet_list
-    !> Number of matrix rows
-    INTEGER, INTENT(IN) :: rows
-    !> Number of matrix columns
-    INTEGER, INTENT(IN) :: columns
-
-
-    !! Local Data
-    INTEGER :: outer_array_ptr
-    INTEGER :: values_counter
-
-    this%rows = rows
-    this%columns = columns
-
-    !! Allocate
-    ALLOCATE(this%outer_index(this%columns+1))
-    this%outer_index = 0
-    ALLOCATE(this%inner_index(triplet_list%CurrentSize))
-    ALLOCATE(this%values(triplet_list%CurrentSize))
-
-    !! Insert Values
-    outer_array_ptr = 1
-    DO values_counter = 1, triplet_list%CurrentSize
-       !! Moving on to the next column?
-       DO WHILE(.NOT. triplet_list%DATA(values_counter)%index_column .EQ. &
-            & outer_array_ptr)
-          outer_array_ptr = outer_array_ptr + 1
-          this%outer_index(outer_array_ptr+1) = this%outer_index(outer_array_ptr)
-       END DO
-       this%outer_index(outer_array_ptr+1)=this%outer_index(outer_array_ptr+1)+1
-       !! Insert inner index and value
-       this%inner_index(values_counter) = &
-            & triplet_list%DATA(values_counter)%index_row
-       this%values(values_counter) = &
-            & triplet_list%DATA(values_counter)%point_value
-    END DO
-
-    !! Fill In The Rest Of The Outer Values
-    DO outer_array_ptr = outer_array_ptr+2, this%columns+1
-       this%outer_index(outer_array_ptr) = this%outer_index(outer_array_ptr-1)
-    END DO
-  END FUNCTION ConstructMatrixFromTripletList_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Explicitly destruct a sparse matrix.
   PURE SUBROUTINE DestructMatrix_lsr(this)
@@ -638,30 +516,26 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Temporary Variables
     INTEGER :: values_found
-    INTEGER :: total_counter, elements_per_inner
-    INTEGER :: outer_counter
-    INTEGER :: inner_counter
+    INTEGER :: elements_per_inner
+    INTEGER :: II, JJ, KK
 
     !! Fill a value buffer
     CALL ConstructEmptyMatrix(row_out, 1, this%columns)
     ALLOCATE(value_buffer(this%columns))
     values_found = 0
-    total_counter = 1
+    KK = 1
     row_out%outer_index(1) = 0
-    DO outer_counter = 1, this%columns
-       row_out%outer_index(outer_counter+1) = &
-            & row_out%outer_index(outer_counter+1) + &
-            & row_out%outer_index(outer_counter)
-       elements_per_inner = this%outer_index(outer_counter+1) - &
-            & this%outer_index(outer_counter)
-       DO inner_counter = 1, elements_per_inner
-          IF (this%inner_index(total_counter) .EQ. row_number) THEN
+    DO II = 1, this%columns
+       row_out%outer_index(II + 1) = row_out%outer_index(II + 1) + &
+            & row_out%outer_index(II)
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
+       DO JJ = 1, elements_per_inner
+          IF (this%inner_index(KK) .EQ. row_number) THEN
              values_found = values_found + 1
-             value_buffer(values_found) = this%values(total_counter)
-             row_out%outer_index(outer_counter+1) = &
-                  & row_out%outer_index(outer_counter+1) + 1
+             value_buffer(values_found) = this%values(KK)
+             row_out%outer_index(II + 1) = row_out%outer_index(II + 1) + 1
           END IF
-          total_counter = total_counter + 1
+          KK = KK + 1
        END DO
     END DO
 
@@ -669,7 +543,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ALLOCATE(row_out%inner_index(values_found))
     row_out%inner_index = 1
     ALLOCATE(row_out%values(values_found))
-    row_out%values = value_buffer(:values_found)
+    row_out%values(:) = value_buffer(:values_found)
 
     !! Cleanup
     DEALLOCATE(value_buffer)
@@ -689,30 +563,26 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Temporary Variables
     INTEGER :: values_found
-    INTEGER :: total_counter, elements_per_inner
-    INTEGER :: outer_counter
-    INTEGER :: inner_counter
+    INTEGER :: elements_per_inner
+    INTEGER :: II, JJ, KK
 
     !! Fill a value buffer
     CALL ConstructEmptyMatrix(row_out, 1, this%columns)
     ALLOCATE(value_buffer(this%columns))
     values_found = 0
-    total_counter = 1
+    KK = 1
     row_out%outer_index(1) = 0
-    DO outer_counter = 1, this%columns
-       row_out%outer_index(outer_counter+1) = &
-            & row_out%outer_index(outer_counter+1) + &
-            & row_out%outer_index(outer_counter)
-       elements_per_inner = this%outer_index(outer_counter+1) - &
-            & this%outer_index(outer_counter)
-       DO inner_counter = 1, elements_per_inner
-          IF (this%inner_index(total_counter) .EQ. row_number) THEN
+    DO II = 1, this%columns
+       row_out%outer_index(II + 1) = row_out%outer_index(II + 1) + &
+            & row_out%outer_index(II)
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
+       DO JJ = 1, elements_per_inner
+          IF (this%inner_index(KK) .EQ. row_number) THEN
              values_found = values_found + 1
-             value_buffer(values_found) = this%values(total_counter)
-             row_out%outer_index(outer_counter+1) = &
-                  & row_out%outer_index(outer_counter+1) + 1
+             value_buffer(values_found) = this%values(KK)
+             row_out%outer_index(II + 1) = row_out%outer_index(II + 1) + 1
           END IF
-          total_counter = total_counter + 1
+          KK = KK + 1
        END DO
     END DO
 
@@ -720,7 +590,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ALLOCATE(row_out%inner_index(values_found))
     row_out%inner_index = 1
     ALLOCATE(row_out%values(values_found))
-    row_out%values = value_buffer(:values_found)
+    row_out%values(:) = value_buffer(:values_found)
 
     !! Cleanup
     DEALLOCATE(value_buffer)
@@ -739,12 +609,12 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Local variables
     INTEGER :: number_of_values
     INTEGER :: start_index
-    INTEGER :: counter
+    INTEGER :: II
 
     !! Allocate Memory
     CALL ConstructEmptyMatrix(column_out, this%rows, 1)
     start_index = this%outer_index(column_number)
-    number_of_values = this%outer_index(column_number+1) - &
+    number_of_values = this%outer_index(column_number + 1) - &
          & this%outer_index(column_number)
     ALLOCATE(column_out%inner_index(number_of_values))
     ALLOCATE(column_out%values(number_of_values))
@@ -752,9 +622,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Copy Values
     column_out%outer_index(1) = 0
     column_out%outer_index(2) = number_of_values
-    DO counter=1, number_of_values
-       column_out%inner_index(counter) = this%inner_index(start_index+counter)
-       column_out%values(counter) = this%values(start_index+counter)
+    DO II = 1, number_of_values
+       column_out%inner_index(II) = this%inner_index(start_index + II)
+       column_out%values(II) = this%values(start_index + II)
     END DO
   END SUBROUTINE ExtractMatrixColumn_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -771,12 +641,12 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Local variables
     INTEGER :: number_of_values
     INTEGER :: start_index
-    INTEGER :: counter
+    INTEGER :: II
 
     !! Allocate Memory
     CALL ConstructEmptyMatrix(column_out, this%rows, 1)
     start_index = this%outer_index(column_number)
-    number_of_values = this%outer_index(column_number+1) - &
+    number_of_values = this%outer_index(column_number + 1) - &
          & this%outer_index(column_number)
     ALLOCATE(column_out%inner_index(number_of_values))
     ALLOCATE(column_out%values(number_of_values))
@@ -784,9 +654,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Copy Values
     column_out%outer_index(1) = 0
     column_out%outer_index(2) = number_of_values
-    DO counter=1, number_of_values
-       column_out%inner_index(counter) = this%inner_index(start_index+counter)
-       column_out%values(counter) = this%values(start_index+counter)
+    DO II = 1, number_of_values
+       column_out%inner_index(II) = this%inner_index(start_index + II)
+       column_out%values(II) = this%values(start_index + II)
     END DO
   END SUBROUTINE ExtractMatrixColumn_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -810,7 +680,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     INTEGER :: num_values, elements_per_inner
 
     !! Allocate New Matrix
-    num_values = this%outer_index(this%columns+1)
+    num_values = this%outer_index(this%columns + 1)
     CALL ConstructEmptyMatrix(matT, this%columns, this%rows)
     ALLOCATE(matT%inner_index(num_values))
     ALLOCATE(matT%values(num_values))
@@ -827,21 +697,21 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     END DO
     offset_array(1) = 0
     DO II = 2, this%rows
-       offset_array(II) = offset_array(II-1) + values_per_row(II-1)
+       offset_array(II) = offset_array(II - 1) + values_per_row(II - 1)
     END DO
 
     !! Insert
     matT%outer_index(:this%rows) = offset_array(:this%rows)
-    matT%outer_index(this%rows+1) = offset_array(this%rows) + &
+    matT%outer_index(this%rows + 1) = offset_array(this%rows) + &
          & values_per_row(this%rows)
     DO II = 1, this%columns
-       elements_per_inner = this%outer_index(II+1) - this%outer_index(II)
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
        this_offset = this%outer_index(II)
        DO JJ = 1, elements_per_inner
-          inner_index = this%inner_index(this_offset+JJ)
+          inner_index = this%inner_index(this_offset + JJ)
           insert_pt = offset_array(inner_index)+1
           matT%inner_index(insert_pt) = II
-          matT%values(insert_pt) = this%values(this_offset+JJ)
+          matT%values(insert_pt) = this%values(this_offset + JJ)
           offset_array(inner_index) = offset_array(inner_index) +1
        END DO
     END DO
@@ -871,7 +741,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     INTEGER :: num_values, elements_per_inner
 
     !! Allocate New Matrix
-    num_values = this%outer_index(this%columns+1)
+    num_values = this%outer_index(this%columns + 1)
     CALL ConstructEmptyMatrix(matT, this%columns, this%rows)
     ALLOCATE(matT%inner_index(num_values))
     ALLOCATE(matT%values(num_values))
@@ -888,21 +758,21 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     END DO
     offset_array(1) = 0
     DO II = 2, this%rows
-       offset_array(II) = offset_array(II-1) + values_per_row(II-1)
+       offset_array(II) = offset_array(II - 1) + values_per_row(II - 1)
     END DO
 
     !! Insert
     matT%outer_index(:this%rows) = offset_array(:this%rows)
-    matT%outer_index(this%rows+1) = offset_array(this%rows) + &
+    matT%outer_index(this%rows + 1) = offset_array(this%rows) + &
          & values_per_row(this%rows)
     DO II = 1, this%columns
-       elements_per_inner = this%outer_index(II+1) - this%outer_index(II)
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
        this_offset = this%outer_index(II)
        DO JJ = 1, elements_per_inner
-          inner_index = this%inner_index(this_offset+JJ)
+          inner_index = this%inner_index(this_offset + JJ)
           insert_pt = offset_array(inner_index)+1
           matT%inner_index(insert_pt) = II
-          matT%values(insert_pt) = this%values(this_offset+JJ)
+          matT%values(insert_pt) = this%values(this_offset + JJ)
           offset_array(inner_index) = offset_array(inner_index) +1
        END DO
     END DO
@@ -921,14 +791,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> The number of columns of the array of blocks.
     INTEGER, INTENT(IN) :: block_columns
     !> 2d array of matrices to compose.
-    TYPE(Matrix_lsr), DIMENSION(block_rows,block_columns), INTENT(IN) :: &
-         & mat_array
+    TYPE(Matrix_lsr), DIMENSION(:, :), INTENT(IN) :: mat_array
     !> The composed matrix.
     TYPE(Matrix_lsr), INTENT(INOUT) :: out_matrix
     !! Local Data
     TYPE(Matrix_lsr), DIMENSION(block_columns) :: merged_columns
     TYPE(Matrix_lsr) :: Temp
-    TYPE(Matrix_lsr), DIMENSION(block_rows,block_columns) :: mat_t
+    TYPE(Matrix_lsr), DIMENSION(block_rows, block_columns) :: mat_t
 
 
     INTEGER :: II, JJ
@@ -936,13 +805,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! First transpose the matrices
     DO JJ = 1, block_columns
        DO II = 1, block_rows
-          CALL TransposeMatrix(mat_array(II,JJ), mat_t(II,JJ))
+          CALL TransposeMatrix(mat_array(II, JJ), mat_t(II, JJ))
        END DO
     END DO
 
     !! Next merge the columns
     DO JJ = 1, block_columns
-       CALL ComposeMatrixColumns(mat_t(:,JJ), Temp)
+       CALL ComposeMatrixColumns(mat_t(:, JJ), Temp)
        CALL TransposeMatrix(Temp, merged_columns(JJ))
     END DO
 
@@ -952,7 +821,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Cleanup
     DO JJ = 1, block_columns
        DO II = 1, block_rows
-          CALL DestructMatrix(mat_t(II,JJ))
+          CALL DestructMatrix(mat_t(II, JJ))
        END DO
     END DO
     DO JJ = 1, block_columns
@@ -969,14 +838,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> The number of columns of the array of blocks.
     INTEGER, INTENT(IN) :: block_columns
     !> 2d array of matrices to compose.
-    TYPE(Matrix_lsc), DIMENSION(block_rows,block_columns), INTENT(IN) :: &
-         & mat_array
+    TYPE(Matrix_lsc), DIMENSION(:, :), INTENT(IN) :: mat_array
     !> The composed matrix.
     TYPE(Matrix_lsc), INTENT(INOUT) :: out_matrix
     !! Local Data
     TYPE(Matrix_lsc), DIMENSION(block_columns) :: merged_columns
     TYPE(Matrix_lsc) :: Temp
-    TYPE(Matrix_lsc), DIMENSION(block_rows,block_columns) :: mat_t
+    TYPE(Matrix_lsc), DIMENSION(block_rows, block_columns) :: mat_t
 
 
     INTEGER :: II, JJ
@@ -984,13 +852,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! First transpose the matrices
     DO JJ = 1, block_columns
        DO II = 1, block_rows
-          CALL TransposeMatrix(mat_array(II,JJ), mat_t(II,JJ))
+          CALL TransposeMatrix(mat_array(II, JJ), mat_t(II, JJ))
        END DO
     END DO
 
     !! Next merge the columns
     DO JJ = 1, block_columns
-       CALL ComposeMatrixColumns(mat_t(:,JJ), Temp)
+       CALL ComposeMatrixColumns(mat_t(:, JJ), Temp)
        CALL TransposeMatrix(Temp, merged_columns(JJ))
     END DO
 
@@ -1000,7 +868,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Cleanup
     DO JJ = 1, block_columns
        DO II = 1, block_rows
-          CALL DestructMatrix(mat_t(II,JJ))
+          CALL DestructMatrix(mat_t(II, JJ))
        END DO
     END DO
     DO JJ = 1, block_columns
@@ -1022,7 +890,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     INTEGER :: inner_start, inner_length
     INTEGER :: outer_start, outer_length
     INTEGER :: outer_offset
-    INTEGER :: counter
+    INTEGER :: II
     INTEGER :: size_of_mat
 
     CALL DestructMatrix(out_matrix)
@@ -1030,9 +898,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Figure Out The Sizes
     total_columns = 0
     total_values  = 0
-    DO counter = LBOUND(mat_list,dim=1), UBOUND(mat_list,dim=1)
-       total_columns = total_columns + mat_list(counter)%columns
-       size_of_mat = mat_list(counter)%outer_index(mat_list(counter)%columns+1)
+    DO II = LBOUND(mat_list, dim = 1), UBOUND(mat_list, dim = 1)
+       total_columns = total_columns + mat_list(II)%columns
+       size_of_mat = mat_list(II)%outer_index(mat_list(II)%columns + 1)
        total_values  = total_values + size_of_mat
     END DO
 
@@ -1045,19 +913,19 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     inner_start = 1
     outer_start = 1
     outer_offset = 0
-    DO counter = LBOUND(mat_list,dim=1),UBOUND(mat_list,dim=1)
+    DO II = LBOUND(mat_list, dim = 1), UBOUND(mat_list, dim = 1)
        !! Inner indices and values
-       size_of_mat = mat_list(counter)%outer_index(mat_list(counter)%columns+1)
+       size_of_mat = mat_list(II)%outer_index(mat_list(II)%columns + 1)
        inner_length = size_of_mat
-       out_matrix%inner_index(inner_start:inner_start+inner_length-1) = &
-            & mat_list(counter)%inner_index
-       out_matrix%values(inner_start:inner_start+inner_length-1) = &
-            & mat_list(counter)%values
+       out_matrix%inner_index(inner_start:inner_start + inner_length - 1) = &
+            & mat_list(II)%inner_index
+       out_matrix%values(inner_start:inner_start + inner_length - 1) = &
+            & mat_list(II)%values
        inner_start = inner_start + inner_length
        !! Outer Indices
-       outer_length = mat_list(counter)%columns+1
-       out_matrix%outer_index(outer_start:outer_start+outer_length-1) = &
-            & mat_list(counter)%outer_index + outer_offset
+       outer_length = mat_list(II)%columns + 1
+       out_matrix%outer_index(outer_start:outer_start+outer_length - 1) = &
+            & mat_list(II)%outer_index + outer_offset
        outer_start = outer_start + outer_length - 1
        outer_offset = out_matrix%outer_index(outer_start)
     END DO
@@ -1077,7 +945,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     INTEGER :: inner_start, inner_length
     INTEGER :: outer_start, outer_length
     INTEGER :: outer_offset
-    INTEGER :: counter
+    INTEGER :: II
     INTEGER :: size_of_mat
 
     CALL DestructMatrix(out_matrix)
@@ -1085,9 +953,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Figure Out The Sizes
     total_columns = 0
     total_values  = 0
-    DO counter = LBOUND(mat_list,dim=1), UBOUND(mat_list,dim=1)
-       total_columns = total_columns + mat_list(counter)%columns
-       size_of_mat = mat_list(counter)%outer_index(mat_list(counter)%columns+1)
+    DO II = LBOUND(mat_list, dim = 1), UBOUND(mat_list, dim = 1)
+       total_columns = total_columns + mat_list(II)%columns
+       size_of_mat = mat_list(II)%outer_index(mat_list(II)%columns + 1)
        total_values  = total_values + size_of_mat
     END DO
 
@@ -1100,19 +968,19 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     inner_start = 1
     outer_start = 1
     outer_offset = 0
-    DO counter = LBOUND(mat_list,dim=1),UBOUND(mat_list,dim=1)
+    DO II = LBOUND(mat_list, dim = 1), UBOUND(mat_list, dim = 1)
        !! Inner indices and values
-       size_of_mat = mat_list(counter)%outer_index(mat_list(counter)%columns+1)
+       size_of_mat = mat_list(II)%outer_index(mat_list(II)%columns + 1)
        inner_length = size_of_mat
-       out_matrix%inner_index(inner_start:inner_start+inner_length-1) = &
-            & mat_list(counter)%inner_index
-       out_matrix%values(inner_start:inner_start+inner_length-1) = &
-            & mat_list(counter)%values
+       out_matrix%inner_index(inner_start:inner_start + inner_length - 1) = &
+            & mat_list(II)%inner_index
+       out_matrix%values(inner_start:inner_start + inner_length - 1) = &
+            & mat_list(II)%values
        inner_start = inner_start + inner_length
        !! Outer Indices
-       outer_length = mat_list(counter)%columns+1
-       out_matrix%outer_index(outer_start:outer_start+outer_length-1) = &
-            & mat_list(counter)%outer_index + outer_offset
+       outer_length = mat_list(II)%columns + 1
+       out_matrix%outer_index(outer_start:outer_start+outer_length - 1) = &
+            & mat_list(II)%outer_index + outer_offset
        outer_start = outer_start + outer_length - 1
        outer_offset = out_matrix%outer_index(outer_start)
     END DO
@@ -1150,17 +1018,17 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     IF (PRESENT(block_size_row_in)) THEN
        block_size_row = block_size_row_in
     ELSE
-       divisor_row = this%rows/block_rows
+       divisor_row = this%rows / block_rows
        block_size_row = divisor_row
-       block_size_row(block_rows) = this%rows - divisor_row*(block_rows-1)
+       block_size_row(block_rows) = this%rows - divisor_row*(block_rows - 1)
     END IF
     IF (PRESENT(block_size_column_in)) THEN
        block_size_column = block_size_column_in
     ELSE
-       divisor_column = this%columns/block_columns
+       divisor_column = this%columns / block_columns
        block_size_column = divisor_column
        block_size_column(block_columns) = this%columns - &
-            & divisor_column*(block_columns-1)
+            & divisor_column*(block_columns - 1)
     END IF
 
     !! First split by columns which is easy with the CSR format
@@ -1174,7 +1042,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             & row_split)
        !! Copy into output array
        DO II = 1, block_rows
-          CALL TransposeMatrix(row_split(II), split_array(II,JJ))
+          CALL TransposeMatrix(row_split(II), split_array(II, JJ))
        END DO
     END DO
 
@@ -1220,17 +1088,17 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     IF (PRESENT(block_size_row_in)) THEN
        block_size_row = block_size_row_in
     ELSE
-       divisor_row = this%rows/block_rows
+       divisor_row = this%rows / block_rows
        block_size_row = divisor_row
-       block_size_row(block_rows) = this%rows - divisor_row*(block_rows-1)
+       block_size_row(block_rows) = this%rows - divisor_row*(block_rows - 1)
     END IF
     IF (PRESENT(block_size_column_in)) THEN
        block_size_column = block_size_column_in
     ELSE
-       divisor_column = this%columns/block_columns
+       divisor_column = this%columns / block_columns
        block_size_column = divisor_column
        block_size_column(block_columns) = this%columns - &
-            & divisor_column*(block_columns-1)
+            & divisor_column*(block_columns - 1)
     END IF
 
     !! First split by columns which is easy with the CSR format
@@ -1244,7 +1112,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             & row_split)
        !! Copy into output array
        DO II = 1, block_rows
-          CALL TransposeMatrix(row_split(II), split_array(II,JJ))
+          CALL TransposeMatrix(row_split(II), split_array(II, JJ))
        END DO
     END DO
 
@@ -1273,41 +1141,40 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Data
     INTEGER, DIMENSION(num_blocks+1) :: block_offsets
-    !! Counters
-    INTEGER :: split_counter
     !! Temporary variables
-    INTEGER :: loffset, lcolumns, linner_offset, total_values
+    INTEGER :: II, loffset, lcolumns, linner_offset, total_values
 
     !! Compute Offsets
     block_offsets(1) = 1
-    DO split_counter = 2, num_blocks+1
-       block_offsets(split_counter) = block_offsets(split_counter-1) + &
-            & block_sizes(split_counter-1)
+    DO II = 2, num_blocks + 1
+       block_offsets(II) = block_offsets(II - 1) + block_sizes(II - 1)
     END DO
 
     !! Split up the columns
-    DO split_counter = 1, num_blocks
+    DO II = 1, num_blocks
        !! Temporary variables
-       loffset = block_offsets(split_counter)
-       lcolumns = block_sizes(split_counter)
-       linner_offset = this%outer_index(loffset)+1
+       loffset = block_offsets(II)
+       lcolumns = block_sizes(II)
+       linner_offset = this%outer_index(loffset) + 1
+
        !! Construct
-       CALL ConstructEmptyMatrix(split_list(split_counter), this%rows, lcolumns)
+       CALL ConstructEmptyMatrix(split_list(II), this%rows, lcolumns)
+
        !! Copy Outer Index
-       split_list(split_counter)%outer_index =        &
-            & this%outer_index(loffset:loffset+lcolumns)
-       split_list(split_counter)%outer_index =        &
-            & split_list(split_counter)%outer_index -    &
-            & split_list(split_counter)%outer_index(1)
-       total_values = split_list(split_counter)%outer_index(lcolumns+1)
+       split_list(II)%outer_index(:) = &
+            & this%outer_index(loffset:loffset + lcolumns)
+       split_list(II)%outer_index(:) = split_list(II)%outer_index(:) - &
+            & split_list(II)%outer_index(1)
+       total_values = split_list(II)%outer_index(lcolumns + 1)
+
        !! Copy Inner Indices and Values
        IF (total_values .GT. 0) THEN
-          ALLOCATE(split_list(split_counter)%inner_index(total_values))
-          split_list(split_counter)%inner_index = &
-               & this%inner_index(linner_offset:linner_offset+total_values-1)
-          ALLOCATE(split_list(split_counter)%values(total_values))
-          split_list(split_counter)%values = &
-               & this%values(linner_offset:linner_offset+total_values-1)
+          ALLOCATE(split_list(II)%inner_index(total_values))
+          split_list(II)%inner_index(:) = &
+               & this%inner_index(linner_offset:linner_offset + total_values - 1)
+          ALLOCATE(split_list(II)%values(total_values))
+          split_list(II)%values(:) = &
+               & this%values(linner_offset:linner_offset + total_values - 1)
        END IF
     END DO
   END SUBROUTINE SplitMatrixColumns_lsr
@@ -1327,41 +1194,40 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Data
     INTEGER, DIMENSION(num_blocks+1) :: block_offsets
-    !! Counters
-    INTEGER :: split_counter
     !! Temporary variables
-    INTEGER :: loffset, lcolumns, linner_offset, total_values
+    INTEGER :: II, loffset, lcolumns, linner_offset, total_values
 
     !! Compute Offsets
     block_offsets(1) = 1
-    DO split_counter = 2, num_blocks+1
-       block_offsets(split_counter) = block_offsets(split_counter-1) + &
-            & block_sizes(split_counter-1)
+    DO II = 2, num_blocks + 1
+       block_offsets(II) = block_offsets(II - 1) + block_sizes(II - 1)
     END DO
 
     !! Split up the columns
-    DO split_counter = 1, num_blocks
+    DO II = 1, num_blocks
        !! Temporary variables
-       loffset = block_offsets(split_counter)
-       lcolumns = block_sizes(split_counter)
-       linner_offset = this%outer_index(loffset)+1
+       loffset = block_offsets(II)
+       lcolumns = block_sizes(II)
+       linner_offset = this%outer_index(loffset) + 1
+
        !! Construct
-       CALL ConstructEmptyMatrix(split_list(split_counter), this%rows, lcolumns)
+       CALL ConstructEmptyMatrix(split_list(II), this%rows, lcolumns)
+
        !! Copy Outer Index
-       split_list(split_counter)%outer_index =        &
-            & this%outer_index(loffset:loffset+lcolumns)
-       split_list(split_counter)%outer_index =        &
-            & split_list(split_counter)%outer_index -    &
-            & split_list(split_counter)%outer_index(1)
-       total_values = split_list(split_counter)%outer_index(lcolumns+1)
+       split_list(II)%outer_index(:) = &
+            & this%outer_index(loffset:loffset + lcolumns)
+       split_list(II)%outer_index(:) = split_list(II)%outer_index(:) - &
+            & split_list(II)%outer_index(1)
+       total_values = split_list(II)%outer_index(lcolumns + 1)
+
        !! Copy Inner Indices and Values
        IF (total_values .GT. 0) THEN
-          ALLOCATE(split_list(split_counter)%inner_index(total_values))
-          split_list(split_counter)%inner_index = &
-               & this%inner_index(linner_offset:linner_offset+total_values-1)
-          ALLOCATE(split_list(split_counter)%values(total_values))
-          split_list(split_counter)%values = &
-               & this%values(linner_offset:linner_offset+total_values-1)
+          ALLOCATE(split_list(II)%inner_index(total_values))
+          split_list(II)%inner_index(:) = &
+               & this%inner_index(linner_offset:linner_offset + total_values - 1)
+          ALLOCATE(split_list(II)%values(total_values))
+          split_list(II)%values(:) = &
+               & this%values(linner_offset:linner_offset + total_values - 1)
        END IF
     END DO
   END SUBROUTINE SplitMatrixColumns_lsc
@@ -1372,29 +1238,24 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Matrix_lsr), INTENT(IN) :: this
     !> The triplet list we created.
     TYPE(TripletList_r), INTENT(INOUT) :: triplet_list
-    !! Local Variables
-    TYPE(Triplet_r) :: temporary
 
 
     !! Helper variables
-    INTEGER :: outer_counter, inner_counter
+    INTEGER :: II, JJ, KK
     INTEGER :: elements_per_inner
-    INTEGER :: total_counter
     INTEGER :: size_of_this
 
-    size_of_this = this%outer_index(this%columns+1)
+    size_of_this = this%outer_index(this%columns + 1)
     CALL ConstructTripletList(triplet_list, size_of_this)
 
-    total_counter = 1
-    DO outer_counter = 1, this%columns
-       elements_per_inner = this%outer_index(outer_counter+1) - &
-            & this%outer_index(outer_counter)
-       DO inner_counter = 1, elements_per_inner
-          temporary%index_column = outer_counter
-          temporary%index_row = this%inner_index(total_counter)
-          temporary%point_value = this%values(total_counter)
-          triplet_list%DATA(total_counter) = temporary
-          total_counter = total_counter + 1
+    KK = 1
+    DO II = 1, this%columns
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
+       DO JJ = 1, elements_per_inner
+          triplet_list%DATA(KK)%index_column = II
+          triplet_list%DATA(KK)%index_row = this%inner_index(KK)
+          triplet_list%DATA(KK)%point_value = this%values(KK)
+          KK = KK + 1
        END DO
     END DO
   END SUBROUTINE MatrixToTripletList_lsr
@@ -1405,29 +1266,24 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Matrix_lsc), INTENT(IN) :: this
     !> The triplet list we created.
     TYPE(TripletList_c), INTENT(INOUT) :: triplet_list
-    !! Local Variables
-    TYPE(Triplet_c) :: temporary
 
 
     !! Helper variables
-    INTEGER :: outer_counter, inner_counter
+    INTEGER :: II, JJ, KK
     INTEGER :: elements_per_inner
-    INTEGER :: total_counter
     INTEGER :: size_of_this
 
-    size_of_this = this%outer_index(this%columns+1)
+    size_of_this = this%outer_index(this%columns + 1)
     CALL ConstructTripletList(triplet_list, size_of_this)
 
-    total_counter = 1
-    DO outer_counter = 1, this%columns
-       elements_per_inner = this%outer_index(outer_counter+1) - &
-            & this%outer_index(outer_counter)
-       DO inner_counter = 1, elements_per_inner
-          temporary%index_column = outer_counter
-          temporary%index_row = this%inner_index(total_counter)
-          temporary%point_value = this%values(total_counter)
-          triplet_list%DATA(total_counter) = temporary
-          total_counter = total_counter + 1
+    KK = 1
+    DO II = 1, this%columns
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
+       DO JJ = 1, elements_per_inner
+          triplet_list%DATA(KK)%index_column = II
+          triplet_list%DATA(KK)%index_row = this%inner_index(KK)
+          triplet_list%DATA(KK)%point_value = this%values(KK)
+          KK = KK + 1
        END DO
     END DO
   END SUBROUTINE MatrixToTripletList_lsc
@@ -1444,9 +1300,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Data
     INTEGER :: file_handler
-    INTEGER :: counter
     INTEGER :: size_of_this
-    CHARACTER(LEN=MAX_LINE_LENGTH) :: tempstr
+    CHARACTER(LEN = MAX_LINE_LENGTH) :: tempstr
+    INTEGER :: II
 
     !! Process Optional Parameters
     IF (PRESENT(file_name_in)) THEN
@@ -1457,9 +1313,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     END IF
 
     !! Print
-    CALL MatrixToTripletList(this,triplet_list)
+    CALL MatrixToTripletList(this, triplet_list)
 
-    size_of_this = this%outer_index(this%columns+1)
+    size_of_this = this%outer_index(this%columns + 1)
 
 
 
@@ -1469,9 +1325,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     WRITE(file_handler,'(A)') "%"
     CALL WriteMMSize(tempstr, this%rows, this%columns, &
-         & INT(size_of_this, KIND=NTLONG))
+         & INT(size_of_this, KIND = NTLONG))
     WRITE(file_handler,'(A)') ADJUSTL(TRIM(tempstr))
-    DO counter = 1,size_of_this
+    DO II = 1, size_of_this
 
 
 
@@ -1479,9 +1335,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
-       CALL WriteMMLine(tempstr, triplet_list%DATA(counter)%index_row, &
-            & triplet_list%DATA(counter)%index_column, &
-            & triplet_list%DATA(counter)%point_value)
+       CALL WriteMMLine(tempstr, triplet_list%DATA(II)%index_row, &
+            & triplet_list%DATA(II)%index_column, &
+            & triplet_list%DATA(II)%point_value)
        WRITE(file_handler,'(A)') ADJUSTL(TRIM(tempstr))
 
     END DO
@@ -1506,9 +1362,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Data
     INTEGER :: file_handler
-    INTEGER :: counter
     INTEGER :: size_of_this
-    CHARACTER(LEN=MAX_LINE_LENGTH) :: tempstr
+    CHARACTER(LEN = MAX_LINE_LENGTH) :: tempstr
+    INTEGER :: II
 
     !! Process Optional Parameters
     IF (PRESENT(file_name_in)) THEN
@@ -1519,9 +1375,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     END IF
 
     !! Print
-    CALL MatrixToTripletList(this,triplet_list)
+    CALL MatrixToTripletList(this, triplet_list)
 
-    size_of_this = this%outer_index(this%columns+1)
+    size_of_this = this%outer_index(this%columns + 1)
 
 
     WRITE(file_handler,'(A)') "%%MatrixMarket matrix coordinate complex general"
@@ -1531,14 +1387,14 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     WRITE(file_handler,'(A)') "%"
     CALL WriteMMSize(tempstr, this%rows, this%columns, &
-         & INT(size_of_this, KIND=NTLONG))
+         & INT(size_of_this, KIND = NTLONG))
     WRITE(file_handler,'(A)') ADJUSTL(TRIM(tempstr))
-    DO counter = 1,size_of_this
+    DO II = 1, size_of_this
 
-       CALL WriteMMLine(tempstr, triplet_list%DATA(counter)%index_row, &
-            & triplet_list%DATA(counter)%index_column, &
-            & REAL(triplet_list%DATA(counter)%point_value), &
-            & AIMAG(triplet_list%DATA(counter)%point_value))
+       CALL WriteMMLine(tempstr, triplet_list%DATA(II)%index_row, &
+            & triplet_list%DATA(II)%index_column, &
+            & REAL(triplet_list%DATA(II)%point_value), &
+            & AIMAG(triplet_list%DATA(II)%point_value))
        WRITE(file_handler,'(A)') ADJUSTL(TRIM(tempstr))
 
 
@@ -1560,7 +1416,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> The matrix to compute the complex conjugate of.
     TYPE(Matrix_lsc), INTENT(INOUT) :: this
 
-    this%values = CONJG(this%values)
+    this%values(:) = CONJG(this%values)
   END SUBROUTINE ConjugateMatrix_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Convert a complex matrix to a real matrix.

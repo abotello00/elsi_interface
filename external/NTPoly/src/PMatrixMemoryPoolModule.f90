@@ -16,12 +16,13 @@ MODULE PMatrixMemoryPoolModule
      TYPE(MatrixMemoryPool_lc), DIMENSION(:,:), ALLOCATABLE, PUBLIC :: grid_c
   END TYPE MatrixMemoryPool_p
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  PUBLIC :: ConstructMatrixMemoryPool
   PUBLIC :: DestructMatrixMemoryPool
   PUBLIC :: CheckMemoryPoolValidity
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  INTERFACE MatrixMemoryPool_p
+  INTERFACE ConstructMatrixMemoryPool
      MODULE PROCEDURE ConstructMatrixMemoryPool_p
-  END INTERFACE MatrixMemoryPool_p
+  END INTERFACE ConstructMatrixMemoryPool
   INTERFACE DestructMatrixMemoryPool
      MODULE PROCEDURE DestructMatrixMemoryPool_p
   END INTERFACE DestructMatrixMemoryPool
@@ -30,12 +31,13 @@ MODULE PMatrixMemoryPoolModule
   END INTERFACE CheckMemoryPoolValidity
 CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Construct Distributed Matrix Memory Pool object.
-  PURE FUNCTION ConstructMatrixMemoryPool_p(matrix) RESULT(this)
+  PURE SUBROUTINE ConstructMatrixMemoryPool_p(this, matrix)
     !> A constructed Matrix Memory Pool object.
-    TYPE(MatrixMemoryPool_p) :: this
+    TYPE(MatrixMemoryPool_p), INTENT(INOUT) :: this
     !> The associated distributed sparse matrix.
     TYPE(Matrix_ps), INTENT(IN) :: matrix
 
+    CALL DestructMatrixMemoryPool(this)
     !! Allocate
     IF (matrix%is_complex) THEN
        ALLOCATE(this%grid_c(matrix%process_grid%number_of_blocks_rows, &
@@ -44,23 +46,22 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        ALLOCATE(this%grid_r(matrix%process_grid%number_of_blocks_rows, &
             & matrix%process_grid%number_of_blocks_columns))
     END IF
-  END FUNCTION ConstructMatrixMemoryPool_p
+  END SUBROUTINE ConstructMatrixMemoryPool_p
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Destruct a Distributed Matrix Memory Pool object.
   PURE SUBROUTINE DestructMatrixMemoryPool_p(this)
     !> Distributed Matrix Memory Pool object to destroy.
     TYPE(MatrixMemoryPool_p), INTENT(INOUT) :: this
     !! Local Data
-    INTEGER :: row_counter, column_counter
+    INTEGER :: II, JJ
 
 
 
     !! Allocate
     IF (ALLOCATED(this%grid_r)) THEN
-       DO column_counter = LBOUND(this%grid_r,2), UBOUND(this%grid_r,2)
-          DO row_counter = LBOUND(this%grid_r,1), UBOUND(this%grid_r,1)
-             CALL DestructMatrixMemoryPool( &
-                  & this%grid_r(row_counter, column_counter))
+       DO II = LBOUND(this%grid_r, 2), UBOUND(this%grid_r, 2)
+          DO JJ = LBOUND(this%grid_r, 1), UBOUND(this%grid_r, 1)
+             CALL DestructMatrixMemoryPool(this%grid_r(JJ, II))
           END DO
        END DO
        DEALLOCATE(this%grid_r)
@@ -71,10 +72,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Allocate
     IF (ALLOCATED(this%grid_c)) THEN
-       DO column_counter = LBOUND(this%grid_c,2), UBOUND(this%grid_c,2)
-          DO row_counter = LBOUND(this%grid_c,1), UBOUND(this%grid_c,1)
-             CALL DestructMatrixMemoryPool( &
-                  & this%grid_c(row_counter, column_counter))
+       DO II = LBOUND(this%grid_c, 2), UBOUND(this%grid_c, 2)
+          DO JJ = LBOUND(this%grid_c, 1), UBOUND(this%grid_c, 1)
+             CALL DestructMatrixMemoryPool(this%grid_c(JJ, II))
           END DO
        END DO
        DEALLOCATE(this%grid_c)
