@@ -41,8 +41,8 @@ build.gnu:
     - make -j4
   artifacts:
     when: always
-    paths:
-      - $CI_JOB_NAME/build/*
+    # paths:
+    #   - $CI_JOB_NAME/build/*
     expire_in: 1 days
 
 ### NVIDIA HPC SDK (20.7) ###
@@ -64,8 +64,8 @@ build.nvhpc:
     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/nvhpc.cmake ..
     - make -j4
   artifacts:
-    paths:
-      - $CI_JOB_NAME/build/
+    # paths:
+    #   - $CI_JOB_NAME/build/
     when: always
     expire_in: 1 days
 
@@ -92,8 +92,8 @@ build.intel:
     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake ..
     - make -j4
   artifacts:
-    paths:
-      - $CI_JOB_NAME/build/
+    # paths:
+    #   - $CI_JOB_NAME/build/
     when: always
     expire_in: 1 days
 
@@ -120,8 +120,8 @@ build.intel-shared:
     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake -DBUILD_SHARED_LIBS=ON ..
     - make -j4
   artifacts:
-    paths:
-      - $CI_JOB_NAME/build/
+    # paths:
+    #   - $CI_JOB_NAME/build/
     when: always
     expire_in: 1 days
 
