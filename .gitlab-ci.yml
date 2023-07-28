@@ -49,7 +49,7 @@ build.nvhpc:
   tags:
     - docker
   image:
-    name: yaoyi1992/aims-gitlab-runner-nvhpc-centos:0.4
+    name: uthpalaherath/centos-nvhpc:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - cat ./toolchains/nvhpc.cmake
