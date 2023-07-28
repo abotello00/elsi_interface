@@ -154,7 +154,8 @@ build.intel-shared:
 ### GNU compilers + MPICH + Netlib BLAS, LAPACK, ScaLAPACK ###
 test.gnu:
   stage: test
-  dependencies: build.gnu
+  dependencies:
+    - build.gnu
   rules:
     - when: on_success
   tags:
@@ -174,7 +175,8 @@ test.gnu:
 ### NVIDIA HPC SDK (20.7) ###
 test.nvhpc:
   stage: test
-  dependencies: build.nvhpc
+  dependencies:
+    - build.nvhpc
   rules:
     - when: on_success
   tags:
@@ -193,7 +195,8 @@ test.nvhpc:
 ### Intel compilers + MPI + MKL ###
 test.intel:
   stage: test
-  dependencies: build.intel
+  dependencies:
+    - build.intel
   rules:
     - when: on_success
   tags:
@@ -213,7 +216,8 @@ test.intel:
 ### Intel compilers + MPI + MKL (shared library) ###
 test.intel-shared:
   stage: test
-  dependencies: build.intel-shared
+  dependencies:
+    - build.intel-shared
   rules:
     - when: on_success
   tags:
