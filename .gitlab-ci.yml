@@ -39,9 +39,9 @@ build.gnu:
     - cd build
     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/gnu.cmake ..
     - make -j4
-    - ctest --output-on-failure
   artifacts:
-    paths: ['build/']
+    paths:
+      - build
     when: always
     expire_in: 1 days
 
@@ -63,9 +63,9 @@ build.nvhpc:
     - cd build
     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/nvhpc.cmake ..
     - make -j4
-    - ctest --output-on-failure
   artifacts:
-    paths: ['build/']
+    paths:
+      - build
     when: always
     expire_in: 1 days
 
@@ -91,9 +91,9 @@ build.intel:
     - cd build
     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake ..
     - make -j4
-    - ctest --output-on-failure
   artifacts:
-    paths: ['build/']
+    paths:
+      - build
     when: always
     expire_in: 1 days
 
@@ -119,9 +119,9 @@ build.intel-shared:
     - cd build
     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake -DBUILD_SHARED_LIBS=ON ..
     - make -j4
-    - ctest --output-on-failure
   artifacts:
-    paths: ['build/']
+    paths:
+      - build
     when: always
     expire_in: 1 days
 
