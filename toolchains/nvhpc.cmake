@@ -4,7 +4,7 @@ SET(CMAKE_Fortran_COMPILER "mpifort" CACHE STRING "MPI Fortran compiler")
 SET(CMAKE_C_COMPILER "mpicc" CACHE STRING "MPI C compiler")
 SET(CMAKE_CXX_COMPILER "mpic++" CACHE STRING "MPI C++ compiler")
 
-SET(CMAKE_Fortran_FLAGS "-O2 -Mvect=nosimd" CACHE STRING "Fortran flags")
+SET(CMAKE_Fortran_FLAGS "-O2 -Mvect=nosimd -lgfortran" CACHE STRING "Fortran flags")
 SET(CMAKE_C_FLAGS "-O1 -c99" CACHE STRING "C flags") # SCOTCH segfaults with "O2"
 SET(CMAKE_CXX_FLAGS "-O2 --c++11 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1" CACHE STRING "C++ flags")
 
