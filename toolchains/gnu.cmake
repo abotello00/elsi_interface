@@ -8,7 +8,7 @@ SET(CMAKE_Fortran_FLAGS "-O3 -ffree-line-length-none -fallow-argument-mismatch" 
 SET(CMAKE_C_FLAGS "-O3 -std=c99" CACHE STRING "C flags")
 SET(CMAKE_CXX_FLAGS "-O3 -std=c++11" CACHE STRING "C++ flags")
 
-#SET(ENABLE_PEXSI ON CACHE BOOL "Enable PEXSI")
+SET(ENABLE_PEXSI ON CACHE BOOL "Enable PEXSI")
 SET(ENABLE_TESTS ON CACHE BOOL "Enable Fortran tests")
 SET(ENABLE_C_TESTS ON CACHE BOOL "Enable C tests")
 
