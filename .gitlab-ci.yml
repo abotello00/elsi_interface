@@ -57,6 +57,7 @@ build.nvhpc:
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - cat ./toolchains/nvhpc.cmake
+    - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
     - cd $CI_JOB_NAME
