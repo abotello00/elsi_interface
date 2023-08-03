@@ -18,7 +18,7 @@ SET(ENABLE_CHASE ON CACHE BOOL "Enable ChASE eigensolver")
 SET(USE_EXTERNAL_ELPA ON CACHE BOOL "Use external ELPA")
 SET(USE_EXTERNAL_OMM ON CACHE BOOL "Use external libOMM")
 SET(USE_EXTERNAL_PEXSI ON CACHE BOOL "Use external PEXSI")
-SET(USE_EXTERNAL_NTPOLY ON CACHE BOOL "Use external NTPoly")
+SET(USE_EXTERNAL_NTPOLY OFF CACHE BOOL "Use external NTPoly")
 SET(USE_EXTERNAL_BSEPACK OFF CACHE BOOL "Use external BSEPACK")
 
 # SET(LIB_PATHS "$ENV{MKLROOT}/lib/intel64 /home/wy29/opt/elpa/lib /home/wy29/opt/omm/lib /home/wy29/opt/pexsi/lib /home/wy29/opt/SuperLU_DIST_6.4.0/build/SRC /home/wy29/opt/scotch_6.1.1/lib /home/wy29/opt/NTPoly/lib /home/yy244/codes/EigenExa/EigenExa-2.11/install_yy/lib /home/wy29/opt/BSEPACK/lib" CACHE STRING "External library paths")
