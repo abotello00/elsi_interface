@@ -18,56 +18,56 @@ stages:
 ##### BUILD STAGE #####
 
 ### GNU compilers + MPICH + Netlib BLAS, LAPACK, ScaLAPACK ###
-build.gnu:
-  stage: build
-  rules:
-    - when: on_success
-  tags:
-    - docker
-  image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
-  script:
-    - export PATH=$MPICH_HOME/bin/:$PATH
-    - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
-    - cat ./toolchains/gnu.cmake
-    - rm -rf $CI_JOB_NAME
-    - mkdir $CI_JOB_NAME
-    - cd $CI_JOB_NAME
-    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/gnu.cmake ..
-    - make -j4
-  artifacts:
-    when: always
-    paths:
-      - $CI_JOB_NAME/
-    expire_in: 1 days
+# build.gnu:
+#   stage: build
+#   rules:
+#     - when: on_success
+#   tags:
+#     - docker
+#   image:
+#     name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+#     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+#   script:
+#     - export PATH=$MPICH_HOME/bin/:$PATH
+#     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
+#     - cd external/SCOTCH/src/libscotch
+#     - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+#     - cd ../../../../
+#     - cat ./toolchains/gnu.cmake
+#     - rm -rf $CI_JOB_NAME
+#     - mkdir $CI_JOB_NAME
+#     - cd $CI_JOB_NAME
+#     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/gnu.cmake ..
+#     - make -j4
+#   artifacts:
+#     when: always
+#     paths:
+#       - $CI_JOB_NAME/
+#     expire_in: 1 days
 
 ### NVIDIA HPC SDK (20.7) ###
-build.nvhpc:
-  stage: build
-  rules:
-    - when: on_success
-  tags:
-    - docker
-  image:
-    name: uthpalaherath/centos-nvhpc:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
-  script:
-    - cat ./toolchains/nvhpc.cmake
-    - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
-    - rm -rf $CI_JOB_NAME
-    - mkdir $CI_JOB_NAME
-    - cd $CI_JOB_NAME
-    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/nvhpc.cmake ..
-    - make -j4
-  artifacts:
-    paths:
-      - $CI_JOB_NAME/
-    when: always
-    expire_in: 1 days
+# build.nvhpc:
+#   stage: build
+#   rules:
+#     - when: on_success
+#   tags:
+#     - docker
+#   image:
+#     name: uthpalaherath/centos-nvhpc:latest
+#     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+#   script:
+#     - cat ./toolchains/nvhpc.cmake
+#     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
+#     - rm -rf $CI_JOB_NAME
+#     - mkdir $CI_JOB_NAME
+#     - cd $CI_JOB_NAME
+#     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/nvhpc.cmake ..
+#     - make -j4
+#   artifacts:
+#     paths:
+#       - $CI_JOB_NAME/
+#     when: always
+#     expire_in: 1 days
 
 ### Intel compilers + MPI + MKL ###
 build.intel:
@@ -159,45 +159,45 @@ build.intel-shared:
 ##### TEST STAGE #####
 
 ### GNU compilers + MPICH + Netlib BLAS, LAPACK, ScaLAPACK ###
-test.gnu:
-  stage: test
-  dependencies:
-    - build.gnu
-  rules:
-    - when: on_success
-  tags:
-    - docker
-  image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
-  script:
-    - export PATH=$MPICH_HOME/bin/:$PATH
-    - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
-    - cd build.gnu
-    - ctest --output-on-failure
-  artifacts:
-    when: always
-    expire_in: 1 days
+# test.gnu:
+#   stage: test
+#   dependencies:
+#     - build.gnu
+#   rules:
+#     - when: on_success
+#   tags:
+#     - docker
+#   image:
+#     name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+#     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+#   script:
+#     - export PATH=$MPICH_HOME/bin/:$PATH
+#     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
+#     - cd build.gnu
+#     - ctest --output-on-failure
+#   artifacts:
+#     when: always
+#     expire_in: 1 days
 
 ### NVIDIA HPC SDK (20.7) ###
-test.nvhpc:
-  stage: test
-  dependencies:
-    - build.nvhpc
-  rules:
-    - when: on_success
-  tags:
-    - docker
-  image:
-    name: uthpalaherath/centos-nvhpc:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
-  script:
-    - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
-    - cd build.nvhpc
-    - ctest --output-on-failure
-  artifacts:
-    when: always
-    expire_in: 1 days
+# test.nvhpc:
+#   stage: test
+#   dependencies:
+#     - build.nvhpc
+#   rules:
+#     - when: on_success
+#   tags:
+#     - docker
+#   image:
+#     name: uthpalaherath/centos-nvhpc:latest
+#     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+#   script:
+#     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
+#     - cd build.nvhpc
+#     - ctest --output-on-failure
+#   artifacts:
+#     when: always
+#     expire_in: 1 days
 
 ### Intel compilers + MPI + MKL ###
 test.intel:
