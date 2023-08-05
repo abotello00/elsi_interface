@@ -81,6 +81,8 @@ build.intel:
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
     - cd external/SCOTCH/src/libscotch
     - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
     - cd ../../../../
@@ -108,6 +110,8 @@ build.intel-shared:
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
     - cd external/SCOTCH/src/libscotch
     - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
     - cd ../../../../
@@ -209,6 +213,8 @@ test.intel:
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
     - cd build.intel
     - ctest --output-on-failure
   artifacts:
@@ -229,6 +235,8 @@ test.intel-shared:
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
     - cd build.intel-shared
     - ctest --output-on-failure
   artifacts:
