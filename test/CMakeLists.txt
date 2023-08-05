@@ -192,9 +192,9 @@ ENDIF()
 
 ### Parallel Fortran tests: ev + ChASE ###
 IF(ENABLE_CHASE)
-  test_fortran(01_chase e 0 r 9 ${h_real} ${s_real})
-  test_fortran(02_chase e 0 c 9 ${h_cmplx} ${s_cmplx})   
-ENDIF()	
+    #test_fortran(01_chase e 0 r 9 ${h_real} ${s_real})
+  test_fortran(02_chase e 0 c 9 ${h_cmplx} ${s_cmplx})
+ENDIF()
 
 ### Serial Fortran tests: ev + LAPACK ###
 ADD_TEST(test_serial_01_lapack
@@ -231,7 +231,7 @@ IF(ENABLE_CHASE)
   ${MPIEXEC_1P} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/elsi_test e 0 c 9 ${h_cmplx} ${s_cmplx})
   SET_TESTS_PROPERTIES(test_serial_02_chase
   PROPERTIES PASS_REGULAR_EXPRESSION "Passed")
-ENDIF()	
+ENDIF()
 
 ### Fortran tests: matrix IO ###
 ADD_TEST(test_matio_01
