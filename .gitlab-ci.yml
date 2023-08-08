@@ -25,14 +25,14 @@ build.gnu:
   tags:
     - docker
   image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
+    # - cd external/SCOTCH/src/libscotch
+    # - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    # - cd ../../../../
     - cat ./toolchains/gnu.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -77,15 +77,15 @@ build.intel:
   tags:
     - docker
   image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
+    # - cd external/SCOTCH/src/libscotch
+    # - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    # - cd ../../../../
     - cat ./toolchains/intel.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -106,15 +106,15 @@ build.intel-shared:
   tags:
     - docker
   image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
+    # - cd external/SCOTCH/src/libscotch
+    # - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    # - cd ../../../../
     - cat ./toolchains/intel.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -168,7 +168,7 @@ test.gnu:
   tags:
     - docker
   image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
@@ -209,7 +209,7 @@ test.intel:
   tags:
     - docker
   image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
@@ -231,7 +231,7 @@ test.intel-shared:
   tags:
     - docker
   image:
-    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
