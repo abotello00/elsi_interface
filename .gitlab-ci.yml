@@ -26,7 +26,6 @@ build.gnu:
     - docker
   image:
     name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
@@ -54,7 +53,6 @@ build.nvhpc:
     - docker
   image:
     name: uthpalaherath/centos-nvhpc:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - cat ./toolchains/nvhpc.cmake
     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
@@ -78,7 +76,6 @@ build.intel:
     - docker
   image:
     name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
@@ -107,7 +104,6 @@ build.intel-shared:
     - docker
   image:
     name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
@@ -169,7 +165,6 @@ test.gnu:
     - docker
   image:
     name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
@@ -190,7 +185,6 @@ test.nvhpc:
     - docker
   image:
     name: uthpalaherath/centos-nvhpc:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
     - cd build.nvhpc
@@ -210,7 +204,6 @@ test.intel:
     - docker
   image:
     name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
@@ -232,7 +225,6 @@ test.intel-shared:
     - docker
   image:
     name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
-    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
