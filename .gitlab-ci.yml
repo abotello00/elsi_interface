@@ -1,9 +1,4 @@
 before_script:
-  # - module use /home/wy29/opt/modulefiles
-  # - module use /home/yy244/yy_modules
-  # - module purge
-  # - module load gcc-7.5.0
-  # - module load cmake_3.20.5
   - export OMP_NUM_THREADS=1
   - ulimit -c 0
   - ulimit -a
@@ -25,13 +20,14 @@ build.gnu:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
+    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
-    # - cd external/SCOTCH/src/libscotch
-    # - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    # - cd ../../../../
+    - cd external/SCOTCH/src/libscotch
+    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    - cd ../../../../
     - cat ./toolchains/gnu.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -75,14 +71,15 @@ build.intel:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
+    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    # - cd external/SCOTCH/src/libscotch
-    # - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    # - cd ../../../../
+    - cd external/SCOTCH/src/libscotch
+    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    - cd ../../../../
     - cat ./toolchains/intel.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -103,14 +100,15 @@ build.intel-shared:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
+    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    # - cd external/SCOTCH/src/libscotch
-    # - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    # - cd ../../../../
+    - cd external/SCOTCH/src/libscotch
+    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    - cd ../../../../
     - cat ./toolchains/intel.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -124,33 +122,33 @@ build.intel-shared:
     expire_in: 1 days
 
 ### Intel compilers + MPI + MKL + external solver libraries (debug) ###
-# build.intel-debug:
-#   stage: build
-#   rules:
-#     - when: on_success
-#   tags:
-#     - docker
-#   image:
-#     name: uthpalaherath/elsi-gitlab-runner-ubuntu22-intel2023-gnu11-elsi-external:latest
-#     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
-#   script:
-#     - ulimit -s unlimited
-#     - export MKL_DYNAMIC=FALSE
-#     - export MKL_NUM_THREADS=1
-#     - cd external/SCOTCH/src/libscotch
-#     - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-#     - cd ../../../../
-#     - cat ./toolchains/intel_debug.cmake
-#     - rm -rf $CI_JOB_NAME
-#     - mkdir $CI_JOB_NAME
-#     - cd $CI_JOB_NAME
-#     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel_debug.cmake ..
-#     - make -j4
-#   artifacts:
-#     paths:
-#       - $CI_JOB_NAME/
-#     when: always
-#     expire_in: 1 days
+build.intel-debug:
+  stage: build
+  rules:
+    - when: on_success
+  tags:
+    - docker
+  image:
+    name: uthpalaherath/elsi-gitlab-runner-ubuntu22-intel2023-gnu11-elsi-external:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
+    - cd external/SCOTCH/src/libscotch
+    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    - cd ../../../../
+    - cat ./toolchains/intel_debug.cmake
+    - rm -rf $CI_JOB_NAME
+    - mkdir $CI_JOB_NAME
+    - cd $CI_JOB_NAME
+    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel_debug.cmake ..
+    - make -j4
+  artifacts:
+    paths:
+      - $CI_JOB_NAME/
+    when: always
+    expire_in: 1 days
 
 ##### TEST STAGE #####
 
@@ -164,7 +162,8 @@ test.gnu:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
+    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
@@ -203,7 +202,8 @@ test.intel:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
+    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
@@ -224,7 +224,8 @@ test.intel-shared:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-centos-intel2021-openmpi4.1.5-gnu8.5:latest
+    name: uthpalaherath/aims-gitlab-runner-ubuntu22-intel2023-openmpi4.1.5-gnu11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
@@ -236,23 +237,23 @@ test.intel-shared:
     expire_in: 1 days
 
 ### Intel compilers + MPI + MKL + external solver libraries (debug) ###
-# test.intel-debug:
-#   stage: test
-#   dependencies:
-#     - build.intel-debug
-#   rules:
-#     - when: on_success
-#   tags:
-#     - docker
-#   image:
-#     name: uthpalaherath/elsi-gitlab-runner-ubuntu22-intel2023-gnu11-elsi-external:latest
-#     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
-#   script:
-#     - ulimit -s unlimited
-#     - export MKL_DYNAMIC=FALSE
-#     - export MKL_NUM_THREADS=1
-#     - cd build.intel-debug
-#     - ctest --output-on-failure
-#   artifacts:
-#     when: always
-#     expire_in: 1 days
+test.intel-debug:
+  stage: test
+  dependencies:
+    - build.intel-debug
+  rules:
+    - when: on_success
+  tags:
+    - docker
+  image:
+    name: uthpalaherath/elsi-gitlab-runner-ubuntu22-intel2023-gnu11-elsi-external:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
+    - cd build.intel-debug
+    - ctest --output-on-failure
+  artifacts:
+    when: always
+    expire_in: 1 days
