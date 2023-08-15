@@ -1,5 +1,4 @@
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-set(CMAKE_CXX_STANDARD 14)
 
 option(ENABLE_CHASE_CUDA_AWARE_MPI "Enable CUDA aware MPI for collective communications" ON)
 

@@ -317,9 +317,9 @@ public:
         if(!isSameDist_){
             auto max_c_len = *max_element(c_lens.begin(), c_lens.end());
             if(cuda_aware_){
-                buff__ = std::make_unique<Matrix<T>>(2, max_c_len, nex_ + nev_);
+                buff__ = make_unique<Matrix<T>>(2, max_c_len, nex_ + nev_);
             }else{
-                buff__ = std::make_unique<Matrix<T>>(0, max_c_len, nex_ + nev_);                
+                buff__ = make_unique<Matrix<T>>(0, max_c_len, nex_ + nev_);                
             }
         }
 
