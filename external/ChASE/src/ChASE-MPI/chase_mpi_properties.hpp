@@ -14,6 +14,7 @@
 
 #include "algorithm/types.hpp"
 #include "chase_mpi_matrices.hpp"
+#include "mpi_wrapper.hpp"
 
 namespace chase
 {
@@ -241,6 +242,39 @@ public:
 
         MPI_Comm_size(comm, &nprocs_);
         MPI_Comm_rank(comm, &rank_);
+
+        /* Set sharem memory communicator and ranks */
+        MPI_Comm_split_type(comm, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, &shm_comm_);
+        MPI_Comm_size(shm_comm_, &shm_nprocs_);
+        MPI_Comm_rank(shm_comm_, &shm_rank_);
+
+#ifdef HAS_CUDA
+        int num_devices = -1;
+        cudaGetDeviceCount(&num_devices);
+
+        // Check the number of MPI ranks per node and the number of available GPUs
+        if(num_devices < shm_nprocs_) {
+            if (!rank_) {
+                std::cerr << "Error! The number of MPI ranks per node ( " << shm_nprocs_ 
+                        << " ) is larger than the number of available GPU devices ( " 
+                        << num_devices << " )!" << std::endl;
+                std::cerr << "The ChASE will terminate. Please, re-run ChASE with the number of " 
+                        << "MPI ranks per node not larger than the number of available GPU devices."
+                        << std::endl;
+            }
+        } else if (num_devices > shm_nprocs_) {
+            cudaSetDevice(shm_rank_);
+            if (!rank_) {
+                std::cout << "Warning! The number of MPI ranks ( " << shm_nprocs_ 
+                        << " ) is less than the number of available GPUs ( " << num_devices << " )! " << std::endl;
+                std::cout << "The resources will not be used optimally. " 
+                        << "The number of MPI ranks should be equal to the number of available GPU devices to exploit all computational resources!" 
+                        << std::endl;
+            }
+        } else { // num_devices mpi_shm_rankmpi_shm_size
+            cudaSetDevice(shm_rank_);
+        }
+#endif
         std::size_t blocknb[2];
         std::size_t N_loc[2];
         std::size_t blocksize[2];
@@ -343,10 +377,6 @@ public:
             c_offs_l_[j] = c_offs_l_[j - 1] + c_lens_[j - 1];
         }
 
-        C2_.reset(new T[m_ * max_block_]());
-        B2_.reset(new T[n_ * max_block_]());
-        A_.reset(new T[max_block_ * max_block_]());
-
         // for MPI communication
         block_counts_.resize(2);
         send_lens_.resize(2);
@@ -433,9 +463,46 @@ public:
         std::size_t nx_b = std::min(bsize, nevex_);
         t_descinit(desc1D_Nxnevx_, &N_, &nevex_, &mb_, &nx_b, &irsrc_, &zero,
                    &colcomm_ctxt_, &m_, &info);
-#else
-        V_.reset(new T[N_ * max_block_]());
 #endif
+
+        comm_2 row_comm_dup;
+        comm_2 col_comm_dup;
+#if defined(HAS_NCCL)
+        ncclUniqueId nccl_id, nccl_ids[nprocs_];
+        ncclGetUniqueId(&nccl_id);
+        MPI_Allgather(&nccl_id, sizeof(ncclUniqueId), MPI_UINT8_T, &nccl_ids[0],
+                      sizeof(ncclUniqueId), MPI_UINT8_T, comm);
+
+        for (auto i = 0; i < dims_[0]; i++)
+        {
+            if (coord_[0] == i)
+            {
+                ncclCommInitRank(&row_comm_dup, dims_[1], nccl_ids[i],
+                                 coord_[1]);
+            }
+        }
+
+        // col_comm
+        ncclUniqueId nccl_id_2, nccl_ids_2[nprocs_];
+        ncclGetUniqueId(&nccl_id_2);
+        MPI_Allgather(&nccl_id_2, sizeof(ncclUniqueId), MPI_UINT8_T,
+                      &nccl_ids_2[0], sizeof(ncclUniqueId), MPI_UINT8_T, comm);
+
+        for (auto i = 0; i < dims_[1]; i++)
+        {
+            if (coord_[1] == i)
+            {
+                ncclCommInitRank(&col_comm_dup, dims_[0],
+                                 nccl_ids_2[i * dims_[0]], coord_[0]);
+            }
+        }
+#else
+        MPI_Comm_dup(row_comm_, &row_comm_dup);
+        MPI_Comm_dup(col_comm_, &col_comm_dup);
+#endif
+        mpi_wrapper_.add(row_comm_, row_comm_dup);
+        mpi_wrapper_.add(col_comm_, col_comm_dup);
+
 #ifdef USE_NSIGHT
         nvtxRangePop();
 #endif
@@ -490,6 +557,39 @@ public:
 
         MPI_Comm_size(comm, &nprocs_);
         MPI_Comm_rank(comm, &rank_);
+
+        /* Set sharem memory communicator and ranks */
+        MPI_Comm_split_type(comm, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, &shm_comm_);
+        MPI_Comm_size(shm_comm_, &shm_nprocs_);
+        MPI_Comm_rank(shm_comm_, &shm_rank_);
+        
+#ifdef HAS_CUDA
+        int num_devices = -1;
+        cudaGetDeviceCount(&num_devices);
+
+        // Check the number of MPI ranks per node and the number of available GPUs
+       if(num_devices < shm_nprocs_) {
+            if (!rank_) {
+                std::cerr << "Error! The number of MPI ranks per node ( " << shm_nprocs_ 
+                        << " ) is larger than the number of available GPU devices ( " 
+                        << num_devices << " )!" << std::endl;
+                std::cerr << "The ChASE will terminate. Please, re-run ChASE with the number of " 
+                        << "MPI ranks per node not larger than the number of available GPU devices."
+                        << std::endl;
+            }
+        } else if (num_devices > shm_nprocs_) {
+            cudaSetDevice(shm_rank_);
+            if (!rank_) {
+                std::cout << "Warning! The number of MPI ranks ( " << shm_nprocs_ 
+                        << " ) is less than the number of available GPUs ( " << num_devices << " )! " << std::endl;
+                std::cout << "The resources will not be used optimally. " 
+                        << "The number of MPI ranks should be equal to the number of available GPU devices to exploit all computational resources!" 
+                        << std::endl;
+            }
+        } else { // num_devices mpi_shm_rankmpi_shm_size
+            cudaSetDevice(shm_rank_);
+        }
+#endif
 
         int tmp_dims_[2];
 
@@ -562,10 +662,6 @@ public:
         c_offs_[0] = off_[1];
         c_lens_[0] = n_;
         c_offs_l_[0] = 0;
-
-        C2_.reset(new T[m_ * max_block_]());
-        B2_.reset(new T[n_ * max_block_]());
-        A_.reset(new T[max_block_ * max_block_]());
 
         block_counts_.resize(2);
         for (std::size_t dim_idx = 0; dim_idx < 2; dim_idx++)
@@ -645,10 +741,46 @@ public:
         std::size_t nx_b = std::min(bsize, nevex_);
         t_descinit(desc1D_Nxnevx_, &N_, &nevex_, &mb_, &nx_b, &zero, &zero,
                    &colcomm_ctxt_, &m_, &info);
-
-#else
-        V_.reset(new T[N_ * max_block_]());
 #endif
+
+        comm_2 row_comm_dup;
+        comm_2 col_comm_dup;
+#if defined(HAS_NCCL)
+        ncclUniqueId nccl_id, nccl_ids[nprocs_];
+        ncclGetUniqueId(&nccl_id);
+        MPI_Allgather(&nccl_id, sizeof(ncclUniqueId), MPI_UINT8_T, &nccl_ids[0],
+                      sizeof(ncclUniqueId), MPI_UINT8_T, comm);
+
+        for (auto i = 0; i < dims_[0]; i++)
+        {
+            if (coord_[0] == i)
+            {
+                ncclCommInitRank(&row_comm_dup, dims_[1], nccl_ids[i],
+                                 coord_[1]);
+            }
+        }
+
+        // col_comm
+        ncclUniqueId nccl_id_2, nccl_ids_2[nprocs_];
+        ncclGetUniqueId(&nccl_id_2);
+        MPI_Allgather(&nccl_id_2, sizeof(ncclUniqueId), MPI_UINT8_T,
+                      &nccl_ids_2[0], sizeof(ncclUniqueId), MPI_UINT8_T, comm);
+
+        for (auto i = 0; i < dims_[1]; i++)
+        {
+            if (coord_[1] == i)
+            {
+                ncclCommInitRank(&col_comm_dup, dims_[0],
+                                 nccl_ids_2[i * dims_[0]], coord_[0]);
+            }
+        }
+#else
+        MPI_Comm_dup(row_comm_, &row_comm_dup);
+        MPI_Comm_dup(col_comm_, &col_comm_dup);
+#endif
+        mpi_wrapper_.add(row_comm_, row_comm_dup);
+        mpi_wrapper_.add(col_comm_, col_comm_dup);
+
 #ifdef USE_NSIGHT
         nvtxRangePop();
 #endif
@@ -694,6 +826,40 @@ public:
         MPI_Comm_rank(comm, &rank_);
         dims_[0] = dims_[1] = 0;
         MPI_Dims_create(nprocs_, 2, dims_);
+
+        /* Set sharem memory communicator and ranks */
+        MPI_Comm_split_type(comm, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, &shm_comm_);
+        MPI_Comm_size(shm_comm_, &shm_nprocs_);
+        MPI_Comm_rank(shm_comm_, &shm_rank_);
+
+#ifdef HAS_CUDA
+
+        int num_devices = -1;
+        cudaGetDeviceCount(&num_devices);
+
+        // Check the number of MPI ranks per node and the number of available GPUs
+        if(num_devices < shm_nprocs_) {
+            if (!rank_) {
+                std::cerr << "Error! The number of MPI ranks per node ( " << shm_nprocs_ 
+                        << " ) is larger than the number of available GPU devices ( " 
+                        << num_devices << " )!" << std::endl;
+                std::cerr << "The ChASE will terminate. Please, re-run ChASE with the number of " 
+                        << "MPI ranks per node not larger than the number of available GPU devices."
+                        << std::endl;
+            }
+        } else if (num_devices > shm_nprocs_) {
+            cudaSetDevice(shm_rank_);
+            if (!rank_) {
+                std::cout << "Warning! The number of MPI ranks ( " << shm_nprocs_ 
+                        << " ) is less than the number of available GPUs ( " << num_devices << " )! " << std::endl;
+                std::cout << "The resources will not be used optimally. " 
+                        << "The number of MPI ranks should be equal to the number of available GPU devices to exploit all computational resources!" 
+                        << std::endl;
+            }
+        } else { // num_devices mpi_shm_rankmpi_shm_size
+            cudaSetDevice(shm_rank_);
+        }
+#endif
 
         create2DGrid(dims_[0], dims_[1], false, comm, &row_comm_, &col_comm_,
                      &coord_[0], &coord_[1]);
@@ -772,10 +938,6 @@ public:
         c_lens_[0] = n_;
         c_offs_l_[0] = 0;
 
-        C2_.reset(new T[m_ * max_block_]());
-        B2_.reset(new T[n_ * max_block_]());
-        A_.reset(new T[max_block_ * max_block_]());
-
         block_counts_.resize(2);
         for (std::size_t dim_idx = 0; dim_idx < 2; dim_idx++)
         {
@@ -844,14 +1006,52 @@ public:
         std::size_t nx_b = std::min(bsize, nevex_);
         t_descinit(desc1D_Nxnevx_, &N_, &nevex_, &mb_, &nx_b, &zero, &zero,
                    &colcomm_ctxt_, &m_, &info);
-#else
-        V_.reset(new T[N_ * max_block_]());
 #endif
+
+        comm_2 row_comm_dup;
+        comm_2 col_comm_dup;
+#if defined(HAS_NCCL)
+        ncclUniqueId nccl_id, nccl_ids[nprocs_];
+        ncclGetUniqueId(&nccl_id);
+        MPI_Allgather(&nccl_id, sizeof(ncclUniqueId), MPI_UINT8_T, &nccl_ids[0],
+                      sizeof(ncclUniqueId), MPI_UINT8_T, comm);
+
+        for (auto i = 0; i < dims_[0]; i++)
+        {
+            if (coord_[0] == i)
+            {
+                ncclCommInitRank(&row_comm_dup, dims_[1], nccl_ids[i],
+                                 coord_[1]);
+            }
+        }
+
+        // col_comm
+        ncclUniqueId nccl_id_2, nccl_ids_2[nprocs_];
+        ncclGetUniqueId(&nccl_id_2);
+        MPI_Allgather(&nccl_id_2, sizeof(ncclUniqueId), MPI_UINT8_T,
+                      &nccl_ids_2[0], sizeof(ncclUniqueId), MPI_UINT8_T, comm);
+
+        for (auto i = 0; i < dims_[1]; i++)
+        {
+            if (coord_[1] == i)
+            {
+                ncclCommInitRank(&col_comm_dup, dims_[0],
+                                 nccl_ids_2[i * dims_[0]], coord_[0]);
+            }
+        }
+#else
+        MPI_Comm_dup(row_comm_, &row_comm_dup);
+        MPI_Comm_dup(col_comm_, &col_comm_dup);
+#endif
+        mpi_wrapper_.add(row_comm_, row_comm_dup);
+        mpi_wrapper_.add(col_comm_, col_comm_dup);
+
 #ifdef USE_NSIGHT
         nvtxRangePop();
 #endif
     }
 
+    Comm_t get_mpi_wrapper() { return mpi_wrapper_; }
 #if defined(HAS_SCALAPACK)
     int get_colcomm_ctxt() { return colcomm_ctxt_; }
 
@@ -1115,26 +1315,6 @@ public:
     std::size_t get_ldc() { return m_; };
 
     /*!
-      \return `C2_.get()`: the pointer to temporary buffer `C2_`.
-    */
-    T* get_C2() { return C2_.get(); }
-    /*!
-      \return `B2_.get()`: the pointer to temporary buffer `B2_`.
-    */
-    T* get_B2() { return B2_.get(); }
-    /*!
-      \return `A_.get()`: the pointer to temporary buffer `A_`.
-    */
-    T* get_A() { return A_.get(); }
-
-#if !defined(HAS_SCALAPACK)
-    /*!
-      \return `V_.get()`: the pointer to temporary buffer `V_`.
-    */
-    T* get_V() { return V_.get(); }
-#endif
-
-    /*!
       \return `block_counts_`: 2D array which stores the block number of local
       matrix on each MPI node in each dimension.
     */
@@ -1184,28 +1364,24 @@ public:
      */
     int get_nprocs() { return nprocs_; }
 
+    //! Returns the total number of MPI nodes within the shared-memory communicator.
+    /*!
+        \return `shm_nprocs_`: the total number of MPI nodes within the shared-memory communicator.
+     */
+    int get_shm_nprocs() { return shm_nprocs_; }
+
     //! Returns the rank of MPI node within 2D grid.
     /*!
         \return `rank_`: the rank of MPI node within 2D grid.
      */
     int get_my_rank() { return rank_; }
-    //! Create a ChaseMpiMatrices object which stores the operating matrices and
-    //! vectors for ChASE-MPI.
+
+    //! Returns the rank of MPI node within the shared-memory communicator.
     /*!
-      @param V1 a `m_ * max_block_` rectangular matrix.
-      @param ritzv a `max_block_` vector which stores the computed Ritz values.
-      @param V2 a `n_ * max_block_` rectangular matrix.
-      @param resid a `max_block_` vector which stores the residual of each
-      computed Ritz value.
-    */
-    ChaseMpiMatrices<T> create_matrices(T* V1 = nullptr,
-                                        Base<T>* ritzv = nullptr,
-                                        T* V2 = nullptr,
-                                        Base<T>* resid = nullptr) const
-    {
-        return ChaseMpiMatrices<T>(comm_, N_, m_, n_, max_block_, V1, ritzv, V2,
-                                   resid);
-    }
+        \return `shm_rank_`: the rank of MPI node within the shared-memory communicator.
+     */
+    int get_my_shm_rank() { return shm_rank_; }
+
     //! Create a ChaseMpiMatrices object which stores the operating matrices and
     //! vectors for ChASE-MPI.
     /*!
@@ -1217,13 +1393,12 @@ public:
       @param resid a `max_block_` vector which stores the residual of each
       computed Ritz value.
     */
-    ChaseMpiMatrices<T> create_matrices(T* H, std::size_t ldh, T* V1 = nullptr,
-                                        Base<T>* ritzv = nullptr,
-                                        T* V2 = nullptr,
-                                        Base<T>* resid = nullptr) const
+    ChaseMpiMatrices<T> create_matrices(int mode, T* H, std::size_t ldh,
+                                        T* V1 = nullptr,
+                                        Base<T>* ritzv = nullptr) const
     {
-        return ChaseMpiMatrices<T>(comm_, N_, m_, n_, max_block_, H, ldh, V1,
-                                   ritzv, V2, resid);
+        return ChaseMpiMatrices<T>(mode, comm_, N_, m_, n_, max_block_, H, ldh,
+                                   V1, ritzv);
     }
 
 private:
@@ -1505,38 +1680,26 @@ private:
      */
     MPI_Comm comm_;
 
+    //! The shared-memory MPI communicator which ChASE is working on.
+    /*!
+        This variable is initialized by the constructor using the value
+        of its input parameters `shm_comm`.
+     */
+    MPI_Comm shm_comm_;
+
     //! Total number of MPI nodes in the MPI communicator which ChASE is working
     //! on.
     int nprocs_;
+
+    //! Total number of MPI ranks in the shared-memory communicator (ie. #mpi ranks per node).
+    int shm_nprocs_;
 
     //! The rank of each MPI node within the MPI communicator which ChASE is
     //! working on.
     int rank_;
 
-    //! A temporary memory allocated for distributed ChASE
-    /*!
-        This variable is initialized during the construction of
-       ChaseMpiProperties of size `m_ * max_block_`.
-
-       It can be accessed by the member function get_C2()
-     */
-    std::unique_ptr<T[]> C2_;
-    //! A temporary memory allocated for distributed ChASE
-    /*!
-        This variable is initialized during the construction of
-       ChaseMpiProperties of size `n_ * max_block_`.
-
-       It can be accessed by the member function get_B2()
-     */
-    std::unique_ptr<T[]> B2_;
-    //! A temporary memory allocated for distributed ChASE
-    /*!
-        This variable is initialized during the construction of
-       ChaseMpiProperties of size `max_block_ * max_block_`.
-
-       It can be accessed by the member function get_A()
-     */
-    std::unique_ptr<T[]> A_;
+    //! The rank of each MPI within the shared-memory MPI communicator.
+    int shm_rank_;
 
     //! The row communicator of the constructed 2D grid of MPI codes.
     /*!
@@ -1595,11 +1758,9 @@ private:
     //! with only 1 column
     int colcomm_ctxt_;
     std::size_t desc1D_Nxnevx_[9];
-#else
-    //! A temporary buffer of size `N_ * max_block_`.
-    //! It is allocated only when no ScaLAPACK is detected.
-    std::unique_ptr<T[]> V_;
 #endif
+
+    Comm_t mpi_wrapper_;
 };
 } // namespace mpi
 } // namespace chase

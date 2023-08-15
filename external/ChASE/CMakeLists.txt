@@ -1,3 +1,9 @@
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_CXX_STANDARD 14)
+
+option(ENABLE_CHASE_CUDA_AWARE_MPI "Enable CUDA aware MPI for collective communications" ON)
+
+
 include( FortranCInterface )
 FortranCInterface_HEADER( ${CMAKE_BINARY_DIR}/fortran_mangle.h
   MACRO_NAMESPACE "FC_"
@@ -24,6 +30,21 @@ IF(USE_GPU_CUDA)
 
   target_link_libraries( chase_cuda PUBLIC ${LIBS})
   add_compile_definitions(HAS_GPU=1)
+  add_compile_definitions(HAS_CUDA=1)
+
+  if(ENABLE_CHASE_CUDA_AWARE_MPI)
+	add_compile_definitions(CUDA_AWARE=1)
+	find_package( NCCL )
+	if(NCCL_FOUND)
+	    target_link_libraries(chase_cuda INTERFACE
+            	${NCCL_LIBRARIES}
+            	)
+    	    target_include_directories( chase_cuda INTERFACE
+            	${NCCL_INCLUDE_DIRS}
+            	)
+	    add_compile_definitions(HAS_NCCL=1)
+	endif()
+  endif()
 ENDIF()
 
 LIST(APPEND chase_src

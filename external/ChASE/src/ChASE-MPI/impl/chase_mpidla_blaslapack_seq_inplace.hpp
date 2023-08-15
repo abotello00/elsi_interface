@@ -33,20 +33,31 @@ public:
         @param maxBlock: maximum column number of matrix `V`, which equals to
        `nev+nex`.
     */
-    ChaseMpiDLABlaslapackSeqInplace(ChaseMpiMatrices<T>& matrices,
-                                    std::size_t n, std::size_t nev,
-                                    std::size_t nex)
+    ChaseMpiDLABlaslapackSeqInplace(T* H, std::size_t ldh, T* V1,
+                                    Base<T>* ritzv, std::size_t n,
+                                    std::size_t nev, std::size_t nex)
         : N_(n), nex_(nex), nev_(nev), maxblock_(nev_ + nex_),
-          V1_(matrices.get_V1()), V2_(matrices.get_V2()), H_(matrices.get_H()),
-          ldh_(matrices.get_ldh())
+          matrices_(0, N_, nev_ + nex_, H, ldh, V1, ritzv)
     {
 
-        v0_.resize(N_);
-        v1_.resize(N_);
-        w_.resize(N_);
+        V1_ = matrices_.C().ptr();
+        V2_ = matrices_.B().ptr();
+        H_ = matrices_.H().ptr();
+        A_ = matrices_.A().ptr();
+
+        ldh_ = matrices_.get_ldh();
+
+        v0_ = (T*)malloc(N_ * sizeof(T));
+        v1_ = (T*)malloc(N_ * sizeof(T));
+        w_ = (T*)malloc(N_ * sizeof(T));
     }
 
-    ~ChaseMpiDLABlaslapackSeqInplace() {}
+    ~ChaseMpiDLABlaslapackSeqInplace()
+    {
+        free(v0_);
+        free(v1_);
+        free(w_);
+    }
     void initVecs() override
     {
         t_lacpy('A', N_, nev_ + nex_, V1_, N_, V2_, N_);
@@ -64,18 +75,6 @@ public:
         }
     }
 
-    void V2C(T* v1, std::size_t off1, T* v2, std::size_t off2,
-             std::size_t block) override
-    {
-        std::memcpy(v2 + off2 * N_, v1 + off1 * N_, N_ * block * sizeof(T));
-    }
-
-    void C2V(T* v1, std::size_t off1, T* v2, std::size_t off2,
-             std::size_t block) override
-    {
-        std::memcpy(v2 + off2 * N_, v1 + off1 * N_, N_ * block * sizeof(T));
-    }
-
     void preApplication(T* V, std::size_t locked, std::size_t block) override
     {
         locked_ = locked;
@@ -91,11 +90,6 @@ public:
                V2_ + locked * N_ + offset * N_, N_);
 
         std::swap(V1_, V2_);
-    }
-
-    bool postApplication(T* V, std::size_t block, std::size_t locked) override
-    {
-        return false;
     }
 
     void shiftMatrix(T const c, bool isunshift = false) override
@@ -119,7 +113,7 @@ public:
         t_gemm(CblasColMajor, CblasNoTrans, CblasNoTrans, //
                N_, 1, N_,                                 //
                &One,                                      //
-               H_, ldh_,                                    //
+               H_, ldh_,                                  //
                B, N_,                                     //
                &Zero,                                     //
                C, N_);
@@ -128,6 +122,8 @@ public:
     int get_nprocs() const override { return 1; }
     void Start() override {}
     void End() override {}
+    Base<T>* get_Resids() override { return matrices_.Resid().ptr(); }
+    Base<T>* get_Ritzv() override { return matrices_.Ritzv().ptr(); }
 
     void axpy(std::size_t N, T* alpha, T* x, std::size_t incx, T* y,
               std::size_t incy) override
@@ -159,17 +155,15 @@ public:
         t_gemm(CblasColMajor, CblasConjTrans, CblasNoTrans, N_, block, N_, &One,
                H_, ldh_, V1_ + locked * N_, N_, &Zero, V2_ + locked * N_, N_);
 
-        auto A = std::unique_ptr<T[]>{new T[block * block]};
-
         // A <- W' * V
         t_gemm(CblasColMajor, CblasConjTrans, CblasNoTrans, block, block, N_,
-               &One, V2_ + locked * N_, N_, V1_ + locked * N_, N_, &Zero,
-               A.get(), block);
+               &One, V2_ + locked * N_, N_, V1_ + locked * N_, N_, &Zero, A_,
+               nev_ + nex_);
 
-        t_heevd(LAPACK_COL_MAJOR, 'V', 'L', block, A.get(), block, ritzv);
+        t_heevd(LAPACK_COL_MAJOR, 'V', 'L', block, A_, nev_ + nex_, ritzv);
 
         t_gemm(CblasColMajor, CblasNoTrans, CblasNoTrans, N_, block, block,
-               &One, V1_ + locked * N_, N_, A.get(), block, &Zero,
+               &One, V1_ + locked * N_, N_, A_, nev_ + nex_, &Zero,
                V2_ + locked * N_, N_);
 
         std::swap(V1_, V2_);
@@ -181,7 +175,7 @@ public:
     {
     }
 
-    int potrf(char uplo, std::size_t n, T* a, std::size_t lda) override
+    int potrf(char uplo, std::size_t n, T* a, std::size_t lda, bool isinfo = true) override
     {
         return 0;
     }
@@ -204,8 +198,8 @@ public:
         T beta = T(0.0);
 
         t_gemm(CblasColMajor, CblasConjTrans, CblasNoTrans, N_, unconverged, N_,
-               &alpha, H_, ldh_, V1_ + locked * N_, N_, &beta, V2_ + locked * N_,
-               N_);
+               &alpha, H_, ldh_, V1_ + locked * N_, N_, &beta,
+               V2_ + locked * N_, N_);
 
         for (std::size_t i = 0; i < unconverged; ++i)
         {
@@ -235,20 +229,18 @@ public:
     {
         auto nevex = nev_ + nex_;
 
-        auto A_ = std::unique_ptr<T[]>{new T[nevex * nevex]};
         T one = T(1.0);
         T zero = T(0.0);
         int info = -1;
 
         std::memcpy(V2_, V1_, locked * N_ * sizeof(T));
 
-        t_syherk('U', 'C', nevex, N_, &one, V1_, N_, &zero, A_.get(), nevex);
-        info = t_potrf('U', nevex, A_.get(), nevex);
+        t_syherk('U', 'C', nevex, N_, &one, V1_, N_, &zero, A_, nevex);
+        info = t_potrf('U', nevex, A_, nevex);
 
         if (info == 0)
         {
-            t_trsm('R', 'U', 'N', 'N', N_, nevex, &one, A_.get(), nevex, V1_,
-                   N_);
+            t_trsm('R', 'U', 'N', 'N', N_, nevex, &one, A_, nevex, V1_, N_);
 
             int choldeg = 2;
             char* choldegenv;
@@ -262,11 +254,9 @@ public:
 #endif
             for (auto i = 0; i < choldeg - 1; i++)
             {
-                t_syherk('U', 'C', nevex, N_, &one, V1_, N_, &zero, A_.get(),
-                         nevex);
-                t_potrf('U', nevex, A_.get(), nevex);
-                t_trsm('R', 'U', 'N', 'N', N_, nevex, &one, A_.get(), nevex,
-                       V1_, N_);
+                t_syherk('U', 'C', nevex, N_, &one, V1_, N_, &zero, A_, nevex);
+                t_potrf('U', nevex, A_, nevex);
+                t_trsm('R', 'U', 'N', 'N', N_, nevex, &one, A_, nevex, V1_, N_);
             }
             std::memcpy(V1_, V2_, locked * N_ * sizeof(T));
         }
@@ -290,39 +280,6 @@ public:
         memcpy(V1_ + N_ * j, tmp, N_ * sizeof(T));
     }
 
-    void getLanczosBuffer(T** V1, T** V2, std::size_t* ld, T** v0, T** v1,
-                          T** w) override
-    {
-        *V1 = V1_;
-        *V2 = V2_;
-        *ld = N_;
-
-        std::fill(v1_.begin(), v1_.end(), T(0));
-        std::fill(v0_.begin(), v0_.end(), T(0));
-        std::fill(w_.begin(), w_.end(), T(0));
-
-        *v0 = v0_.data();
-        *v1 = v1_.data();
-        *w = w_.data();
-    }
-
-    void getLanczosBuffer2(T** v0, T** v1, T** w) override
-    {
-        std::fill(v0_.begin(), v0_.end(), T(0));
-        std::fill(w_.begin(), w_.end(), T(0));
-        std::mt19937 gen(2342.0);
-        std::normal_distribution<> normal_distribution;
-
-        for (std::size_t k = 0; k < N_; ++k)
-        {
-            v1_[k] = getRandomT<T>([&]() { return normal_distribution(gen); });
-        }
-
-        *v0 = v0_.data();
-        *v1 = v1_.data();
-        *w = w_.data();
-    }
-
     void LanczosDos(std::size_t idx, std::size_t m, T* ritzVc) override
     {
         T alpha = T(1.0);
@@ -332,6 +289,94 @@ public:
                V1_, N_, ritzVc, m, &beta, V2_, N_);
         std::memcpy(V1_, V2_, m * N_ * sizeof(T));
     }
+    void Lanczos(std::size_t M, int idx, Base<T>* d, Base<T>* e,
+                 Base<T>* r_beta) override
+    {
+        Base<T> real_beta;
+
+        T alpha = T(1.0);
+        T beta = T(0.0);
+
+        std::fill(v0_, v0_ + N_, T(0));
+
+#ifdef USE_NSIGHT
+        nvtxRangePushA("Lanczos Init vec");
+#endif
+        if (idx >= 0)
+        {
+            std::memcpy(v1_, V2_ + idx * N_, N_ * sizeof(T));
+        }
+        else
+        {
+            std::mt19937 gen(2342.0);
+            std::normal_distribution<> normal_distribution;
+
+            for (std::size_t k = 0; k < N_; ++k)
+            {
+                v1_[k] =
+                    getRandomT<T>([&]() { return normal_distribution(gen); });
+            }
+        }
+#ifdef USE_NSIGHT
+        nvtxRangePop();
+#endif
+        // ENSURE that v1 has one norm
+#ifdef USE_NSIGHT
+        nvtxRangePushA("Lanczos: loop");
+#endif
+        Base<T> real_alpha = this->nrm2(N_, v1_, 1);
+        alpha = T(1 / real_alpha);
+        this->scal(N_, &alpha, v1_, 1);
+        for (std::size_t k = 0; k < M; k = k + 1)
+        {
+            if (idx >= 0)
+            {
+                std::memcpy(V1_ + k * N_, v1_, N_ * sizeof(T));
+            }
+            this->applyVec(v1_, w_);
+            alpha = this->dot(N_, v1_, 1, w_, 1);
+            alpha = -alpha;
+            this->axpy(N_, &alpha, v1_, 1, w_, 1);
+            alpha = -alpha;
+
+            d[k] = std::real(alpha);
+
+            if (k == M - 1)
+                break;
+
+            beta = T(-real_beta);
+            this->axpy(N_, &beta, v0_, 1, w_, 1);
+            beta = -beta;
+
+            real_beta = this->nrm2(N_, w_, 1);
+
+            beta = T(1.0 / real_beta);
+
+            this->scal(N_, &beta, w_, 1);
+
+            e[k] = real_beta;
+
+            std::swap(v1_, v0_);
+            std::swap(v1_, w_);
+        }
+#ifdef USE_NSIGHT
+        nvtxRangePop();
+#endif
+        *r_beta = real_beta;
+    }
+
+    void B2C(T* B, std::size_t off1, T* C, std::size_t off2,
+             std::size_t block) override
+    {
+    }
+    void lacpy(char uplo, std::size_t m, std::size_t n, T* a, std::size_t lda,
+               T* b, std::size_t ldb) override
+    {
+    }
+
+    void shiftMatrixForQR(T* A, std::size_t n, T shift) override {}
+
+    ChaseMpiMatrices<T>* getChaseMatrices() override { return &matrices_; }
 
 private:
     std::size_t N_;      //!< global dimension of the symmetric/Hermtian matrix
@@ -339,16 +384,17 @@ private:
     std::size_t nev_;    //!< number of required eigenpairs
     std::size_t nex_;    //!< number of extral searching space
     std::size_t maxblock_; //!< `maxBlock_=nev_ + nex_`
-    std::size_t ldh_; //!< leading dimension of Hermitian matrix
+    std::size_t ldh_;      //!< leading dimension of Hermitian matrix
     T* H_;                 //!< a pointer to the Symmetric/Hermtian matrix
     T* V1_;                //!< a matrix of size `N_*(nev_+nex_)`
-    T* V2_;                //!< a matrix of size `N_*(nev_+nex_)`
-    std::vector<T> v0_; //!< a vector of size `N_`, which is allocated in this
-                        //!< class for Lanczos
-    std::vector<T> v1_; //!< a vector of size `N_`, which is allocated in this
-                        //!< class for Lanczos
-    std::vector<T> w_;  //!< a vector of size `N_`, which is allocated in this
-                        //!< class for Lanczos
+    T* A_;
+    T* V2_; //!< a matrix of size `N_*(nev_+nex_)`
+    T* v0_; //!< a vector of size `N_`, which is allocated in this
+            //!< class for Lanczos
+    T* v1_; //!< a vector of size `N_`, which is allocated in this
+            //!< class for Lanczos
+    T* w_;
+    ChaseMpiMatrices<T> matrices_;
 };
 
 template <typename T>

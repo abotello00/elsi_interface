@@ -11,6 +11,7 @@
 #include <tuple>
 
 #include "algorithm/types.hpp"
+#include "chase_mpi_matrices.hpp"
 #include "chase_mpi_properties.hpp"
 
 namespace chase
@@ -130,41 +131,6 @@ public:
     virtual void asynCxHGatherC(std::size_t locked, std::size_t block,
                                 bool isCcopied = false) = 0;
 
-    //! Copy from buffer rectangular matrix `v1` to `v2`.
-    //! For the implementation of distributed-memory ChASE, this operation
-    //! performs a `copy` from a matrix redundantly distributed across all MPI
-    //! procs to a matrix distributed within each column communicator and
-    //! redundant among different column communicators. This operation is
-    //! reciprocal to V2C().
-    /*!
-     *  @param v1: the buffer to copy from
-     *  @param off1: the offset for the starting column index of `v1` to copy
-     * from
-     *  @param v2: the buffer to copy to
-     *  @param off2: the offset for the starting column index of `v2` to copy to
-     *  @param block: number of columns to copy from `v1` to `v2`
-     */
-    virtual void C2V(T* v1, std::size_t off1, T* v2, std::size_t off2,
-                     std::size_t block) = 0;
-    //! Copy from buffer rectangular matrix `v1` to `v2`.
-    //! For the implementation of distributed-memory ChASE, this operation
-    //! performs a `copy` from a matrix distributed within each column
-    //! communicator and redundant among different column communicators to a
-    //! matrix redundantly distributed across all MPI procs. This operation is
-    //! reciprocal to C2V(). It requires the `dim_[0]` MPI broadcasting
-    //! operations, in which `dim_[0]` is the size of each MPI column
-    //! communicatior.
-    /*!
-     *  @param v1: the buffer to copy from
-     *  @param off1: the offset for the starting column index of `v1` to copy
-     * from
-     *  @param v2: the buffer to copy to
-     *  @param off2: the offset for the starting column index of `v2` to copy to
-     *  @param block: number of columns to copy from `v1` to `v2`
-     */
-    virtual void V2C(T* v1, std::size_t off1, T* v2, std::size_t off2,
-                     std::size_t block) = 0;
-
     //! Swap the columns indexing `i` and `j` in a rectangular matrix
     //! The operated matrices maybe different in different implementations
     /*!
@@ -173,20 +139,6 @@ public:
      *
      */
     virtual void Swap(std::size_t i, std::size_t j) = 0;
-    //! Copy from buffer rectangular matrix `v1` to `v2`.
-    //! For the implementation of distributed-memory ChASE, this operation
-    //! performs a `copy` from a matrix distributed within each column
-    //! communicator and redundant among different column communicators to a
-    //! matrix redundantly distributed across all MPI procs. Then in the next
-    //! iteration of ChASE-MPI, this operation takes places in the row
-    //! communicator...
-    /*!
-     *  @param V: the target buff
-     *  @param block: number of columns to copy from `v1` to `v2`
-     *  @param locked: number of converged eigenvectors.
-     */
-    virtual bool postApplication(T* V, std::size_t block,
-                                 std::size_t locked) = 0;
 
     //! Performs a Generalized Matrix Vector Multiplication (`GEMV`) with
     //! `alpha=1.0` and `beta=0.0`.
@@ -200,6 +152,9 @@ public:
     //! Return the total number of MPI procs within the working MPI
     //! communicator.
     virtual int get_nprocs() const = 0;
+    virtual Base<T>* get_Resids() = 0;
+    virtual Base<T>* get_Ritzv() = 0;
+
     //! Starting point of solving an eigenproblem
     virtual void Start() = 0;
     //! Ending point of solving an eigenproblem
@@ -305,7 +260,7 @@ public:
        href="https://netlib.org/lapack/explore-html/d3/d8d/group__complex16_p_ocomputational_
         ga93e22b682170873efb50df5a79c5e4eb.html">zpotrf()</a>
     */
-    virtual int potrf(char uplo, std::size_t n, T* a, std::size_t lda) = 0;
+    virtual int potrf(char uplo, std::size_t n, T* a, std::size_t lda, bool isInfo = true) = 0;
 
     //! A `LAPACK-like` function which solves one of the matrix equations
     /*!
@@ -371,25 +326,19 @@ public:
     //! Cholesky QR factorization on the rectangular matrix `V1`.
     //!  @param locked: number of converged eigenvectors.
     virtual void cholQR(std::size_t locked, Base<T> cond) = 0;
-    //! Return the required buffers of Lanczos which are allocated within each
-    //! individual implementation of DLA. This operation is required, since
-    //! Lanczos algorithm is implemented in ChaseMpi class, which has no direct
-    //! access to these buffers. Depending on the implementation and targeting
-    //! architectures, these buffers can be on CPU or GPUs.
-    //! **This function will be removed in short future in which all the buffers
-    //! will be allocated within ChaseMpiMatrices**.
-    virtual void getLanczosBuffer(T** V1, T** V2, std::size_t* ld, T** v0,
-                                  T** v1, T** w) = 0;
-    //! Return the required buffers of Lanczos which are allocated within each
-    //! individual implementation of DLA. This operation is required, since
-    //! Lanczos algorithm is implemented in ChaseMpi class, which has no direct
-    //! access to these buffers. Depending on the implementation and targeting
-    //! architectures, these buffers can be on CPU or GPUs.
-    //! **This function will be removed in short future in which all the buffers
-    //! will be allocated within ChaseMpiMatrices**.
-    virtual void getLanczosBuffer2(T** v0, T** v1, T** w) = 0;
     //! Lanczos DOS to estimate the \mu_{nev+nex} for ChASE
     virtual void LanczosDos(std::size_t idx, std::size_t m, T* ritzVc) = 0;
+
+    virtual void Lanczos(std::size_t M, int idx, Base<T>* d, Base<T>* e,
+                         Base<T>* r_beta) = 0;
+
+    virtual void B2C(T* B, std::size_t off1, T* C, std::size_t off2,
+                     std::size_t block) = 0;
+
+    virtual void lacpy(char uplo, std::size_t m, std::size_t n, T* a,
+                       std::size_t lda, T* b, std::size_t ldb) = 0;
+    virtual void shiftMatrixForQR(T* A, std::size_t n, T shift) = 0;
+    virtual ChaseMpiMatrices<T>* getChaseMatrices() = 0;
 };
 } // namespace mpi
 } // namespace chase
