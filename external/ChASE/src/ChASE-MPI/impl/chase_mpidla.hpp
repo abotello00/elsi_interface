@@ -956,7 +956,7 @@ public:
 
         if (!alloc_)
         {
-            V___ = std::make_unique<Matrix<T>>(0, N_, nevex);
+            V___ = make_unique<Matrix<T>>(0, N_, nevex);
             alloc_ = true;
         }
 
