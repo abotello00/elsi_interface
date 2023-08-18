@@ -1,3 +1,5 @@
+OPTION(ENABLE_CHASE_NCCL "Enable NCCL support in ChASE" OFF)
+
 include( FortranCInterface )
 FortranCInterface_HEADER( ${CMAKE_BINARY_DIR}/fortran_mangle.h
   MACRO_NAMESPACE "FC_"
