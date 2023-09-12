@@ -318,7 +318,7 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
 
    !chase
    integer(kind=i4) :: nev, nex
-   integer(kind=i4) :: i, j
+   integer(kind=i4) :: i, j, k, nr
    logical          :: isApprox
    character        :: Approx
    integer(kind=i4) :: desc_ev(9)
@@ -426,11 +426,20 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
       eval(ph%n_good+1:ph%n_basis) = eval(ph%n_good)+10.0_r8
    end if
 
-   call descinit(desc_ev,ph%n_good, nev, bh%blk, nev, 0, 0, &
-                 bh%blacs_ctxt, ph%n_basis,ierr)
-
-   call pdgemr2d(ph%n_good, nev, ph%pre_evec_real, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)      
-
+   j = 0
+   k = 1
+   do i = 1, nev, bh%blk
+        nr = bh%blk
+        if(nev - i < bh%blk) then
+            nr = nev - i  + 1
+        end if
+        if(bh%my_pcol == j) then
+            evec(:,k:k+nr-1) = ph%pre_evec_real(:,i:i+nr-1)
+            k = k + nr
+        end if
+        j = MOD(j + 1, bh%n_prow)
+   end do
+   
    call elsi_get_time(t1)
 
    write(msg,"(A)") "Finished solving standard eigenproblem"
@@ -484,7 +493,7 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
 
    !chase
    integer(kind=i4) :: nev, nex
-   integer(kind=i4) :: i, j
+   integer(kind=i4) :: i, j, k, nr
    integer(kind=i4) :: desc_ev(9)
    complex(kind=r8) :: v
    logical          :: isApprox
@@ -537,7 +546,7 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
       if(allocated(ph%pre_evec_cmplx) ) then
          call elsi_deallocate(bh,ph%pre_evec_cmplx,"pre_evec_cmplx")
       end if           
-      call elsi_allocate(bh, ph%pre_evec_cmplx, ph%n_good, nev+nex,&
+      call elsi_allocate(bh, ph%pre_evec_cmplx, bh%n_lrow, nev+nex,&
              "pre_evec_cmplx",caller)
    end if
 
@@ -591,10 +600,20 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
       eval(ph%n_good+1:ph%n_basis) = eval(ph%n_good)+10.0_r8
    end if
 
-   call descinit(desc_ev,ph%n_good, nev, bh%blk, nev, 0, 0, &
-                 bh%blacs_ctxt, ph%n_basis,ierr)
-
-   call pzgemr2d(ph%n_good, nev, ph%pre_evec_cmplx, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)
+   j = 0
+   k = 1
+   do i = 1, nev, bh%blk
+        nr = bh%blk
+        if(nev - i < bh%blk) then
+            nr = nev - i  + 1
+        end if
+        if(bh%my_pcol == j) then
+            evec(:,k:k+nr-1) = ph%pre_evec_cmplx(:,i:i+nr-1)
+            k = k + nr
+        end if
+        j = MOD(j + 1, bh%n_prow)
+   end do   
+   
    call elsi_get_time(t1)
 
    write(msg,"(A)") "Finished solving standard eigenproblem"
