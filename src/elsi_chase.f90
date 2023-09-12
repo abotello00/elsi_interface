@@ -56,12 +56,10 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
    !chase
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j
-   real(kind=r8)    :: v
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
    character        :: QRImpl
-   v = 0.5_r8
 
    if(ph%chase_deg_opt) then
      degOpt = 'S'
@@ -184,7 +182,6 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    !chase
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j
-   complex(kind=r8) :: v
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
@@ -201,8 +198,6 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    else
      degOpt = 'N'
    end if
-   
-   v = (0.5_r8, 0.0_r8)
 
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%ill_check) then
@@ -321,8 +316,6 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    integer(kind=i4) :: i, j, k, nr
    logical          :: isApprox
    character        :: Approx
-   integer(kind=i4) :: desc_ev(9)
-   real(kind=r8) :: v
    character        :: degOpt
    character        :: gridMajor
    character        :: QRImpl
@@ -344,8 +337,6 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    else
      degOpt = 'N'
    end if
-
-   v = 0.5_r8
 
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%elpa_first .and. ph%ill_check) then
@@ -381,13 +372,6 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
       end if           
       call elsi_allocate(bh,ph%pre_eval, nev+nex,"pre_eval",caller)
    end if
-
-   !if(.not. ph%chase_started) then
-   !   if(allocated(ph%htmp_r) ) then
-   !      call elsi_deallocate(bh,ph%htmp_r,"htmp_r")
-   !   end if           
-   !   call elsi_allocate(bh, ph%htmp_r, bh%n_lrow,bh%n_lcol, "htmp_r",caller)
-   !end if
    
    ! Transform to standard form
    if(.not. ph%unit_ovlp) then
@@ -403,9 +387,6 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    ! Solve
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
-   !ph%htmp_r(:,:) = ham(:,:)
-   !call pdgeadd('T', ph%n_basis, ph%n_basis, v, ph%htmp_r, 1, 1, bh%desc, &
-   !              v, ham, 1, 1, bh%desc)   
    call elsi_set_full_mat(ph, bh, UT_MAT, ham)
 
    if(.not. ph%chase_started) then
@@ -494,8 +475,6 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    !chase
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j, k, nr
-   integer(kind=i4) :: desc_ev(9)
-   complex(kind=r8) :: v
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
@@ -519,8 +498,6 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    else
      degOpt = 'N'
    end if
-
-   v = (0.5_r8, 0.0_r8)
    
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%elpa_first .and. ph%ill_check) then
@@ -557,13 +534,6 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
       call elsi_allocate(bh,ph%pre_eval, nev+nex,"pre_eval",caller)
    end if
 
-   !if(.not. ph%chase_started) then
-   !   if(allocated(ph%htmp_c) ) then
-   !      call elsi_deallocate(bh,ph%htmp_c,"htmp_c")
-   !   end if           
-   !   call elsi_allocate(bh, ph%htmp_c, bh%n_lrow,bh%n_lcol, "htmp_c",caller)
-   !end if
-
    ! Transform to standard form
    if(.not. ph%unit_ovlp) then
       if(ph%elpa_first .and. ph%n_good == ph%n_basis) then
@@ -577,9 +547,6 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    ! Solve
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
-   !ph%htmp_c(:,:) = ham(:,:)
-   !call pzgeadd('C', ph%n_basis, ph%n_basis, v,  ph%htmp_c, 1, 1, bh%desc, &
-   !              v, ham, 1, 1, bh%desc)   
    call elsi_set_full_mat(ph, bh, UT_MAT, ham)
 
    if(.not. ph%chase_started) then
