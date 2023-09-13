@@ -25,8 +25,6 @@ LIST(APPEND ntpoly_src
   src/MatrixMarketModule.f90
   src/MatrixMemoryPoolModule.f90
   src/MatrixReduceModule.f90
-  src/NTMPIFH.f90
-  src/NTMPIModule.f90
   src/PermutationModule.f90
   src/PMatrixMemoryPoolModule.f90
   src/PolynomialSolversModule.f90
