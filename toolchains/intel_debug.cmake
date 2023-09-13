@@ -18,7 +18,7 @@ SET(ENABLE_CHASE ON CACHE BOOL "Enable ChASE eigensolver")
 
 SET(USE_EXTERNAL_ELPA ON CACHE BOOL "Use external ELPA")
 SET(USE_EXTERNAL_OMM ON CACHE BOOL "Use external libOMM")
-SET(USE_EXTERNAL_PEXSI ON CACHE BOOL "Use external PEXSI")
+SET(USE_EXTERNAL_PEXSI OFF CACHE BOOL "Use external PEXSI")
 SET(USE_EXTERNAL_NTPOLY ON CACHE BOOL "Use external NTPoly")
 SET(USE_EXTERNAL_BSEPACK ON CACHE BOOL "Use external BSEPACK")
 
@@ -28,4 +28,4 @@ SET(USE_EXTERNAL_BSEPACK ON CACHE BOOL "Use external BSEPACK")
 
 SET(LIB_PATHS "$ENV{MKLROOT}/lib/intel64 $ENV{ELPA_ROOT}/lib $ENV{OMM_ROOT}/lib $ENV{PEXSI_ROOT}/lib $ENV{SUPERLU_DIST_ROOT}/lib $ENV{SCOTCH_ROOT}/lib $ENV{NTPOLY_ROOT}/lib $ENV{EIGENEXA_ROOT}/lib $ENV{BSEPACK_ROOT}/lib" CACHE STRING "External library paths")
 SET(INC_PATHS "$ENV{ELPA_ROOT}/include $ENV{ELPA_ROOT}/include/modules $ENV{ELPA_ROOT}/include/elpa-2023.05.001/modules/ $ENV{OMM_ROOT}/include $ENV{PEXSI_ROOT}/include $ENV{SUPERLU_DIST_ROOT}/include $ENV{SCOTCH_ROOT}/src/include $ENV{NTPOLY_ROOT}/include $ENV{EIGENEXA_ROOT}/include" CACHE STRING "External library include paths")
-SET(LIBS "OMM MatrixSwitch elpa pexsi superlu_dist ptscotchparmetisv3 ptscotch ptscotcherr scotchmetisv3 scotch scotcherr NTPoly EigenExa bsepack sseig mkl_scalapack_lp64 mkl_blacs_intelmpi_lp64 mkl_intel_lp64 mkl_sequential mkl_core" CACHE STRING "External libraries")
+SET(LIBS "OMM MatrixSwitch elpa superlu_dist ptscotchparmetisv3 ptscotch ptscotcherr scotchmetisv3 scotch scotcherr NTPoly EigenExa bsepack sseig mkl_scalapack_lp64 mkl_blacs_intelmpi_lp64 mkl_intel_lp64 mkl_sequential mkl_core" CACHE STRING "External libraries")
