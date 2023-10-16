@@ -166,6 +166,7 @@ module ELSI
    public :: elsi_suggest_blacs_distribution
    public :: elsi_static_excitations
    public :: elsi_check_electrons
+   public :: elsi_find_homo_lumo_gap
 
    ! Read and write matrix
    public :: elsi_init_rw
