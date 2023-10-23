@@ -2849,7 +2849,7 @@ subroutine elsi_find_homo_lumo_gap &
   ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
   ! for Q4C. Therefore, midpoint should be 0.5d0:
   !if(flag_rel.eq.REL_q4c.or.flag_rel.eq.REL_x2c) midpoint = 0.5d0
-  if(relativistic .eq. .TRUE.) midpoint = 0.5d0
+  if(relativistic .eqv. .TRUE.) midpoint = 0.5d0
 
   homo_occ = 2.0d0
   lumo_occ = 0.0d0
