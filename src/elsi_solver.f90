@@ -2943,4 +2943,4 @@ subroutine elsi_find_homo_lumo_gap &
   ! Setting mid-point chemical potential
   mu_midpoint =  (homo_level + lumo_level) / 2
 
-end subroutine elsi_find_homo_lumo_gap
+end subroutine
