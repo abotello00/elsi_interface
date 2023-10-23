@@ -73,6 +73,7 @@ module ELSI_SOLVER
    public :: elsi_inverse_cholesky_real
    public :: elsi_inverse_cholesky_complex
    public :: elsi_static_excitations
+   public :: find_homo_lumo_gap
 
 contains
 
@@ -2792,7 +2793,7 @@ end subroutine
 !! UKH
 
 subroutine elsi_find_homo_lumo_gap &
-      ( eval, occ, n_state, n_spin, n_kpt, spin_degen, homo_level, &
+      ( eval, occ, n_state, n_spin, n_kpt, spin_degen, relativistic, homo_level, &
         lumo_level, homo_occ, lumo_occ, i_kpt_homo, i_kpt_lumo, i_spin_homo, i_spin_lumo, found_min_direct_gap,&
         min_direct_gap, i_kpt_min_direct_gap, i_spin_min_direct_homo, &
         i_spin_min_direct_lumo, mu_midpoint)
@@ -2805,6 +2806,7 @@ subroutine elsi_find_homo_lumo_gap &
   integer, intent(in) :: n_spin
   integer, intent(in) :: n_kpt
   real*8,  intent(in)  :: spin_degen
+  logical, intent(in) :: relativistic
 
   real*8,  intent(out) :: homo_level
   real*8,  intent(out) :: lumo_level
@@ -2845,7 +2847,8 @@ subroutine elsi_find_homo_lumo_gap &
   ! for the convenience of printing, we at present don't distinguish the
   ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
   ! for Q4C. Therefore, midpoint should be 0.5d0:
-  if(flag_rel.eq.REL_q4c.or.flag_rel.eq.REL_x2c) midpoint = 0.5d0
+  !if(flag_rel.eq.REL_q4c.or.flag_rel.eq.REL_x2c) midpoint = 0.5d0
+  if(relativistic .eq. .TRUE.) midpoint = 0.5d0
 
   homo_occ = 2.0d0
   lumo_occ = 0.0d0
@@ -2901,7 +2904,7 @@ subroutine elsi_find_homo_lumo_gap &
             ! check if homo
             ! "HOMO" also includes Fermi level ("ge" above)
             if (eval(i_state, i_spin, i_k_point) .gt. current_homo_level) then
-              current_homo_level   = KS_eigenvalue(i_state, i_spin, i_k_point)
+              current_homo_level   = eval(i_state, i_spin, i_k_point)
               current_homo_spin = i_spin
               current_homo_state = i_state
             end if
@@ -2912,7 +2915,7 @@ subroutine elsi_find_homo_lumo_gap &
             ! nonsensical gaps (i.e., a gap in a molecule with half-occupied
             ! orbitals)
             if (eval(i_state, i_spin, i_k_point) .lt. current_lumo_level) then
-              current_lumo_level   = KS_eigenvalue(i_state,i_spin,i_k_point)
+              current_lumo_level   = eval(i_state,i_spin,i_k_point)
               current_lumo_spin = i_spin
               current_lumo_state = i_state
             end if
