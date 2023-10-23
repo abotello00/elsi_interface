@@ -1433,7 +1433,8 @@ subroutine elsi_dm_real_sparse(eh,ham,ovlp,dm,ebs)
       call elsi_init_blacs(eh)
       call elsi_init_elpa(eh%ph,eh%bh)
       call elsi_init_omm(eh%ph,eh%bh)
-
+      if(.not. allocated(eh%ham_real_den)) then
+         call elsi_allocate(eh%bh,eh%ham_real_den,eh%bh%n_lrow,eh%bh%n_lcol,&
               "ham_real_den",caller)
       end if
 
