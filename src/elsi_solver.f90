@@ -2944,3 +2944,5 @@ subroutine elsi_find_homo_lumo_gap &
   mu_midpoint =  (homo_level + lumo_level) / 2
 
 end subroutine
+
+end module ELSI_SOLVER
