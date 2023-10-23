@@ -2792,19 +2792,19 @@ end subroutine
 !! UKH
 
 subroutine elsi_find_homo_lumo_gap &
-      ( KS_eigenvalue, occ_numbers, n_states, n_spin, n_k_points, spin_degeneracy, homo_level, &
+      ( eval, occ, n_state, n_spin, n_kpt, spin_degen, homo_level, &
         lumo_level, homo_occ, lumo_occ, i_kpt_homo, i_kpt_lumo, i_spin_homo, i_spin_lumo, found_min_direct_gap,&
         min_direct_gap, i_kpt_min_direct_gap, i_spin_min_direct_homo, &
-        i_spin_min_direct_lumo, midpoint_chemical_potential)
+        i_spin_min_direct_lumo, mu_midpoint)
 
   implicit none
 
-  real*8,  intent(in)  :: KS_eigenvalue(n_states, n_spin, n_k_points)
-  real*8,  intent(in)  :: occ_numbers(n_states, n_spin, n_k_points)
-  integer, intent(in) :: n_states
+  real*8,  intent(in)  :: eval(n_state, n_spin, n_kpt)
+  real*8,  intent(in)  :: occ(n_state, n_spin, n_kpt)
+  integer, intent(in) :: n_state
   integer, intent(in) :: n_spin
-  integer, intent(in) :: n_k_points
-  real*8,  intent(in)  :: spin_degeneracy
+  integer, intent(in) :: n_kpt
+  real*8,  intent(in)  :: spin_degen
 
   real*8,  intent(out) :: homo_level
   real*8,  intent(out) :: lumo_level
@@ -2819,7 +2819,7 @@ subroutine elsi_find_homo_lumo_gap &
   integer, intent(out) :: i_kpt_min_direct_gap
   integer, intent(out) :: i_spin_min_direct_homo
   integer, intent(out) :: i_spin_min_direct_lumo
-  real*8, intent(out)  :: midpoint_chemical_potential
+  real*8, intent(out)  :: mu_midpoint
 
   !  counters
   real*8  :: direct_gap
@@ -2840,7 +2840,7 @@ subroutine elsi_find_homo_lumo_gap &
   found_min_direct_gap = .false.
 
   ! Define the correct "half occupation" (with or without spin)
-  midpoint = spin_degeneracy/2.0d0
+  midpoint = spin_degen/2.0d0
   ! (Rundong) Q4C currently works only for closed-shell systems (spin none), and
   ! for the convenience of printing, we at present don't distinguish the
   ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
@@ -2851,7 +2851,7 @@ subroutine elsi_find_homo_lumo_gap &
   lumo_occ = 0.0d0
   i_kpt_homo = 0
   i_kpt_lumo = 0
-  do i_k_point = 1, n_k_points, 1
+  do i_k_point = 1, n_kpt, 1
     ! The "current" variables refer to HOMO, LUMO, etc. at the current k-point
     ! only.
     ! Their purpose is solely the determination of the direct gap.
@@ -2864,54 +2864,54 @@ subroutine elsi_find_homo_lumo_gap &
     current_lumo_spin = 0
 
     do i_spin = 1, n_spin, 1
-      do i_state = 1, n_states, 1
+      do i_state = 1, n_state, 1
         ! We first search for the global HOMO and LUMO (any k-point)
-        if (occ_numbers(i_state, i_spin, i_k_point) .ge. midpoint) then
+        if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
           ! check if homo
           ! "HOMO" also includes Fermi level ("ge" above)
-          if (KS_eigenvalue(i_state, i_spin, i_k_point) .gt. homo_level) then
-            homo_level = KS_eigenvalue(i_state, i_spin, i_k_point)
-            homo_occ = occ_numbers(i_state, i_spin, i_k_point)
+          if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
+            homo_level = eval(i_state, i_spin, i_k_point)
+            homo_occ = occ(i_state, i_spin, i_k_point)
             i_kpt_homo = i_k_point
             i_spin_homo = i_spin
             i_state_homo = i_state
           end if
         end if
 
-        if (occ_numbers(i_state, i_spin, i_k_point) .le. midpoint) then
+        if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
           ! check if lumo
           ! LUMO must also include Fermi level ("le" above), else we may get
           ! nonsensical gaps (i.e., a gap in a molecule with half-occupied
           ! orbitals)
-          if (KS_eigenvalue(i_state, i_spin, i_k_point) .lt. lumo_level) then
-            lumo_level = KS_eigenvalue(i_state, i_spin, i_k_point)
-            lumo_occ = occ_numbers(i_state, i_spin, i_k_point)
+          if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
+            lumo_level = eval(i_state, i_spin, i_k_point)
+            lumo_occ = occ(i_state, i_spin, i_k_point)
             i_kpt_lumo = i_k_point
             i_spin_lumo = i_spin
             i_state_lumo = i_state
           end if
         end if
 
-        if (n_k_points.gt.1) then
+        if (n_kpt.gt.1) then
           ! We next do the same thing again, but this time we search the direct
           ! gap at the present k-point.
           ! Tricky enough, the direct gap could be between HOMO and LUMO on
           ! different spin channels.
-          if (occ_numbers(i_state, i_spin, i_k_point) .ge. midpoint) then
+          if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
             ! check if homo
             ! "HOMO" also includes Fermi level ("ge" above)
-            if (KS_eigenvalue(i_state, i_spin, i_k_point) .gt. current_homo_level) then
+            if (eval(i_state, i_spin, i_k_point) .gt. current_homo_level) then
               current_homo_level   = KS_eigenvalue(i_state, i_spin, i_k_point)
               current_homo_spin = i_spin
               current_homo_state = i_state
             end if
           end if
-          if (occ_numbers(i_state, i_spin, i_k_point) .le. midpoint) then
+          if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
             ! check if lumo
             ! LUMO must also include Fermi level ("le" above), else we may get
             ! nonsensical gaps (i.e., a gap in a molecule with half-occupied
             ! orbitals)
-            if (KS_eigenvalue(i_state, i_spin, i_k_point) .lt. current_lumo_level) then
+            if (eval(i_state, i_spin, i_k_point) .lt. current_lumo_level) then
               current_lumo_level   = KS_eigenvalue(i_state,i_spin,i_k_point)
               current_lumo_spin = i_spin
               current_lumo_state = i_state
@@ -2922,7 +2922,7 @@ subroutine elsi_find_homo_lumo_gap &
     end do
 
     ! if we have more than one k-point, check for the minimum direct gap here:
-    if (n_k_points.gt.1) then
+    if (n_kpt.gt.1) then
       if ( (current_lumo_spin .ne. 0) .and. (current_homo_spin .ne. 0) ) then
         direct_gap = current_lumo_level - current_homo_level
         if (direct_gap .lt. min_direct_gap) then
@@ -2937,8 +2937,6 @@ subroutine elsi_find_homo_lumo_gap &
   end do
 
   ! Setting mid-point chemical potential
-  midpoint_chemical_potential =  (homo_level + lumo_level) / 2
+  mu_midpoint =  (homo_level + lumo_level) / 2
 
-  ! To avoid unintentional modification of state, estimate_low_gap is modified
-  ! in find_and_output_homo_lumo_gap, not here.
 end subroutine find_homo_lumo_gap
