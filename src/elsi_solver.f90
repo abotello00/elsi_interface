@@ -73,7 +73,7 @@ module ELSI_SOLVER
    public :: elsi_inverse_cholesky_real
    public :: elsi_inverse_cholesky_complex
    public :: elsi_static_excitations
-   public :: find_homo_lumo_gap
+   public :: elsi_find_homo_lumo_gap
 
 contains
 
