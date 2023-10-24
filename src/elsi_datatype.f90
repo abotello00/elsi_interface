@@ -116,6 +116,7 @@ module ELSI_DATATYPE
       logical :: eval_ready = .false.
       logical :: evec_ready = .false.
       logical :: occ_ready = .false.
+      logical :: flag_relativistic = .false.
 
       ! Variables for non aufbau occupations
       logical :: occ_non_aufbau = .false. ! Value to turn on occ_non_aufbau code
@@ -124,7 +125,7 @@ module ELSI_DATATYPE
       integer(kind=i4), allocatable :: constr_spin(:) ! Spin channel of electron to constrain
       real(kind=r8), allocatable :: constr_occ(:) ! Occupation of orbital to constrain
 
-      ! Chemical potential 
+      ! Chemical potential
       real(kind=r8) :: mu ! Fermi level
       real(kind=r8) :: ts ! Entropy
       integer(kind=i4) :: mu_scheme
@@ -262,7 +263,7 @@ module ELSI_DATATYPE
       integer(kind=i4) :: chase_pre_n_good
       integer(kind=i4) :: chase_pre_n_states
       logical :: chase_deg_opt = .true.
-      logical :: chase_evecs_recycl = .true. 
+      logical :: chase_evecs_recycl = .true.
       integer(kind=i4) :: dchase_init = 0
       integer(kind=i4) :: zchase_init = 0
       integer(kind=i4) :: pdchase_init = 0

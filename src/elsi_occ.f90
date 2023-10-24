@@ -27,14 +27,15 @@ module ELSI_OCC
    public :: elsi_entropy
    public :: elsi_get_occ_for_dm
    public :: elsi_check_electrons
+   public :: elsi_find_homo_lumo_gap
 
 contains
 
 !>
 !! Compute the chemical potential and occupation numbers.
 !!
-subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-   mu)
+subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+   occ, mu)
 
    implicit none
 
@@ -49,13 +50,38 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
    real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt)
    real(kind=r8), intent(out) :: mu
 
-   real(kind=r8) :: occ1(n_state,n_spin,n_kpt)
-   real(kind=r8) :: occ2(n_state,n_spin,n_kpt)
-   real(kind=r8) :: mu1
-   real(kind=r8) :: mu2
+   ! dummy variables to call elsi_find_homo_lumo_gap
+   integer(kind=i4) :: dummy_int
+   real(kind=r8)  :: dummy_real
+   logical :: dummy_log
+
+   ! variables for homo and lumo level
+   real(kind=r8) :: homo_level
+   real(kind=r8) :: lumo_level
+   real(kind=r8) :: spin_degen
 
    call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,&
         eval,occ,mu)
+
+    ! Set spin degeneracy
+    if(.not. ph%spin_is_set) then
+        if(n_spin == 2) then
+             spin_degen = 1.0_r8
+        else
+            spin_degen = 2.0_r8
+        end if
+    else
+          spin_degen = ph%spin_degen
+    end if
+
+   ! call elsi_find_homo_lumo_gap to calculate mid-point
+   ! chemical potential for this occ
+   call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
+        lumo_level, dummy_real, dummy_real, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
+        dummy_int, dummy_int, dummy_int)
+
+    ! Set chemical potential to be mid-point between homo and lumo
+    mu = (homo_level + lumo_level) / 2
 
 end subroutine
 !>
@@ -768,6 +794,161 @@ subroutine elsi_get_occ_for_dm(ph,bh,eval,occ)
 
    call elsi_deallocate(bh,eval_all,"eval_all")
    call elsi_deallocate(bh,k_wt,"k_wt")
+
+end subroutine
+
+!>
+!! Compute the HOMO and LUMO level. Returns the minimum direct gap and
+!! the mid-point chemical potential.
+!! This has been moved from FHIaims find_homo_lumo_gap.f90
+!!
+!! UKH
+
+subroutine elsi_find_homo_lumo_gap &
+      ( eval, occ, n_state, n_spin, n_kpt, spin_degen, flag_relativistic, homo_level, &
+        lumo_level, homo_occ, lumo_occ, i_kpt_homo, i_kpt_lumo, i_spin_homo, i_spin_lumo, found_min_direct_gap,&
+        min_direct_gap, i_kpt_min_direct_gap, i_spin_min_direct_homo, &
+        i_spin_min_direct_lumo)
+
+  implicit none
+
+  real*8,  intent(in)  :: eval(n_state, n_spin, n_kpt)
+  real*8,  intent(in)  :: occ(n_state, n_spin, n_kpt)
+  integer, intent(in) :: n_state
+  integer, intent(in) :: n_spin
+  integer, intent(in) :: n_kpt
+  real*8,  intent(in)  :: spin_degen
+  logical, intent(in) :: flag_relativistic
+
+  real*8,  intent(out) :: homo_level
+  real*8,  intent(out) :: lumo_level
+  real*8,  intent(out) :: homo_occ
+  real*8,  intent(out) :: lumo_occ
+  integer, intent(out) :: i_kpt_homo
+  integer, intent(out) :: i_kpt_lumo
+  integer, intent(out) :: i_spin_homo
+  integer, intent(out) :: i_spin_lumo
+  logical, intent(out) :: found_min_direct_gap
+  real*8,  intent(out) :: min_direct_gap
+  integer, intent(out) :: i_kpt_min_direct_gap
+  integer, intent(out) :: i_spin_min_direct_homo
+  integer, intent(out) :: i_spin_min_direct_lumo
+
+  !  counters
+  real*8  :: direct_gap
+  real*8 :: current_homo_level, current_lumo_level
+  real*8 :: midpoint
+  integer :: current_homo_spin, current_lumo_spin
+  integer :: current_homo_state, current_lumo_state
+  integer :: i_state_homo, i_state_lumo
+  integer :: i_state, i_spin, i_k_point
+
+  ! Determine HOMO and LUMO values (VBM and CBM in case of periodic systems)
+  ! safe initial values. If we break these, we have a problem somwehere else.
+  homo_level = -10000000.0d0
+  lumo_level = 10000000.0d0
+
+  ! We also look for the minimum direct gap value at a given k-point.
+  min_direct_gap = 10000000.0d0
+  found_min_direct_gap = .false.
+
+  ! Define the correct "half occupation" (with or without spin)
+  midpoint = spin_degen/2.0d0
+  ! (Rundong) Q4C currently works only for closed-shell systems (spin none), and
+  ! for the convenience of printing, we at present don't distinguish the
+  ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
+  ! for Q4C. Therefore, midpoint should be 0.5d0:
+  !if(flag_rel.eq.REL_q4c.or.flag_rel.eq.REL_x2c) midpoint = 0.5d0
+  if(flag_relativistic .eqv. .TRUE.) midpoint = 0.5d0
+
+  homo_occ = 2.0d0
+  lumo_occ = 0.0d0
+  i_kpt_homo = 0
+  i_kpt_lumo = 0
+  do i_k_point = 1, n_kpt, 1
+    ! The "current" variables refer to HOMO, LUMO, etc. at the current k-point
+    ! only.
+    ! Their purpose is solely the determination of the direct gap.
+    ! They are thus only meaningful in periodic systems. We do not
+    ! expect any significant overhead in non-periodic systems, as searching
+    ! for the direct gap is then a waste of time.
+    current_homo_level = -10000000.0d0
+    current_lumo_level =  10000000.0d0
+    current_homo_spin = 0
+    current_lumo_spin = 0
+
+    do i_spin = 1, n_spin, 1
+      do i_state = 1, n_state, 1
+        ! We first search for the global HOMO and LUMO (any k-point)
+        if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
+          ! check if homo
+          ! "HOMO" also includes Fermi level ("ge" above)
+          if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
+            homo_level = eval(i_state, i_spin, i_k_point)
+            homo_occ = occ(i_state, i_spin, i_k_point)
+            i_kpt_homo = i_k_point
+            i_spin_homo = i_spin
+            i_state_homo = i_state
+          end if
+        end if
+
+        if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
+          ! check if lumo
+          ! LUMO must also include Fermi level ("le" above), else we may get
+          ! nonsensical gaps (i.e., a gap in a molecule with half-occupied
+          ! orbitals)
+          if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
+            lumo_level = eval(i_state, i_spin, i_k_point)
+            lumo_occ = occ(i_state, i_spin, i_k_point)
+            i_kpt_lumo = i_k_point
+            i_spin_lumo = i_spin
+            i_state_lumo = i_state
+          end if
+        end if
+
+        if (n_kpt.gt.1) then
+          ! We next do the same thing again, but this time we search the direct
+          ! gap at the present k-point.
+          ! Tricky enough, the direct gap could be between HOMO and LUMO on
+          ! different spin channels.
+          if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
+            ! check if homo
+            ! "HOMO" also includes Fermi level ("ge" above)
+            if (eval(i_state, i_spin, i_k_point) .gt. current_homo_level) then
+              current_homo_level   = eval(i_state, i_spin, i_k_point)
+              current_homo_spin = i_spin
+              current_homo_state = i_state
+            end if
+          end if
+          if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
+            ! check if lumo
+            ! LUMO must also include Fermi level ("le" above), else we may get
+            ! nonsensical gaps (i.e., a gap in a molecule with half-occupied
+            ! orbitals)
+            if (eval(i_state, i_spin, i_k_point) .lt. current_lumo_level) then
+              current_lumo_level   = eval(i_state,i_spin,i_k_point)
+              current_lumo_spin = i_spin
+              current_lumo_state = i_state
+            end if
+          end if
+        end if ! ( n_k_points .gt. 1)
+      end do
+    end do
+
+    ! if we have more than one k-point, check for the minimum direct gap here:
+    if (n_kpt.gt.1) then
+      if ( (current_lumo_spin .ne. 0) .and. (current_homo_spin .ne. 0) ) then
+        direct_gap = current_lumo_level - current_homo_level
+        if (direct_gap .lt. min_direct_gap) then
+          min_direct_gap = direct_gap
+          found_min_direct_gap = .true.
+          i_spin_min_direct_homo = current_homo_spin
+          i_spin_min_direct_lumo = current_lumo_spin
+          i_kpt_min_direct_gap = i_k_point
+        end if
+      end if
+    end if
+  end do
 
 end subroutine
 

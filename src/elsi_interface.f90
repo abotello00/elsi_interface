@@ -18,7 +18,7 @@ module ELSI
    use ELSI_SETUP
    use ELSI_SOLVER
    use ELSI_UTIL, only: elsi_suggest_blacs_distribution
-   use ELSI_OCC, only: elsi_check_electrons
+   use ELSI_OCC, only: elsi_check_electrons, elsi_find_homo_lumo_gap
 
    implicit none
 
