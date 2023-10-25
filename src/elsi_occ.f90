@@ -247,16 +247,16 @@ contains
                                  occ,mu,diff)
 
                 if (abs(diff) < ph%mu_tol) then
-                    write(msg,"(A)") "WARNING: ELSI failed to place mu between homo and lumo!"
+                    write(msg,"(A)") "WARNING: ELSI failed to place chemical potential between homo and lumo!"
                     call elsi_say(bh,msg)
-                    write(msg,"(A)") "Reverting to previous mu value."
+                    write(msg,"(A)") "Reverting to previous chemical potential value."
                     call elsi_say(bh,msg)
                 else
-                    write(msg,"(A)") "WARNING: ELSI failed to fine mu!"
+                    write(msg,"(A)") "WARNING: ELSI failed to find chemical potential!"
                     call elsi_say(bh,msg)
                 endif
             else
-                write(msg,"(A)") "ELSI found mu half-way between homo and lumo. "
+                write(msg,"(A)") "ELSI found chemical potential half-way between homo and lumo. "
                 call elsi_say(bh,msg)
             endif
         endif ! Fractional occupations
