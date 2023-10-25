@@ -49,6 +49,7 @@ contains
         real(kind=r8), intent(in) :: eval(n_state,n_spin,n_kpt)
         real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt)
         real(kind=r8), intent(out) :: mu
+        real(kind=r8)  :: mu_tmp
 
         ! dummy variables to call elsi_find_homo_lumo_gap
         integer(kind=i4) :: dummy_int
@@ -64,7 +65,6 @@ contains
         real(kind=r8) :: diff
         real(kind=r8) :: occupation_def
         logical :: fractionally_occupied
-        logical :: found_midpoint
         character(len=200) :: msg
 
         !  counters
@@ -73,6 +73,9 @@ contains
 
         call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,&
             eval,occ,mu)
+
+        ! Store temporary mu for later if mid-point calculation fails
+        mu_tmp = mu
 
         ! Set spin degeneracy
         if(.not. ph%spin_is_set) then
@@ -96,19 +99,92 @@ contains
 
         ! Check if occ numbers are fractional
         ! If fractional we are done.
-        ! If no fractinoal occupation numbers, then find next lowest state and next highest
+        ! If not fractional occupation numbers, then find next lowest state and next highest
         ! state.
         ! Then place mu inbetween and determine check_electrons.
         ! If n_electrons is correct, then we are done.
         ! If not, go back to previous mu and recalculate check_electrons.
         ! Also display warning: ELSI tried to place mu between homo and lumo but failed.
 
+        ! ----------------- Method I -------------------------------------
+        ! fractional occupation check
+        ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
+        !     lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
+        !     dummy_int, dummy_int, dummy_int)
+
+        ! found_midpoint = .false.
+        ! occupation_def = 0.05d0
+
+        ! if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
+        !     fractionally_occupied = .true.
+        ! else
+        !     fractionally_occupied = .false.
+        ! endif
+
+        ! if (fractionally_occupied == .true.) then
+        !     ! mu is found
+        !     found_midpoint = .true.
+        ! else
+        !     homo_level = -10000000.0d0
+        !     lumo_level = 10000000.0d0
+
+        !     ! Define the correct "half occupation" (with or without spin)
+        !     midpoint = spin_degen/2.0d0
+        !     ! (Rundong) Q4C currently works only for closed-shell systems (spin none), and
+        !     ! for the convenience of printing, we at present don't distinguish the
+        !     ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
+        !     ! for Q4C. Therefore, midpoint should be 0.5d0:
+        !     if(ph%flag_relativistic == .true.) midpoint = 0.5d0
+
+        !     ! Find mid-point mu
+        !     do i_k_point = 1, n_kpt, 1
+        !         do i_spin = 1, n_spin, 1
+        !             do i_state = 1, n_state, 1
+        !                 if (found_midpoint == .false.) then
+        !                     ! Search for global homo and lumo
+        !                     if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
+        !                         ! Check for HOMO
+        !                         if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
+        !                             homo_level = eval(i_state, i_spin, i_k_point)
+        !                         end if
+        !                     end if
+
+        !                     if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
+        !                         ! Check for LUMO
+        !                         if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
+        !                             lumo_level = eval(i_state, i_spin, i_k_point)
+        !                         end if
+        !                     end if
+
+        !                     ! Set new mu to be mid-point of homo_level and lumo_level
+        !                     mu = (homo_level + lumo_level) / 2
+
+        !                     call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+        !                         occ,mu,diff)
+
+        !                     if(abs(diff) < ph%mu_tol) then
+        !                         found_midpoint = .true.
+        !                     else
+        !                         found_midpoint = .false.
+        !                     end if
+        !                 endif
+        !             enddo
+        !         enddo
+        !     enddo
+
+        !     ! Failed to find mid-point mu
+        !     write(msg,"(A)") "WARNING: ELSI failed to place mu between homo and lumo!"
+        !     call elsi_say(bh,msg)
+        ! endif
+        ! ---------------------------------------------------------------------------------
+
+        ! ----------------- Method II -----------------------------------------------------
+
         ! fractional occupation check
         call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
             lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
             dummy_int, dummy_int, dummy_int)
 
-        found_midpoint = .false.
         occupation_def = 0.05d0
 
         if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
@@ -117,10 +193,7 @@ contains
             fractionally_occupied = .false.
         endif
 
-        if (fractionally_occupied == .true.) then
-            ! mu is found
-            found_midpoint = .true.
-        else
+        if (fractionally_occupied == .false.) then
             homo_level = -10000000.0d0
             lumo_level = 10000000.0d0
 
@@ -132,49 +205,64 @@ contains
             ! for Q4C. Therefore, midpoint should be 0.5d0:
             if(ph%flag_relativistic == .true.) midpoint = 0.5d0
 
-            ! Find mid-point mu
+            ! finding homo-lumo level
             do i_k_point = 1, n_kpt, 1
                 do i_spin = 1, n_spin, 1
                     do i_state = 1, n_state, 1
-                        if (found_midpoint == .false.) then
-                            ! Search for global homo and lumo
-                            if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
-                                ! Check for HOMO
-                                if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
-                                    homo_level = eval(i_state, i_spin, i_k_point)
-                                end if
-                            end if
+                        ! search for the global HOMO and LUMO (any k-point)
+                        if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
+                          ! check if homo
+                          ! "HOMO" also includes Fermi level ("ge" above)
+                          if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
+                            homo_level = eval(i_state, i_spin, i_k_point)
+                          end if
+                        end if
 
-                            if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
-                                ! Check for LUMO
-                                if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
-                                    lumo_level = eval(i_state, i_spin, i_k_point)
-                                end if
-                            end if
-
-                            ! Set new mu to be mid-point of homo_level and lumo_level
-                            mu = (homo_level + lumo_level) / 2
-
-                            call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-                                occ,mu,diff)
-
-                            if(abs(diff) < ph%mu_tol) then
-                                found_midpoint = .true.
-                            else
-                                found_midpoint = .false.
-                            end if
-                        endif
+                        if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
+                          ! check if lumo
+                          ! LUMO must also include Fermi level ("le" above), else we may get
+                          ! nonsensical gaps (i.e., a gap in a molecule with half-occupied
+                          ! orbitals)
+                          if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
+                            lumo_level = eval(i_state, i_spin, i_k_point)
+                          end if
+                        end if
                     enddo
                 enddo
             enddo
 
-            ! Failed to find mid-point mu
-            write(msg,"(A)") "WARNING: ELSI failed to place mu between homo and lumo!"
-            call elsi_say(bh,msg)
+            ! Set mid-point inbetween this homo and lumo
+            mu = (homo_level + lumo_level) / 2
 
-        endif
+            ! Check electron number for this mu value
+            call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+                                 occ,mu,diff)
+
+            if(abs(diff) > ph%mu_tol) then
+                ! Failed to find  mid-point in between homo and lumo
+                ! Set mu to previous value
+                mu = mu_tmp
+                ! Check electron number for this mu value
+                call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+                                 occ,mu,diff)
+
+                if (abs(diff) < ph%mu_tol) then
+                    write(msg,"(A)") "WARNING: ELSI failed to place mu between homo and lumo!"
+                    call elsi_say(bh,msg)
+                    write(msg,"(A)") "Reverting to previous mu value."
+                    call elsi_say(bh,msg)
+                else
+                    write(msg,"(A)") "WARNING: ELSI failed to fine mu!"
+                    call elsi_say(bh,msg)
+                endif
+            else
+                write(msg,"(A)") "ELSI found mu half-way between homo and lumo. "
+                call elsi_say(bh,msg)
+            endif
+        endif ! Fractional occupations
 
     end subroutine
+
     !>
     !! Compute the chemical potential and occupation numbers normal distribution.
     !!
