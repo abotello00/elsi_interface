@@ -74,20 +74,10 @@ contains
         call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,&
             eval,occ,mu)
 
-        ! Store temporary mu for later if mid-point calculation fails
-        mu_tmp = mu
-
-        ! Set spin degeneracy
-        if(.not. ph%spin_is_set) then
-            if(n_spin == 2) then
-                spin_degen = 1.0_r8
-            else
-                spin_degen = 2.0_r8
-            end if
-        else
-            spin_degen = ph%spin_degen
-        end if
-
+        ! Attempts to put Fermi level half-way between homo and lumo
+        ! - UKH
+        !
+        ! ------------------------ Method I ----------------------------------
         ! ! call elsi_find_homo_lumo_gap to calculate mid-point
         ! ! chemical potential for this occ
         ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
@@ -96,7 +86,9 @@ contains
 
         ! ! Set chemical potential to be mid-point between homo and lumo
         ! mu = (homo_level + lumo_level) / 2
+        ! ---------------------------------------------------------------------
 
+        ! -- Steps for updated method --
         ! Check if occ numbers are fractional
         ! If fractional we are done.
         ! If not fractional occupation numbers, then find next lowest state and next highest
@@ -106,7 +98,7 @@ contains
         ! If not, go back to previous mu and recalculate check_electrons.
         ! Also display warning: ELSI tried to place mu between homo and lumo but failed.
 
-        ! ----------------- Method I -------------------------------------
+        ! ----------------- Method II -------------------------------------
         ! fractional occupation check
         ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
         !     lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
@@ -178,7 +170,21 @@ contains
         ! endif
         ! ---------------------------------------------------------------------------------
 
-        ! ----------------- Method II -----------------------------------------------------
+        ! ----------------- Method III -----------------------------------------------------
+
+        ! Store temporary mu for later if mid-point calculation fails
+        mu_tmp = mu
+
+        ! Set spin degeneracy
+        if(.not. ph%spin_is_set) then
+            if(n_spin == 2) then
+                spin_degen = 1.0_r8
+            else
+                spin_degen = 2.0_r8
+            end if
+        else
+            spin_degen = ph%spin_degen
+        end if
 
         ! fractional occupation check
         call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
@@ -211,18 +217,14 @@ contains
                     do i_state = 1, n_state, 1
                         ! search for the global HOMO and LUMO (any k-point)
                         if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
-                          ! check if homo
-                          ! "HOMO" also includes Fermi level ("ge" above)
+                          ! check if homo (including Fermi level)
                           if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
                             homo_level = eval(i_state, i_spin, i_k_point)
                           end if
                         end if
 
                         if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
-                          ! check if lumo
-                          ! LUMO must also include Fermi level ("le" above), else we may get
-                          ! nonsensical gaps (i.e., a gap in a molecule with half-occupied
-                          ! orbitals)
+                          ! check if lumo (including Fermi level)
                           if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
                             lumo_level = eval(i_state, i_spin, i_k_point)
                           end if
@@ -247,7 +249,7 @@ contains
                                  occ,mu,diff)
 
                 if (abs(diff) < ph%mu_tol) then
-                    write(msg,"(A)") "WARNING: ELSI failed to place chemical potential between homo and lumo!"
+                    write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
                     call elsi_say(bh,msg)
                     write(msg,"(A)") "Reverting to previous chemical potential value."
                     call elsi_say(bh,msg)
@@ -256,7 +258,7 @@ contains
                     call elsi_say(bh,msg)
                 endif
             else
-                write(msg,"(A)") "ELSI found chemical potential half-way between homo and lumo. "
+                write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO. "
                 call elsi_say(bh,msg)
             endif
         endif ! Fractional occupations
