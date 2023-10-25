@@ -193,7 +193,7 @@ contains
             fractionally_occupied = .false.
         endif
 
-        if (fractionally_occupied == .false.) then
+        if (fractionally_occupied .eqv. .false.) then
             homo_level = -10000000.0d0
             lumo_level = 10000000.0d0
 
@@ -203,7 +203,7 @@ contains
             ! for the convenience of printing, we at present don't distinguish the
             ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
             ! for Q4C. Therefore, midpoint should be 0.5d0:
-            if(ph%flag_relativistic == .true.) midpoint = 0.5d0
+            if(ph%flag_relativistic .eqv. .true.) midpoint = 0.5d0
 
             ! finding homo-lumo level
             do i_k_point = 1, n_kpt, 1
