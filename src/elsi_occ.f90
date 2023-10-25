@@ -136,7 +136,7 @@ contains
             do i_k_point = 1, n_kpt, 1
                 do i_spin = 1, n_spin, 1
                     do i_state = 1, n_state, 1
-                        do while(found_midpoint == .false.)
+                        if (found_midpoint == .false.) then
                             ! Search for global homo and lumo
                             if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
                                 ! Check for HOMO
@@ -163,7 +163,7 @@ contains
                             else
                                 found_midpoint = .false.
                             end if
-                        enddo
+                        endif
                     enddo
                 enddo
             enddo
