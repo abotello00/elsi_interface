@@ -241,14 +241,14 @@ contains
                 do i_spin = 1, n_spin, 1
                     do i_state = 1, n_state, 1
                         ! search for the global HOMO and LUMO (any k-point)
-                        if (occ(i_state, i_spin, i_k_point) .ge. spin_degen) then
+                        if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
                           ! check if homo (including Fermi level)
                           if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
                             homo_level = eval(i_state, i_spin, i_k_point)
                           end if
                         end if
 
-                        if (occ(i_state, i_spin, i_k_point) .le. spin_degen) then
+                        if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
                           ! check if lumo (including Fermi level)
                           if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
                             lumo_level = eval(i_state, i_spin, i_k_point)
