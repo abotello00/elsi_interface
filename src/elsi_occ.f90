@@ -281,7 +281,8 @@ contains
 
                 if (abs(diff) < ph%mu_tol) then
                     ! Found mu at homo-lumo midpoint after electron correction
-                    write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO after residual electron correction. "
+                    write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO &
+                        after residual electron correction. "
                     call elsi_say(bh,msg)
                 else
                     ! Set mu to previous value
