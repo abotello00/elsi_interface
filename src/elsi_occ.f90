@@ -69,8 +69,8 @@ contains
         character(len=200) :: msg
 
         !  counters
-        real*8 :: midpoint
-        integer :: i_state, i_spin, i_k_point, i_occ_val
+        real*8 :: midpoint, i_occ_val
+        integer :: i_state, i_spin, i_k_point
 
         call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,&
             eval,occ,mu)
@@ -201,7 +201,7 @@ contains
         ! endif
 
         ! Go through all occupation numbers to see if they are fractional
-        frac_tol = 1E-13
+        frac_tol = 1E-06
 
         loopi: do i_k_point = 1, n_kpt, 1
             loopj: do i_spin = 1, n_spin, 1
@@ -209,7 +209,7 @@ contains
 
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
 
-                    if (abs(i_occ_val-0.0_r8) .le. frac_tol .or. abs(i_occ_val-spin_degen) .le. frac_tol) then
+                    if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
                         fractionally_occupied = .false.
                     else
                         fractionally_occupied = .true.
