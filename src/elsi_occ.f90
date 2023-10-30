@@ -259,7 +259,7 @@ contains
             enddo
 
             ! Set mid-point inbetween this homo and lumo
-            mu = (homo_level + lumo_level) / 2
+            mu = (homo_level + lumo_level) / 2.0_r8
 
             ! Check electron number for this mu value
             call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
