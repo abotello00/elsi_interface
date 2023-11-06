@@ -264,6 +264,9 @@ contains
             ! Check electron number for this mu value
             call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
                                  occ,mu,diff)
+            call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
+            write(msg,"(A,E12.4,A)") "Residual electron error :", diff
+            call elsi_say(bh,msg)
 
             if(abs(diff) < ph%mu_tol) then
                 ! Found mu at homo-lumo midpoint
@@ -271,39 +274,25 @@ contains
                 call elsi_say(bh,msg)
             else
                 ! Failed to find  mu at mid-point inbetween homo and lumo
-                write(msg,"(A,E12.4,A)") "Residual electron error :", diff
-                call elsi_say(bh,msg)
-
-                ! Attempt to correct electron error for this mu
+                ! Set mu to previous value
+                mu = mu_tmp
+                ! Check electron number for this mu value
+                call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+                                 occ,mu,diff)
                 call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
-                write(msg,"(A,E12.4,A)") "Corrected residual electron error :", diff
-                call elsi_say(bh,msg)
 
                 if (abs(diff) < ph%mu_tol) then
-                    ! Found mu at homo-lumo midpoint after electron correction
-                    write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO &
-                        after residual electron correction. "
+                    write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
+                    call elsi_say(bh,msg)
+                    write(msg,"(A)") "Reverting to previous chemical potential value."
+                    call elsi_say(bh,msg)
+                    write(msg,"(A,E12.4,A)") "Residual electron error :", diff
                     call elsi_say(bh,msg)
                 else
-                    ! Set mu to previous value
-                    mu = mu_tmp
-                    ! Check electron number for this mu value
-                    call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-                                     occ,mu,diff)
-
-                    if (abs(diff) < ph%mu_tol) then
-                        write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
-                        call elsi_say(bh,msg)
-                        write(msg,"(A)") "Reverting to previous chemical potential value."
-                        call elsi_say(bh,msg)
-                        write(msg,"(A,E12.4,A)") "Residual electron error :", diff
-                        call elsi_say(bh,msg)
-                    else
-                        write(msg,"(A)") "WARNING: ELSI failed to find chemical potential!"
-                        call elsi_say(bh,msg)
-                        write(msg,"(A,E12.4,A)") "Residual electron error :", diff
-                        call elsi_say(bh,msg)
-                    endif
+                    write(msg,"(A)") "WARNING: ELSI failed to find chemical potential!"
+                    call elsi_say(bh,msg)
+                    write(msg,"(A,E12.4,A)") "Residual electron error :", diff
+                    call elsi_say(bh,msg)
                 endif
             endif
         endif ! Fractional occupations
