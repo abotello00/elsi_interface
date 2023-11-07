@@ -188,41 +188,41 @@ contains
         end if
 
         ! (OLDER) fractional occupation check
-        ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
-        !     lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
-        !     dummy_int, dummy_int, dummy_int)
+        call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
+            lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
+            dummy_int, dummy_int, dummy_int)
 
-        ! occupation_def = 0.05d0
+        occupation_def = 0.05d0
 
-        ! if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
-        !     fractionally_occupied = .true.
-        ! else
-        !     fractionally_occupied = .false.
-        ! endif
+        if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
+            fractionally_occupied = .true.
+        else
+            fractionally_occupied = .false.
+        endif
 
         ! Go through all occupation numbers to see if they are fractional
-        frac_tol = 1E-06
+        ! frac_tol = 1E-06
 
-        loopi: do i_k_point = 1, n_kpt, 1
-            loopj: do i_spin = 1, n_spin, 1
-                loopk: do i_state = 1, n_state, 1
+        ! loopi: do i_k_point = 1, n_kpt, 1
+        !     loopj: do i_spin = 1, n_spin, 1
+        !         loopk: do i_state = 1, n_state, 1
 
-                    i_occ_val = occ(i_state, i_spin,  i_k_point)
+        !             i_occ_val = occ(i_state, i_spin,  i_k_point)
 
-                    if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
-                        fractionally_occupied = .false.
-                    else
-                        fractionally_occupied = .true.
+        !             if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
+        !                 fractionally_occupied = .false.
+        !             else
+        !                 fractionally_occupied = .true.
 
-                        write(msg,"(A)") "ELSI found fractional occupation numbers."
-                        call elsi_say(bh,msg)
+        !                 write(msg,"(A)") "ELSI found fractional occupation numbers."
+        !                 call elsi_say(bh,msg)
 
-                        exit loopi
-                    endif
+        !                 exit loopi
+        !             endif
 
-                enddo loopk
-            enddo loopj
-        enddo loopi
+        !         enddo loopk
+        !     enddo loopj
+        ! enddo loopi
 
         if (fractionally_occupied .eqv. .false.) then
             homo_level = -10000000.0d0
