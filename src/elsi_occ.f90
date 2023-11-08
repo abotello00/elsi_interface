@@ -65,6 +65,7 @@ contains
         real(kind=r8) :: diff
         real(kind=r8) :: occupation_def
         real(kind=r8) :: frac_tol
+        real(kind=r8) :: abs_tol
         logical :: fractionally_occupied
         character(len=200) :: msg
 
