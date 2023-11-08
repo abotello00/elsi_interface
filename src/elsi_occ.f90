@@ -201,7 +201,8 @@ contains
         ! endif
 
         ! Go through all occupation numbers to see if they are fractional
-        frac_tol = 0.05d0 !1E-06
+        frac_tol = 1E-08
+        abs_tol = 0.0_r8
 
         loopi: do i_k_point = 1, n_kpt, 1
             loopj: do i_spin = 1, n_spin, 1
@@ -209,7 +210,9 @@ contains
 
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
 
-                    if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
+                    !if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
+                    if ( abs(i_occ_val-nint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
+                        abs(nint(i_occ_val))), abs_tol) ) then
                         fractionally_occupied = .false.
                     else
                         fractionally_occupied = .true.
@@ -242,17 +245,17 @@ contains
                     do i_state = 1, n_state, 1
                         ! search for the global HOMO and LUMO (any k-point)
                         if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
-                          ! check if homo (including Fermi level)
-                          if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
-                            homo_level = eval(i_state, i_spin, i_k_point)
-                          end if
+                            ! check if homo (including Fermi level)
+                            if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
+                                homo_level = eval(i_state, i_spin, i_k_point)
+                            end if
                         end if
 
                         if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
-                          ! check if lumo (including Fermi level)
-                          if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
-                            lumo_level = eval(i_state, i_spin, i_k_point)
-                          end if
+                            ! check if lumo (including Fermi level)
+                            if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
+                                lumo_level = eval(i_state, i_spin, i_k_point)
+                            end if
                         end if
                     enddo
                 enddo
@@ -263,7 +266,7 @@ contains
 
             ! Check electron number for this mu value
             call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-                                 occ,mu,diff)
+                occ,mu,diff)
             call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
             write(msg,"(A,E12.4,A)") "Residual electron error :", diff
             call elsi_say(bh,msg)
@@ -278,7 +281,7 @@ contains
                 mu = mu_tmp
                 ! Check electron number for this mu value
                 call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-                                 occ,mu,diff)
+                    occ,mu,diff)
                 call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
 
                 if (abs(diff) < ph%mu_tol) then
