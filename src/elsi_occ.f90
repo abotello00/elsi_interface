@@ -212,8 +212,8 @@ contains
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
 
                     !if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
-                    if ( abs(i_occ_val-nint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
-                        abs(nint(i_occ_val))), abs_tol) ) then
+                    if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
+                        abs(anint(i_occ_val))), abs_tol) ) then
                         fractionally_occupied = .false.
                     else
                         fractionally_occupied = .true.
