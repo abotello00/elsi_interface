@@ -1,4 +1,4 @@
-elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/build_generic
+elpa_dir=/scratch1/05979/uthpala/elpa-2023.05.001/build_generic
 for file in \
   aligned_mem.f90                       \
   check_for_gpu.f90                     \
@@ -67,7 +67,7 @@ cp $origin_file $file
 done
 cp $elpa_dir/config.h .
 
-elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/build_generic
+elpa_dir=/scratch1/05979/uthpala/elpa-2023.05.001/build_generic
  for file in \
    mod_cuda_stub.f90 \
    mod_hip_stub.f90 \
@@ -89,7 +89,7 @@ cp $elpa_dir/cannon.c .
 cp $elpa_dir/check_thread_affinity.c .
 cp $elpa_dir/elpa_index.c .
 
-elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/build_cuda
+elpa_dir=/scratch1/05979/uthpala/elpa-2023.05.001/build_cuda
 for file in \
   mod_cuda.f90 \
   interface_c_cuda_kernel.f90 \
@@ -107,7 +107,7 @@ cp $origin_file $file
 done
 
 
-elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/src
+elpa_dir=/scratch1/05979/uthpala/elpa-2023.05.001/src
 for file in \
   elpa_c_interface.c
 do
@@ -118,7 +118,7 @@ cp $origin_file $file
 done
 cp $elpa_dir/elpa_index.h .
 
-elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/src/ftimings
+elpa_dir=/scratch1/05979/uthpala/elpa-2023.05.001/src/ftimings
 for file in \
   highwater_mark.c \
   resident_set_size.c \
@@ -131,7 +131,7 @@ origin_file=`ls $elpa_dir/$file | tail -n 1`
 cp $origin_file $file
 done
 
-elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/elpa
+elpa_dir=/scratch1/05979/uthpala/elpa-2023.05.001/elpa
 mkdir elpa
 cp $elpa_dir/elpa_constants.h.in elpa
 cp $elpa_dir/elpa.h elpa
@@ -141,11 +141,11 @@ cp $elpa_dir/elpa_explicit_name.h elpa
 cp ../../ELPA/src/mod_mpi.f90 .
 cp ../../ELPA/src/mod_mpifh.f90 .
 
-elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/build_generic
-elpa_dir_avx=/scratch/ukh0001/elpa-2023.05.001_c/build_avx
-elpa_dir_avx2=/scratch/ukh0001/elpa-2023.05.001_c/build_avx2
-elpa_dir_avx512=/scratch/ukh0001/elpa-2023.05.001_c/build_avx512
-elpa_dir_cuda=/scratch/ukh0001/elpa-2023.05.001_c/build_cuda
+elpa_dir=/scratch1/05979/uthpala/elpa-2023.05.001/build_generic
+elpa_dir_avx=/scratch1/05979/uthpala/elpa-2023.05.001/build_avx
+elpa_dir_avx2=/scratch1/05979/uthpala/elpa-2023.05.001/build_avx2
+elpa_dir_avx512=/scratch1/05979/uthpala/elpa-2023.05.001/build_avx512
+elpa_dir_cuda=/scratch1/05979/uthpala/elpa-2023.05.001/build_cuda
 
 origin_file=`ls $elpa_dir/*mod_compute_hh_trafo* | tail -n 1`
 cp $origin_file mod_compute_hh_trafo.f90
@@ -183,10 +183,10 @@ cp $origin_file mod_cuda.f90
 
 cp $elpa_dir_cuda/config-f90.h .
 
-elpa_dir_cuda_src=/scratch/ukh0001/elpa-2023.05.001_c/src/GPU/CUDA
+elpa_dir_cuda_src=/scratch1/05979/uthpala/elpa-2023.05.001/src/GPU/CUDA
 cp $elpa_dir_cuda_src/*.cu .
 
-elpa_dir_elpa=/scratch/ukh0001/elpa-2023.05.001_c/build_generic/elpa
+elpa_dir_elpa=/scratch1/05979/uthpala/elpa-2023.05.001/build_generic/elpa
 cp -r $elpa_dir_elpa .
 
 mkdir kernels
