@@ -305,15 +305,6 @@ module elpa_api
       procedure(print_settings_i), deferred, public :: print_settings !< method to print all parameters
       procedure(store_settings_i), deferred, public :: store_settings !< method to save all parameters
       procedure(load_settings_i), deferred, public :: load_settings !< method to save all parameters
-      ! Auto-tune
-      procedure(elpa_autotune_set_api_version_i), deferred, public :: autotune_set_api_version       !< method to prepare the ELPA autotuning
-      procedure(elpa_autotune_setup_i), deferred, public :: autotune_setup       !< method to prepare the ELPA autotuning
-      procedure(elpa_autotune_step_i), deferred, public :: autotune_step         !< method to do an autotuning step
-      procedure(elpa_autotune_set_best_i), deferred, public :: autotune_set_best !< method to set the best options
-      procedure(elpa_autotune_print_best_i), deferred, public :: autotune_print_best !< method to print the best options
-      procedure(elpa_autotune_print_state_i), deferred, public :: autotune_print_state !< method to print the state
-      procedure(elpa_autotune_save_state_i), deferred, public :: autotune_save_state !< method to save the state
-      procedure(elpa_autotune_load_state_i), deferred, public :: autotune_load_state !< method to load the state
 
       !> \brief These method have to be public, in order to be overrideable in the extension types
       procedure(elpa_set_integer_i), deferred, public :: elpa_set_integer
@@ -400,13 +391,6 @@ module elpa_api
       procedure(elpa_solve_tridiagonal_f_i), deferred, public :: elpa_solve_tridiagonal_f
   end type elpa_t
 
-  !> \brief Abstract definition of the elpa_autotune type
-  type, abstract :: elpa_autotune_t
-    private
-    contains
-      procedure(elpa_autotune_destroy_i), deferred, public :: destroy
-      procedure(elpa_autotune_print_i), deferred, public :: print
-  end type
 
   !> \brief definition of helper function to get C strlen
   !> Parameters
@@ -486,148 +470,6 @@ module elpa_api
     end subroutine
   end interface
 
-  !> \brief abstract definition of the autotune set_api_verion method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which should be tuned
-  !> \param   api_version integer: the api_version that should be used
-  abstract interface
-    subroutine elpa_autotune_set_api_version_i(self, api_version, error)
-      import elpa_t
-      implicit none
-      class(elpa_t), intent(inout), target :: self
-      integer, intent(in)                  :: api_version
-      integer , optional                   :: error
-    end subroutine
-  end interface
-
-  !> \brief abstract definition of the autotune setup method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which should be tuned
-  !> \param   level       integer: the level of "thoroughness" of the tuning steps
-  !> \param   domain      integer: domain (real/complex) which should be tuned
-  !> \result  tune_state  class(elpa_autotune_t): the autotuning object
-  abstract interface
-    function elpa_autotune_setup_i(self, level, domain, error) result(tune_state)
-      import elpa_t, elpa_autotune_t
-      implicit none
-      class(elpa_t), intent(inout), target :: self
-      integer, intent(in)                  :: level, domain
-      class(elpa_autotune_t), pointer      :: tune_state
-      integer , optional                   :: error
-    end function
-  end interface
-
-
-  !> \brief abstract definition of the autotune step method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which should be tuned
-  !> \param   tune_state  class(elpa_autotune_t): the autotuning object
-  !> \param   unfinished  logical: state whether tuning is unfinished or not
-  !> \param   error       integer, optional
-  abstract interface
-    function elpa_autotune_step_i(self, tune_state, error) result(unfinished)
-      import elpa_t, elpa_autotune_t
-      implicit none
-      class(elpa_t), intent(inout)                  :: self
-      class(elpa_autotune_t), intent(inout), target :: tune_state
-      logical                                       :: unfinished
-      integer, optional, intent(out)                :: error
-    end function
-  end interface
-
-
-  !> \brief abstract definition of the autotune set_best method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which should be tuned
-  !> \param   tune_state  class(elpa_autotune_t): the autotuning object
-  !> \param   error       integer, optional
-  !> Sets the best combination of ELPA options
-  abstract interface
-    subroutine elpa_autotune_set_best_i(self, tune_state, error)
-      import elpa_t, elpa_autotune_t
-      implicit none
-      class(elpa_t), intent(inout)               :: self
-      class(elpa_autotune_t), intent(in), target :: tune_state
-      integer, optional, intent(out)             :: error
-    end subroutine
-  end interface
-
-
-  !> \brief abstract definition of the autotune print best method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which should be tuned
-  !> \param   tune_state  class(elpa_autotune_t): the autotuning object
-  !> \param   error       integer, optional
-  !> Prints the best combination of ELPA options
-  abstract interface
-    subroutine elpa_autotune_print_best_i(self, tune_state, error)
-      import elpa_t, elpa_autotune_t
-      implicit none
-      class(elpa_t), intent(inout)               :: self
-      class(elpa_autotune_t), intent(in), target :: tune_state
-      integer, optional, intent(out)             :: error
-    end subroutine
-  end interface
-
-  !> \brief abstract definition of the autotune print state method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which should be tuned
-  !> \param   tune_state  class(elpa_autotune_t): the autotuning object
-  !> \param   error       integer, optional
-  !> Prints the autotuning state
-  abstract interface
-    subroutine elpa_autotune_print_state_i(self, tune_state, error)
-      import elpa_t, elpa_autotune_t
-      implicit none
-      class(elpa_t), intent(inout)               :: self
-      class(elpa_autotune_t), intent(in), target :: tune_state
-      integer, optional, intent(out)             :: error
-    end subroutine
-  end interface
-
-  !> \brief abstract definition of the autotune save state method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which should be tuned
-  !> \param   tune_state  class(elpa_autotune_t): the autotuning object
-  !> \param   file_name   string, the name of the file where to save the state
-  !> \param   error       integer, optional
-  !> Saves the autotuning state
-  abstract interface
-    subroutine elpa_autotune_save_state_i(self, tune_state, file_name, error)
-      import elpa_t, elpa_autotune_t
-      implicit none
-      class(elpa_t), intent(inout)               :: self
-      class(elpa_autotune_t), intent(in), target :: tune_state
-      character(*), intent(in)                   :: file_name
-      integer, optional, intent(out)             :: error
-    end subroutine
-  end interface
-
-  !> \brief abstract definition of the autotune load state method
-  !> Parameters
-  !> \details
-  !> \param   self        class(elpa_t): the ELPA object, which is being tuned
-  !> \param   tune_state  class(elpa_autotune_t): the autotuning object
-  !> \param   file_name   string, the name of the file from which to load the autotuning state
-  !> \param   error       integer, optional
-  !> Loads all the elpa parameters
-  abstract interface
-    subroutine elpa_autotune_load_state_i(self, tune_state, file_name, error)
-      import elpa_t, elpa_autotune_t
-      implicit none
-      class(elpa_t), intent(inout)               :: self
-      class(elpa_autotune_t), intent(in), target :: tune_state
-      character(*), intent(in)                   :: file_name
-      integer, optional, intent(out)             :: error
-    end subroutine
-  end interface
 
   !> \brief abstract definition of set method for integer values
   !> Parameters
@@ -3502,31 +3344,6 @@ module elpa_api
     end subroutine
   end interface
 
-  !> \brief abstract definition of interface to print the autotuning state
-  !> Parameters
-  !> \param   self        class(elpa_autotune_t): the ELPA autotune object
-  abstract interface
-    subroutine elpa_autotune_print_i(self, error)
-      import elpa_autotune_t
-      implicit none
-      class(elpa_autotune_t), intent(in) :: self
-      integer, intent(out), optional     :: error
-
-    end subroutine
-  end interface
-
-
-  !> \brief abstract definition of interface to destroy the autotuning state
-  !> Parameters
-  !> \param   self        class(elpa_autotune_t): the ELPA autotune object
-  abstract interface
-    subroutine elpa_autotune_destroy_i(self, error)
-      import elpa_autotune_t
-      implicit none
-      class(elpa_autotune_t), intent(inout) :: self
-      integer, optional, intent(out)        :: error
-    end subroutine
-  end interface
 
   abstract interface
     subroutine elpa_creating_from_legacy_api_i(self)

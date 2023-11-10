@@ -41,10 +41,10 @@
 #define EARLIEST_AUTOTUNE_VERSION 20171201
 
 /* "Time of build" */
-#define ELPA_BUILDTIME 1699631424
+#define ELPA_BUILDTIME 1699634706
 
 /* enable autotuning functionality */
-#define ENABLE_AUTOTUNING 1
+/* #undef ENABLE_AUTOTUNING */
 
 /* enable C++ tests */
 #define ENABLE_CPP_TESTS 1

@@ -419,45 +419,5 @@ module elpa
       endif
     end subroutine
 
-    !> \brief function to deallocate an ELPA autotune instance
-    !> Parameters
-    !> \details
-    !> \param  obj        class(elpa_autotune_t), pointer : pointer to the autotune object to be destroyed and deallocated
-    !> \param  error      integer, optional : error code
-    subroutine elpa_autotune_deallocate(obj, error)
-      class(elpa_autotune_t), pointer :: obj
-      integer, optional, intent(out)  :: error
-      integer                         :: error2
-      call obj%destroy(error2)
-      if (present(error)) then
-        error = error2
-        if (error2 .ne. ELPA_OK) then
-          write(*,*) "Cannot destroy the ELPA autotuning object!"
-          write(*,*) "This is a critical error!"
-          write(*,*) "This might lead to a memory leak in your application!"
-          error = ELPA_ERROR_CRITICAL
-          return
-        endif
-      else
-        if (error2 .ne. ELPA_OK) then
-          write(*,*) "Cannot destroy the ELPA autotuning object!"
-          write(*,*) "This is a critical error!"
-          write(*,*) "This might lead to a memory leak in your application!"
-          write(*,*) "But you do not check the error codes"
-          return
-        endif
-      endif
-      deallocate(obj, stat=error2)
-      if (error2 .ne. 0) then
-        write(*,*) "Cannot deallocate the ELPA autotuning object!"  
-        write(*,*) "This is a critical error!"  
-        write(*,*) "This might lead to a memory leak in your application!"
-        if (present(error)) then
-          error = ELPA_ERROR_CRITICAL
-          return
-        endif
-      endif
-
-    end subroutine
 
 end module
