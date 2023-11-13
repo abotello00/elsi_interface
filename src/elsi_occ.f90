@@ -65,6 +65,7 @@ contains
         real(kind=r8) :: diff
         real(kind=r8) :: occupation_def
         real(kind=r8) :: frac_tol
+        real(kind=r8) :: frac_diff
         real(kind=r8) :: abs_tol
         logical :: fractionally_occupied
         character(len=200) :: msg
@@ -210,10 +211,14 @@ contains
                 loopk: do i_state = 1, n_state, 1
 
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
+                    frac_diff = abs(i_occ_val-nint(i_occ_val))
 
-                    !if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
-                    if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
-                        abs(anint(i_occ_val))), abs_tol) ) then
+                    write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
+                    call(elsi_say(bh, msg))
+
+                    if ( frac_diff .le. frac_tol) then
+                    ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
+                    !     abs(anint(i_occ_val))), abs_tol) ) then
                         fractionally_occupied = .false.
                     else
                         fractionally_occupied = .true.
