@@ -1203,7 +1203,7 @@ contains
     ! For x smaller than 3.6
     if (x .lt. 3.6) then
 
-        N=100000
+        N=200
         AN=-1.0D0
         FACT=1.0D0
         A5=0.0D0
