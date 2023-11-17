@@ -1189,13 +1189,13 @@ contains
 
     implicit none
 
-    real(8), intent(in) :: x
-    real(8), intent(out) :: res
+    real*8, intent(in) :: x
+    real*8, intent(out) :: res
 
-    real(8) :: E,PI,PKON,AN,FACT,A1,A2,A3,A4,A5, &
+    real*8 :: E,PI,PKON,AN,FACT,A1,A2,A3,A4,A5, &
         ERF_out,ERFC_out,X2,F12,BT1,BT2,BT3,BT4,BT5,BT6,BT7,BT8,BT9,SR,B1,B2,B3,B4
 
-    integer(4) :: N, j
+    integer :: N, j
 
     E=2.718281828459045D0
     PI=4.0D0*DATAN(1.0D0)
