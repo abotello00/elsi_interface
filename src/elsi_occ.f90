@@ -504,6 +504,7 @@ contains
                         call erf_v2( (eval(i_state,i_spin,i_kpt)-mu)*invert_width, res)
                          occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
                              *(1.0_r8-res)
+                         write(*,*) "res=",res
 
                         ! occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
                         !     *(1.0_r8-erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width))
