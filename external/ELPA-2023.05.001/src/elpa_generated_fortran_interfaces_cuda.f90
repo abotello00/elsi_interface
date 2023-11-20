@@ -70,86 +70,6 @@ module elpa_generated_fortran_interfaces
   implicit none
 
  interface
-   subroutine single_hh_trafo_complex_AVX_1hv_double(q, hh, pnb, pnq, pldq) &
-                             bind(C, name="single_hh_trafo_complex_AVX_1hv_double")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq
-     ! complex(kind=c_double_complex)     :: q(*)
-     type(c_ptr), value                   :: q
-     complex(kind=c_double_complex)       :: hh(pnb,2)
-   end subroutine
- end interface
- interface
-   subroutine single_hh_trafo_complex_AVX_1hv_single(q, hh, pnb, pnq, pldq) &
-                             bind(C, name="single_hh_trafo_complex_AVX_1hv_single")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq
-     ! complex(kind=c_float_complex)   :: q(*)
-     type(c_ptr), value              :: q
-     complex(kind=c_float_complex)   :: hh(pnb,2)
-   end subroutine
- end interface
- interface
-   subroutine single_hh_trafo_complex_AVX2_1hv_double(q, hh, pnb, pnq, pldq) &
-                             bind(C, name="single_hh_trafo_complex_AVX2_1hv_double")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq
-     ! complex(kind=c_double_complex)     :: q(*)
-     type(c_ptr), value                   :: q
-     complex(kind=c_double_complex)       :: hh(pnb,2)
-   end subroutine
- end interface
- interface
-   subroutine single_hh_trafo_complex_AVX2_1hv_single(q, hh, pnb, pnq, pldq) &
-                             bind(C, name="single_hh_trafo_complex_AVX2_1hv_single")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq
-     ! complex(kind=c_float_complex)   :: q(*)
-     type(c_ptr), value              :: q
-     complex(kind=c_float_complex)   :: hh(pnb,2)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_complex_AVX_2hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_complex_AVX_2hv_double")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        ! complex(kind=c_double_complex)     :: q(*)
-        type(c_ptr), value                     :: q
-        complex(kind=c_double_complex)           :: hh(pnb,2)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_complex_AVX_2hv_single(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_complex_AVX_2hv_single")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        ! complex(kind=c_float_complex)   :: q(*)
-        type(c_ptr), value                  :: q
-        complex(kind=c_float_complex)        :: hh(pnb,2)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_complex_AVX2_2hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_complex_AVX2_2hv_double")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        ! complex(kind=c_double_complex)     :: q(*)
-        type(c_ptr), value                     :: q
-        complex(kind=c_double_complex)           :: hh(pnb,2)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_complex_AVX2_2hv_single(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_complex_AVX2_2hv_single")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        ! complex(kind=c_float_complex)   :: q(*)
-        type(c_ptr), value                  :: q
-        complex(kind=c_float_complex)        :: hh(pnb,2)
-   end subroutine
- end interface
- interface
    subroutine double_hh_trafo_real_VSX_2hv_double(q, hh, pnb, pnq, pldq, pldh) &
                                 bind(C, name="double_hh_trafo_real_VSX_2hv_double")
         use, intrinsic :: iso_c_binding
@@ -163,42 +83,6 @@ module elpa_generated_fortran_interfaces
                                 bind(C, name="double_hh_trafo_real_VSX_2hv_single")
         use, intrinsic :: iso_c_binding
         integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        type(c_ptr), value        :: q
-        real(kind=c_float)        :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_real_AVX_2hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_real_AVX_2hv_double")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        type(c_ptr), value        :: q
-        real(kind=c_double)        :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_real_AVX_2hv_single(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_real_AVX_2hv_single")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)       :: pnb, pnq, pldq, pldh
-        type(c_ptr), value        :: q
-        real(kind=c_float)        :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_real_AVX2_2hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_real_AVX2_2hv_double")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        type(c_ptr), value        :: q
-        real(kind=c_double)        :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine double_hh_trafo_real_AVX2_2hv_single(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="double_hh_trafo_real_AVX2_2hv_single")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)       :: pnb, pnq, pldq, pldh
         type(c_ptr), value        :: q
         real(kind=c_float)        :: hh(pnb,6)
    end subroutine
@@ -222,42 +106,6 @@ module elpa_generated_fortran_interfaces
    end subroutine
  end interface
  interface
-   subroutine quad_hh_trafo_real_AVX_4hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="quad_hh_trafo_real_AVX_4hv_double")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        type(c_ptr), value        :: q
-        real(kind=c_double)        :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine quad_hh_trafo_real_AVX_4hv_single(q, hh, pnb, pnq, pldq, pldh) &
-              bind(C, name="quad_hh_trafo_real_AVX_4hv_single")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int) :: pnb, pnq, pldq, pldh
-     type(c_ptr), value  :: q
-     real(kind=c_float)  :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine quad_hh_trafo_real_AVX2_4hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                                bind(C, name="quad_hh_trafo_real_AVX2_4hv_double")
-        use, intrinsic :: iso_c_binding
-        integer(kind=c_int)        :: pnb, pnq, pldq, pldh
-        type(c_ptr), value        :: q
-        real(kind=c_double)        :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine quad_hh_trafo_real_AVX2_4hv_single(q, hh, pnb, pnq, pldq, pldh) &
-              bind(C, name="quad_hh_trafo_real_AVX2_4hv_single")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int) :: pnb, pnq, pldq, pldh
-     type(c_ptr), value  :: q
-     real(kind=c_float)  :: hh(pnb,6)
-   end subroutine
- end interface
- interface
    subroutine hexa_hh_trafo_real_VSX_6hv_double(q, hh, pnb, pnq, pldq, pldh) &
                                 bind(C, name="hexa_hh_trafo_real_VSX_6hv_double")
         use, intrinsic :: iso_c_binding
@@ -273,42 +121,6 @@ module elpa_generated_fortran_interfaces
         integer(kind=c_int)        :: pnb, pnq, pldq, pldh
         type(c_ptr), value        :: q
         real(kind=c_float)        :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine hexa_hh_trafo_real_AVX_6hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                             bind(C, name="hexa_hh_trafo_real_AVX_6hv_double")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq, pldh
-     type(c_ptr), value      :: q
-     real(kind=c_double)     :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine hexa_hh_trafo_real_AVX_6hv_single(q, hh, pnb, pnq, pldq, pldh) &
-                             bind(C, name="hexa_hh_trafo_real_AVX_6hv_single")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq, pldh
-     type(c_ptr), value      :: q
-     real(kind=c_float)      :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine hexa_hh_trafo_real_AVX2_6hv_double(q, hh, pnb, pnq, pldq, pldh) &
-                             bind(C, name="hexa_hh_trafo_real_AVX2_6hv_double")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq, pldh
-     type(c_ptr), value      :: q
-     real(kind=c_double)     :: hh(pnb,6)
-   end subroutine
- end interface
- interface
-   subroutine hexa_hh_trafo_real_AVX2_6hv_single(q, hh, pnb, pnq, pldq, pldh) &
-                             bind(C, name="hexa_hh_trafo_real_AVX2_6hv_single")
-     use, intrinsic :: iso_c_binding
-     integer(kind=c_int)     :: pnb, pnq, pldq, pldh
-     type(c_ptr), value      :: q
-     real(kind=c_float)      :: hh(pnb,6)
    end subroutine
  end interface
  interface
