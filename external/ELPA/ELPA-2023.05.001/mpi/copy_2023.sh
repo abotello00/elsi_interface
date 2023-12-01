@@ -138,8 +138,8 @@ cp $elpa_dir/elpa.h elpa
 cp $elpa_dir/elpa_generic.h elpa
 cp $elpa_dir/elpa_explicit_name.h elpa
 
-cp ../../ELPA/src/mod_mpi.f90 .
-cp ../../ELPA/src/mod_mpifh.f90 .
+cp ../../../ELPA-2020.05.001/src/mod_mpi.f90 .
+cp ../../../ELPA-2020.05.001/src/mod_mpifh.f90 .
 
 elpa_dir=/scratch/ukh0001/elpa-2023.05.001_c/build_generic
 elpa_dir_avx=/scratch/ukh0001/elpa-2023.05.001_c/build_avx
@@ -203,6 +203,7 @@ cp $elpa_dir_avx512/{complex_avx512_1hv_double_precision.c,complex_avx512_1hv_si
 
 cp $elpa_dir_cuda/../src/GPU/CUDA/elpa_index_nvidia_gpu.cu  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cudaFunctions.cu  .
+cp $elpa_dir_cuda/../src/GPU/CUDA/cudaFunctions_template.h  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils.cu  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils_template.cu  .
 cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_real.cu  .
