@@ -65,6 +65,7 @@ contains
         real(kind=r8) :: diff
         real(kind=r8) :: occupation_def
         real(kind=r8) :: frac_tol
+        real(kind=r8) :: frac_diff
         logical :: fractionally_occupied
         character(len=200) :: msg
 
@@ -201,20 +202,23 @@ contains
         ! endif
 
         ! Go through all occupation numbers to see if they are fractional
-        frac_tol = 1E-06
+        frac_tol = 1E-08
 
         loopi: do i_k_point = 1, n_kpt, 1
             loopj: do i_spin = 1, n_spin, 1
                 loopk: do i_state = 1, n_state, 1
 
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
+                    frac_diff = abs(i_occ_val-nint(i_occ_val))
 
-                    if (abs(i_occ_val-nint(i_occ_val)) .le. frac_tol) then
+                    if (frac_diff .le. frac_tol) then
                         fractionally_occupied = .false.
                     else
                         fractionally_occupied = .true.
 
                         write(msg,"(A)") "ELSI found fractional occupation numbers."
+                        call elsi_say(bh,msg)
+                        write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
                         call elsi_say(bh,msg)
 
                         exit loopi
