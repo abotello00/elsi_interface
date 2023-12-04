@@ -212,6 +212,8 @@ contains
                     frac_diff = abs(i_occ_val-nint(i_occ_val))
 
                     if (frac_diff .le. frac_tol) then
+                    ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
+                    !     abs(anint(i_occ_val))), abs_tol) ) then
                         fractionally_occupied = .false.
                     else
                         fractionally_occupied = .true.
@@ -246,17 +248,17 @@ contains
                     do i_state = 1, n_state, 1
                         ! search for the global HOMO and LUMO (any k-point)
                         if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
-                          ! check if homo (including Fermi level)
-                          if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
-                            homo_level = eval(i_state, i_spin, i_k_point)
-                          end if
+                            ! check if homo (including Fermi level)
+                            if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
+                                homo_level = eval(i_state, i_spin, i_k_point)
+                            end if
                         end if
 
                         if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
-                          ! check if lumo (including Fermi level)
-                          if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
-                            lumo_level = eval(i_state, i_spin, i_k_point)
-                          end if
+                            ! check if lumo (including Fermi level)
+                            if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
+                                lumo_level = eval(i_state, i_spin, i_k_point)
+                            end if
                         end if
                     enddo
                 enddo
@@ -267,7 +269,7 @@ contains
 
             ! Check electron number for this mu value
             call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-                                 occ,mu,diff)
+                occ,mu,diff)
             call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
             write(msg,"(A,E12.4,A)") "Residual electron error :", diff
             call elsi_say(bh,msg)
@@ -282,7 +284,7 @@ contains
                 mu = mu_tmp
                 ! Check electron number for this mu value
                 call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-                                 occ,mu,diff)
+                    occ,mu,diff)
                 call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
 
                 if (abs(diff) < ph%mu_tol) then
@@ -468,6 +470,8 @@ contains
         real(kind=r8) :: A
         real(kind=r8) :: H_even
         real(kind=r8) :: H_odd
+        real(kind=r8) :: res
+
         integer(kind=i4) :: i_state
         integer(kind=i4) :: i_kpt
         integer(kind=i4) :: i_spin
@@ -494,8 +498,14 @@ contains
             do i_kpt = 1,n_kpt
                 do i_spin = 1,n_spin
                     do i_state = 1,n_state
-                        occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
-                            *(1.0_r8-erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width))
+                        ! test erf_v2
+                        call erf_v2( (eval(i_state,i_spin,i_kpt)-mu)*invert_width, res)
+                         occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
+                             *(1.0_r8-res)
+                         write(*,*) "res=",res
+
+                        ! occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
+                        !     *(1.0_r8-erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width))
 
                         diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
                     end do
@@ -1172,5 +1182,75 @@ contains
         end do
 
     end subroutine
+
+    subroutine erf_v2(x, res)
+
+    implicit none
+
+    real*8, intent(in) :: x
+    real*8, intent(out) :: res
+
+    real*8 :: E,PI,PKON,AN,FACT,A1,A2,A3,A4,A5, &
+        ERF_out,ERFC_out,X2,F12,BT1,BT2,BT3,BT4,BT5,BT6,BT7,BT8,BT9,SR,B1,B2,B3,B4
+
+    integer :: N, j
+
+    E=2.718281828459045D0
+    PI=4.0D0*DATAN(1.0D0)
+    PKON=2D0/(DSQRT(PI))
+
+    ! For x smaller than 3.6
+    if (x .lt. 3.6) then
+
+        N=200
+        AN=-1.0D0
+        FACT=1.0D0
+        A5=0.0D0
+
+        do j = 1, N
+            AN=AN+1.0D0
+            FACT=FACT*AN
+
+            IF(AN.EQ.0) FACT=1.0D0
+
+            A1=(-1.0D0)**AN
+            A2=(2.0D0*AN)+1.0D0
+            A3=A1*x**A2
+            A4=FACT*((2.0D0*AN)+1.0D0)
+            A5=(A3/A4)+A5
+
+            ERF_out=PKON*A5
+            ERFC_out=1.0D0-ERF_out
+        end do
+
+    ! For x larger than 3.6
+    else
+        X2=2.0D0*X
+        F12=132.0D0*3628800.0D0
+        BT1=2.0D0/(X2**2.0D0)
+        BT2=24.0D0/(2.0D0*(X2**4.0D0))
+        BT3=720.0D0/(6.0D0*(X2**6.0D0))
+        BT4=40320.0D0/(24.0D0*(X2**8.0D0))
+        BT5=3628800.0D0/(120.0D0*(X2**10.0D0))
+        BT6=F12/(720.0D0*(X2**12.0D0))
+        BT7=(F12*182.0D0)/(5040.0D0*(X2**14.0D0))
+        BT8=(F12*240.0D0*182.0D0)/(40320.0D0*(X2**16.0D0))
+        BT9=(F12*306.0D0*240.0D0*182.0D0)/(362880.0D0*(X2**18.0D0))
+
+        SR=1.0D0-BT1+BT2-BT3+BT4-BT5+BT6-BT7+BT8-BT9
+
+        B1=x*x
+        B2=E**(-B1)
+        B3=x*(DSQRT(PI))
+        B4=B2/B3
+
+        ERF_out=1.0D0-B4*SR
+        ERFC_out=B4*SR
+    endif
+
+    ! res is ERF_out
+    res = ERF_out
+  end subroutine
+
 
 end module ELSI_OCC
