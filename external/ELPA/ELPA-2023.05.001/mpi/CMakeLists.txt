@@ -98,6 +98,7 @@ IF(USE_GPU_CUDA)
     src/kernels/kernels_complex.f90
     src/kernels/kernels_real.f90
     src/mod_compute_hh_trafo_cuda.f90
+    src/elpa_constants_cuda.f90
     src/mod_cuda.f90)
 
   SET(ELPA_REAL_DEFAULT "ELPA_2STAGE_REAL_GENERIC")
