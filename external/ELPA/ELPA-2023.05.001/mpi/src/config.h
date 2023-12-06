@@ -1,51 +1,3 @@
-/* Copyright 2014 - 2023, A. Marek */
-
-/*     This file is part of ELPA. */
-
-/*     The ELPA library was originally created by the ELPA consortium, */
-/*     consisting of the following organizations: */
-
-/*     - Max Planck Computing and Data Facility (MPCDF), formerly known as */
-/*       Rechenzentrum Garching der Max-Planck-Gesellschaft (RZG), */
-/*     - Bergische Universität Wuppertal, Lehrstuhl für angewandte */
-/*       Informatik, */
-/*     - Technische Universität München, Lehrstuhl für Informatik mit */
-/*       Schwerpunkt Wissenschaftliches Rechnen , */
-/*     - Fritz-Haber-Institut, Berlin, Abt. Theorie, */
-/*     - Max-Plack-Institut für Mathematik in den Naturwissenschaften, */
-/*       Leipzig, Abt. Komplexe Strukutren in Biologie und Kognition, */
-/*       and */
-/*     - IBM Deutschland GmbH */
-
-
-/*     More information can be found here: */
-/*     http://elpa.mpcdf.mpg.de/ */
-
-/*     ELPA is free software: you can redistribute it and/or modify */
-/*     it under the terms of the version 3 of the license of the */
-/*     GNU Lesser General Public License as published by the Free */
-/*     Software Foundation. */
-
-/*     ELPA is distributed in the hope that it will be useful, */
-/*     but WITHOUT ANY WARRANTY; without even the implied warranty of */
-/*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the */
-/*     GNU Lesser General Public License for more details. */
-
-/*     You should have received a copy of the GNU Lesser General Public License */
-/*     along with ELPA.  If not, see <http://www.gnu.org/licenses/> */
-
-/*     ELPA reflects a substantial effort on the part of the original */
-/*     ELPA consortium, and we ask you to respect the spirit of the */
-/*     license that we chose: i.e., please contribute any changes you */
-/*     may have back to the original ELPA library distribution, and keep */
-/*     any derivatives of ELPA under the same license that we chose for */
-/*     the original distribution, the GNU Lesser General Public License. */
-
-/*  Author: Andreas Marek, MPCDF */
-/*  This file is the generated version. Do NOT edit */
-
-
-
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
@@ -74,7 +26,7 @@
 #define CURRENT_WITH_AMD_GPU_VERSION 0
 
 /* "disable use NVIDIA GPU in C-headers" */
-#define CURRENT_WITH_NVIDIA_GPU_VERSION 0
+#define CURRENT_WITH_NVIDIA_GPU_VERSION 1
 
 /* "disable use SYCL GPU in C-headers" */
 #define CURRENT_WITH_SYCL_GPU_VERSION 0
@@ -89,7 +41,7 @@
 #define EARLIEST_AUTOTUNE_VERSION 20171201
 
 /* "Time of build" */
-#define ELPA_BUILDTIME 1697424557
+#define ELPA_BUILDTIME 1701867832
 
 /* enable autotuning functionality */
 #define ENABLE_AUTOTUNING 1
@@ -147,13 +99,13 @@
 #define HAVE_AVX512_F 1
 
 /* Define to 1 to support AVX-512 Integer Fused Multiply Add Instructions */
-/* #undef HAVE_AVX512_IFMA */
+#define HAVE_AVX512_IFMA 1
 
 /* Define to 1 to support AVX-512 Conflict Prefetch Instructions */
 /* #undef HAVE_AVX512_PF */
 
 /* Define to 1 to support AVX-512 Vector Byte Manipulation Instructions */
-/* #undef HAVE_AVX512_VBMI */
+#define HAVE_AVX512_VBMI 1
 
 /* Define to 1 to support AVX-512 Vector Length Extensions */
 #define HAVE_AVX512_VL 1
@@ -203,6 +155,9 @@
 /* Use likwid */
 /* #undef HAVE_LIKWID */
 
+/* Define to 1 if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
 /* Define to 1 to support Multimedia Extensions */
 #define HAVE_MMX 1
 
@@ -210,7 +165,7 @@
 /* #undef HAVE_MPI_MODULE */
 
 /* Define to 1 to support Memory Protection Extensions */
-#define HAVE_MPX 1
+/* #undef HAVE_MPX */
 
 /* NEON_ARCH64 intrinsics are supported on this CPU */
 /* #undef HAVE_NEON_ARCH64_SSE */
@@ -225,7 +180,7 @@
 /* #undef HAVE_REDIRECT */
 
 /* Define to 1 to support Secure Hash Algorithm Extension */
-/* #undef HAVE_SHA */
+#define HAVE_SHA 1
 
 /* build for skewsyemmtric case */
 #define HAVE_SKEWSYMMETRIC 1
@@ -259,9 +214,6 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
-
-/* Define to 1 if you have the <stdio.h> header file. */
-#define HAVE_STDIO_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
@@ -306,7 +258,7 @@
 /* #undef HIPBLAS */
 
 /* use blocking in loops */
-/* #undef LOOP_BLOCKING */
+#define LOOP_BLOCKING 1
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
@@ -353,9 +305,7 @@
 /* The size of `long int', as computed by sizeof. */
 #define SIZEOF_LONG_INT 8
 
-/* Define to 1 if all of the C90 standard headers exist (not just the ones
-   required in a freestanding environment). This macro is provided for
-   backward compatibility; new code need not use it. */
+/* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* compile build config into the library object */
@@ -417,7 +367,7 @@
 /* #undef WITH_COMPLEX_BGQ_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-#define WITH_COMPLEX_GENERIC_KERNEL 1
+/* #undef WITH_COMPLEX_GENERIC_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_COMPLEX_GENERIC_SIMPLE_KERNEL */
@@ -432,7 +382,7 @@
 /* #undef WITH_COMPLEX_NEON_ARCH64_BLOCK2_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-/* #undef WITH_COMPLEX_NVIDIA_GPU_KERNEL */
+#define WITH_COMPLEX_NVIDIA_GPU_KERNEL 1
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_COMPLEX_NVIDIA_SM80_GPU_KERNEL */
@@ -489,13 +439,13 @@
 /* #undef WITH_NVIDIA_CUSOLVER */
 
 /* Nvidia GPU kernel should be build */
-/* #undef WITH_NVIDIA_GPU_KERNEL */
+#define WITH_NVIDIA_GPU_KERNEL 1
 
 /* the NVIDIA GPU kernels for A100 can be used */
-/* #undef WITH_NVIDIA_GPU_SM80_COMPUTE_CAPABILITY */
+#define WITH_NVIDIA_GPU_SM80_COMPUTE_CAPABILITY 1
 
 /* enable Nvidia GPU support */
-/* #undef WITH_NVIDIA_GPU_VERSION */
+#define WITH_NVIDIA_GPU_VERSION 1
 
 /* enable usage of NVIDIA NCCL */
 /* #undef WITH_NVIDIA_NCCL */
@@ -552,7 +502,7 @@
 /* #undef WITH_REAL_BGQ_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-#define WITH_REAL_GENERIC_KERNEL 1
+/* #undef WITH_REAL_GENERIC_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_REAL_GENERIC_SIMPLE_BLOCK4_KERNEL */
@@ -576,7 +526,7 @@
 /* #undef WITH_REAL_NEON_ARCH64_BLOCK6_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-/* #undef WITH_REAL_NVIDIA_GPU_KERNEL */
+#define WITH_REAL_NVIDIA_GPU_KERNEL 1
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_REAL_NVIDIA_SM80_GPU_KERNEL */
