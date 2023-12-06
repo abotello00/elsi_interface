@@ -9465,29 +9465,6 @@ extern long double scalbl (long double __x, long double __n) __attribute__ ((__n
 
 
  
-extern int __fpclassifyf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
-
- 
-extern int __signbitf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
-
-
- 
-extern int __isinff128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-
- 
-extern int __finitef128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-
- 
-extern int __isnanf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-
- 
-extern int __iseqsigf128 (_Float128 __x, _Float128 __y) __attribute__ ((__nothrow__ , __leaf__));
-
- 
-extern int __issignalingf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
 # 421 "/usr/include/math.h" 2 3
 # 430 "/usr/include/math.h" 3
 

@@ -3124,12 +3124,6 @@ extern _Float64 strtof64 (const char *__restrict __nptr,
 
 
 
-extern _Float128 strtof128 (const char *__restrict __nptr,
-			    char **__restrict __endptr)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
-
-
-
 extern _Float32x strtof32x (const char *__restrict __nptr,
 			    char **__restrict __endptr)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
@@ -3212,12 +3206,6 @@ extern int strfromf32 (char *__dest, size_t __size, const char * __format,
 
 extern int strfromf64 (char *__dest, size_t __size, const char * __format,
 		       _Float64 __f)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3)));
-
-
-
-extern int strfromf128 (char *__dest, size_t __size, const char * __format,
-			_Float128 __f)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3)));
 
 
@@ -3363,13 +3351,6 @@ extern _Float32 strtof32_l (const char *__restrict __nptr,
 extern _Float64 strtof64_l (const char *__restrict __nptr,
 			    char **__restrict __endptr,
 			    locale_t __loc)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 3)));
-
-
-
-extern _Float128 strtof128_l (const char *__restrict __nptr,
-			      char **__restrict __endptr,
-			      locale_t __loc)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 3)));
 
 
