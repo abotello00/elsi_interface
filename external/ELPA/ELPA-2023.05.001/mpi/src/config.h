@@ -26,7 +26,7 @@
 #define CURRENT_WITH_AMD_GPU_VERSION 0
 
 /* "disable use NVIDIA GPU in C-headers" */
-#define CURRENT_WITH_NVIDIA_GPU_VERSION 1
+#define CURRENT_WITH_NVIDIA_GPU_VERSION 0
 
 /* "disable use SYCL GPU in C-headers" */
 #define CURRENT_WITH_SYCL_GPU_VERSION 0
@@ -41,7 +41,7 @@
 #define EARLIEST_AUTOTUNE_VERSION 20171201
 
 /* "Time of build" */
-#define ELPA_BUILDTIME 1701867832
+#define ELPA_BUILDTIME 1701717734
 
 /* enable autotuning functionality */
 #define ENABLE_AUTOTUNING 1
@@ -81,7 +81,7 @@
 #define HAVE_AVX2 1
 
 /* AVX512 is supported on this CPU */
-/* #undef HAVE_AVX512 */
+#define HAVE_AVX512 1
 
 /* Define to 1 to support AVX-512 Byte and Word Instructions */
 #define HAVE_AVX512_BW 1
@@ -111,7 +111,7 @@
 #define HAVE_AVX512_VL 1
 
 /* AVX512 for Xeon is supported on this CPU */
-/* #undef HAVE_AVX512_XEON */
+#define HAVE_AVX512_XEON 1
 
 /* AVX512 for Xeon-PHI is supported on this CPU */
 /* #undef HAVE_AVX512_XEON_PHI */
@@ -349,7 +349,7 @@
 /* #undef WITH_COMPLEX_AVX2_BLOCK2_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-/* #undef WITH_COMPLEX_AVX512_BLOCK1_KERNEL */
+#define WITH_COMPLEX_AVX512_BLOCK1_KERNEL 1
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_COMPLEX_AVX512_BLOCK2_KERNEL */
@@ -382,7 +382,7 @@
 /* #undef WITH_COMPLEX_NEON_ARCH64_BLOCK2_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-#define WITH_COMPLEX_NVIDIA_GPU_KERNEL 1
+/* #undef WITH_COMPLEX_NVIDIA_GPU_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_COMPLEX_NVIDIA_SM80_GPU_KERNEL */
@@ -439,13 +439,13 @@
 /* #undef WITH_NVIDIA_CUSOLVER */
 
 /* Nvidia GPU kernel should be build */
-#define WITH_NVIDIA_GPU_KERNEL 1
+/* #undef WITH_NVIDIA_GPU_KERNEL */
 
 /* the NVIDIA GPU kernels for A100 can be used */
-#define WITH_NVIDIA_GPU_SM80_COMPUTE_CAPABILITY 1
+/* #undef WITH_NVIDIA_GPU_SM80_COMPUTE_CAPABILITY */
 
 /* enable Nvidia GPU support */
-#define WITH_NVIDIA_GPU_VERSION 1
+/* #undef WITH_NVIDIA_GPU_VERSION */
 
 /* enable usage of NVIDIA NCCL */
 /* #undef WITH_NVIDIA_NCCL */
@@ -478,7 +478,7 @@
 /* #undef WITH_REAL_AVX2_BLOCK6_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-/* #undef WITH_REAL_AVX512_BLOCK2_KERNEL */
+#define WITH_REAL_AVX512_BLOCK2_KERNEL 1
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_REAL_AVX512_BLOCK4_KERNEL */
@@ -526,7 +526,7 @@
 /* #undef WITH_REAL_NEON_ARCH64_BLOCK6_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
-#define WITH_REAL_NVIDIA_GPU_KERNEL 1
+/* #undef WITH_REAL_NVIDIA_GPU_KERNEL */
 
 /* Build elpa_m4_kernel kernel */
 /* #undef WITH_REAL_NVIDIA_SM80_GPU_KERNEL */

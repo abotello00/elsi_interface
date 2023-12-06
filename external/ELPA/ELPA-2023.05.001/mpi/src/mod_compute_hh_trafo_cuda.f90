@@ -163,7 +163,8 @@ last_stripe_width, kernel, my_stream, success)
 
   !if (wantDebug) then
     if (useGPU .and. &
-      ( kernel .ne. ELPA_2STAGE_REAL_NVIDIA_GPU)) then
+      ( kernel .ne. ELPA_2STAGE_REAL_NVIDIA_GPU .and. kernel .ne. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU)) then
+
       write(error_unit,'(a)') "ERROR: useGPU is set in compute_hh_trafo but not a NVIDIA GPU kernel!"
       success = .false.
       return
@@ -174,6 +175,7 @@ last_stripe_width, kernel, my_stream, success)
 
 
   if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_INTEL_GPU_SYCL) then
     ! ncols - indicates the number of HH reflectors to apply; at least 1 must be available
@@ -201,6 +203,7 @@ last_stripe_width, kernel, my_stream, success)
 
 ! GPU kernel real
   if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_INTEL_GPU_SYCL) then
     if (wantDebug) then
@@ -213,12 +216,27 @@ last_stripe_width, kernel, my_stream, success)
 
     dev_offset_2 = off*size_of_datatype
 
+    if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_GPU .or. &
+        kernel .eq. ELPA_2STAGE_REAL_AMD_GPU .or. &
+        kernel .eq. ELPA_2STAGE_REAL_INTEL_GPU_SYCL) then
       call launch_compute_hh_trafo_gpu_kernel_&
            &real&
            &_&
            &double&
            &(a_dev + dev_offset, bcast_buffer_dev + dev_offset_1, &
            hh_tau_dev + dev_offset_2, nl, nbw,stripe_width, ncols, my_stream)
+    endif
+
+    if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU ) then
+
+        call launch_compute_hh_trafo_sm80_gpu_kernel_&
+            &real&
+            &_&
+            &double&
+            &(a_dev + dev_offset, bcast_buffer_dev + dev_offset_1, &
+            hh_tau_dev + dev_offset_2, nl, nbw,stripe_width, ncols, my_stream)
+    endif
+
 
 
     if (wantDebug) then
@@ -513,7 +531,8 @@ last_stripe_width, kernel, my_stream, success)
 
   !if (wantDebug) then
     if (useGPU .and. &
-      ( kernel .ne. ELPA_2STAGE_REAL_NVIDIA_GPU)) then
+      ( kernel .ne. ELPA_2STAGE_REAL_NVIDIA_GPU .and. kernel .ne. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU)) then
+
       write(error_unit,'(a)') "ERROR: useGPU is set in compute_hh_trafo but not a NVIDIA GPU kernel!"
       success = .false.
       return
@@ -524,6 +543,7 @@ last_stripe_width, kernel, my_stream, success)
 
 
   if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_INTEL_GPU_SYCL) then
     ! ncols - indicates the number of HH reflectors to apply; at least 1 must be available
@@ -551,6 +571,7 @@ last_stripe_width, kernel, my_stream, success)
 
 ! GPU kernel real
   if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_REAL_INTEL_GPU_SYCL) then
     if (wantDebug) then
@@ -563,12 +584,27 @@ last_stripe_width, kernel, my_stream, success)
 
     dev_offset_2 = off*size_of_datatype
 
+    if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_GPU .or. &
+        kernel .eq. ELPA_2STAGE_REAL_AMD_GPU .or. &
+        kernel .eq. ELPA_2STAGE_REAL_INTEL_GPU_SYCL) then
       call launch_compute_hh_trafo_gpu_kernel_&
            &real&
            &_&
            &single&
            &(a_dev + dev_offset, bcast_buffer_dev + dev_offset_1, &
            hh_tau_dev + dev_offset_2, nl, nbw,stripe_width, ncols, my_stream)
+    endif
+
+    if (kernel .eq. ELPA_2STAGE_REAL_NVIDIA_SM80_GPU ) then
+
+        call launch_compute_hh_trafo_sm80_gpu_kernel_&
+            &real&
+            &_&
+            &single&
+            &(a_dev + dev_offset, bcast_buffer_dev + dev_offset_1, &
+            hh_tau_dev + dev_offset_2, nl, nbw,stripe_width, ncols, my_stream)
+    endif
+
 
 
     if (wantDebug) then
@@ -855,7 +891,8 @@ last_stripe_width, kernel, my_stream, success)
 
   !if (wantDebug) then
     if (useGPU .and. &
-      ( kernel .ne. ELPA_2STAGE_COMPLEX_NVIDIA_GPU)) then
+      ( kernel .ne. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .and. kernel .ne. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU)) then
+
       write(error_unit,'(a)') "ERROR: useGPU is set in compute_hh_trafo but not a NVIDIA GPU kernel!"
       success = .false.
       return
@@ -866,6 +903,7 @@ last_stripe_width, kernel, my_stream, success)
 
 
   if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_INTEL_GPU_SYCL) then
     ! ncols - indicates the number of HH reflectors to apply; at least 1 must be available
@@ -893,6 +931,7 @@ last_stripe_width, kernel, my_stream, success)
 
 ! GPU kernel complex
   if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_INTEL_GPU_SYCL) then
     if (wantDebug) then
@@ -905,12 +944,22 @@ last_stripe_width, kernel, my_stream, success)
 
     dev_offset_2 = off*size_of_datatype
 
+  if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_AMD_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_INTEL_GPU_SYCL) then
       call launch_compute_hh_trafo_gpu_kernel_&
            &complex&
            &_&
            &double&
            &(a_dev + dev_offset, bcast_buffer_dev + dev_offset_1, &
            hh_tau_dev + dev_offset_2, nl, nbw,stripe_width, ncols, my_stream)
+    endif
+
+    if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU ) then
+      stop "This is sm80 complex kernel is not yet implemented"
+
+    endif
+
 
 
     if (wantDebug) then
@@ -1159,7 +1208,8 @@ last_stripe_width, kernel, my_stream, success)
 
   !if (wantDebug) then
     if (useGPU .and. &
-      ( kernel .ne. ELPA_2STAGE_COMPLEX_NVIDIA_GPU)) then
+      ( kernel .ne. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .and. kernel .ne. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU)) then
+
       write(error_unit,'(a)') "ERROR: useGPU is set in compute_hh_trafo but not a NVIDIA GPU kernel!"
       success = .false.
       return
@@ -1170,6 +1220,7 @@ last_stripe_width, kernel, my_stream, success)
 
 
   if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_INTEL_GPU_SYCL) then
     ! ncols - indicates the number of HH reflectors to apply; at least 1 must be available
@@ -1197,6 +1248,7 @@ last_stripe_width, kernel, my_stream, success)
 
 ! GPU kernel complex
   if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_AMD_GPU .or. &
       kernel .eq. ELPA_2STAGE_COMPLEX_INTEL_GPU_SYCL) then
     if (wantDebug) then
@@ -1209,12 +1261,22 @@ last_stripe_width, kernel, my_stream, success)
 
     dev_offset_2 = off*size_of_datatype
 
+  if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_AMD_GPU .or. &
+      kernel .eq. ELPA_2STAGE_COMPLEX_INTEL_GPU_SYCL) then
       call launch_compute_hh_trafo_gpu_kernel_&
            &complex&
            &_&
            &single&
            &(a_dev + dev_offset, bcast_buffer_dev + dev_offset_1, &
            hh_tau_dev + dev_offset_2, nl, nbw,stripe_width, ncols, my_stream)
+    endif
+
+    if (kernel .eq. ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU ) then
+      stop "This is sm80 complex kernel is not yet implemented"
+
+    endif
+
 
 
     if (wantDebug) then

@@ -317,6 +317,16 @@ module cuda_c_kernel
       call launch_compute_hh_trafo_c_cuda_kernel_real_double(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
     end subroutine
 
+    subroutine launch_compute_hh_trafo_cuda_sm80_kernel_real_double(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_int)      :: nev, nb, ldq, ncols
+      integer(kind=c_intptr_t) :: q
+      integer(kind=c_intptr_t) :: hh_tau ,hh
+      integer(kind=c_intptr_t) :: my_stream
+
+      call launch_compute_hh_trafo_c_cuda_sm80_kernel_real_double(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
+    end subroutine
 
 
     subroutine launch_compute_hh_trafo_cuda_kernel_real_single(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
@@ -330,6 +340,20 @@ module cuda_c_kernel
       call launch_compute_hh_trafo_c_cuda_kernel_real_single(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
     end subroutine
 
+    subroutine launch_compute_hh_trafo_cuda_sm80_kernel_real_single(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_int)      :: nev, nb, ldq, ncols
+      integer(kind=c_intptr_t) :: q
+      integer(kind=c_intptr_t) :: hh_tau ,hh
+      integer(kind=c_intptr_t) :: my_stream
+
+!#ifdef 1
+!      call launch_compute_hh_trafo_c_cuda_sm80_kernel_real_single(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
+!#endif
+       print *,"the single precision kernel is not yet implemented"
+       stop 1
+    end subroutine
 
 
     subroutine launch_compute_hh_trafo_cuda_kernel_complex_double(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)

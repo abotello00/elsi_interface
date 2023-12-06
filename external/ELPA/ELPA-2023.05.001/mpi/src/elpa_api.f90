@@ -65,13 +65,6 @@ module elpa_api
   implicit none
 
  interface
-   pure function elpa_strerr_c(elpa_error) result(string) bind(C, name="elpa_strerr")
-     import c_int, c_ptr
-     integer(kind=c_int), intent(in), value :: elpa_error
-     type(c_ptr) :: string
-   end function
- end interface
- interface
    function elpa_int_value_to_string_c(name, value, string) &
               result(error) bind(C, name="elpa_int_value_to_string")
      import c_int, c_ptr, c_char
@@ -92,6 +85,13 @@ module elpa_api
    end function
  end interface
 
+ interface
+   pure function elpa_strerr_c(elpa_error) result(string) bind(C, name="elpa_strerr")
+     import c_int, c_ptr
+     integer(kind=c_int), intent(in), value :: elpa_error
+     type(c_ptr) :: string
+   end function
+ end interface
 
   integer, private, parameter :: earliest_api_version = 20170403 !< Definition of the earliest API version supported
                                                                              !< with the current release

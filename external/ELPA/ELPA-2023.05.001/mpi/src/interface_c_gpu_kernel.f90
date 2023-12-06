@@ -81,6 +81,7 @@ module gpu_c_kernel
       integer(kind=c_intptr_t) :: hh_tau ,hh
       integer(kind=c_intptr_t) :: my_stream
 
+      call launch_compute_hh_trafo_c_cuda_sm80_kernel_real_double(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
     end subroutine
 
     subroutine launch_compute_hh_trafo_gpu_kernel_real_single(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
@@ -102,6 +103,7 @@ module gpu_c_kernel
       integer(kind=c_intptr_t) :: hh_tau ,hh
       integer(kind=c_intptr_t) :: my_stream
 
+      call launch_compute_hh_trafo_c_cuda_sm80_kernel_real_single(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
     end subroutine
 
 
@@ -124,6 +126,9 @@ module gpu_c_kernel
       integer(kind=c_intptr_t) :: hh_tau ,hh
       integer(kind=c_intptr_t) :: my_stream
 
+      print *, "not yet implemented. ohoh"
+      stop 1
+      !call launch_compute_hh_trafo_c_cuda_sm80_kernel_complex_double(q, hh, hh_tau, nev, nb, ldq, ncols)
     end subroutine
 
     subroutine launch_compute_hh_trafo_gpu_kernel_complex_single(q, hh, hh_tau, nev, nb, ldq, ncols, my_stream)
@@ -145,6 +150,9 @@ module gpu_c_kernel
       integer(kind=c_intptr_t) :: hh_tau ,hh
       integer(kind=c_intptr_t) :: my_stream
 
+      print *,"not yet implemented. oh no"
+      stop 1
+      !call launch_compute_hh_trafo_c_cuda_sm80_kernel_complex_single(q, hh, hh_tau, nev, nb, ldq, ncols)
     end subroutine
 
 

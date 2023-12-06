@@ -128,7 +128,7 @@ module elpa_constants
  integer(kind=C_INT), parameter :: ELPA_2STAGE_REAL_GENERIC_SIMPLE_BLOCK6 = 40 
  integer(kind=C_INT), parameter :: ELPA_2STAGE_REAL_NVIDIA_SM80_GPU = 41 
  integer(kind=C_INT), parameter :: ELPA_2STAGE_REAL_INVALID = -1 
- integer(kind=C_INT), parameter :: ELPA_2STAGE_REAL_DEFAULT = 1 
+ integer(kind=C_INT), parameter :: ELPA_2STAGE_REAL_DEFAULT = 15 
 
  integer(kind=C_INT), parameter :: ELPA_2STAGE_NUMBER_OF_REAL_KERNELS = & 
  (0 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1) 
@@ -159,7 +159,7 @@ module elpa_constants
  integer(kind=C_INT), parameter :: ELPA_2STAGE_COMPLEX_INTEL_GPU_SYCL = 24 
  integer(kind=C_INT), parameter :: ELPA_2STAGE_COMPLEX_NVIDIA_SM80_GPU = 25 
  integer(kind=C_INT), parameter :: ELPA_2STAGE_COMPLEX_INVALID = -1 
- integer(kind=C_INT), parameter :: ELPA_2STAGE_COMPLEX_DEFAULT = 1 
+ integer(kind=C_INT), parameter :: ELPA_2STAGE_COMPLEX_DEFAULT = 12 
 
  integer(kind=C_INT), parameter :: ELPA_2STAGE_NUMBER_OF_COMPLEX_KERNELS = & 
  (0 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1) 
