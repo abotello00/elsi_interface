@@ -10,8 +10,9 @@ ELSEIF(USE_ELPA_2023)
     ADD_SUBDIRECTORY(ELPA-2023.05.001)
 ELSE()
     # We need some workarounds now, since ELPA-2023 does not work out-of-thebox on all archtiectures.
-    # We hope that most of the issues can be fixed with the ELPA-2023 Novemerb release. 
-    if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT USE_GPU_CUDA)
+    # We hope that most of the issues can be fixed with the ELPA-2023 Novemerb release.
+    # if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT USE_GPU_CUDA)
+    if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
         ADD_SUBDIRECTORY(ELPA-2023.05.001)
     ELSE()
         MESSAGE(STATUS "Enabling internal ELPA-2020.05.001")
