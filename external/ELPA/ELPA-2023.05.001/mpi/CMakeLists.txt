@@ -17,7 +17,6 @@ LIST(APPEND elpa_src
   src/elpa_api.f90
   src/elpa_autotune_impl.f90
   src/elpa_c_interface.c
-  src/elpa_constants.f90
   src/elpa.f90
   src/elpa_impl.f90
   src/elpa_index.c
@@ -118,6 +117,7 @@ ELSE()
   IF(ELPA2_KERNEL STREQUAL "AVX512")
     MESSAGE(STATUS "Using ELPA AVX512 kernel")
     LIST(APPEND elpa_src
+      src/elpa_constants_avx512.f90
       src/elpa_generated_fortran_interfaces_avx512.f90
       src/kernels/complex_avx512_1hv_double_precision.c
       src/kernels/complex_avx512_1hv_single_precision.c
@@ -131,6 +131,7 @@ ELSE()
   ELSEIF(ELPA2_KERNEL STREQUAL "AVX2")
     MESSAGE(STATUS "Using ELPA AVX2 kernel")
     LIST(APPEND elpa_src
+      src/elpa_constants_avx2.f90
       src/elpa_generated_fortran_interfaces_avx2.f90
       src/kernels/complex_avx2_1hv_double_precision.c
       src/kernels/complex_avx2_1hv_single_precision.c
@@ -144,6 +145,7 @@ ELSE()
   ELSEIF(ELPA2_KERNEL STREQUAL "AVX")
     MESSAGE(STATUS "Using ELPA AVX kernel")
     LIST(APPEND elpa_src
+      src/elpa_constants_avx.f90
       src/elpa_generated_fortran_interfaces_avx.f90
       src/kernels/complex_avx_1hv_double_precision.c
       src/kernels/complex_avx_1hv_single_precision.c
@@ -157,6 +159,7 @@ ELSE()
   ELSE()
     MESSAGE(STATUS "Using ELPA generic kernel")
     LIST(APPEND elpa_src
+      src/elpa_constants.f90
       src/elpa_generated_fortran_interfaces.f90
       src/kernels/kernels_complex.f90
       src/kernels/kernels_real.f90
