@@ -1809,6 +1809,7 @@ subroutine elsi_elpa_evec_real(ph,bh,mat,eval,evec,sing_check)
 
    integer(kind=i4) :: i
    integer(kind=i4) :: ierr
+   integer(kind=i4) :: n_states_solve
 
    real(kind=r8), allocatable :: copy(:,:)
    real(kind=r4), allocatable :: copy_r4(:,:)
@@ -1842,7 +1843,8 @@ subroutine elsi_elpa_evec_real(ph,bh,mat,eval,evec,sing_check)
          end if
       end do
 
-      ph%n_states_solve = min(ph%n_good,ph%n_states)
+      n_states_solve = min(ph%n_good,ph%n_states)
+      call MPI_Allreduce(n_states_solve,ph%n_states_solve,1,MPI_INTEGER,MPI_MIN,bh%comm_all,ierr)
       ph%ovlp_ev_min = eval(1)
       ph%ovlp_ev_max = eval(ph%n_basis)
    else
@@ -1908,6 +1910,7 @@ subroutine elsi_elpa_evec_cmplx(ph,bh,mat,eval,evec,sing_check)
 
    integer(kind=i4) :: i
    integer(kind=i4) :: ierr
+   integer(kind=i4) :: n_states_solve
 
    complex(kind=r8), allocatable :: copy(:,:)
    complex(kind=r4), allocatable :: copy_r4(:,:)
@@ -1941,7 +1944,8 @@ subroutine elsi_elpa_evec_cmplx(ph,bh,mat,eval,evec,sing_check)
          end if
       end do
 
-      ph%n_states_solve = min(ph%n_good,ph%n_states)
+      n_states_solve = min(ph%n_good,ph%n_states)
+      call MPI_Allreduce(n_states_solve,ph%n_states_solve,1,MPI_INTEGER,MPI_MIN,bh%comm_all,ierr)
       ph%ovlp_ev_min = eval(1)
       ph%ovlp_ev_max = eval(ph%n_basis)
    else
