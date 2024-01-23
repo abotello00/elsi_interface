@@ -57,7 +57,7 @@ LIST(APPEND elpa_src
   src/solve_secular_equation.f90
   src/mod_invert_trm_gpu.F90
   src/mod_cholesky_gpu.F90
-  src/mod_query_gpu_settings/F90
+  src/mod_query_gpu_settings.F90
   src/elpa_cholesky.f90
   src/elpa_invert_trm.f90
   src/solve_tridi.f90
