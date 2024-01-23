@@ -2,6 +2,7 @@
 LIST(APPEND elpa_src
   src/aligned_mem.f90
   src/check_for_gpu.f90
+  src/mod_multiply_a_b_gpu.F90
   src/mod_elpa_multiply_a_b.F90
   src/elpa1_auxiliary.f90
   src/mod_vendor_agnostic_layer_utilities.F90
