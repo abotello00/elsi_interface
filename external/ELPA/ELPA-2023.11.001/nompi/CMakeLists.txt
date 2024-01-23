@@ -2,9 +2,11 @@
 LIST(APPEND elpa_src
   src/aligned_mem.f90
   src/check_for_gpu.f90
+  src/mod_multiply_a_b_gpu.F90
   src/mod_elpa_multiply_a_b.F90
   src/elpa1_auxiliary.f90
   src/mod_vendor_agnostic_layer_utilities.F90
+  src/mod_elpa1_gpu.F90
   src/elpa1_compute_private.f90
   src/elpa1.f90
   src/elpa2_compute.f90
@@ -56,6 +58,7 @@ LIST(APPEND elpa_src
   src/solve_secular_equation.f90
   src/mod_invert_trm_gpu.F90
   src/mod_cholesky_gpu.F90
+  src/mod_query_gpu_settings.F90
   src/elpa_cholesky.f90
   src/elpa_invert_trm.f90
   src/solve_tridi.f90
