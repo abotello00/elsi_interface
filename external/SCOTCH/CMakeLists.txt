@@ -456,6 +456,7 @@ ADD_LIBRARY(ptscotchparmetis ${ptscotchparmetis_src})
 
 IF(ELSI_USE_FIND_PACKAGE_MPI)
   find_package(MPI)
+  TARGET_LINK_LIBRARIES(ptdummysizes PUBLIC MPI::MPI_C MPI::MPI_Fortran)
   TARGET_LINK_LIBRARIES(scotch PUBLIC MPI::MPI_C MPI::MPI_Fortran)
   TARGET_LINK_LIBRARIES(scotcherr PUBLIC MPI::MPI_C MPI::MPI_Fortran)
   TARGET_LINK_LIBRARIES(scotchmetis PUBLIC MPI::MPI_C MPI::MPI_Fortran)
