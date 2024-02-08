@@ -54,7 +54,9 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_BINARY_DIR}/generated/ptscotch.h ${PROJECT_B
 ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_BINARY_DIR}/generated/parser_ll.c ${PROJECT_BINARY_DIR}/generated/parser_yy.c
   COMMAND bison -pscotchyy -y -b y -d -v -o${PROJECT_BINARY_DIR}/generated/tmp2.c ${SCOTCH_DIR}/parser_yy.y
   COMMAND mv ${PROJECT_BINARY_DIR}/generated/tmp2.c ${PROJECT_BINARY_DIR}/generated/parser_yy.c
-  COMMAND mv ${PROJECT_BINARY_DIR}/generated/tmp2.h ${PROJECT_BINARY_DIR}/generated/parser_ly.h
+  # Versions of bison > 2.X insert a '#include tmp2.h' in tmp2.c. A simple 'mv' will not work.
+  # The file needs to remain in the directory with the old name. Hence the 'cp'
+  COMMAND cp ${PROJECT_BINARY_DIR}/generated/tmp2.h ${PROJECT_BINARY_DIR}/generated/parser_ly.h
   COMMAND flex -Pscotchyy -o${PROJECT_BINARY_DIR}/generated/tmp1.c ${SCOTCH_DIR}/parser_ll.l
   COMMAND mv ${PROJECT_BINARY_DIR}/generated/tmp1.c ${PROJECT_BINARY_DIR}/generated/parser_ll.c
   DEPENDS ${SCOTCH_DIR}/parser_yy.y ${SCOTCH_DIR}/parser_ll.l ${SCOTCH_DIR}/parser_yy.h ${SCOTCH_DIR}/parser_ll.h
