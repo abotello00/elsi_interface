@@ -166,6 +166,7 @@ module ELSI_DATATYPE
       integer(kind=i4) :: elpa_n_lcol ! Non-ill-conditioned basis functions
       logical :: elpa_first
       logical :: elpa_started = .false.
+      character(len=30) :: elpa_gpu_string = "gpu"
       class(elpa_t), pointer :: elpa_aux => null()
       class(elpa_t), pointer :: elpa_solve => null()
       class(elpa_autotune_t), pointer :: elpa_tune => null()
