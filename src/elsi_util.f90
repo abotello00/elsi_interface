@@ -133,6 +133,7 @@ subroutine elsi_reset_param(ph)
    ph%elpa_n_lcol = UNSET
    ph%elpa_first = .true.
    ph%elpa_started = .false.
+   ph%elpa_gpu_string = "gpu"
    ph%omm_n_lrow = UNSET
    ph%omm_n_elpa = 5
    ph%omm_flavor = 0

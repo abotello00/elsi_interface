@@ -102,3 +102,24 @@ subroutine elsi_get_chase_enabled(chase_enabled)
    chase_enabled = @ENABLE_CHASE_BOOL@
 
 end subroutine
+!>
+!! Return the GPU string to be used in the "set" method in ELPA
+!!
+subroutine elsi_get_elpa_gpu_string(gpu_string,status)
+
+   implicit none
+
+   character(len=*), intent(out) :: gpu_string !< GPU string for ELPA
+   integer, intent(out)          :: status
+
+   character(len=*), parameter :: compiled_gpu_string = "@ELSI_ELPA_GPU_STRING@"
+
+   if (len(gpu_string) >= len(compiled_gpu_string)) then
+      gpu_string = compiled_gpu_string
+      status = 0
+   else
+      status = -1
+      gpu_string = "----"
+   endif
+
+end subroutine

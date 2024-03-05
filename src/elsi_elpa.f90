@@ -108,10 +108,16 @@ subroutine elsi_init_elpa(ph,bh)
 
    character(len=*), parameter :: caller = "elsi_init_elpa"
 
+   external :: elsi_get_elpa_gpu_string
+
    if(.not. ph%elpa_started) then
+
       ierr = elpa_init(20180525)
 
       call elsi_check_err(bh,"ELPA initialization failed",ierr,caller)
+
+      call elsi_get_elpa_gpu_string(ph%elpa_gpu_string,ierr)
+      call elsi_check_err(bh,"ELPA GPU string initialization failed",ierr,caller)
 
       call MPI_Comm_split(bh%comm,bh%my_pcol,bh%my_prow,ph%elpa_comm_row,ierr)
 
@@ -1715,9 +1721,9 @@ subroutine elsi_elpa_setup(ph,bh,is_aux)
          call ph%elpa_aux%set("solver",2,ierr)
 
          if(ph%elpa_gpu == UNSET .or. ph%elpa_gpu == 0) then
-            call ph%elpa_aux%set("nvidia-gpu",0,ierr)
+            call ph%elpa_aux%set(trim(ph%elpa_gpu_string),0,ierr)
          else
-            call ph%elpa_aux%set("nvidia-gpu",1,ierr)
+            call ph%elpa_aux%set(trim(ph%elpa_gpu_string),1,ierr)
             call ph%elpa_aux%set("real_kernel",ELPA_2STAGE_REAL_GPU,ierr)
             call ph%elpa_aux%set("complex_kernel",ELPA_2STAGE_COMPLEX_GPU,ierr)
          end if
@@ -1725,9 +1731,9 @@ subroutine elsi_elpa_setup(ph,bh,is_aux)
          call ph%elpa_aux%set("solver",1,ierr)
 
          if(ph%elpa_gpu == UNSET .or. ph%elpa_gpu == 0) then
-            call ph%elpa_aux%set("nvidia-gpu",0,ierr)
+            call ph%elpa_aux%set(trim(ph%elpa_gpu_string),0,ierr)
          else
-            call ph%elpa_aux%set("nvidia-gpu",1,ierr)
+            call ph%elpa_aux%set(trim(ph%elpa_gpu_string),1,ierr)
          end if
       end if
    else
@@ -1771,7 +1777,7 @@ subroutine elsi_elpa_setup(ph,bh,is_aux)
       end if
 
       if(ph%elpa_gpu /= UNSET) then
-         call ph%elpa_solve%set("nvidia-gpu",ph%elpa_gpu,ierr)
+         call ph%elpa_solve%set(trim(ph%elpa_gpu_string),ph%elpa_gpu,ierr)
       end if
 
       if(ph%elpa_gpu == 1) then
