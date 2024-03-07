@@ -113,8 +113,9 @@ build.intel-shared:
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
     - cd $CI_JOB_NAME
-    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake -DBUILD_SHARED_LIBS=ON ..
+    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake -DBUILD_SHARED_LIBS=OFF ..
     - make -j4
+      #- cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake -DBUILD_SHARED_LIBS=ON ..
   artifacts:
     paths:
       - $CI_JOB_NAME/
