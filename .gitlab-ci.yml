@@ -304,7 +304,7 @@ test.intel-external:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd build.intel-debug
+    - cd build.intel-external
     - ctest --output-on-failure
   artifacts:
     when: always
