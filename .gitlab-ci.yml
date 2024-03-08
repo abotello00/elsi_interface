@@ -159,7 +159,7 @@ build.intel-external:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-ubuntu22-intel2023-gnu11-elsi-external:latest
+    name: uthpalaherath/ubuntu20-intel2022-elsi-external:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
@@ -298,7 +298,7 @@ test.intel-external:
   tags:
     - docker
   image:
-    name: uthpalaherath/elsi-gitlab-runner-ubuntu22-intel2023-gnu11-elsi-external:latest
+    name: uthpalaherath/ubuntu20-intel2022-elsi-external:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
