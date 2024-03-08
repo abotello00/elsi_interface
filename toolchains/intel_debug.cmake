@@ -5,7 +5,7 @@ SET(CMAKE_C_COMPILER "mpiicc" CACHE STRING "MPI C compiler")
 SET(CMAKE_CXX_COMPILER "mpiicpc" CACHE STRING "MPI C++ compiler")
 
 #SET(CMAKE_Fortran_FLAGS "-O3 -ip -fp-model precise -g -traceback -check bounds -check uninit -check pointers -fpe0 -warn all -init=snan,arrays -fopenmp" CACHE STRING "Fortran flags")
-SET(CMAKE_Fortran_FLAGS "-O3 -ip -fp-model precise -g -traceback -check bounds -check uninit -check pointers -fpe0 -init=snan,arrays" CACHE STRING "Fortran flags")
+SET(CMAKE_Fortran_FLAGS "-O3 -ip -fp-model precise" CACHE STRING "Fortran flags")
 SET(CMAKE_C_FLAGS "-O3 -ip -fp-model precise -std=c99" CACHE STRING "C flags")
 SET(CMAKE_CXX_FLAGS "-O3 -ip -fp-model precise -std=c++11" CACHE STRING "C++ flags")
 
