@@ -80,7 +80,7 @@ subroutine test_ev_real_den(comm,solver,h_file,s_file)
       else if(solver == 7) then
          write(*,"(2X,A)") "Now start testing  elsi_ev_real + MAGMA"
       else if(solver == 9) then
-         write(*,"(2X,A)") "Now start testing  elsi_ev_real + ChASE"         
+         write(*,"(2X,A)") "Now start testing  elsi_ev_real + ChASE"
       end if
       write(*,*)
    end if
@@ -158,6 +158,7 @@ subroutine test_ev_real_den(comm,solver,h_file,s_file)
    call elsi_set_mu_broaden_width(eh,1.0e-6_r8)
    call elsi_set_sips_n_elpa(eh,1)
    call elsi_set_chase_cholqr(eh, 0)
+   call elsi_set_chase_tol(eh, 1e-6_r8)
 
    inquire(file=file_name,exist=file_exist)
 
