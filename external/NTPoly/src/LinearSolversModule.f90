@@ -19,7 +19,8 @@ MODULE LinearSolversModule
        & FillMatrixIdentity, PrintMatrixInformation, MergeMatrixLocalBlocks
   USE SMatrixModule, ONLY : Matrix_lsr
   USE SolverParametersModule, ONLY : SolverParameters_t, PrintParameters, &
-       & DestructSolverParameters
+       & DestructSolverParameters, ConstructSolverParameters, &
+       & CopySolverParameters
   USE NTMPIMODULE
   IMPLICIT NONE
   PRIVATE
@@ -38,7 +39,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Parameters for the solver
     TYPE(SolverParameters_t), INTENT(IN), OPTIONAL :: solver_parameters_in
     !! Handling Optional Parameters
-    TYPE(SolverParameters_t) :: solver_parameters
+    TYPE(SolverParameters_t) :: params
     !! Local Variables
     TYPE(Matrix_ps) :: Identity
     TYPE(Matrix_ps) :: ABalanced
@@ -47,24 +48,24 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Matrix_ps) :: RMatT, PMatT
     TYPE(Matrix_ps) :: TempMat
     !! Temporary Variables
-    INTEGER :: outer_counter
+    INTEGER :: II
     REAL(NTREAL) :: norm_value
     TYPE(MatrixMemoryPool_p) :: pool
     REAL(NTREAL) :: top, bottom, new_top, step_size
 
     !! Optional Parameters
     IF (PRESENT(solver_parameters_in)) THEN
-       solver_parameters = solver_parameters_in
+       CALL CopySolverParameters(solver_parameters_in, params)
     ELSE
-       solver_parameters = SolverParameters_t()
+       CALL ConstructSolverParameters(params)
     END IF
 
     !! Print out parameters
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL WriteHeader("Linear Solver")
        CALL EnterSubLog
-       CALL WriteElement(key="Method", VALUE="CG")
-       CALL PrintParameters(solver_parameters)
+       CALL WriteElement(key = "Method", VALUE = "CG")
+       CALL PrintParameters(params)
     END IF
 
     !! Setup all the matrices
@@ -78,13 +79,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL ConstructEmptyMatrix(TempMat, AMat)
 
     !! Load Balancing Step
-    IF (solver_parameters%do_load_balancing) THEN
+    IF (params%do_load_balancing) THEN
        CALL PermuteMatrix(Identity, Identity, &
-            & solver_parameters%BalancePermutation, memorypool_in=pool)
+            & params%BalancePermutation, memorypool_in = pool)
        CALL PermuteMatrix(AMat, ABalanced, &
-            & solver_parameters%BalancePermutation, memorypool_in=pool)
+            & params%BalancePermutation, memorypool_in = pool)
        CALL PermuteMatrix(BMat, BBalanced, &
-            & solver_parameters%BalancePermutation, memorypool_in=pool)
+            & params%BalancePermutation, memorypool_in = pool)
     ELSE
        CALL CopyMatrix(AMat,ABalanced)
        CALL CopyMatrix(BMat,BBalanced)
@@ -94,77 +95,77 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL CopyMatrix(Identity, XMat)
     !! Compute residual
     CALL MatrixMultiply(ABalanced, Xmat, TempMat, &
-         & threshold_in=solver_parameters%threshold, memory_pool_in=pool)
+         & threshold_in = params%threshold, memory_pool_in = pool)
     CALL CopyMatrix(BBalanced,RMat)
     CALL IncrementMatrix(TempMat, RMat, -1.0_NTREAL)
-    CALL CopyMatrix(RMat,PMat)
+    CALL CopyMatrix(RMat, PMat)
 
     !! Iterate
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL WriteHeader("Iterations")
        CALL EnterSubLog
     END IF
-    norm_value = solver_parameters%converge_diff + 1.0_NTREAL
-    DO outer_counter = 1,solver_parameters%max_iterations
-       IF (solver_parameters%be_verbose .AND. outer_counter .GT. 1) THEN
-          CALL WriteListElement(key="Convergence", VALUE=norm_value)
+    norm_value = params%converge_diff + 1.0_NTREAL
+    DO II = 1, params%max_iterations
+       IF (params%be_verbose .AND. II .GT. 1) THEN
+          CALL WriteListElement(key = "Convergence", VALUE = norm_value)
        END IF
-       IF (norm_value .LE. solver_parameters%converge_diff) THEN
+       IF (norm_value .LE. params%converge_diff) THEN
           EXIT
        END IF
 
        !! Compute the Step Size
        CALL MatrixMultiply(ABalanced, PMat, QMat, &
-            & threshold_in=solver_parameters%threshold, memory_pool_in=pool)
+            & threshold_in = params%threshold, memory_pool_in = pool)
 
        CALL TransposeMatrix(RMat,RMatT)
        IF (RMatT%is_complex) THEN
           CALL ConjugateMatrix(RMatT)
        END IF
        CALL MatrixMultiply(RMatT, RMat, TempMat, &
-            & threshold_in=solver_parameters%threshold, memory_pool_in=pool)
+            & threshold_in = params%threshold, memory_pool_in = pool)
        CALL MatrixTrace(TempMat, top)
-       CALL TransposeMatrix(PMat,PMatT)
+       CALL TransposeMatrix(PMat, PMatT)
        IF (PMatT%is_complex) THEN
           CALL ConjugateMatrix(PMatT)
        END IF
        CALL MatrixMultiply(PMatT, QMat, TempMat, &
-            & threshold_in=solver_parameters%threshold, memory_pool_in=pool)
+            & threshold_in = params%threshold, memory_pool_in = pool)
        CALL MatrixTrace(TempMat, bottom)
-       step_size = top/bottom
+       step_size = top / bottom
 
        !! Update
-       CALL IncrementMatrix(PMat, XMat, alpha_in=step_size)
-       norm_value = ABS(step_size*MatrixNorm(PMat))
-       CALL IncrementMatrix(QMat, RMat, alpha_in=-1.0_NTREAL*step_size)
+       CALL IncrementMatrix(PMat, XMat, alpha_in = step_size)
+       norm_value = ABS(step_size * MatrixNorm(PMat))
+       CALL IncrementMatrix(QMat, RMat, alpha_in = -1.0_NTREAL * step_size)
 
        !! Update PMat
-       CALL TransposeMatrix(RMat,RMatT)
+       CALL TransposeMatrix(RMat, RMatT)
        IF (RMatT%is_complex) THEN
           CALL ConjugateMatrix(RMatT)
        END IF
        CALL MatrixMultiply(RMatT, RMat, TempMat, &
-            & threshold_in=solver_parameters%threshold, memory_pool_in=pool)
+            & threshold_in = params%threshold, memory_pool_in = pool)
        CALL MatrixTrace(TempMat, new_top)
        step_size = new_top / top
        CALL ScaleMatrix(PMat, step_size)
        CALL IncrementMatrix(RMat, PMat)
 
     END DO
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL ExitSubLog
-       CALL WriteElement(key="Total_Iterations", VALUE=outer_counter-1)
+       CALL WriteElement(key = "Total Iterations", VALUE = II - 1)
        CALL PrintMatrixInformation(XMat)
     END IF
 
     !! Undo Load Balancing Step
-    IF (solver_parameters%do_load_balancing) THEN
-       CALL UndoPermuteMatrix(XMat,XMat, &
-            & solver_parameters%BalancePermutation, memorypool_in=pool)
+    IF (params%do_load_balancing) THEN
+       CALL UndoPermuteMatrix(XMat, XMat, &
+            & params%BalancePermutation, memorypool_in = pool)
     END IF
 
     !! Cleanup
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL ExitSubLog
     END IF
     CALL DestructMatrix(TempMat)
@@ -175,7 +176,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL DestructMatrix(ABalanced)
     CALL DestructMatrix(BBalanced)
     CALL DestructMatrixMemoryPool(pool)
-    CALL DestructSolverParameters(solver_parameters)
+    CALL DestructSolverParameters(params)
   END SUBROUTINE CGSolver
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Compute The Cholesky Decomposition of a Hermitian Positive Definite matrix.
@@ -188,7 +189,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Parameters for the solver
     TYPE(SolverParameters_t), INTENT(IN), OPTIONAL :: solver_parameters_in
     !! Handling Optional Parameters
-    TYPE(SolverParameters_t) :: solver_parameters
+    TYPE(SolverParameters_t) :: params
     !! Local Variables
     TYPE(Matrix_lsr) :: sparse_a
     TYPE(Matrix_ldr) :: dense_a
@@ -208,17 +209,17 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Optional Parameters
     IF (PRESENT(solver_parameters_in)) THEN
-       solver_parameters = solver_parameters_in
+       CALL CopySolverParameters(solver_parameters_in, params)
     ELSE
-       solver_parameters = SolverParameters_t()
+       CALL ConstructSolverParameters(params)
     END IF
 
     !! Print out parameters
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL WriteHeader("Linear Solver")
        CALL EnterSubLog
-       CALL WriteElement(key="Method", VALUE="Cholesky Decomposition")
-       CALL PrintParameters(solver_parameters)
+       CALL WriteElement(key = "Method", VALUE = "Cholesky Decomposition")
+       CALL PrintParameters(params)
     END IF
 
     CALL ConstructEmptyMatrix(LMat, AMat)
@@ -230,7 +231,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Root Lookups
     ALLOCATE(col_root_lookup(AMat%logical_matrix_dimension))
     CALL ConstructRankLookup(AMat, LMat%process_grid, &
-         & col_root_lookup=col_root_lookup)
+         & col_root_lookup = col_root_lookup)
 
     !! Allocate space for L
     ALLOCATE(values_per_column_l(sparse_a%columns))
@@ -258,7 +259,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              local_row = JJ - AMat%start_row + 1
              Aval = dense_a%DATA(local_row, local_JJ)
              insert_value = SQRT(Aval - dot_values(1))
-             inverse_factor = 1.0_NTREAL/insert_value
+             inverse_factor = 1.0_NTREAL / insert_value
              !! Insert
              CALL AppendToVector(values_per_column_l(local_JJ), &
                   & index_l(:,local_JJ), values_l(:, local_JJ), local_row, &
@@ -274,8 +275,8 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        !! Broadcast column JJ, and Inverse Factor
        CALL BroadcastVector(recv_num_values, recv_index, recv_values, &
             & col_root, LMat%process_grid%row_comm)
-       CALL MPI_Allreduce(MPI_IN_PLACE, inverse_factor, 1, MPINTREAL, MPI_SUM, &
-            & LMat%process_grid%within_slice_comm, ierr)
+       CALL MPI_Allreduce(MPI_IN_PLACE, inverse_factor, 1, MPINTREAL, &
+            & MPI_SUM, LMat%process_grid%within_slice_comm, ierr)
 
        !! Loop over other columns
        CALL DotAllHelper(recv_num_values, recv_index, recv_values, &
@@ -287,7 +288,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              local_row = JJ - AMat%start_row + 1
              Aval = dense_a%DATA(local_row, local_II)
              insert_value = inverse_factor * (Aval - dot_values(local_II))
-             IF (ABS(insert_value) .GT. solver_parameters%threshold) THEN
+             IF (ABS(insert_value) .GT. params%threshold) THEN
                 CALL AppendToVector(values_per_column_l(local_II), &
                      & index_l(:,local_II), values_l(:, local_II), &
                      & local_row, insert_value)
@@ -300,7 +301,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL UnpackCholesky(values_per_column_l, index_l, values_l, LMat)
 
     !! Cleanup
-    IF (solver_parameters%be_verbose) THEN
+    IF (params%be_verbose) THEN
        CALL PrintMatrixInformation(LMat)
        CALL ExitSubLog
     END IF
@@ -313,6 +314,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     DEALLOCATE(dot_values)
     DEALLOCATE(col_root_lookup)
     CALL DestructMatrix(sparse_a)
+    CALL DestructSolverParameters(params)
   END SUBROUTINE CholeskyDecomposition
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 END MODULE LinearSolversModule

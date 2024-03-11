@@ -10,7 +10,7 @@ MODULE CholeskyModule
        & DestructMatrix
   USE SVectorModule, ONLY : DotSparseVectors
   USE TripletListModule, ONLY : TripletList_r, AppendToTripletList, &
-       & DestructTripletList
+       & DestructTripletList, ConstructTripletList
   USE TripletModule, ONLY : Triplet_r
   USE NTMPIModule
   IMPLICIT NONE
@@ -123,14 +123,14 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           fill_counter = fill_counter + 1
        END IF
     END DO
-    diags_per_proc(process_grid%my_row+1) = fill_counter
+    diags_per_proc(process_grid%my_row + 1) = fill_counter
 
     !! Duplicate the diagonal entries along the process column (across rows)
     CALL MPI_Allgather(MPI_IN_PLACE, 1, MPINTINTEGER, diags_per_proc, 1, &
          & MPINTINTEGER, process_grid%column_comm, ierr)
     diag_displ(1) = 0
     DO II = 2, process_grid%num_process_rows
-       diag_displ(II) = diag_displ(II-1) + diags_per_proc(II-1)
+       diag_displ(II) = diag_displ(II - 1) + diags_per_proc(II - 1)
     END DO
     CALL MPI_Allgatherv(MPI_IN_PLACE, diags_per_proc(process_grid%my_row+1), &
          & MPINTREAL, diag, diags_per_proc, diag_displ, MPINTREAL, &
@@ -190,17 +190,17 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Variables
     INTEGER :: err
-    INTEGER :: counter
+    INTEGER :: II
     INTEGER :: inner_len_j
 
     !! Local Dot
     !$omp parallel private(inner_len_j)
     !$omp do
-    DO counter = 1, SIZE(num_values_j)
-       inner_len_j = num_values_j(counter)
-       out_values(counter) = DotSparseVectors(indices_i(:num_values_i), &
-            & values_i(:num_values_i), indices_j(:inner_len_j, counter), &
-            & values_j(:inner_len_j, counter))
+    DO II = 1, SIZE(num_values_j)
+       inner_len_j = num_values_j(II)
+       out_values(II) = DotSparseVectors(indices_i(:num_values_i), &
+            & values_i(:num_values_i), indices_j(:inner_len_j, II), &
+            & values_j(:inner_len_j, II))
     END DO
     !$omp end do
     !$omp end parallel
@@ -241,17 +241,17 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Variables
     INTEGER :: err
-    INTEGER :: counter
+    INTEGER :: II
     INTEGER :: inner_len_j
     INTEGER :: local_pi_i
 
     !! Local Dot
     !$omp parallel private(inner_len_j, local_pi_i)
     !$omp do
-    DO counter = 1, num_local_pivots
-       local_pi_i = pivot_vector(counter)
+    DO II = 1, num_local_pivots
+       local_pi_i = pivot_vector(II)
        inner_len_j = num_values_j(local_pi_i)
-       out_values(counter) = DotSparseVectors(indices_i(:num_values_i), &
+       out_values(II) = DotSparseVectors(indices_i(:num_values_i), &
             & values_i(:num_values_i), indices_j(:inner_len_j, local_pi_i), &
             & values_j(:inner_len_j, local_pi_i))
     END DO
@@ -277,8 +277,8 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     CALL TransposeMatrix(local_matrix, local_matrixT)
-    CALL ReduceAndComposeMatrix(local_matrixT, column_matrix, &
-         & process_grid%column_comm)
+    CALL ReduceAndComposeMatrix(local_matrixT, process_grid%column_comm, &
+         & column_matrix)
 
     CALL DestructMatrix(local_matrixT)
   END SUBROUTINE GatherMatrixColumn_r
@@ -370,15 +370,15 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     local_columns = LMat%local_columns
 
-    local_triplets = TripletList_r()
+    CALL ConstructTripletList(local_triplets)
     IF (LMat%process_grid%my_slice .EQ. 0) THEN
        DO JJ = 1, local_columns
           !! note transpose
           temp%index_row = JJ + LMat%start_column - 1
           DO II = 1, values_per_column(JJ)
              !! note transpose
-             temp%index_column = INDEX(II,JJ) + LMat%start_row - 1
-             temp%point_value = values(II,JJ)
+             temp%index_column = INDEX(II, JJ) + LMat%start_row - 1
+             temp%point_value = values(II, JJ)
              CALL AppendToTripletList(local_triplets, temp)
           END DO
        END DO

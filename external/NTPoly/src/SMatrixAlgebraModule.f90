@@ -84,7 +84,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     REAL(NTREAL), INTENT(IN) :: constant
 
 
-    matA%values = constant * matA%values
+    matA%values(:) = constant * matA%values
   END SUBROUTINE ScaleMatrix_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Will scale a sparse matrix by a constant.
@@ -95,7 +95,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     REAL(NTREAL), INTENT(IN) :: constant
 
 
-    matA%values = constant * matA%values
+    matA%values(:) = constant * matA%values
   END SUBROUTINE ScaleMatrix_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Will scale a sparse matrix by a constant.
@@ -106,7 +106,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     COMPLEX(NTCOMPLEX), INTENT(IN) :: constant
 
 
-    matA%values = constant * matA%values
+    matA%values(:) = constant * matA%values
   END SUBROUTINE ScaleMatrix_lsc_c
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Matrix B = alpha*Matrix A + Matrix B (AXPY).
@@ -116,18 +116,18 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Matrix_lsr), INTENT(IN)  :: matA
     !> Matrix B.
     TYPE(Matrix_lsr), INTENT(INOUT) :: matB
-    !> Multiplier (default=1.0).
+    !> Multiplier (default = 1.0).
     REAL(NTREAL), OPTIONAL, INTENT(IN) :: alpha_in
-    !> For flushing values to zero (default=0).
+    !> For flushing values to zero (default = 0).
     REAL(NTREAL), OPTIONAL, INTENT(IN) :: threshold_in
     !! Local Variables
     TYPE(Matrix_lsr) :: matC
 
 
     !! Counter Variables
-    INTEGER :: outer_counter
+    INTEGER :: II
     INTEGER :: inner_a, inner_b
-    INTEGER :: total_counter_a, total_counter_b, total_counter_c
+    INTEGER :: total_a, total_b, total_c
     !! Temporary Variables
     INTEGER :: indices_added_into_c
     REAL(NTREAL) :: alpha
@@ -146,51 +146,48 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        threshold = threshold_in
     END IF
 
-    size_of_a = matA%outer_index(matA%columns+1)
+    size_of_a = matA%outer_index(matA%columns + 1)
 
     !! Allocate sufficient space for matC
     CALL ConstructEmptyMatrix(matC, matA%rows, matA%columns)
     IF (ALLOCATED(matB%values)) THEN
-       size_of_b = matB%outer_index(matB%columns+1)
-       ALLOCATE(matC%inner_index(size_of_a+size_of_b))
-       ALLOCATE(matC%values(size_of_a+size_of_b))
+       size_of_b = matB%outer_index(matB%columns + 1)
+       ALLOCATE(matC%inner_index(size_of_a + size_of_b))
+       ALLOCATE(matC%values(size_of_a + size_of_b))
     ELSE
        ALLOCATE(matC%inner_index(size_of_a))
        ALLOCATE(matC%values(size_of_a))
     END IF
 
     !! Perform loops
-    total_counter_a = 1
-    total_counter_b = 1
-    total_counter_c = 1
-    DO outer_counter = 1, matA%columns
+    total_a = 1
+    total_b = 1
+    total_c = 1
+    DO II = 1, matA%columns
        !! Inner counters
-       inner_a = matA%outer_index(outer_counter+1) - &
-            & matA%outer_index(outer_counter)
-       inner_b = matB%outer_index(outer_counter+1) - &
-            & matB%outer_index(outer_counter)
+       inner_a = matA%outer_index(II + 1) - matA%outer_index(II)
+       inner_b = matB%outer_index(II+1) - matB%outer_index(II)
        CALL AddSparseVectors(&
-            matA%inner_index(total_counter_a:total_counter_a+inner_a-1),&
-            matA%values(total_counter_a:total_counter_a+inner_a-1),&
-            matB%inner_index(total_counter_b:total_counter_b+inner_b-1),&
-            matB%values(total_counter_b:total_counter_b+inner_b-1),&
-            matC%inner_index(total_counter_c:),matC%values(total_counter_c:),&
+            matA%inner_index(total_a:total_a + inner_a - 1), &
+            matA%values(total_a:total_a + inner_a - 1), &
+            matB%inner_index(total_b:total_b + inner_b - 1), &
+            matB%values(total_b:total_b + inner_b - 1), &
+            matC%inner_index(total_c:), matC%values(total_c:), &
             indices_added_into_c, alpha, threshold)
-       matC%outer_index(outer_counter+1) = matC%outer_index(outer_counter)+&
-            & indices_added_into_c
-       total_counter_a = total_counter_a + inner_a
-       total_counter_b = total_counter_b + inner_b
-       total_counter_c = total_counter_c + indices_added_into_c
+       matC%outer_index(II + 1) = matC%outer_index(II) + indices_added_into_c
+       total_a = total_a + inner_a
+       total_b = total_b + inner_b
+       total_c = total_c + indices_added_into_c
     END DO
 
     !! Cleanup
     CALL DestructMatrix(matB)
     CALL ConstructEmptyMatrix(matB, matC%rows, matC%columns)
-    matB%outer_index = matC%outer_index
-    ALLOCATE(matB%inner_index(matC%outer_index(matC%columns+1)))
-    ALLOCATE(matB%values(matC%outer_index(matC%columns+1)))
-    matB%inner_index = matC%inner_index(:matC%outer_index(matC%columns+1))
-    matB%values = matC%values(:matC%outer_index(matC%columns+1))
+    matB%outer_index(:) = matC%outer_index
+    ALLOCATE(matB%inner_index(matC%outer_index(matC%columns + 1)))
+    ALLOCATE(matB%values(matC%outer_index(matC%columns + 1)))
+    matB%inner_index(:) = matC%inner_index(:matC%outer_index(matC%columns + 1))
+    matB%values(:) = matC%values(:matC%outer_index(matC%columns + 1))
     CALL DestructMatrix(matC)
   END SUBROUTINE IncrementMatrix_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -201,18 +198,18 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Matrix_lsc), INTENT(IN)  :: matA
     !> Matrix B.
     TYPE(Matrix_lsc), INTENT(INOUT) :: matB
-    !> Multiplier (default=1.0).
+    !> Multiplier (default = 1.0).
     REAL(NTREAL), OPTIONAL, INTENT(IN) :: alpha_in
-    !> For flushing values to zero (default=0).
+    !> For flushing values to zero (default = 0).
     REAL(NTREAL), OPTIONAL, INTENT(IN) :: threshold_in
     !! Local Variables
     TYPE(Matrix_lsc) :: matC
 
 
     !! Counter Variables
-    INTEGER :: outer_counter
+    INTEGER :: II
     INTEGER :: inner_a, inner_b
-    INTEGER :: total_counter_a, total_counter_b, total_counter_c
+    INTEGER :: total_a, total_b, total_c
     !! Temporary Variables
     INTEGER :: indices_added_into_c
     REAL(NTREAL) :: alpha
@@ -231,51 +228,48 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        threshold = threshold_in
     END IF
 
-    size_of_a = matA%outer_index(matA%columns+1)
+    size_of_a = matA%outer_index(matA%columns + 1)
 
     !! Allocate sufficient space for matC
     CALL ConstructEmptyMatrix(matC, matA%rows, matA%columns)
     IF (ALLOCATED(matB%values)) THEN
-       size_of_b = matB%outer_index(matB%columns+1)
-       ALLOCATE(matC%inner_index(size_of_a+size_of_b))
-       ALLOCATE(matC%values(size_of_a+size_of_b))
+       size_of_b = matB%outer_index(matB%columns + 1)
+       ALLOCATE(matC%inner_index(size_of_a + size_of_b))
+       ALLOCATE(matC%values(size_of_a + size_of_b))
     ELSE
        ALLOCATE(matC%inner_index(size_of_a))
        ALLOCATE(matC%values(size_of_a))
     END IF
 
     !! Perform loops
-    total_counter_a = 1
-    total_counter_b = 1
-    total_counter_c = 1
-    DO outer_counter = 1, matA%columns
+    total_a = 1
+    total_b = 1
+    total_c = 1
+    DO II = 1, matA%columns
        !! Inner counters
-       inner_a = matA%outer_index(outer_counter+1) - &
-            & matA%outer_index(outer_counter)
-       inner_b = matB%outer_index(outer_counter+1) - &
-            & matB%outer_index(outer_counter)
+       inner_a = matA%outer_index(II + 1) - matA%outer_index(II)
+       inner_b = matB%outer_index(II+1) - matB%outer_index(II)
        CALL AddSparseVectors(&
-            matA%inner_index(total_counter_a:total_counter_a+inner_a-1),&
-            matA%values(total_counter_a:total_counter_a+inner_a-1),&
-            matB%inner_index(total_counter_b:total_counter_b+inner_b-1),&
-            matB%values(total_counter_b:total_counter_b+inner_b-1),&
-            matC%inner_index(total_counter_c:),matC%values(total_counter_c:),&
+            matA%inner_index(total_a:total_a + inner_a - 1), &
+            matA%values(total_a:total_a + inner_a - 1), &
+            matB%inner_index(total_b:total_b + inner_b - 1), &
+            matB%values(total_b:total_b + inner_b - 1), &
+            matC%inner_index(total_c:), matC%values(total_c:), &
             indices_added_into_c, alpha, threshold)
-       matC%outer_index(outer_counter+1) = matC%outer_index(outer_counter)+&
-            & indices_added_into_c
-       total_counter_a = total_counter_a + inner_a
-       total_counter_b = total_counter_b + inner_b
-       total_counter_c = total_counter_c + indices_added_into_c
+       matC%outer_index(II + 1) = matC%outer_index(II) + indices_added_into_c
+       total_a = total_a + inner_a
+       total_b = total_b + inner_b
+       total_c = total_c + indices_added_into_c
     END DO
 
     !! Cleanup
     CALL DestructMatrix(matB)
     CALL ConstructEmptyMatrix(matB, matC%rows, matC%columns)
-    matB%outer_index = matC%outer_index
-    ALLOCATE(matB%inner_index(matC%outer_index(matC%columns+1)))
-    ALLOCATE(matB%values(matC%outer_index(matC%columns+1)))
-    matB%inner_index = matC%inner_index(:matC%outer_index(matC%columns+1))
-    matB%values = matC%values(:matC%outer_index(matC%columns+1))
+    matB%outer_index(:) = matC%outer_index
+    ALLOCATE(matB%inner_index(matC%outer_index(matC%columns + 1)))
+    ALLOCATE(matB%values(matC%outer_index(matC%columns + 1)))
+    matB%inner_index(:) = matC%inner_index(:matC%outer_index(matC%columns + 1))
+    matB%values(:) = matC%values(:matC%outer_index(matC%columns + 1))
     CALL DestructMatrix(matC)
   END SUBROUTINE IncrementMatrix_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -293,53 +287,51 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Counter Variables
-    INTEGER :: outer_counter
+    INTEGER :: II
     INTEGER :: inner_a, inner_b
-    INTEGER :: total_counter_a, total_counter_b, total_counter_c
+    INTEGER :: total_a, total_b, total_c
     !! Temporary Variables
     INTEGER :: indices_added_into_c
     INTEGER :: size_of_a, size_of_b
 
     CALL ConstructEmptyMatrix(TempMat, matA%rows, matA%columns)
-    size_of_a = matA%outer_index(matA%columns+1)
-    size_of_b = matB%outer_index(matB%columns+1)
-    ALLOCATE(TempMat%inner_index(MIN(size_of_a,size_of_b)))
-    ALLOCATE(TempMat%values(MIN(size_of_a,size_of_b)))
+    size_of_a = matA%outer_index(matA%columns + 1)
+    size_of_b = matB%outer_index(matB%columns + 1)
+    ALLOCATE(TempMat%inner_index(MIN(size_of_a, size_of_b)))
+    ALLOCATE(TempMat%values(MIN(size_of_a, size_of_b)))
 
     !! Perform loops
-    total_counter_a = 1
-    total_counter_b = 1
-    total_counter_c = 1
-    DO outer_counter = 1, matA%columns
+    total_a = 1
+    total_b = 1
+    total_c = 1
+    DO II = 1, matA%columns
        !! Inner counters
-       inner_a = matA%outer_index(outer_counter+1) - &
-            & matA%outer_index(outer_counter)
-       inner_b = matB%outer_index(outer_counter+1) - &
-            & matB%outer_index(outer_counter)
+       inner_a = matA%outer_index(II + 1) - matA%outer_index(II)
+       inner_b = matB%outer_index(II + 1) - matB%outer_index(II)
        CALL PairwiseMultiplyVectors(&
-            matA%inner_index(total_counter_a:total_counter_a+inner_a-1),&
-            matA%values(total_counter_a:total_counter_a+inner_a-1),&
-            matB%inner_index(total_counter_b:total_counter_b+inner_b-1),&
-            matB%values(total_counter_b:total_counter_b+inner_b-1),&
-            TempMat%inner_index(total_counter_c:),&
-            TempMat%values(total_counter_c:),&
+            matA%inner_index(total_a:total_a + inner_a - 1), &
+            matA%values(total_a:total_a + inner_a - 1), &
+            matB%inner_index(total_b:total_b + inner_b - 1), &
+            matB%values(total_b:total_b + inner_b - 1), &
+            TempMat%inner_index(total_c:), &
+            TempMat%values(total_c:), &
             indices_added_into_c)
-       TempMat%outer_index(outer_counter+1) = TempMat%outer_index(outer_counter)+&
-            & indices_added_into_c
-       total_counter_a = total_counter_a + inner_a
-       total_counter_b = total_counter_b + inner_b
-       total_counter_c = total_counter_c + indices_added_into_c
+       TempMat%outer_index(II + 1) = &
+            & TempMat%outer_index(II) + indices_added_into_c
+       total_a = total_a + inner_a
+       total_b = total_b + inner_b
+       total_c = total_c + indices_added_into_c
     END DO
 
     !! Cleanup
     CALL DestructMatrix(matC)
     CALL ConstructEmptyMatrix(matC, TempMat%rows, TempMat%columns)
-    matC%outer_index = TempMat%outer_index
+    matC%outer_index(:) = TempMat%outer_index
     ALLOCATE(matC%inner_index(TempMat%outer_index(TempMat%columns+1)))
     ALLOCATE(matC%values(TempMat%outer_index(TempMat%columns+1)))
-    matC%inner_index = TempMat%inner_index(&
+    matC%inner_index(:) = TempMat%inner_index(&
          & :TempMat%outer_index(TempMat%columns+1))
-    matC%values = TempMat%values(:TempMat%outer_index(TempMat%columns+1))
+    matC%values(:) = TempMat%values(:TempMat%outer_index(TempMat%columns+1))
     CALL DestructMatrix(TempMat)
   END SUBROUTINE PairwiseMultiplyMatrix_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -357,53 +349,51 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Counter Variables
-    INTEGER :: outer_counter
+    INTEGER :: II
     INTEGER :: inner_a, inner_b
-    INTEGER :: total_counter_a, total_counter_b, total_counter_c
+    INTEGER :: total_a, total_b, total_c
     !! Temporary Variables
     INTEGER :: indices_added_into_c
     INTEGER :: size_of_a, size_of_b
 
     CALL ConstructEmptyMatrix(TempMat, matA%rows, matA%columns)
-    size_of_a = matA%outer_index(matA%columns+1)
-    size_of_b = matB%outer_index(matB%columns+1)
-    ALLOCATE(TempMat%inner_index(MIN(size_of_a,size_of_b)))
-    ALLOCATE(TempMat%values(MIN(size_of_a,size_of_b)))
+    size_of_a = matA%outer_index(matA%columns + 1)
+    size_of_b = matB%outer_index(matB%columns + 1)
+    ALLOCATE(TempMat%inner_index(MIN(size_of_a, size_of_b)))
+    ALLOCATE(TempMat%values(MIN(size_of_a, size_of_b)))
 
     !! Perform loops
-    total_counter_a = 1
-    total_counter_b = 1
-    total_counter_c = 1
-    DO outer_counter = 1, matA%columns
+    total_a = 1
+    total_b = 1
+    total_c = 1
+    DO II = 1, matA%columns
        !! Inner counters
-       inner_a = matA%outer_index(outer_counter+1) - &
-            & matA%outer_index(outer_counter)
-       inner_b = matB%outer_index(outer_counter+1) - &
-            & matB%outer_index(outer_counter)
+       inner_a = matA%outer_index(II + 1) - matA%outer_index(II)
+       inner_b = matB%outer_index(II + 1) - matB%outer_index(II)
        CALL PairwiseMultiplyVectors(&
-            matA%inner_index(total_counter_a:total_counter_a+inner_a-1),&
-            matA%values(total_counter_a:total_counter_a+inner_a-1),&
-            matB%inner_index(total_counter_b:total_counter_b+inner_b-1),&
-            matB%values(total_counter_b:total_counter_b+inner_b-1),&
-            TempMat%inner_index(total_counter_c:),&
-            TempMat%values(total_counter_c:),&
+            matA%inner_index(total_a:total_a + inner_a - 1), &
+            matA%values(total_a:total_a + inner_a - 1), &
+            matB%inner_index(total_b:total_b + inner_b - 1), &
+            matB%values(total_b:total_b + inner_b - 1), &
+            TempMat%inner_index(total_c:), &
+            TempMat%values(total_c:), &
             indices_added_into_c)
-       TempMat%outer_index(outer_counter+1) = TempMat%outer_index(outer_counter)+&
-            & indices_added_into_c
-       total_counter_a = total_counter_a + inner_a
-       total_counter_b = total_counter_b + inner_b
-       total_counter_c = total_counter_c + indices_added_into_c
+       TempMat%outer_index(II + 1) = &
+            & TempMat%outer_index(II) + indices_added_into_c
+       total_a = total_a + inner_a
+       total_b = total_b + inner_b
+       total_c = total_c + indices_added_into_c
     END DO
 
     !! Cleanup
     CALL DestructMatrix(matC)
     CALL ConstructEmptyMatrix(matC, TempMat%rows, TempMat%columns)
-    matC%outer_index = TempMat%outer_index
+    matC%outer_index(:) = TempMat%outer_index
     ALLOCATE(matC%inner_index(TempMat%outer_index(TempMat%columns+1)))
     ALLOCATE(matC%values(TempMat%outer_index(TempMat%columns+1)))
-    matC%inner_index = TempMat%inner_index(&
+    matC%inner_index(:) = TempMat%inner_index(&
          & :TempMat%outer_index(TempMat%columns+1))
-    matC%values = TempMat%values(:TempMat%outer_index(TempMat%columns+1))
+    matC%values(:) = TempMat%values(:TempMat%outer_index(TempMat%columns+1))
     CALL DestructMatrix(TempMat)
   END SUBROUTINE PairwiseMultiplyMatrix_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -418,7 +408,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Local Variables
     TYPE(Matrix_lsr) :: matC
 
-    CALL PairwiseMultiplyMatrix(matA,matB,matC)
+    CALL PairwiseMultiplyMatrix(matA, matB, matC)
 
     CALL MatrixGrandSum(matC, product)
     CALL DestructMatrix(matC)
@@ -529,9 +519,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     END IF
 
     !! Initialization of Memory
-    sparsity_a = DBLE(SIZE(matA%values))/(matA%rows*matA%columns)
-    sparsity_b = DBLE(SIZE(matB%values))/(matB%rows*matB%columns)
-    sparsity_estimate = 4*MAX(sparsity_a,sparsity_b)
+    sparsity_a = DBLE(SIZE(matA%values)) / (matA%rows * matA%columns)
+    sparsity_b = DBLE(SIZE(matB%values)) / (matB%rows * matB%columns)
+    sparsity_estimate = 4*MAX(sparsity_a, sparsity_b)
     IF (sparsity_estimate > 1.0) THEN
        sparsity_estimate = 1.0
     ELSE IF (sparsity_estimate < 1e-8) THEN
@@ -571,13 +561,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Handle the add part of GEMM
     IF (PRESENT(beta_in)) THEN
        IF (ABS(beta_in) .GT. 0) THEN
-          CALL ScaleMatrix(matC,beta)
-          CALL IncrementMatrix(matAB,matC)
+          CALL ScaleMatrix(matC, beta)
+          CALL IncrementMatrix(matAB, matC)
        ELSE
-          CALL CopyMatrix(matAB,matC)
+          CALL CopyMatrix(matAB, matC)
        END IF
     ELSE
-       CALL CopyMatrix(matAB,matC)
+       CALL CopyMatrix(matAB, matC)
     END IF
 
     CALL DestructMatrix(matAB)
@@ -665,9 +655,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     END IF
 
     !! Initialization of Memory
-    sparsity_a = DBLE(SIZE(matA%values))/(matA%rows*matA%columns)
-    sparsity_b = DBLE(SIZE(matB%values))/(matB%rows*matB%columns)
-    sparsity_estimate = 4*MAX(sparsity_a,sparsity_b)
+    sparsity_a = DBLE(SIZE(matA%values)) / (matA%rows * matA%columns)
+    sparsity_b = DBLE(SIZE(matB%values)) / (matB%rows * matB%columns)
+    sparsity_estimate = 4*MAX(sparsity_a, sparsity_b)
     IF (sparsity_estimate > 1.0) THEN
        sparsity_estimate = 1.0
     ELSE IF (sparsity_estimate < 1e-8) THEN
@@ -707,13 +697,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Handle the add part of GEMM
     IF (PRESENT(beta_in)) THEN
        IF (ABS(beta_in) .GT. 0) THEN
-          CALL ScaleMatrix(matC,beta)
-          CALL IncrementMatrix(matAB,matC)
+          CALL ScaleMatrix(matC, beta)
+          CALL IncrementMatrix(matAB, matC)
        ELSE
-          CALL CopyMatrix(matAB,matC)
+          CALL CopyMatrix(matAB, matC)
        END IF
     ELSE
-       CALL CopyMatrix(matAB,matC)
+       CALL CopyMatrix(matAB, matC)
     END IF
 
     CALL DestructMatrix(matAB)
@@ -731,21 +721,18 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Local Data
-    INTEGER :: outer_counter, inner_counter
+    INTEGER :: II, JJ
     INTEGER :: elements_per_inner
 
     !! Allocate Space For Result
     norm_per_column = 0
 
     !! Iterate Over Local Data
-    DO outer_counter = 1, this%columns
-       elements_per_inner = this%outer_index(outer_counter+1) - &
-            & this%outer_index(outer_counter)
-       DO inner_counter = 1, elements_per_inner
-          temp_value = this%values(this%outer_index(outer_counter)+ &
-               & inner_counter)
-          norm_per_column(outer_counter) = norm_per_column(outer_counter) + &
-               & ABS(temp_value)
+    DO II = 1, this%columns
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
+       DO JJ = 1, elements_per_inner
+          temp_value = this%values(this%outer_index(II) + JJ)
+          norm_per_column(II) = norm_per_column(II) + ABS(temp_value)
        END DO
     END DO
   END SUBROUTINE MatrixColumnNorm_lsr
@@ -761,21 +748,18 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Local Data
-    INTEGER :: outer_counter, inner_counter
+    INTEGER :: II, JJ
     INTEGER :: elements_per_inner
 
     !! Allocate Space For Result
     norm_per_column = 0
 
     !! Iterate Over Local Data
-    DO outer_counter = 1, this%columns
-       elements_per_inner = this%outer_index(outer_counter+1) - &
-            & this%outer_index(outer_counter)
-       DO inner_counter = 1, elements_per_inner
-          temp_value = this%values(this%outer_index(outer_counter)+ &
-               & inner_counter)
-          norm_per_column(outer_counter) = norm_per_column(outer_counter) + &
-               & ABS(temp_value)
+    DO II = 1, this%columns
+       elements_per_inner = this%outer_index(II + 1) - this%outer_index(II)
+       DO JJ = 1, elements_per_inner
+          temp_value = this%values(this%outer_index(II) + JJ)
+          norm_per_column(II) = norm_per_column(II) + ABS(temp_value)
        END DO
     END DO
   END SUBROUTINE MatrixColumnNorm_lsc
@@ -790,7 +774,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     REAL(NTREAL), DIMENSION(this%columns) :: column
 
 
-    CALL MatrixColumnNorm(this,column)
+    CALL MatrixColumnNorm(this, column)
     norm = MAXVAL(column)
 
   END FUNCTION MatrixNorm_lsr
@@ -805,7 +789,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     REAL(NTREAL), DIMENSION(this%columns) :: column
 
 
-    CALL MatrixColumnNorm(this,column)
+    CALL MatrixColumnNorm(this, column)
     norm = MAXVAL(column)
 
   END FUNCTION MatrixNorm_lsc
@@ -859,10 +843,10 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Block A and B
     IF (.NOT. IsATransposed) THEN
-       CALL TransposeMatrix(matA,matAT)
+       CALL TransposeMatrix(matA, matAT)
     END IF
     IF (.NOT. IsBTransposed) THEN
-       CALL TransposeMatrix(matB,matBT)
+       CALL TransposeMatrix(matB, matBT)
     END IF
 
     IF (IsATransposed .AND. IsBTransposed) THEN
@@ -905,10 +889,10 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Block A and B
     IF (.NOT. IsATransposed) THEN
-       CALL TransposeMatrix(matA,matAT)
+       CALL TransposeMatrix(matA, matAT)
     END IF
     IF (.NOT. IsBTransposed) THEN
-       CALL TransposeMatrix(matB,matBT)
+       CALL TransposeMatrix(matB, matBT)
     END IF
 
     IF (IsATransposed .AND. IsBTransposed) THEN
@@ -959,7 +943,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Convert Back
     CALL ConstructMatrixSFromD(DenseC, matC, threshold)
-    CALL ScaleMatrix(matC,alpha)
+    CALL ScaleMatrix(matC, alpha)
 
     !! Cleanup
     CALL DestructMatrix(DenseA)
@@ -1000,7 +984,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Convert Back
     CALL ConstructMatrixSFromD(DenseC, matC, threshold)
-    CALL ScaleMatrix(matC,alpha)
+    CALL ScaleMatrix(matC, alpha)
 
     !! Cleanup
     CALL DestructMatrix(DenseA)
@@ -1017,49 +1001,42 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Memory pool to multiply into.
     TYPE(MatrixMemoryPool_lr), INTENT(INOUT) :: memorypool
     !! Temp Variables
-    REAL(NTREAL) :: temp_value_a, temp_value_b, temp_value_c
+    REAL(NTREAL) :: val_a, val_b, val_c
 
 
-    INTEGER :: temp_inserted_values
-    INTEGER :: temp_index_a, temp_index_b
-    INTEGER :: elements_per_inner_a
-    INTEGER :: elements_per_inner_b
+    INTEGER :: inserted_vals
+    INTEGER :: idx_a, idx_b, idx_hash
+    INTEGER :: elements_per_inner_a, elements_per_inner_b
     LOGICAL :: is_set
     !! Counters
-    INTEGER :: outer_counter, inner_counter_a, inner_counter_b
+    INTEGER :: II, AA, BB
 
     !! Multiply
-    DO outer_counter = 1, matAT%columns
-       elements_per_inner_a = matAT%outer_index(outer_counter+1) - &
-            & matAT%outer_index(outer_counter)
-       DO inner_counter_a = 1, elements_per_inner_a
-          temp_value_a = matAT%values(matAT%outer_index(outer_counter)+ &
-               & inner_counter_a)
-          temp_index_a = matAT%inner_index(matAT%outer_index(outer_counter)+ &
-               & inner_counter_a)
-          elements_per_inner_b = matBT%outer_index(temp_index_a+1) - &
-               & matBT%outer_index(temp_index_a)
-          DO inner_counter_b = 1, elements_per_inner_b
-             temp_index_b = matBT%inner_index(matBT%outer_index(temp_index_a)+ &
-                  & inner_counter_b)
-             temp_value_b = matBT%values(matBT%outer_index(temp_index_a)+ &
-                  & inner_counter_b)
-             temp_value_c = memorypool%value_array(temp_index_b,outer_counter)
-             is_set = memorypool%dirty_array(temp_index_b,outer_counter)
+    DO II = 1, matAT%columns
+       elements_per_inner_a = matAT%outer_index(II + 1) - &
+            & matAT%outer_index(II)
+       DO AA = 1, elements_per_inner_a
+          val_a = matAT%values(matAT%outer_index(II) + AA)
+          idx_a = matAT%inner_index(matAT%outer_index(II) + AA)
+          elements_per_inner_b = matBT%outer_index(idx_a + 1) - &
+               & matBT%outer_index(idx_a)
+          DO BB = 1, elements_per_inner_b
+             idx_b = matBT%inner_index(matBT%outer_index(idx_a) + BB)
+             val_b = matBT%values(matBT%outer_index(idx_a)+ BB)
+             val_c = memorypool%value_array(idx_b, II)
+             is_set = memorypool%dirty_array(idx_b, II)
              IF (is_set .EQV. .FALSE.) THEN
-                memorypool%dirty_array(temp_index_b,outer_counter) = .TRUE.
-                temp_inserted_values = memorypool%inserted_per_bucket(&
-                     & (temp_index_b-1)/memorypool%hash_size+1,outer_counter) + 1
-                memorypool%inserted_per_bucket(&
-                     & (temp_index_b-1)/memorypool%hash_size+1,outer_counter) = &
-                     & temp_inserted_values
-                memorypool%hash_index(temp_inserted_values+ &
-                     & ((temp_index_b-1)/memorypool%hash_size)&
-                     & *memorypool%hash_size, &
-                     & outer_counter) = temp_index_b
+                memorypool%dirty_array(idx_b, II) = .TRUE.
+                idx_hash = (idx_b - 1) / memorypool%hash_size
+                inserted_vals = & 
+                     & memorypool%inserted_per_bucket(idx_hash + 1, II) + 1
+                memorypool%inserted_per_bucket(idx_hash + 1, II) = &
+                     & inserted_vals
+                memorypool%hash_index(&
+                     & inserted_vals + idx_hash * memorypool%hash_size, &
+                     & II) = idx_b
              END IF
-             memorypool%value_array(temp_index_b,outer_counter) = &
-                  & temp_value_c + temp_value_a*temp_value_b
+             memorypool%value_array(idx_b, II) = val_c + val_a * val_b
           END DO
        END DO
     END DO
@@ -1074,49 +1051,42 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> Memory pool to multiply into.
     TYPE(MatrixMemoryPool_lc), INTENT(INOUT) :: memorypool
     !! Temp Variables
-    COMPLEX(NTCOMPLEX) :: temp_value_a, temp_value_b, temp_value_c
+    COMPLEX(NTCOMPLEX) :: val_a, val_b, val_c
 
 
-    INTEGER :: temp_inserted_values
-    INTEGER :: temp_index_a, temp_index_b
-    INTEGER :: elements_per_inner_a
-    INTEGER :: elements_per_inner_b
+    INTEGER :: inserted_vals
+    INTEGER :: idx_a, idx_b, idx_hash
+    INTEGER :: elements_per_inner_a, elements_per_inner_b
     LOGICAL :: is_set
     !! Counters
-    INTEGER :: outer_counter, inner_counter_a, inner_counter_b
+    INTEGER :: II, AA, BB
 
     !! Multiply
-    DO outer_counter = 1, matAT%columns
-       elements_per_inner_a = matAT%outer_index(outer_counter+1) - &
-            & matAT%outer_index(outer_counter)
-       DO inner_counter_a = 1, elements_per_inner_a
-          temp_value_a = matAT%values(matAT%outer_index(outer_counter)+ &
-               & inner_counter_a)
-          temp_index_a = matAT%inner_index(matAT%outer_index(outer_counter)+ &
-               & inner_counter_a)
-          elements_per_inner_b = matBT%outer_index(temp_index_a+1) - &
-               & matBT%outer_index(temp_index_a)
-          DO inner_counter_b = 1, elements_per_inner_b
-             temp_index_b = matBT%inner_index(matBT%outer_index(temp_index_a)+ &
-                  & inner_counter_b)
-             temp_value_b = matBT%values(matBT%outer_index(temp_index_a)+ &
-                  & inner_counter_b)
-             temp_value_c = memorypool%value_array(temp_index_b,outer_counter)
-             is_set = memorypool%dirty_array(temp_index_b,outer_counter)
+    DO II = 1, matAT%columns
+       elements_per_inner_a = matAT%outer_index(II + 1) - &
+            & matAT%outer_index(II)
+       DO AA = 1, elements_per_inner_a
+          val_a = matAT%values(matAT%outer_index(II) + AA)
+          idx_a = matAT%inner_index(matAT%outer_index(II) + AA)
+          elements_per_inner_b = matBT%outer_index(idx_a + 1) - &
+               & matBT%outer_index(idx_a)
+          DO BB = 1, elements_per_inner_b
+             idx_b = matBT%inner_index(matBT%outer_index(idx_a) + BB)
+             val_b = matBT%values(matBT%outer_index(idx_a)+ BB)
+             val_c = memorypool%value_array(idx_b, II)
+             is_set = memorypool%dirty_array(idx_b, II)
              IF (is_set .EQV. .FALSE.) THEN
-                memorypool%dirty_array(temp_index_b,outer_counter) = .TRUE.
-                temp_inserted_values = memorypool%inserted_per_bucket(&
-                     & (temp_index_b-1)/memorypool%hash_size+1,outer_counter) + 1
-                memorypool%inserted_per_bucket(&
-                     & (temp_index_b-1)/memorypool%hash_size+1,outer_counter) = &
-                     & temp_inserted_values
-                memorypool%hash_index(temp_inserted_values+ &
-                     & ((temp_index_b-1)/memorypool%hash_size)&
-                     & *memorypool%hash_size, &
-                     & outer_counter) = temp_index_b
+                memorypool%dirty_array(idx_b, II) = .TRUE.
+                idx_hash = (idx_b - 1) / memorypool%hash_size
+                inserted_vals = & 
+                     & memorypool%inserted_per_bucket(idx_hash + 1, II) + 1
+                memorypool%inserted_per_bucket(idx_hash + 1, II) = &
+                     & inserted_vals
+                memorypool%hash_index(&
+                     & inserted_vals + idx_hash * memorypool%hash_size, &
+                     & II) = idx_b
              END IF
-             memorypool%value_array(temp_index_b,outer_counter) = &
-                  & temp_value_c + temp_value_a*temp_value_b
+             memorypool%value_array(idx_b, II) = val_c + val_a * val_b
           END DO
        END DO
     END DO
@@ -1144,41 +1114,41 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Local data
-    INTEGER :: row_counter_c, column_counter_c, hash_counter
-    INTEGER :: working_column
-    INTEGER :: temp_values_per_hash
-    INTEGER :: pruned_counter
+    INTEGER :: working_col
+    INTEGER :: values_per_hash
+    INTEGER :: PII, HII, RII, CII
 
-    pruned_counter = 1
-    DO row_counter_c = 1, mat_c_rows
-       DO column_counter_c = 1, (mat_c_columns-1)/memorypool%hash_size+1
+    !! Loop over the hash structure
+    PII = 1
+    DO RII = 1, mat_c_rows
+       DO CII = 1, (mat_c_columns - 1) / memorypool%hash_size + 1
           !! Sort the elements in a hash
-          temp_values_per_hash = memorypool%inserted_per_bucket(&
-               & column_counter_c,row_counter_c)
-          memorypool%inserted_per_bucket(column_counter_c,row_counter_c) = 0
+          values_per_hash = memorypool%inserted_per_bucket(CII, RII)
+          memorypool%inserted_per_bucket(CII, RII) = 0
           !! Copy them
-          DO hash_counter=1,temp_values_per_hash
-             working_column = memorypool%hash_index(hash_counter+ &
-                  & (column_counter_c-1)*memorypool%hash_size, row_counter_c)
-             working_value = memorypool%value_array(working_column,row_counter_c)
-             memorypool%value_array(working_column,row_counter_c) = 0
-             memorypool%dirty_array(working_column,row_counter_c) = .FALSE.
+          DO HII = 1, values_per_hash
+             working_col = memorypool%hash_index(HII + &
+                  & (CII - 1) * memorypool%hash_size, RII)
+             working_value = &
+                  & memorypool%value_array(working_col, RII)
+             memorypool%value_array(working_col, RII) = 0
+             memorypool%dirty_array(working_col, RII) = .FALSE.
+             !! If above threshold, insert
              IF (ABS(alpha*working_value) .GT. threshold) THEN
-                memorypool%pruned_list(pruned_counter)%point_value = &
-                     & alpha*working_value
-                memorypool%pruned_list(pruned_counter)%index_column = &
-                     & working_column
-                memorypool%pruned_list(pruned_counter)%index_row = &
-                     & row_counter_c
-                pruned_counter = pruned_counter + 1
+                memorypool%pruned_list(PII)%point_value = alpha*working_value
+                memorypool%pruned_list(PII)%index_column = working_col
+                memorypool%pruned_list(PII)%index_row = RII
+                PII = PII + 1
              END IF
           END DO
        END DO
     END DO
-    CALL ConstructTripletList(unsorted_pruned_list, pruned_counter-1)
-    unsorted_pruned_list%DATA = memorypool%pruned_list(1:pruned_counter-1)
+
+    !! Convert to matrix
+    CALL ConstructTripletList(unsorted_pruned_list, PII - 1)
+    unsorted_pruned_list%DATA(:) = memorypool%pruned_list(1:PII - 1)
     CALL SortTripletList(unsorted_pruned_list, mat_c_columns, mat_c_rows, &
-         & sorted_pruned_list, bubble_in=.TRUE.)
+         & sorted_pruned_list, bubble_in = .TRUE.)
     CALL ConstructMatrixFromTripletList(matAB, sorted_pruned_list, mat_c_rows, &
          & mat_c_columns)
     CALL DestructTripletList(sorted_pruned_list)
@@ -1207,41 +1177,41 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Local data
-    INTEGER :: row_counter_c, column_counter_c, hash_counter
-    INTEGER :: working_column
-    INTEGER :: temp_values_per_hash
-    INTEGER :: pruned_counter
+    INTEGER :: working_col
+    INTEGER :: values_per_hash
+    INTEGER :: PII, HII, RII, CII
 
-    pruned_counter = 1
-    DO row_counter_c = 1, mat_c_rows
-       DO column_counter_c = 1, (mat_c_columns-1)/memorypool%hash_size+1
+    !! Loop over the hash structure
+    PII = 1
+    DO RII = 1, mat_c_rows
+       DO CII = 1, (mat_c_columns - 1) / memorypool%hash_size + 1
           !! Sort the elements in a hash
-          temp_values_per_hash = memorypool%inserted_per_bucket(&
-               & column_counter_c,row_counter_c)
-          memorypool%inserted_per_bucket(column_counter_c,row_counter_c) = 0
+          values_per_hash = memorypool%inserted_per_bucket(CII, RII)
+          memorypool%inserted_per_bucket(CII, RII) = 0
           !! Copy them
-          DO hash_counter=1,temp_values_per_hash
-             working_column = memorypool%hash_index(hash_counter+ &
-                  & (column_counter_c-1)*memorypool%hash_size, row_counter_c)
-             working_value = memorypool%value_array(working_column,row_counter_c)
-             memorypool%value_array(working_column,row_counter_c) = 0
-             memorypool%dirty_array(working_column,row_counter_c) = .FALSE.
+          DO HII = 1, values_per_hash
+             working_col = memorypool%hash_index(HII + &
+                  & (CII - 1) * memorypool%hash_size, RII)
+             working_value = &
+                  & memorypool%value_array(working_col, RII)
+             memorypool%value_array(working_col, RII) = 0
+             memorypool%dirty_array(working_col, RII) = .FALSE.
+             !! If above threshold, insert
              IF (ABS(alpha*working_value) .GT. threshold) THEN
-                memorypool%pruned_list(pruned_counter)%point_value = &
-                     & alpha*working_value
-                memorypool%pruned_list(pruned_counter)%index_column = &
-                     & working_column
-                memorypool%pruned_list(pruned_counter)%index_row = &
-                     & row_counter_c
-                pruned_counter = pruned_counter + 1
+                memorypool%pruned_list(PII)%point_value = alpha*working_value
+                memorypool%pruned_list(PII)%index_column = working_col
+                memorypool%pruned_list(PII)%index_row = RII
+                PII = PII + 1
              END IF
           END DO
        END DO
     END DO
-    CALL ConstructTripletList(unsorted_pruned_list, pruned_counter-1)
-    unsorted_pruned_list%DATA = memorypool%pruned_list(1:pruned_counter-1)
+
+    !! Convert to matrix
+    CALL ConstructTripletList(unsorted_pruned_list, PII - 1)
+    unsorted_pruned_list%DATA(:) = memorypool%pruned_list(1:PII - 1)
     CALL SortTripletList(unsorted_pruned_list, mat_c_columns, mat_c_rows, &
-         & sorted_pruned_list, bubble_in=.TRUE.)
+         & sorted_pruned_list, bubble_in = .TRUE.)
     CALL ConstructMatrixFromTripletList(matAB, sorted_pruned_list, mat_c_rows, &
          & mat_c_columns)
     CALL DestructTripletList(sorted_pruned_list)
