@@ -1,5 +1,4 @@
 ### Intel (External) ###
-
 SET(CMAKE_Fortran_COMPILER "mpiifort" CACHE STRING "MPI Fortran compiler")
 SET(CMAKE_C_COMPILER "mpiicc" CACHE STRING "MPI C compiler")
 SET(CMAKE_CXX_COMPILER "mpiicpc" CACHE STRING "MPI C++ compiler")
