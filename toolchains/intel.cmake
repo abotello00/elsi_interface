@@ -14,7 +14,7 @@ SET(CHASE_OUTPUT ON CACHE BOOL "Enable ChASE solver with output")
 SET(ENABLE_TESTS ON CACHE BOOL "Enable Fortran tests")
 SET(ENABLE_C_TESTS ON CACHE BOOL "Enable C tests")
 # SET(USE_ELPA_2023 ON CACHE BOOL "ENABLE ELPA 2023")
-#SET(ELPA2_KERNEL "AVX" CACHE STRING "Use AVX/AVX2/AVX512 ELPA2 kernel")
+# SET(ELPA2_KERNEL "AVX" CACHE STRING "Use AVX/AVX2/AVX512 ELPA2 kernel")
 
 SET(LIB_PATHS "$ENV{MKLROOT}/lib/intel64" CACHE STRING "External library paths")
 SET(LIBS "mkl_scalapack_lp64 mkl_blacs_intelmpi_lp64 mkl_intel_lp64 mkl_sequential mkl_core" CACHE STRING "External libraries")
