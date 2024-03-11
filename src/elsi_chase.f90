@@ -10,7 +10,7 @@ module ELSI_CHASE
    use ELSI_OUTPUT, only: elsi_say,elsi_get_time
    use ELSI_PRECISION, only: r8,i4,i8
    use ELSI_SORT, only: elsi_heapsort,elsi_permute
-  
+
    use ELSI_LAPACK, only: elsi_factor_ovlp_sp,elsi_reduce_evp_sp,elsi_back_ev_sp,elsi_check_ovlp_sp
    use ELSI_ELPA, only: elsi_factor_ovlp_elpa, elsi_reduce_evp_elpa, elsi_back_ev_elpa, &
                         elsi_check_ovlp_elpa, elsi_elpa_evec, elsi_elpa_setup
@@ -52,16 +52,14 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
    character(len=200) :: msg
 
    character(len=*), parameter :: caller = "elsi_solve_chase_real_sp"
-   
+
    !chase
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j
-   real(kind=r8)    :: v
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
    character        :: QRImpl
-   v = 0.5_r8
 
    if(ph%chase_deg_opt) then
      degOpt = 'S'
@@ -73,7 +71,7 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
       QRImpl = 'C'
    else
       QRImpl = 'H'
-   end if   
+   end if
 
    if(.not. ph%unit_ovlp .and. ph%ill_check) then
       call elsi_check_ovlp_sp(ph,bh,ovlp,eval,evec)
@@ -101,11 +99,11 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
       call elsi_allocate(bh, ph%pre_evec_real, ph%n_good, nev+nex,&
              "pre_evec_real",caller)
    end if
-   
+
    if(.not. ph%chase_started) then
       if(allocated(ph%pre_eval) ) then
          call elsi_deallocate(bh,ph%pre_eval,"pre_eval")
-      end if           
+      end if
       call elsi_allocate(bh,ph%pre_eval, nev+nex,"pre_eval",caller)
    end if
 
@@ -127,18 +125,18 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
       end do
    end do
 
-   if(.not. ph%chase_started) then  
+   if(.not. ph%chase_started) then
       if(ph%dchase_init == 1) then
         call dchase_finalize(ph%dchase_init)
-      end if 
-      call dchase_init(ph%n_good, nev, nex, ham, ph%n_basis, ph%pre_evec_real, ph%pre_eval, ph%dchase_init)   
+      end if
+      call dchase_init(ph%n_good, nev, nex, ham, ph%n_basis, ph%pre_evec_real, ph%pre_eval, ph%dchase_init)
    end if
 
    call dchase(ph%chase_filter_deg, ph%chase_tol, Approx, degOpt, QRImpl)
-   
+
    evec(1:ph%n_good,1:nev) = ph%pre_evec_real(1:ph%n_good,1:nev)
    eval(1:nev) = ph%pre_eval(1:nev)
-   
+
    call elsi_get_time(t1)
    write(msg,"(A)") "Finished solving standard eigenproblem"
    call elsi_say(bh,msg)
@@ -162,7 +160,7 @@ subroutine elsi_solve_chase_real_sp(ph,bh,ham,ovlp,eval,evec)
       ph%n_states_solve = ph%n_states_solve+ph%n_basis_c
    end if
 
-end subroutine         
+end subroutine
 
 subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    implicit none
@@ -184,7 +182,6 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    !chase
    integer(kind=i4) :: nev, nex
    integer(kind=i4) :: i, j
-   complex(kind=r8) :: v
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
@@ -201,8 +198,6 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    else
      degOpt = 'N'
    end if
-   
-   v = (0.5_r8, 0.0_r8)
 
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%ill_check) then
@@ -211,12 +206,12 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
 
    nev = min(ph%n_states, ph%n_good)
    nex = min(max(int(nev * ph%chase_extra_space), ph%chase_min_extra_space), ph%n_good - nev)
- 
+
    if(ph%chase_pre_n_good == ph%n_good .and. nev <= ph%chase_pre_n_states ) then
       ph%chase_started = .true.
-   end if        
+   end if
 
-   if(ph%chase_started .and. ph%chase_evecs_recycl) then   
+   if(ph%chase_started .and. ph%chase_evecs_recycl) then
       isApprox = .true.
       Approx = 'A'
    else
@@ -257,7 +252,7 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
          ham(j, i) = conjg(ham(i,j))
       end do
    end do
-   
+
    ! solve
    if(.not. ph%chase_started) then
       if(ph%zchase_init == 1) then
@@ -276,7 +271,7 @@ subroutine elsi_solve_chase_cmplx_sp(ph,bh,ham,ovlp,eval,evec)
    call elsi_say(bh,msg)
    write(msg,"(A,F10.3,A)") "| Time :",t1-t0," s"
    call elsi_say(bh,msg)
-   
+
    ! Back-transform eigenvectors
    if(.not. ph%unit_ovlp) then
       call elsi_back_ev_sp(ph,bh,ovlp,evec)
@@ -314,15 +309,13 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
 
    integer(kind=i4), external :: numroc
 
-   character(len=*), parameter :: caller = "elsi_solve_chase_real_mp"   
+   character(len=*), parameter :: caller = "elsi_solve_chase_real_mp"
 
    !chase
    integer(kind=i4) :: nev, nex
-   integer(kind=i4) :: i, j
+   integer(kind=i4) :: i, j, k, nr
    logical          :: isApprox
    character        :: Approx
-   integer(kind=i4) :: desc_ev(9)
-   real(kind=r8) :: v
    character        :: degOpt
    character        :: gridMajor
    character        :: QRImpl
@@ -337,7 +330,7 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
         gridMajor = 'R'
    else
         gridMajor = 'C'
-   end if        
+   end if
 
    if(ph%chase_deg_opt) then
      degOpt = 'S'
@@ -345,13 +338,11 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
      degOpt = 'N'
    end if
 
-   v = 0.5_r8
-
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%elpa_first .and. ph%ill_check) then
       call elsi_check_ovlp_elpa(ph,bh,ovlp,eval,evec)
    end if
-   
+
    nev = min(ph%n_states, ph%n_good)
    nex = min(max(int(nev * ph%chase_extra_space), ph%chase_min_extra_space), ph%n_good - nev)
 
@@ -359,7 +350,7 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
       ph%chase_started = .true.
    end if
 
-   if(ph%chase_started .and. ph%chase_evecs_recycl) then   
+   if(ph%chase_started .and. ph%chase_evecs_recycl) then
       isApprox = .true.
       Approx = 'A'
    else
@@ -370,7 +361,7 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    if(.not. ph%chase_started) then
       if(allocated(ph%pre_evec_real) ) then
          call elsi_deallocate(bh,ph%pre_evec_real,"pre_evec_real")
-      end if           
+      end if
       call elsi_allocate(bh, ph%pre_evec_real, bh%n_lrow, nev+nex,&
              "pre_evec_real",caller)
    end if
@@ -378,17 +369,10 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    if(.not. ph%chase_started) then
       if(allocated(ph%pre_eval) ) then
          call elsi_deallocate(bh,ph%pre_eval,"pre_eval")
-      end if           
+      end if
       call elsi_allocate(bh,ph%pre_eval, nev+nex,"pre_eval",caller)
    end if
 
-   !if(.not. ph%chase_started) then
-   !   if(allocated(ph%htmp_r) ) then
-   !      call elsi_deallocate(bh,ph%htmp_r,"htmp_r")
-   !   end if           
-   !   call elsi_allocate(bh, ph%htmp_r, bh%n_lrow,bh%n_lcol, "htmp_r",caller)
-   !end if
-   
    ! Transform to standard form
    if(.not. ph%unit_ovlp) then
       if(ph%elpa_first .and. ph%n_good == ph%n_basis) then
@@ -403,9 +387,6 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
    ! Solve
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
-   !ph%htmp_r(:,:) = ham(:,:)
-   !call pdgeadd('T', ph%n_basis, ph%n_basis, v, ph%htmp_r, 1, 1, bh%desc, &
-   !              v, ham, 1, 1, bh%desc)   
    call elsi_set_full_mat(ph, bh, UT_MAT, ham)
 
    if(.not. ph%chase_started) then
@@ -426,10 +407,19 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
       eval(ph%n_good+1:ph%n_basis) = eval(ph%n_good)+10.0_r8
    end if
 
-   call descinit(desc_ev,ph%n_good, nev, bh%blk, nev, 0, 0, &
-                 bh%blacs_ctxt, ph%n_basis,ierr)
-
-   call pdgemr2d(ph%n_good, nev, ph%pre_evec_real, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)      
+   j = 0
+   k = 1
+   do i = 1, nev, bh%blk
+        nr = bh%blk
+        if(nev - i < bh%blk) then
+            nr = nev - i  + 1
+        end if
+        if(bh%my_pcol == j) then
+            evec(:,k:k+nr-1) = ph%pre_evec_real(:,i:i+nr-1)
+            k = k + nr
+        end if
+        j = MOD(j + 1, bh%n_prow)
+   end do
 
    call elsi_get_time(t1)
 
@@ -455,7 +445,7 @@ subroutine elsi_solve_chase_real_mp(ph,bh,ham,ovlp,eval,evec)
       call descinit(bh%desc,ph%n_basis,ph%n_basis,bh%blk,bh%blk,0,0,&
            bh%blacs_ctxt,max(1,bh%n_lrow),ierr)
    end if
-   
+
    ph%chase_started = .true.
    ph%elpa_first = .false.
    ph%chase_pre_n_good = ph%n_good
@@ -484,9 +474,7 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
 
    !chase
    integer(kind=i4) :: nev, nex
-   integer(kind=i4) :: i, j
-   integer(kind=i4) :: desc_ev(9)
-   complex(kind=r8) :: v
+   integer(kind=i4) :: i, j, k, nr
    logical          :: isApprox
    character        :: Approx
    character        :: degOpt
@@ -511,8 +499,6 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
      degOpt = 'N'
    end if
 
-   v = (0.5_r8, 0.0_r8)
-   
    ! Ill-conditioning check
    if(.not. ph%unit_ovlp .and. ph%elpa_first .and. ph%ill_check) then
       call elsi_check_ovlp_elpa(ph,bh,ovlp,eval,evec)
@@ -525,7 +511,7 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
       ph%chase_started = .true.
    end if
 
-   if(ph%chase_started .and. ph%chase_evecs_recycl) then   
+   if(ph%chase_started .and. ph%chase_evecs_recycl) then
       isApprox = .true.
       Approx = 'A'
    else
@@ -536,24 +522,17 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    if(.not. ph%chase_started) then
       if(allocated(ph%pre_evec_cmplx) ) then
          call elsi_deallocate(bh,ph%pre_evec_cmplx,"pre_evec_cmplx")
-      end if           
-      call elsi_allocate(bh, ph%pre_evec_cmplx, ph%n_good, nev+nex,&
+      end if
+      call elsi_allocate(bh, ph%pre_evec_cmplx, bh%n_lrow, nev+nex,&
              "pre_evec_cmplx",caller)
    end if
 
    if(.not. ph%chase_started) then
       if(allocated(ph%pre_eval) ) then
          call elsi_deallocate(bh,ph%pre_eval,"pre_eval")
-      end if           
+      end if
       call elsi_allocate(bh,ph%pre_eval, nev+nex,"pre_eval",caller)
    end if
-
-   !if(.not. ph%chase_started) then
-   !   if(allocated(ph%htmp_c) ) then
-   !      call elsi_deallocate(bh,ph%htmp_c,"htmp_c")
-   !   end if           
-   !   call elsi_allocate(bh, ph%htmp_c, bh%n_lrow,bh%n_lcol, "htmp_c",caller)
-   !end if
 
    ! Transform to standard form
    if(.not. ph%unit_ovlp) then
@@ -568,9 +547,6 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    ! Solve
    ! Explicitly ensure the symmetricity of ham
    ! Required by ChASE
-   !ph%htmp_c(:,:) = ham(:,:)
-   !call pzgeadd('C', ph%n_basis, ph%n_basis, v,  ph%htmp_c, 1, 1, bh%desc, &
-   !              v, ham, 1, 1, bh%desc)   
    call elsi_set_full_mat(ph, bh, UT_MAT, ham)
 
    if(.not. ph%chase_started) then
@@ -591,10 +567,20 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
       eval(ph%n_good+1:ph%n_basis) = eval(ph%n_good)+10.0_r8
    end if
 
-   call descinit(desc_ev,ph%n_good, nev, bh%blk, nev, 0, 0, &
-                 bh%blacs_ctxt, ph%n_basis,ierr)
+   j = 0
+   k = 1
+   do i = 1, nev, bh%blk
+        nr = bh%blk
+        if(nev - i < bh%blk) then
+            nr = nev - i  + 1
+        end if
+        if(bh%my_pcol == j) then
+            evec(:,k:k+nr-1) = ph%pre_evec_cmplx(:,i:i+nr-1)
+            k = k + nr
+        end if
+        j = MOD(j + 1, bh%n_prow)
+   end do
 
-   call pzgemr2d(ph%n_good, nev, ph%pre_evec_cmplx, 1, 1, desc_ev, evec, 1, 1, bh%desc, bh%blacs_ctxt)
    call elsi_get_time(t1)
 
    write(msg,"(A)") "Finished solving standard eigenproblem"
@@ -621,10 +607,10 @@ subroutine elsi_solve_chase_cmplx_mp(ph,bh,ham,ovlp,eval,evec)
    end if
 
    ph%chase_started = .true.
-   ph%elpa_first = .false.   
+   ph%elpa_first = .false.
    ph%chase_pre_n_good = ph%n_good
    ph%chase_pre_n_states = nev
-   
+
 end subroutine
 
 
@@ -637,8 +623,8 @@ subroutine elsi_cleanup_chase(ph)
    character(len=*), parameter :: caller = "elsi_cleanup_chase"
 
    if(ph%dchase_init == 1) then
-        call dchase_finalize(ph%dchase_init)        
-   end if    
+        call dchase_finalize(ph%dchase_init)
+   end if
 
    if(ph%zchase_init == 1) then
         call zchase_finalize(ph%zchase_init)

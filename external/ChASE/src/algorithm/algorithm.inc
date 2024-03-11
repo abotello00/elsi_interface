@@ -409,7 +409,7 @@ void Algorithm<T>::solve(Chase<T>* single)
             int cnt;
             for (cnt = 0; cnt < unconverged; cnt++)
             {
-                if (resid[cnt] > 5e-1)
+                if (resid[cnt] > 1)
                 {
                     break;
                 }
