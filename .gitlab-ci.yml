@@ -158,7 +158,7 @@ build.intel-external:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu20-intel2022-elsi-external-old:latest
+    name: uthpalaherath/ubuntu20-intel2022-elsi-external-pexsi:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
@@ -297,7 +297,7 @@ test.intel-external:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu20-intel2022-elsi-external-old:latest
+    name: uthpalaherath/ubuntu20-intel2022-elsi-external-pexsi:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
