@@ -70,7 +70,9 @@ LIST(APPEND elpa_src
   src/elpa_qrkernels.f90
   src/tests_variable_definitions.f90
   src/cannon.c
-  src/check_thread_affinity.c)
+  src/check_thread_affinity.c
+  src/mod_cusolver.f90
+  src/mod_rocsolver.f90)
 
 IF(USE_MPI_MODULE)
   LIST(APPEND elpa_src src/mod_mpi.f90)
