@@ -53,13 +53,13 @@
 !    the original distribution, the GNU Lesser General Public License.
 !
 ! Author: Andreas Marek, MPCDF
-! This file is the generated version. Do NOT edit
 
 
 
 module sycl_functions
   use, intrinsic :: iso_c_binding
   use precision
+  use syclsolver_functions
   implicit none
 
   public
@@ -121,6 +121,42 @@ module sycl_functions
   integer(kind=ik) :: syclblasPointerModeDevice
   integer(kind=ik) :: syclblasPointerModeHost
 
+
+!  interface
+!    function sycl_device_get_attributes_c(value, attribute) result(istat) &
+!             bind(C, name="syclDeviceGetAttributeFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!
+!      integer(kind=C_INT), value  :: attribute
+!      integer(kind=C_INT)         :: value
+!      integer(kind=C_INT)         :: istat
+!    end function
+!  end interface
+
+
+!  interface
+!    function syclblas_get_version_c(syclblasHandle, version) result(istat) &
+!             bind(C, name="syclblasGetVersionFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!
+!      integer(kind=C_intptr_T), value  :: syclblasHandle
+!      integer(kind=C_INT)              :: version
+!      integer(kind=C_INT)              :: istat
+!    end function
+!  end interface
+
+
+!  interface
+!    function sycl_get_last_error_c() result(istat) &
+!             bind(C, name="syclGetLastErrorFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_int)              :: istat
+!    end function
+!  end interface
+
 !  ! streams
 !
 !  interface
@@ -132,7 +168,7 @@ module sycl_functions
 !      integer(kind=C_INT)      :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_stream_destroy_c(syclStream) result(istat) &
 !             bind(C, name="syclStreamDestroyFromC")
@@ -142,7 +178,7 @@ module sycl_functions
 !      integer(kind=C_INT)             :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_stream_synchronize_explicit_c(syclStream) result(istat) &
 !             bind(C, name="syclStreamSynchronizeExplicitFromC")
@@ -153,7 +189,7 @@ module sycl_functions
 !      integer(kind=C_INT)              :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_stream_synchronize_implicit_c() result(istat) &
 !             bind(C, name="syclStreamSynchronizeImplicitFromC")
@@ -163,7 +199,7 @@ module sycl_functions
 !      integer(kind=C_INT)              :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function syclblas_set_stream_c(syclHandle, syclStream) result(istat) &
 !             bind(C, name="syclblasSetStreamFromC")
@@ -176,19 +212,6 @@ module sycl_functions
 !    end function
 !  end interface
 
-!  interface
-!    function syclsolver_set_stream_c(syclsolverHandle, syclStream) result(istat) &
-!             bind(C, name="syclsolverSetStreamFromC")
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!
-!      integer(kind=C_intptr_T), value  :: syclsolverHandle
-!      integer(kind=C_intptr_T), value  :: syclStream
-!      integer(kind=C_INT)              :: istat
-!    end function
-!  end interface
-
-  ! functions to set and query the GPU devices
   interface
     function syclblas_create_c(syclHandle) result(istat) &
              bind(C, name="syclblasCreateFromC")
@@ -209,26 +232,7 @@ module sycl_functions
     end function
   end interface
 
-  interface
-    function syclsolver_create_c(syclsolverHandle) result(istat) &
-             bind(C, name="syclsolverCreateFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_T) :: syclsolverHandle
-      integer(kind=C_INT)      :: istat
-    end function
-  end interface
-
-  interface
-    function syclsolver_destroy_c(syclsolverHandle) result(istat) &
-             bind(C, name="syclsolverDestroyFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_T) :: syclsolverHandle
-      integer(kind=C_INT)      :: istat
-    end function
-  end interface
-
+  ! functions to set and query the GPU devices
   interface
     function sycl_setdevice_c(n) result(istat) &
              bind(C, name="syclSetDeviceFromC")
@@ -241,13 +245,23 @@ module sycl_functions
   end interface
 
   interface
-    function sycl_getdevicecount_c(n, onlyIntelGpus) result(istat) &
+    function sycl_getdevicecount_c(n, onlyIntelgpus) result(istat) &
              bind(C, name="syclGetDeviceCountFromC")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(kind=C_INT), intent(out)       :: n
-      integer(kind=C_INT), intent(in), value :: onlyIntelGpus
-      integer(kind=C_INT)                    :: istat
+      integer(kind=C_INT), intent(out)         :: n
+      integer(kind=C_INT), intent(in), value :: onlyIntelgpus
+      integer(kind=C_INT)                      :: istat
+    end function
+  end interface
+
+
+  interface
+    function sycl_printdevices_c() result(n) &
+             bind(C, name="syclPrintDevicesFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=C_INT) :: n
     end function
   end interface
 
@@ -259,15 +273,6 @@ module sycl_functions
       integer(kind=C_INT), intent(out) :: n
       integer(kind=C_INT)              :: istat
     end function
-  end interface
-
-  interface
-    function sycl_printdevices_c() result(n) &
-             bind(C, name="syclPrintDevicesFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_INT) :: n
-    end function sycl_printdevices_c
   end interface
 
 !  interface
@@ -316,7 +321,7 @@ module sycl_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_hostRegisterPortable_c() result(flag) &
 !             bind(C, name="syclHostRegisterPortableFromC")
@@ -325,7 +330,7 @@ module sycl_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_hostRegisterMapped_c() result(flag) &
 !             bind(C, name="syclHostRegisterMappedFromC")
@@ -334,7 +339,7 @@ module sycl_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
   interface
     function sycl_memcpy_intptr_c(dst, src, size, dir) result(istat) &
              bind(C, name="syclMemcpyFromC")
@@ -400,7 +405,7 @@ module sycl_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_memcpy_async_cptr_c(dst, src, size, dir, syclStream) result(istat) &
 !             bind(C, name="syclMemcpyAsyncFromC")
@@ -414,7 +419,7 @@ module sycl_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_memcpy_async_mixed_to_device_c(dst, src, size, dir, syclStream) result(istat) &
 !             bind(C, name="syclMemcpyAsyncFromC")
@@ -428,7 +433,7 @@ module sycl_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_memcpy_async_mixed_to_host_c(dst, src, size, dir, syclStream) result(istat) &
 !             bind(C, name="syclMemcpyAsyncFromC")
@@ -442,7 +447,7 @@ module sycl_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_memcpy2d_intptr_c(dst, dpitch, src, spitch, width, height , dir) result(istat) &
 !             bind(C, name="syclMemcpy2dFromC")
@@ -458,7 +463,7 @@ module sycl_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_memcpy2d_cptr_c(dst, dpitch, src, spitch, width, height , dir) result(istat) &
 !             bind(C, name="syclMemcpy2dFromC")
@@ -474,7 +479,7 @@ module sycl_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_memcpy2d_async_intptr_c(dst, dpitch, src, spitch, width, height, dir, syclStream) result(istat) &
 !             bind(C, name="syclMemcpy2dAsyncFromC")
@@ -491,7 +496,7 @@ module sycl_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_memcpy2d_async_cptr_c(dst, dpitch, src, spitch, width, height, dir, syclStream) result(istat) &
 !             bind(C, name="syclMemcpy2dAsyncFromC")
@@ -508,7 +513,7 @@ module sycl_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_host_register_c(a, size, flag) result(istat) &
 !             bind(C, name="syclHostRegisterFromC")
@@ -520,7 +525,7 @@ module sycl_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function sycl_host_unregister_c(a) result(istat) &
 !             bind(C, name="syclHostUnregisterFromC")
@@ -530,7 +535,7 @@ module sycl_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
   interface sycl_free
     module procedure sycl_free_intptr
     module procedure sycl_free_cptr
@@ -587,7 +592,6 @@ module sycl_functions
     end function
   end interface
 
-
   interface
     function sycl_malloc_cptr_c(a, width_height) result(istat) &
              bind(C, name="syclMallocFromC")
@@ -600,8 +604,22 @@ module sycl_functions
     end function
   end interface
 
+!  interface sycl_free_host
+!    module procedure sycl_free_host_intptr
+!    module procedure sycl_free_host_cptr
+!  end interface
 !  interface
-!    function sycl_free_host_c(a) result(istat) &
+!    function sycl_free_host_intptr_c(a) result(istat) &
+!             bind(C, name="syclFreeHostFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t), value  :: a
+!      integer(kind=C_INT)              :: istat
+!    end function
+!  end interface
+
+!  interface
+!    function sycl_free_host_cptr_c(a) result(istat) &
 !             bind(C, name="syclFreeHostFromC")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -609,14 +627,29 @@ module sycl_functions
 !      integer(kind=C_INT)              :: istat
 !    end function
 !  end interface
-!
+
+!  interface sycl_malloc_host
+!    module procedure sycl_malloc_host_intptr
+!    module procedure sycl_malloc_host_cptr
+!  end interface
 !  interface
-!    function sycl_malloc_host_c(a, width_height) result(istat) &
+!    function sycl_malloc_host_intptr_c(a, width_height) result(istat) &
+!             bind(C, name="syclMallocHostFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t)                    :: a
+!      integer(kind=c_intptr_t), intent(in), value :: width_height
+!      integer(kind=C_INT)                         :: istat
+!    end function
+!  end interface
+
+!  interface
+!    function sycl_malloc_host_cptr_c(a, width_height) result(istat) &
 !             bind(C, name="syclMallocHostFromC")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      type(c_ptr)                    :: a
-!      integer(kind=c_intptr_t), intent(in), value   :: width_height
+!      integer(kind=c_intptr_t), intent(in), value :: width_height
 !      integer(kind=C_INT)                         :: istat
 !    end function
 !  end interface
@@ -645,32 +678,6 @@ module sycl_functions
 !      integer(kind=c_intptr_t), value            :: syclStream
 !    end function
 !  end interface
-
-  interface
-    subroutine syclsolver_Dtrtri_c(syclsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="syclsolverDtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine syclsolver_Dpotrf_c(syclsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="syclsolverDpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
-    end subroutine
-  end interface
 
   interface syclblas_Dgemm
     module procedure syclblas_Dgemm_intptr
@@ -722,6 +729,7 @@ module sycl_functions
     end subroutine
   end interface
 
+
   interface syclblas_Dcopy
     module procedure syclblas_Dcopy_intptr
     module procedure syclblas_Dcopy_cptr
@@ -750,6 +758,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Dtrmm
     module procedure syclblas_Dtrmm_intptr
@@ -783,6 +792,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Dtrsm
     module procedure syclblas_Dtrsm_intptr
@@ -828,32 +838,6 @@ module sycl_functions
       real(kind=C_DOUBLE) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: syclblasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine syclsolver_Strtri_c(syclsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="syclsolverStrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine syclsolver_Spotrf_c(syclsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="syclsolverSpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
     end subroutine
   end interface
 
@@ -907,6 +891,7 @@ module sycl_functions
     end subroutine
   end interface
 
+
   interface syclblas_Scopy
     module procedure syclblas_Scopy_intptr
     module procedure syclblas_Scopy_cptr
@@ -935,6 +920,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Strmm
     module procedure syclblas_Strmm_intptr
@@ -968,6 +954,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Strsm
     module procedure syclblas_Strsm_intptr
@@ -1013,32 +1000,6 @@ module sycl_functions
       real(kind=C_FLOAT) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: syclblasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine syclsolver_Ztrtri_c(syclsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="syclsolverZtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine syclsolver_Zpotrf_c(syclsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="syclsolverZpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
     end subroutine
   end interface
 
@@ -1092,6 +1053,7 @@ module sycl_functions
     end subroutine
   end interface
 
+
   interface syclblas_Zcopy
     module procedure syclblas_Zcopy_intptr
     module procedure syclblas_Zcopy_cptr
@@ -1120,6 +1082,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Ztrmm
     module procedure syclblas_Ztrmm_intptr
@@ -1153,6 +1116,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Ztrsm
     module procedure syclblas_Ztrsm_intptr
@@ -1198,32 +1162,6 @@ module sycl_functions
       complex(kind=C_DOUBLE_COMPLEX) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: syclblasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine syclsolver_Ctrtri_c(syclsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="syclsolverCtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine syclsolver_Cpotrf_c(syclsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="syclsolverCpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: syclsolverHandle
     end subroutine
   end interface
 
@@ -1277,6 +1215,7 @@ module sycl_functions
     end subroutine
   end interface
 
+
   interface syclblas_Ccopy
     module procedure syclblas_Ccopy_intptr
     module procedure syclblas_Ccopy_cptr
@@ -1305,6 +1244,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Ctrmm
     module procedure syclblas_Ctrmm_intptr
@@ -1338,6 +1278,7 @@ module sycl_functions
       integer(kind=C_intptr_T), value         :: syclblasHandle
     end subroutine
   end interface
+
 
   interface syclblas_Ctrsm
     module procedure syclblas_Ctrsm_intptr
@@ -1394,7 +1335,7 @@ module sycl_functions
 !      character(kind=C_CHAR,len=1) :: name(*)
 !    end subroutine
 !  end interface
-!
+
 !  interface nvtxRangePop
 !    subroutine nvtxRangePop() bind(C, name='nvtxRangePop')
 !    end subroutine
@@ -1409,7 +1350,7 @@ module sycl_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    function syclblas_pointerModeHost_c() result(flag) &
 !               bind(C, name="syclblasPointerModeHostFromC")
@@ -1418,7 +1359,7 @@ module sycl_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    subroutine syclblas_getPointerMode_c(syclblasHandle, mode) &
 !               bind(C, name="syclblasGetPointerModeFromC")
@@ -1428,7 +1369,7 @@ module sycl_functions
 !      integer(kind=c_int)               :: mode
 !    end subroutine
 !  end interface
-!
+
 !  interface
 !    subroutine syclblas_setPointerMode_c(syclblasHandle, mode) &
 !               bind(C, name="syclblasSetPointerModeFromC")
@@ -1439,32 +1380,34 @@ module sycl_functions
 !    end subroutine
 !  end interface
 
+
   interface syclblas_Ddot
     module procedure syclblas_Ddot_intptr
     module procedure syclblas_Ddot_cptr
   end interface
 
 !  interface
-!    subroutine syclblas_Ddot_intptr_c(syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Ddot_intptr_c(syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasDdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine syclblas_Ddot_cptr_c(syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Ddot_cptr_c(syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasDdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Dscal
     module procedure syclblas_Dscal_intptr
@@ -1494,6 +1437,7 @@ module sycl_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Daxpy
     module procedure syclblas_Daxpy_intptr
@@ -1530,26 +1474,27 @@ module sycl_functions
   end interface
 
 !  interface
-!    subroutine syclblas_Sdot_intptr_c(syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Sdot_intptr_c(syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasSdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine syclblas_Sdot_cptr_c(syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Sdot_cptr_c(syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasSdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Sscal
     module procedure syclblas_Sscal_intptr
@@ -1579,6 +1524,7 @@ module sycl_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Saxpy
     module procedure syclblas_Saxpy_intptr
@@ -1615,28 +1561,29 @@ module sycl_functions
   end interface
 
 !  interface
-!    subroutine syclblas_Zdot_intptr_c(conj, syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Zdot_intptr_c(conj, syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasZdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine syclblas_Zdot_cptr_c(conj, syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Zdot_cptr_c(conj, syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasZdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Zscal
     module procedure syclblas_Zscal_intptr
@@ -1666,6 +1613,7 @@ module sycl_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Zaxpy
     module procedure syclblas_Zaxpy_intptr
@@ -1702,28 +1650,29 @@ module sycl_functions
   end interface
 
 !  interface
-!    subroutine syclblas_Cdot_intptr_c(conj, syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Cdot_intptr_c(conj, syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasCdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine syclblas_Cdot_cptr_c(conj, syclblasHandle, length, x, incx, y, incy, z) &
+!    subroutine syclblas_Cdot_cptr_c(conj, syclblasHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="syclblasCdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: syclblasHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Cscal
     module procedure syclblas_Cscal_intptr
@@ -1753,6 +1702,7 @@ module sycl_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface syclblas_Caxpy
     module procedure syclblas_Caxpy_intptr
@@ -1785,6 +1735,42 @@ module sycl_functions
 
   contains
 
+!    function sycl_device_get_attributes(value, attribute) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=C_INT)                       :: value, attribute
+!      logical                                   :: success
+!#ifdef WITH_SYCL_GPU_VERSION
+!      success = sycl_device_get_attributes_c(value, attribute) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function syclblas_get_version(syclblasHandle, version) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=C_intptr_t)                  :: syclblasHandle
+!      integer(kind=C_INT)                       :: version
+!      logical                                   :: success
+!#ifdef WITH_SYCL_GPU_VERSION
+!      success = syclblas_get_version_c(syclblasHandle, version) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function sycl_get_last_error() result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      logical                                   :: success
+!#ifdef WITH_SYCL_GPU_VERSION
+!      success = sycl_get_last_error_c() /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
 !    function sycl_stream_create(syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1796,7 +1782,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_stream_destroy(syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1808,7 +1794,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function syclblas_set_stream(syclblasHandle, syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1821,22 +1807,8 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
-!    function syclsolver_set_stream(syclsolverHandle, syclStream) result(success)
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!      integer(kind=C_intptr_t)                  :: syclsolverHandle
-!      integer(kind=C_intptr_t)                  :: syclStream
-!      logical                                   :: success
-!
-!#ifdef WITH_SYCL_SOLVER
-!      success = syclsolver_set_stream_c(syclsolverHandle, syclStream) /= 0
-!#else
-!      success = .true.
-!#endif
-!    end function
-!
-!
+
+
 !    function sycl_stream_synchronize(syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1856,7 +1828,7 @@ module sycl_functions
 !#endif
 !      endif
 !    end function
-!
+
 !#ifdef WITH_NVTX
 !    ! this wrapper is needed for the string conversion
 !    subroutine nvtxRangePush(range_name)
@@ -1888,22 +1860,6 @@ module sycl_functions
       implicit none
       integer(kind=C_intptr_t)   :: syclblasHandle
       logical                    :: success
-      success = .true.
-    end function
-
-    function syclsolver_create(syclsolverHandle) result(success)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_t)                  :: syclsolverHandle
-      logical                                   :: success
-      success = .true.
-    end function
-
-    function syclsolver_destroy(syclsolverHandle) result(success)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_t)                  :: syclsolverHandle
-      logical                                   :: success
       success = .true.
     end function
 
@@ -1954,7 +1910,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
     function sycl_malloc_intptr(a, width_height) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -1989,26 +1945,51 @@ module sycl_functions
       success = .true.
     end function
 
-!    function sycl_malloc_host(a, width_height) result(success)
+!    function sycl_malloc_host_intptr(a, width_height) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t)                  :: a
+!      integer(kind=c_intptr_t), intent(in)      :: width_height
+!      logical                                   :: success
+!#ifdef WITH_SYCL_GPU_VERSION
+!      success = sycl_malloc_host_intptr_c(a, width_height) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function sycl_malloc_host_cptr(a, width_height) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      type(c_ptr)                               :: a
 !      integer(kind=c_intptr_t), intent(in)      :: width_height
 !      logical                                   :: success
 !#ifdef WITH_SYCL_GPU_VERSION
-!      success = sycl_malloc_host_c(a, width_height) /= 0
+!      success = sycl_malloc_host_cptr_c(a, width_height) /= 0
 !#else
 !      success = .true.
 !#endif
 !    end function
-!
-!    function sycl_free_host(a) result(success)
+
+!    function sycl_free_host_intptr(a) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t) :: a
+!      logical                  :: success
+!#ifdef WITH_SYCL_GPU_VERSION
+!      success = sycl_free_host_intptr_c(a) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function sycl_free_host_cptr(a) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      type(c_ptr)                   :: a
 !      logical                  :: success
 !#ifdef WITH_SYCL_GPU_VERSION
-!      success = sycl_free_host_c(a) /= 0
+!      success = sycl_free_host_cptr_c(a) /= 0
 !#else
 !      success = .true.
 !#endif
@@ -2019,7 +2000,7 @@ module sycl_functions
       implicit none
       integer(kind=c_intptr_t)                :: a
       integer(kind=ik)                        :: val
-      integer(kind=c_intptr_t), intent(in)      :: size
+      integer(kind=c_intptr_t), intent(in)    :: size
       integer(kind=C_INT)                     :: istat
       logical :: success
       success = .true.
@@ -2076,7 +2057,7 @@ module sycl_functions
 !      flag = 0
 !#endif
 !    end function
-!
+
 !    function sycl_hostRegisterPortable() result(flag)
 !      use, intrinsic :: iso_c_binding
 !      use precision
@@ -2088,7 +2069,7 @@ module sycl_functions
 !      flag = 0
 !#endif
 !    end function
-!
+
 !    function sycl_hostRegisterMapped() result(flag)
 !      use, intrinsic :: iso_c_binding
 !      use precision
@@ -2160,7 +2141,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_memcpy_async_cptr(dst, src, size, dir, syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2176,7 +2157,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_memcpy_async_mixed_to_device(dst, src, size, dir, syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2192,7 +2173,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_memcpy_async_mixed_to_host(dst, src, size, dir, syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2208,7 +2189,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_memcpy2d_intptr(dst, dpitch, src, spitch, width, height , dir) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2226,7 +2207,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_memcpy2d_cptr(dst, dpitch, src, spitch, width, height , dir) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2244,7 +2225,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_memcpy2d_async_intptr(dst, dpitch, src, spitch, width, height, dir, syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2263,7 +2244,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_memcpy2d_async_cptr(dst, dpitch, src, spitch, width, height, dir, syclStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2282,7 +2263,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_host_register(a, size, flag) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2296,7 +2277,7 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function sycl_host_unregister(a) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2308,26 +2289,6 @@ module sycl_functions
 !      success = .true.
 !#endif
 !    end function
-
-    subroutine syclsolver_Dtrtri(uplo, diag, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
-    end subroutine
-
-    subroutine syclsolver_Dpotrf(uplo, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
-    end subroutine
 
     subroutine syclblas_Dgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, syclblasHandle)
       use, intrinsic :: iso_c_binding
@@ -2435,26 +2396,6 @@ module sycl_functions
       real(kind=C_DOUBLE) ,value               :: alpha,beta
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: syclblasHandle
-    end subroutine
-
-    subroutine syclsolver_Strtri(uplo, diag, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
-    end subroutine
-
-    subroutine syclsolver_Spotrf(uplo, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
     end subroutine
 
     subroutine syclblas_Sgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, syclblasHandle)
@@ -2565,26 +2506,6 @@ module sycl_functions
       integer(kind=C_intptr_T)        :: syclblasHandle
     end subroutine
 
-    subroutine syclsolver_Ztrtri(uplo, diag, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
-    end subroutine
-
-    subroutine syclsolver_Zpotrf(uplo, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
-    end subroutine
-
     subroutine syclblas_Zgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, syclblasHandle)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -2691,26 +2612,6 @@ module sycl_functions
       complex(kind=C_DOUBLE_COMPLEX) ,value               :: alpha,beta
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: syclblasHandle
-    end subroutine
-
-    subroutine syclsolver_Ctrtri(uplo, diag, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
-    end subroutine
-
-    subroutine syclsolver_Cpotrf(uplo, n, a, lda, info, syclsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: syclsolverHandle
     end subroutine
 
     subroutine syclblas_Cgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, syclblasHandle)
@@ -2853,22 +2754,21 @@ module sycl_functions
 
     end subroutine
 
-
-    subroutine syclblas_Ddot_intptr(syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Ddot_intptr(syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine syclblas_Ddot_cptr(syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Ddot_cptr(syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2912,22 +2812,21 @@ module sycl_functions
 
     end subroutine
 
-
-    subroutine syclblas_Sdot_intptr(syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Sdot_intptr(syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine syclblas_Sdot_cptr(syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Sdot_cptr(syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2971,24 +2870,23 @@ module sycl_functions
 
     end subroutine
 
-
-    subroutine syclblas_Zdot_intptr(conj, syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Zdot_intptr(conj, syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine syclblas_Zdot_cptr(conj, syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Zdot_cptr(conj, syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -3032,24 +2930,23 @@ module sycl_functions
 
     end subroutine
 
-
-    subroutine syclblas_Cdot_intptr(conj, syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Cdot_intptr(conj, syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine syclblas_Cdot_cptr(conj, syclblasHandle, length, x, incx, y, incy, z)
+    subroutine syclblas_Cdot_cptr(conj, syclblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: syclblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 

@@ -38,19 +38,18 @@ module elpa_solver_gpu
 
     end subroutine
 
-    subroutine gpusolver_Dpotrf(uplo, n, a, lda, info, handle)
+    subroutine gpusolver_Dpotrf(uplo, n, a_dev, lda, info_dev, handle)
       use, intrinsic :: iso_c_binding
       use cuda_functions
 
       implicit none
       character(1,C_CHAR),value       :: uplo
       integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
+      integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=c_intptr_t)        :: handle
 
       if (use_gpu_vendor == nvidia_gpu) then
-        call cusolver_Dpotrf(uplo, n, a, lda, info, handle)
+        call cusolver_Dpotrf(uplo, n, a_dev, lda, info_dev, handle)
       endif
 
 
@@ -74,19 +73,18 @@ module elpa_solver_gpu
 
     end subroutine
 
-    subroutine gpusolver_Spotrf(uplo, n, a, lda, info, handle)
+    subroutine gpusolver_Spotrf(uplo, n, a_dev, lda, info_dev, handle)
       use, intrinsic :: iso_c_binding
       use cuda_functions
 
       implicit none
       character(1,C_CHAR),value       :: uplo
       integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
+      integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=c_intptr_t)        :: handle
 
       if (use_gpu_vendor == nvidia_gpu) then
-        call cusolver_Spotrf(uplo, n, a, lda, info, handle)
+        call cusolver_Spotrf(uplo, n, a_dev, lda, info_dev, handle)
       endif
 
 
@@ -110,19 +108,18 @@ module elpa_solver_gpu
 
     end subroutine
 
-    subroutine gpusolver_Zpotrf(uplo, n, a, lda, info, handle)
+    subroutine gpusolver_Zpotrf(uplo, n, a_dev, lda, info_dev, handle)
       use, intrinsic :: iso_c_binding
       use cuda_functions
 
       implicit none
       character(1,C_CHAR),value       :: uplo
       integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
+      integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=c_intptr_t)        :: handle
 
       if (use_gpu_vendor == nvidia_gpu) then
-        call cusolver_Zpotrf(uplo, n, a, lda, info, handle)
+        call cusolver_Zpotrf(uplo, n, a_dev, lda, info_dev, handle)
       endif
 
 
@@ -146,19 +143,65 @@ module elpa_solver_gpu
 
     end subroutine
 
-    subroutine gpusolver_Cpotrf(uplo, n, a, lda, info, handle)
+    subroutine gpusolver_Cpotrf(uplo, n, a_dev, lda, info_dev, handle)
       use, intrinsic :: iso_c_binding
       use cuda_functions
 
       implicit none
       character(1,C_CHAR),value       :: uplo
       integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
+      integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=c_intptr_t)        :: handle
 
       if (use_gpu_vendor == nvidia_gpu) then
-        call cusolver_Cpotrf(uplo, n, a, lda, info, handle)
+        call cusolver_Cpotrf(uplo, n, a_dev, lda, info_dev, handle)
+      endif
+
+
+    end subroutine
+
+    ! Xpotrf_bufferSize
+
+    subroutine gpusolver_Xpotrf_bufferSize(cusolverHandle, uplo, n, dataType, a_dev, lda, &
+                                           workspaceInBytesOnDevice, workspaceInBytesOnHost)
+      use, intrinsic :: iso_c_binding
+      use cuda_functions
+
+      implicit none
+      integer(kind=c_intptr_t)       :: cusolverHandle
+      character(1, c_char), value    :: uplo, dataType
+      integer(kind=c_int)            :: n, lda
+      integer(kind=c_intptr_t)       :: a_dev
+      integer(kind=c_size_t)         :: workspaceInBytesOnDevice, workspaceInBytesOnHost
+
+      if (use_gpu_vendor == nvidia_gpu) then
+        call cusolver_Xpotrf_bufferSize(cusolverHandle, uplo, n, dataType, a_dev, lda, &
+                                        workspaceInBytesOnDevice, workspaceInBytesOnHost)
+      endif
+
+
+    end subroutine
+
+    ! Xpotrf
+
+    subroutine gpusolver_Xpotrf(cusolverHandle, uplo, n, dataType, a_dev, lda, &
+                                buffer_dev , workspaceInBytesOnDevice, &
+                                buffer_host, workspaceInBytesOnHost, info_dev)
+      use, intrinsic :: iso_c_binding
+      use cuda_functions
+
+      implicit none
+      integer(kind=c_intptr_t)       :: cusolverHandle
+      character(1, c_char), value    :: uplo, dataType
+      integer(kind=c_int)            :: n, lda
+      integer(kind=c_intptr_t)       :: a_dev, buffer_dev, info_dev
+      integer(kind=c_intptr_t)       :: buffer_host
+      integer(kind=c_size_t)         :: workspaceInBytesOnDevice, workspaceInBytesOnHost
+
+      if (use_gpu_vendor == nvidia_gpu) then
+        call cusolver_Xpotrf(cusolverHandle, uplo, n, dataType, a_dev, lda, &
+                             buffer_dev , workspaceInBytesOnDevice, &
+                             buffer_host, workspaceInBytesOnHost, info_dev)
       endif
 
 
@@ -166,4 +209,3 @@ module elpa_solver_gpu
 
 
 end module
-

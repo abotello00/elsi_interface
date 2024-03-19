@@ -2148,15 +2148,15 @@ enum ELPA_CONSTANTS {
         ELPA_2STAGE_NUMBER_OF_COMPLEX_KERNELS = (0 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1),
         ELPA_2STAGE_NUMBER_OF_REAL_KERNELS = (0 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1),
 };
-# 178 "./elpa/elpa_constants.h"
+# 179 "./elpa/elpa_constants.h"
 enum ELPA_AUTOTUNE_LEVELS {
-        ELPA_AUTOTUNE_NOT_TUNABLE = 0, ELPA_AUTOTUNE_GPU = 1, ELPA2_AUTOTUNE_KERNEL = 2, ELPA_AUTOTUNE_OPENMP = 3, ELPA_AUTOTUNE_TRANSPOSE_VECTORS = 4, ELPA2_AUTOTUNE_FULL_TO_BAND = 5, ELPA2_AUTOTUNE_BAND_TO_TRIDI = 6, ELPA_AUTOTUNE_SOLVE = 7, ELPA2_AUTOTUNE_TRIDI_TO_BAND = 8, ELPA2_AUTOTUNE_BAND_TO_FULL = 9, ELPA2_AUTOTUNE_MAIN = 10, ELPA1_AUTOTUNE_FULL_TO_TRIDI = 11, ELPA1_AUTOTUNE_TRIDI_TO_FULL = 12, ELPA_AUTOTUNE_MPI = 13, ELPA_AUTOTUNE_FAST = 14, ELPA_AUTOTUNE_MEDIUM = 15, ELPA2_AUTOTUNE_BAND_TO_FULL_BLOCKING = 16, ELPA2_AUTOTUNE_HERMITIAN_MULTIPLY_BLOCKING = 17, ELPA1_AUTOTUNE_MAX_STORED_ROWS = 18, ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH = 19, ELPA_AUTOTUNE_EXTENSIVE = 20,
+        ELPA_AUTOTUNE_NOT_TUNABLE = 0, ELPA_AUTOTUNE_GPU = 1, ELPA2_AUTOTUNE_KERNEL = 2, ELPA_AUTOTUNE_OPENMP = 3, ELPA_AUTOTUNE_TRANSPOSE_VECTORS = 4, ELPA2_AUTOTUNE_FULL_TO_BAND = 5, ELPA2_AUTOTUNE_BAND_TO_TRIDI = 6, ELPA_AUTOTUNE_SOLVE = 7, ELPA2_AUTOTUNE_TRIDI_TO_BAND = 8, ELPA2_AUTOTUNE_BAND_TO_FULL = 9, ELPA2_AUTOTUNE_MAIN = 10, ELPA1_AUTOTUNE_FULL_TO_TRIDI = 11, ELPA1_AUTOTUNE_TRIDI_TO_FULL = 12, ELPA_AUTOTUNE_MPI = 13, ELPA_AUTOTUNE_FAST = 14, ELPA_AUTOTUNE_MEDIUM = 15, ELPA2_AUTOTUNE_BAND_TO_FULL_BLOCKING = 16, ELPA2_AUTOTUNE_HERMITIAN_MULTIPLY_BLOCKING = 17, ELPA2_AUTOTUNE_CHOLESKY_BLOCKING = 18, ELPA1_AUTOTUNE_MAX_STORED_ROWS = 19, ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH = 20, ELPA_AUTOTUNE_EXTENSIVE = 21,
 };
-# 189 "./elpa/elpa_constants.h"
+# 190 "./elpa/elpa_constants.h"
 enum ELPA_AUTOTUNE_DOMAINS {
         ELPA_AUTOTUNE_DOMAIN_REAL = 1, ELPA_AUTOTUNE_DOMAIN_COMPLEX = 2, ELPA_AUTOTUNE_DOMAIN_ANY = 3,
 };
-# 201 "./elpa/elpa_constants.h"
+# 202 "./elpa/elpa_constants.h"
 enum ELPA_AUTOTUNE_PARTS {
         ELPA_AUTOTUNE_PART_NONE = 0, ELPA_AUTOTUNE_PART_ANY = 1, ELPA_AUTOTUNE_PART_GENERALIZED = 2, ELPA_AUTOTUNE_PART_ELPA1 = 3, ELPA_AUTOTUNE_PART_ELPA2 = 4,
 };
@@ -4301,6 +4301,10 @@ static int hermitian_multiply_cardinality(elpa_index_t index);
 static int hermitian_multiply_enumerate(elpa_index_t index, int i);
 static int hermitian_multiply_is_valid(elpa_index_t index, int n, int new_value);
 
+static int cholesky_cardinality(elpa_index_t index);
+static int cholesky_enumerate(elpa_index_t index, int i);
+static int cholesky_is_valid(elpa_index_t index, int n, int new_value);
+
 static int stripewidth_real_cardinality(elpa_index_t index);
 static int stripewidth_real_enumerate(elpa_index_t index, int i);
 static int stripewidth_real_is_valid(elpa_index_t index, int n, int new_value);
@@ -4324,7 +4328,7 @@ static int max_stored_rows_is_valid(elpa_index_t index, int n, int new_value);
 static int min_tile_size_cardinality(elpa_index_t index);
 static int min_tile_size_enumerate(elpa_index_t index, int i);
 static int min_tile_size_is_valid(elpa_index_t index, int n, int new_value);
-# 139 "../src/elpa_index.c"
+# 143 "../src/elpa_index.c"
 static int use_gpu_id_cardinality(elpa_index_t index);
 static int use_gpu_id_enumerate(elpa_index_t index, int i);
 static int use_gpu_id_is_valid(elpa_index_t index, int n, int new_value);
@@ -4361,7 +4365,7 @@ static int elpa_float_value_to_string(char *name, float value, const char **stri
 
 static int elpa_double_string_to_value(char *name, char *string, double *value);
 static int elpa_double_value_to_string(char *name, double value, const char **string);
-# 228 "../src/elpa_index.c"
+# 232 "../src/elpa_index.c"
 static const elpa_index_int_entry_t int_entries[] = {
         { .base = { .name = "na", .description = "Global matrix has size (na * na)", .once = 1, .readonly = 0, .env_default = "ELPA_DEFAULT_" "na", .env_force = "ELPA_FORCE_" "na", .print_flag = PRINT_STRUCTURE, }, .valid = na_is_valid, },
         { .base = { .name = "nev", .description = "Number of eigenvectors to be computed, 0 <= nev <= na", .once = 1, .readonly = 0, .env_default = "ELPA_DEFAULT_" "nev", .env_force = "ELPA_FORCE_" "nev", .print_flag = PRINT_STRUCTURE, }, .valid = nev_is_valid, },
@@ -4527,6 +4531,9 @@ static const elpa_index_int_entry_t int_entries[] = {
         { .base = { .name = "blocking_in_multiply", .description = "Blocking used in hermitian multiply, default", .once = 0, .readonly = 0, .env_default = "ELPA_DEFAULT_" "blocking_in_multiply", .env_force = "ELPA_FORCE_" "blocking_in_multiply", .print_flag = PRINT_YES, }, .default_value = 31, .autotune_level_old = ELPA_AUTOTUNE_EXTENSIVE, .autotune_level = ELPA2_AUTOTUNE_HERMITIAN_MULTIPLY_BLOCKING, .autotune_domain = ELPA_AUTOTUNE_DOMAIN_ANY, .autotune_part = ELPA_AUTOTUNE_PART_ELPA2, .cardinality = hermitian_multiply_cardinality, .enumerate = hermitian_multiply_enumerate, .valid = hermitian_multiply_is_valid, .to_string = ((void*)0), },
 
 
+        { .base = { .name = "blocking_in_cholesky", .description = "Blocking used in cholesky, default", .once = 0, .readonly = 0, .env_default = "ELPA_DEFAULT_" "blocking_in_cholesky", .env_force = "ELPA_FORCE_" "blocking_in_cholesky", .print_flag = PRINT_YES, }, .default_value = 128, .autotune_level_old = ELPA_AUTOTUNE_EXTENSIVE, .autotune_level = ELPA2_AUTOTUNE_CHOLESKY_BLOCKING, .autotune_domain = ELPA_AUTOTUNE_DOMAIN_ANY, .autotune_part = ELPA_AUTOTUNE_PART_ELPA2, .cardinality = cholesky_cardinality, .enumerate = cholesky_enumerate, .valid = cholesky_is_valid, .to_string = ((void*)0), },
+
+
         { .base = { .name = "stripewidth_real", .description = "Stripewidth_real, default 48. Must be a multiple of 4", .once = 0, .readonly = 0, .env_default = "ELPA_DEFAULT_" "stripewidth_real", .env_force = "ELPA_FORCE_" "stripewidth_real", .print_flag = PRINT_YES, }, .default_value = 48, .autotune_level_old = ELPA_AUTOTUNE_EXTENSIVE, .autotune_level = ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH, .autotune_domain = ELPA_AUTOTUNE_DOMAIN_REAL, .autotune_part = ELPA_AUTOTUNE_PART_ELPA2, .cardinality = stripewidth_real_cardinality, .enumerate = stripewidth_real_enumerate, .valid = stripewidth_real_is_valid, .to_string = ((void*)0), },
 
         { .base = { .name = "stripewidth_complex", .description = "Stripewidth_complex, default 96. Must be a multiple of 8", .once = 0, .readonly = 0, .env_default = "ELPA_DEFAULT_" "stripewidth_complex", .env_force = "ELPA_FORCE_" "stripewidth_complex", .print_flag = PRINT_YES, }, .default_value = 96, .autotune_level_old = ELPA_AUTOTUNE_EXTENSIVE, .autotune_level = ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH, .autotune_domain = ELPA_AUTOTUNE_DOMAIN_COMPLEX, .autotune_part = ELPA_AUTOTUNE_PART_ELPA2, .cardinality = stripewidth_complex_cardinality, .enumerate = stripewidth_complex_enumerate, .valid = stripewidth_complex_is_valid, .to_string = ((void*)0), },
@@ -4534,11 +4541,11 @@ static const elpa_index_int_entry_t int_entries[] = {
         { .base = { .name = "min_tile_size", .description = "Minimal tile size used internally in elpa1_tridiag and elpa2_bandred", .once = 0, .readonly = 0, .env_default = "ELPA_DEFAULT_" "min_tile_size", .env_force = "ELPA_FORCE_" "min_tile_size", .print_flag = PRINT_YES, }, .default_value = 0, .autotune_level_old = ELPA_AUTOTUNE_NOT_TUNABLE, .autotune_level = ELPA_AUTOTUNE_NOT_TUNABLE, .autotune_domain = ELPA_AUTOTUNE_DOMAIN_ANY, .autotune_part = ELPA_AUTOTUNE_PART_ANY, .cardinality = min_tile_size_cardinality, .enumerate = min_tile_size_enumerate, .valid = min_tile_size_is_valid, .to_string = ((void*)0), },
 
 };
-# 412 "../src/elpa_index.c"
+# 419 "../src/elpa_index.c"
 static const elpa_index_float_entry_t float_entries[] = {
         { .base = { .name = "thres_pd_single", .description = "Threshold to define ill-conditioning, default 0.00001", .once = 0, .readonly = 0, .env_default = "ELPA_DEFAULT_" "thres_pd_single", .env_force = "ELPA_FORCE_" "thres_pd_single", .print_flag = PRINT_YES, }, .default_value = 0.00001, },
 };
-# 427 "../src/elpa_index.c"
+# 434 "../src/elpa_index.c"
 static const elpa_index_double_entry_t double_entries[] = {
         { .base = { .name = "thres_pd_double", .description = "Threshold to define ill-conditioning, default 0.00001", .once = 0, .readonly = 0, .env_default = "ELPA_DEFAULT_" "thres_pd_double", .env_force = "ELPA_FORCE_" "thres_pd_double", .print_flag = PRINT_YES, }, .default_value = 0.00001, },
 };
@@ -4558,19 +4565,19 @@ static int compar(const void *a, const void *b) {
         return __extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p (((elpa_index_int_entry_t *) a)->base.name) && __builtin_constant_p (((elpa_index_int_entry_t *) b)->base.name) && (__s1_len = strlen (((elpa_index_int_entry_t *) a)->base.name), __s2_len = strlen (((elpa_index_int_entry_t *) b)->base.name), (!((size_t)(const void *)((((elpa_index_int_entry_t *) a)->base.name) + 1) - (size_t)(const void *)(((elpa_index_int_entry_t *) a)->base.name) == 1) || __s1_len >= 4) && (!((size_t)(const void *)((((elpa_index_int_entry_t *) b)->base.name) + 1) - (size_t)(const void *)(((elpa_index_int_entry_t *) b)->base.name) == 1) || __s2_len >= 4)) ? __builtin_strcmp (((elpa_index_int_entry_t *) a)->base.name, ((elpa_index_int_entry_t *) b)->base.name) : (__builtin_constant_p (((elpa_index_int_entry_t *) a)->base.name) && ((size_t)(const void *)((((elpa_index_int_entry_t *) a)->base.name) + 1) - (size_t)(const void *)(((elpa_index_int_entry_t *) a)->base.name) == 1) && (__s1_len = strlen (((elpa_index_int_entry_t *) a)->base.name), __s1_len < 4) ? (__builtin_constant_p (((elpa_index_int_entry_t *) b)->base.name) && ((size_t)(const void *)((((elpa_index_int_entry_t *) b)->base.name) + 1) - (size_t)(const void *)(((elpa_index_int_entry_t *) b)->base.name) == 1) ? __builtin_strcmp (((elpa_index_int_entry_t *) a)->base.name, ((elpa_index_int_entry_t *) b)->base.name) : (__extension__ ({ const unsigned char *__s2 = (const unsigned char *) (const char *) (((elpa_index_int_entry_t *) b)->base.name); int __result = (((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) a)->base.name))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) a)->base.name))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) a)->base.name))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) a)->base.name))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p (((elpa_index_int_entry_t *) b)->base.name) && ((size_t)(const void *)((((elpa_index_int_entry_t *) b)->base.name) + 1) - (size_t)(const void *)(((elpa_index_int_entry_t *) b)->base.name) == 1) && (__s2_len = strlen (((elpa_index_int_entry_t *) b)->base.name), __s2_len < 4) ? (__builtin_constant_p (((elpa_index_int_entry_t *) a)->base.name) && ((size_t)(const void *)((((elpa_index_int_entry_t *) a)->base.name) + 1) - (size_t)(const void *)(((elpa_index_int_entry_t *) a)->base.name) == 1) ? __builtin_strcmp (((elpa_index_int_entry_t *) a)->base.name, ((elpa_index_int_entry_t *) b)->base.name) : (__extension__ ({ const unsigned char *__s1 = (const unsigned char *) (const char *) (((elpa_index_int_entry_t *) a)->base.name); register int __result = __s1[0] - ((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) b)->base.name))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) b)->base.name))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) b)->base.name))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((const unsigned char *) (const char *) (((elpa_index_int_entry_t *) b)->base.name))[3]); } } __result; }))) : __builtin_strcmp (((elpa_index_int_entry_t *) a)->base.name, ((elpa_index_int_entry_t *) b)->base.name)))); });
 
 }
-# 459 "../src/elpa_index.c"
+# 466 "../src/elpa_index.c"
 static int find_int_entry(char *name) { elpa_index_int_entry_t *entry; elpa_index_int_entry_t key = { .base = {.name = name} } ; size_t nmembers = (sizeof(int_entries)/sizeof(int_entries[0])); entry = lfind((const void*) &key, (const void *) int_entries, &nmembers, sizeof(elpa_index_int_entry_t), compar); if (entry) { return (entry - &int_entries[0]); } else { return -1; } } static int find_float_entry(char *name) { elpa_index_float_entry_t *entry; elpa_index_float_entry_t key = { .base = {.name = name} } ; size_t nmembers = (sizeof(float_entries)/sizeof(float_entries[0])); entry = lfind((const void*) &key, (const void *) float_entries, &nmembers, sizeof(elpa_index_float_entry_t), compar); if (entry) { return (entry - &float_entries[0]); } else { return -1; } } static int find_double_entry(char *name) { elpa_index_double_entry_t *entry; elpa_index_double_entry_t key = { .base = {.name = name} } ; size_t nmembers = (sizeof(double_entries)/sizeof(double_entries[0])); entry = lfind((const void*) &key, (const void *) double_entries, &nmembers, sizeof(elpa_index_double_entry_t), compar); if (entry) { return (entry - &double_entries[0]); } else { return -1; } }
-# 494 "../src/elpa_index.c"
+# 501 "../src/elpa_index.c"
 static int getenv_int(elpa_index_t index, const char *env_variable, enum NOTIFY_FLAGS notify_flag, int n, int *value, const char *error_string) { int err; char *env_value = getenv(env_variable); if (env_value) { err = elpa_int_string_to_value(int_entries[n].base.name, env_value, value); if (err != ELPA_OK) { fprintf(stderr, "ELPA: Error interpreting environment variable %s with value '%s': %s\n", int_entries[n].base.name, env_value, elpa_strerr(err)); } else { const char *value_string = ((void*)0); if (elpa_int_value_to_string(int_entries[n].base.name, *value, &value_string) == ELPA_OK) { if (!(index->int_options.notified[n] & notify_flag)) { if (elpa_index_is_printing_mpi_rank(index)) { if (elpa_index_int_value_is_set(index, "verbose")) { fprintf(stderr, "ELPA: %s '%s' is set to %s due to environment variable %s\n", error_string, int_entries[n].base.name, value_string, env_variable); } } index->int_options.notified[n] |= notify_flag; } } else { if (elpa_index_is_printing_mpi_rank(index)) { fprintf(stderr, "ELPA: %s '%s' is set to '" "%d" "' due to environment variable %s\n", error_string, int_entries[n].base.name, *value, env_variable); } } return 1; } } return 0; } static int getenv_float(elpa_index_t index, const char *env_variable, enum NOTIFY_FLAGS notify_flag, int n, float *value, const char *error_string) { int err; char *env_value = getenv(env_variable); if (env_value) { err = elpa_float_string_to_value(float_entries[n].base.name, env_value, value); if (err != ELPA_OK) { fprintf(stderr, "ELPA: Error interpreting environment variable %s with value '%s': %s\n", float_entries[n].base.name, env_value, elpa_strerr(err)); } else { const char *value_string = ((void*)0); if (elpa_float_value_to_string(float_entries[n].base.name, *value, &value_string) == ELPA_OK) { if (!(index->float_options.notified[n] & notify_flag)) { if (elpa_index_is_printing_mpi_rank(index)) { if (elpa_index_int_value_is_set(index, "verbose")) { fprintf(stderr, "ELPA: %s '%s' is set to %s due to environment variable %s\n", error_string, float_entries[n].base.name, value_string, env_variable); } } index->float_options.notified[n] |= notify_flag; } } else { if (elpa_index_is_printing_mpi_rank(index)) { fprintf(stderr, "ELPA: %s '%s' is set to '" "%g" "' due to environment variable %s\n", error_string, float_entries[n].base.name, *value, env_variable); } } return 1; } } return 0; } static int getenv_double(elpa_index_t index, const char *env_variable, enum NOTIFY_FLAGS notify_flag, int n, double *value, const char *error_string) { int err; char *env_value = getenv(env_variable); if (env_value) { err = elpa_double_string_to_value(double_entries[n].base.name, env_value, value); if (err != ELPA_OK) { fprintf(stderr, "ELPA: Error interpreting environment variable %s with value '%s': %s\n", double_entries[n].base.name, env_value, elpa_strerr(err)); } else { const char *value_string = ((void*)0); if (elpa_double_value_to_string(double_entries[n].base.name, *value, &value_string) == ELPA_OK) { if (!(index->double_options.notified[n] & notify_flag)) { if (elpa_index_is_printing_mpi_rank(index)) { if (elpa_index_int_value_is_set(index, "verbose")) { fprintf(stderr, "ELPA: %s '%s' is set to %s due to environment variable %s\n", error_string, double_entries[n].base.name, value_string, env_variable); } } index->double_options.notified[n] |= notify_flag; } } else { if (elpa_index_is_printing_mpi_rank(index)) { fprintf(stderr, "ELPA: %s '%s' is set to '" "%g" "' due to environment variable %s\n", error_string, double_entries[n].base.name, *value, env_variable); } } return 1; } } return 0; }
-# 523 "../src/elpa_index.c"
+# 530 "../src/elpa_index.c"
 int elpa_index_get_int_value(elpa_index_t index, char *name, int *error) { int ret; if (sizeof(int_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_int_entry(name); if (n >= 0) { int from_env = 0; if (!int_entries[n].base.once && !int_entries[n].base.readonly) { from_env = getenv_int(index, int_entries[n].base.env_force, NOTIFY_ENV_FORCE, n, &ret, "Option"); } if (!from_env) { ret = index->int_options.values[n]; } if (error != ((void*)0)) { *error = ELPA_OK; } return ret; } else { if (error != ((void*)0)) { *error = ELPA_ERROR_ENTRY_NOT_FOUND; } return -1; } } float elpa_index_get_float_value(elpa_index_t index, char *name, int *error) { float ret; if (sizeof(float_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_float_entry(name); if (n >= 0) { int from_env = 0; if (!float_entries[n].base.once && !float_entries[n].base.readonly) { from_env = getenv_float(index, float_entries[n].base.env_force, NOTIFY_ENV_FORCE, n, &ret, "Option"); } if (!from_env) { ret = index->float_options.values[n]; } if (error != ((void*)0)) { *error = ELPA_OK; } return ret; } else { if (error != ((void*)0)) { *error = ELPA_ERROR_ENTRY_NOT_FOUND; } return (__builtin_nanf ("")); } } double elpa_index_get_double_value(elpa_index_t index, char *name, int *error) { double ret; if (sizeof(double_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_double_entry(name); if (n >= 0) { int from_env = 0; if (!double_entries[n].base.once && !double_entries[n].base.readonly) { from_env = getenv_double(index, double_entries[n].base.env_force, NOTIFY_ENV_FORCE, n, &ret, "Option"); } if (!from_env) { ret = index->double_options.values[n]; } if (error != ((void*)0)) { *error = ELPA_OK; } return ret; } else { if (error != ((void*)0)) { *error = ELPA_ERROR_ENTRY_NOT_FOUND; } return (__builtin_nanf ("")); } }
-# 538 "../src/elpa_index.c"
+# 545 "../src/elpa_index.c"
 int* elpa_index_get_int_loc(elpa_index_t index, char *name) { if (sizeof(int_entries) == 0) { return ((void*)0); } int n = find_int_entry(name); if (n >= 0) { return &index->int_options.values[n]; } else { return ((void*)0); } } float* elpa_index_get_float_loc(elpa_index_t index, char *name) { if (sizeof(float_entries) == 0) { return ((void*)0); } int n = find_float_entry(name); if (n >= 0) { return &index->float_options.values[n]; } else { return ((void*)0); } } double* elpa_index_get_double_loc(elpa_index_t index, char *name) { if (sizeof(double_entries) == 0) { return ((void*)0); } int n = find_double_entry(name); if (n >= 0) { return &index->double_options.values[n]; } else { return ((void*)0); } }
-# 565 "../src/elpa_index.c"
+# 572 "../src/elpa_index.c"
 int elpa_index_set_int_value(elpa_index_t index, char *name, int value) { if (sizeof(int_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_int_entry(name); if (n < 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; }; if (int_entries[n].valid != ((void*)0)) { if(!int_entries[n].valid(index, n, value)) { return ELPA_ERROR_ENTRY_INVALID_VALUE; }; } if (int_entries[n].base.once & index->int_options.is_set[n]) { return ELPA_ERROR_ENTRY_ALREADY_SET; } if (int_entries[n].base.readonly) { return ELPA_ERROR_ENTRY_READONLY; } index->int_options.values[n] = value; index->int_options.is_set[n] = 1; return ELPA_OK; } int elpa_index_set_float_value(elpa_index_t index, char *name, float value) { if (sizeof(float_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_float_entry(name); if (n < 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; }; if (float_entries[n].valid != ((void*)0)) { if(!float_entries[n].valid(index, n, value)) { return ELPA_ERROR_ENTRY_INVALID_VALUE; }; } if (float_entries[n].base.once & index->float_options.is_set[n]) { return ELPA_ERROR_ENTRY_ALREADY_SET; } if (float_entries[n].base.readonly) { return ELPA_ERROR_ENTRY_READONLY; } index->float_options.values[n] = value; index->float_options.is_set[n] = 1; return ELPA_OK; } int elpa_index_set_double_value(elpa_index_t index, char *name, double value) { if (sizeof(double_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_double_entry(name); if (n < 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; }; if (double_entries[n].valid != ((void*)0)) { if(!double_entries[n].valid(index, n, value)) { return ELPA_ERROR_ENTRY_INVALID_VALUE; }; } if (double_entries[n].base.once & index->double_options.is_set[n]) { return ELPA_ERROR_ENTRY_ALREADY_SET; } if (double_entries[n].base.readonly) { return ELPA_ERROR_ENTRY_READONLY; } index->double_options.values[n] = value; index->double_options.is_set[n] = 1; return ELPA_OK; }
-# 581 "../src/elpa_index.c"
+# 588 "../src/elpa_index.c"
 int elpa_index_set_from_load_int_value(elpa_index_t index, char *name, int value, int explicit) { if (sizeof(int_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_int_entry(name); if (n < 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; }; index->int_options.values[n] = value; if(explicit) index->int_options.is_set[n] = 1; return ELPA_OK; } int elpa_index_set_from_load_float_value(elpa_index_t index, char *name, float value, int explicit) { if (sizeof(float_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_float_entry(name); if (n < 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; }; index->float_options.values[n] = value; if(explicit) index->float_options.is_set[n] = 1; return ELPA_OK; } int elpa_index_set_from_load_double_value(elpa_index_t index, char *name, double value, int explicit) { if (sizeof(double_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_double_entry(name); if (n < 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; }; index->double_options.values[n] = value; if(explicit) index->double_options.is_set[n] = 1; return ELPA_OK; }
-# 600 "../src/elpa_index.c"
+# 607 "../src/elpa_index.c"
 int elpa_index_int_value_is_set(elpa_index_t index, char *name) { if (sizeof(int_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_int_entry(name); if (n >= 0) { if (index->int_options.is_set[n]) { return 1; } else { return 0; } } else { return ELPA_ERROR_ENTRY_NOT_FOUND; } } int elpa_index_float_value_is_set(elpa_index_t index, char *name) { if (sizeof(float_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_float_entry(name); if (n >= 0) { if (index->float_options.is_set[n]) { return 1; } else { return 0; } } else { return ELPA_ERROR_ENTRY_NOT_FOUND; } } int elpa_index_double_value_is_set(elpa_index_t index, char *name) { if (sizeof(double_entries) == 0) { return ELPA_ERROR_ENTRY_NOT_FOUND; } int n = find_double_entry(name); if (n >= 0) { if (index->double_options.is_set[n]) { return 1; } else { return 0; } } else { return ELPA_ERROR_ENTRY_NOT_FOUND; } }
 
 
@@ -4724,7 +4731,7 @@ static int valid_bool(elpa_index_t index, int n, int new_value) {
 static int enumerate_identity(elpa_index_t index, int i) {
         return i;
 }
-# 768 "../src/elpa_index.c"
+# 775 "../src/elpa_index.c"
 static const char* elpa_matrix_layout_name(int layout) {
  switch(layout) {
   case 1: return "COLUMN_MAJOR_ORDER"; case 2: return "ROW_MAJOR_ORDER";
@@ -4738,7 +4745,7 @@ static int number_of_matrix_layouts(elpa_index_t index) {
 }
 
 static int matrix_layout_enumerate(elpa_index_t index, int i) {
-# 793 "../src/elpa_index.c"
+# 800 "../src/elpa_index.c"
         switch(i) {
 
                 { const int array_of_size_value[1]; case 0 +(1 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1) +(2 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1): return 1; } { const int array_of_size_value[2]; case 0 +(1 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1) +(2 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1): return 2; }
@@ -4769,7 +4776,7 @@ static int number_of_solvers(elpa_index_t index) {
 }
 
 static int solver_enumerate(elpa_index_t index, int i) {
-# 835 "../src/elpa_index.c"
+# 842 "../src/elpa_index.c"
         switch(i) {
 
                 { const int array_of_size_value[1]; case 0 +(1 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1) +(2 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1): return 1; } { const int array_of_size_value[2]; case 0 +(1 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1) +(2 >= sizeof(array_of_size_value)/sizeof(int) ? 0 : 1): return 2; }
@@ -4809,7 +4816,7 @@ static const char *real_kernel_name(int kernel) {
                         return "(Invalid real kernel)";
         }
 }
-# 884 "../src/elpa_index.c"
+# 891 "../src/elpa_index.c"
 static int real_kernel_is_valid(elpa_index_t index, int n, int new_value) {
         int solver = elpa_index_get_int_value(index, "solver", ((void*)0));
         if (solver == ELPA_SOLVER_1STAGE) {
@@ -4817,7 +4824,7 @@ static int real_kernel_is_valid(elpa_index_t index, int n, int new_value) {
         }
         int gpu_is_active = (elpa_index_get_int_value(index, "nvidia-gpu", ((void*)0)) || elpa_index_get_int_value(index, "gpu", ((void*)0)) || elpa_index_get_int_value(index, "amd-gpu", ((void*)0)) || elpa_index_get_int_value(index, "intel-gpu", ((void*)0)));
         switch(new_value) {
-# 907 "../src/elpa_index.c"
+# 914 "../src/elpa_index.c"
                 case 1: return 1 && (1 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 2: return 0 && (2 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 3: return 0 && (3 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 4: return 0 && (4 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 5: return 0 && (5 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 6: return 0 && (6 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 7: return 0 && (7 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 8: return 0 && (8 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 9: return 0 && (9 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 10: return 0 && (10 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 11: return 0 && (11 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 12: return 0 && (12 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 13: return 0 && (13 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 14: return 0 && (14 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 15: return 0 && (15 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 16: return 0 && (16 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 17: return 0 && (17 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 18: return 0 && (18 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 19: return 0 && (19 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 20: return 0 && (20 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 21: return 0 && (21 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 22: return 0 && (22 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 23: return 0 && (23 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 24: return 0 && (24 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 25: return 0 && (25 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 26: return 0 && (26 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 27: return 0 && (27 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 28: return 0 && (28 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 29: return 0 && (29 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 30: return 0 && (30 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 31: return 0 && (31 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 32: return 0 && (32 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 33: return 0 && (33 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 34: return 0 && (34 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 35: return 0 && (35 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 36: return 0 && (36 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 37: return 0 && (37 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 38: return 0 && (38 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 39: return 0 && (39 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 40: return 0 && (40 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1); case 41: return 0 && (41 == ELPA_2STAGE_REAL_NVIDIA_GPU ? gpu_is_active : 1);
 
 
@@ -4848,7 +4855,7 @@ static const char *complex_kernel_name(int kernel) {
                         return "(Invalid complex kernel)";
         }
 }
-# 947 "../src/elpa_index.c"
+# 954 "../src/elpa_index.c"
 static int complex_kernel_is_valid(elpa_index_t index, int n, int new_value) {
         int solver = elpa_index_get_int_value(index, "solver", ((void*)0));
         if (solver == ELPA_SOLVER_1STAGE) {
@@ -4856,7 +4863,7 @@ static int complex_kernel_is_valid(elpa_index_t index, int n, int new_value) {
         }
         int gpu_is_active = (elpa_index_get_int_value(index, "nvidia-gpu", ((void*)0)) || elpa_index_get_int_value(index, "amd-gpu", ((void*)0)) || elpa_index_get_int_value(index, "intel-gpu", ((void*)0)));
         switch(new_value) {
-# 970 "../src/elpa_index.c"
+# 977 "../src/elpa_index.c"
                 case 1: return 1 && (1 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 2: return 0 && (2 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 3: return 0 && (3 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 4: return 0 && (4 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 5: return 0 && (5 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 6: return 0 && (6 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 7: return 0 && (7 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 8: return 0 && (8 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 9: return 0 && (9 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 10: return 0 && (10 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 11: return 0 && (11 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 12: return 0 && (12 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 13: return 0 && (13 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 14: return 0 && (14 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 15: return 0 && (15 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 16: return 0 && (16 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 17: return 0 && (17 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 18: return 0 && (18 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 19: return 0 && (19 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 20: return 0 && (20 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 21: return 0 && (21 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 22: return 0 && (22 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 23: return 0 && (23 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 24: return 0 && (24 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1); case 25: return 0 && (25 == ELPA_2STAGE_COMPLEX_NVIDIA_GPU ? gpu_is_active : 1);
 
 
@@ -4867,7 +4874,7 @@ static int complex_kernel_is_valid(elpa_index_t index, int n, int new_value) {
 
 static const char* elpa_autotune_level_name(int level) {
         switch(level) {
-                case 0: return "ELPA_AUTOTUNE_NOT_TUNABLE"; case 1: return "ELPA_AUTOTUNE_GPU"; case 2: return "ELPA2_AUTOTUNE_KERNEL"; case 3: return "ELPA_AUTOTUNE_OPENMP"; case 4: return "ELPA_AUTOTUNE_TRANSPOSE_VECTORS"; case 5: return "ELPA2_AUTOTUNE_FULL_TO_BAND"; case 6: return "ELPA2_AUTOTUNE_BAND_TO_TRIDI"; case 7: return "ELPA_AUTOTUNE_SOLVE"; case 8: return "ELPA2_AUTOTUNE_TRIDI_TO_BAND"; case 9: return "ELPA2_AUTOTUNE_BAND_TO_FULL"; case 10: return "ELPA2_AUTOTUNE_MAIN"; case 11: return "ELPA1_AUTOTUNE_FULL_TO_TRIDI"; case 12: return "ELPA1_AUTOTUNE_TRIDI_TO_FULL"; case 13: return "ELPA_AUTOTUNE_MPI"; case 14: return "ELPA_AUTOTUNE_FAST"; case 15: return "ELPA_AUTOTUNE_MEDIUM"; case 16: return "ELPA2_AUTOTUNE_BAND_TO_FULL_BLOCKING"; case 17: return "ELPA2_AUTOTUNE_HERMITIAN_MULTIPLY_BLOCKING"; case 18: return "ELPA1_AUTOTUNE_MAX_STORED_ROWS"; case 19: return "ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH"; case 20: return "ELPA_AUTOTUNE_EXTENSIVE";
+                case 0: return "ELPA_AUTOTUNE_NOT_TUNABLE"; case 1: return "ELPA_AUTOTUNE_GPU"; case 2: return "ELPA2_AUTOTUNE_KERNEL"; case 3: return "ELPA_AUTOTUNE_OPENMP"; case 4: return "ELPA_AUTOTUNE_TRANSPOSE_VECTORS"; case 5: return "ELPA2_AUTOTUNE_FULL_TO_BAND"; case 6: return "ELPA2_AUTOTUNE_BAND_TO_TRIDI"; case 7: return "ELPA_AUTOTUNE_SOLVE"; case 8: return "ELPA2_AUTOTUNE_TRIDI_TO_BAND"; case 9: return "ELPA2_AUTOTUNE_BAND_TO_FULL"; case 10: return "ELPA2_AUTOTUNE_MAIN"; case 11: return "ELPA1_AUTOTUNE_FULL_TO_TRIDI"; case 12: return "ELPA1_AUTOTUNE_TRIDI_TO_FULL"; case 13: return "ELPA_AUTOTUNE_MPI"; case 14: return "ELPA_AUTOTUNE_FAST"; case 15: return "ELPA_AUTOTUNE_MEDIUM"; case 16: return "ELPA2_AUTOTUNE_BAND_TO_FULL_BLOCKING"; case 17: return "ELPA2_AUTOTUNE_HERMITIAN_MULTIPLY_BLOCKING"; case 18: return "ELPA2_AUTOTUNE_CHOLESKY_BLOCKING"; case 19: return "ELPA1_AUTOTUNE_MAX_STORED_ROWS"; case 20: return "ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH"; case 21: return "ELPA_AUTOTUNE_EXTENSIVE";
                 default:
                         return "(Invalid autotune level)";
         }
@@ -4993,6 +5000,13 @@ static int hermitian_multiply_enumerate(elpa_index_t index, int i) {
  return i+1;
 }
 
+static int cholesky_cardinality(elpa_index_t index) {
+ return 4096;
+}
+static int cholesky_enumerate(elpa_index_t index, int i) {
+ return i+1;
+}
+
 static int internal_nblk_is_valid(elpa_index_t index, int n, int new_value) {
         return (0 <= new_value);
 }
@@ -5031,6 +5045,11 @@ static int band_to_full_is_valid(elpa_index_t index, int n, int new_value) {
 
 static int hermitian_multiply_is_valid(elpa_index_t index, int n, int new_value) {
  int max_block=4100;
+        return (1 <= new_value) && (new_value <= max_block);
+}
+
+static int cholesky_is_valid(elpa_index_t index, int n, int new_value) {
+ int max_block=4096;
         return (1 <= new_value) && (new_value <= max_block);
 }
 
@@ -5223,7 +5242,7 @@ static int max_stored_rows_is_valid(elpa_index_t index, int n, int new_value) {
 }
 
 static int use_gpu_id_cardinality(elpa_index_t index) {
-# 1372 "../src/elpa_index.c"
+# 1391 "../src/elpa_index.c"
  return 0;
 
 }
@@ -5234,7 +5253,7 @@ static int use_gpu_id_enumerate(elpa_index_t index, int i) {
 }
 
 static int use_gpu_id_is_valid(elpa_index_t index, int n, int new_value) {
-# 1408 "../src/elpa_index.c"
+# 1427 "../src/elpa_index.c"
  return 0 == 0;
 
 
@@ -5350,7 +5369,7 @@ static int cannon_buffer_size_is_valid(elpa_index_t index, int n, int new_value)
 
 elpa_index_t elpa_index_instance() {
         elpa_index_t index = (elpa_index_t) calloc(1, sizeof(struct elpa_index_struct));
-# 1536 "../src/elpa_index.c"
+# 1555 "../src/elpa_index.c"
         index->int_options.values = (int*) calloc((sizeof(int_entries)/sizeof(int_entries[0])), sizeof(int)); index->int_options.is_set = (int*) calloc((sizeof(int_entries)/sizeof(int_entries[0])), sizeof(int)); index->int_options.notified = (int*) calloc((sizeof(int_entries)/sizeof(int_entries[0])), sizeof(int)); for (int n = 0; n < (sizeof(int_entries)/sizeof(int_entries[0])); n++) { int default_value = int_entries[n].default_value; if (!int_entries[n].base.once && !int_entries[n].base.readonly) { getenv_int(index, int_entries[n].base.env_default, NOTIFY_ENV_DEFAULT, n, &default_value, "Default for option"); } index->int_options.values[n] = default_value; } index->float_options.values = (float*) calloc((sizeof(float_entries)/sizeof(float_entries[0])), sizeof(float)); index->float_options.is_set = (int*) calloc((sizeof(float_entries)/sizeof(float_entries[0])), sizeof(int)); index->float_options.notified = (int*) calloc((sizeof(float_entries)/sizeof(float_entries[0])), sizeof(int)); for (int n = 0; n < (sizeof(float_entries)/sizeof(float_entries[0])); n++) { float default_value = float_entries[n].default_value; if (!float_entries[n].base.once && !float_entries[n].base.readonly) { getenv_float(index, float_entries[n].base.env_default, NOTIFY_ENV_DEFAULT, n, &default_value, "Default for option"); } index->float_options.values[n] = default_value; } index->double_options.values = (double*) calloc((sizeof(double_entries)/sizeof(double_entries[0])), sizeof(double)); index->double_options.is_set = (int*) calloc((sizeof(double_entries)/sizeof(double_entries[0])), sizeof(int)); index->double_options.notified = (int*) calloc((sizeof(double_entries)/sizeof(double_entries[0])), sizeof(int)); for (int n = 0; n < (sizeof(double_entries)/sizeof(double_entries[0])); n++) { double default_value = double_entries[n].default_value; if (!double_entries[n].base.once && !double_entries[n].base.readonly) { getenv_double(index, double_entries[n].base.env_default, NOTIFY_ENV_DEFAULT, n, &default_value, "Default for option"); } index->double_options.values[n] = default_value; }
 
         return index;
@@ -5664,7 +5683,7 @@ int elpa_index_print_autotune_state_new_stepping(elpa_index_t index, int autotun
 }
 
 const int LEN =1000;
-# 1873 "../src/elpa_index.c"
+# 1892 "../src/elpa_index.c"
 static int load_int_line(FILE* f, const char* expected, int* val) { char line[LEN], s[LEN]; int error = 0; int n; if(fgets(line, LEN, f) == ((void*)0)){ fprintf(stderr, "Loading autotuning state error: line is not there\n"); error = 1; } else{ sscanf(line, "%s = " "%d" "\n", s, &n); if(__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p (s) && __builtin_constant_p (expected) && (__s1_len = strlen (s), __s2_len = strlen (expected), (!((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) || __s1_len >= 4) && (!((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) || __s2_len >= 4)) ? __builtin_strcmp (s, expected) : (__builtin_constant_p (s) && ((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) && (__s1_len = strlen (s), __s1_len < 4) ? (__builtin_constant_p (expected) && ((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) ? __builtin_strcmp (s, expected) : (__extension__ ({ const unsigned char *__s2 = (const unsigned char *) (const char *) (expected); int __result = (((const unsigned char *) (const char *) (s))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((const unsigned char *) (const char *) (s))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((const unsigned char *) (const char *) (s))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((const unsigned char *) (const char *) (s))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p (expected) && ((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) && (__s2_len = strlen (expected), __s2_len < 4) ? (__builtin_constant_p (s) && ((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) ? __builtin_strcmp (s, expected) : (__extension__ ({ const unsigned char *__s1 = (const unsigned char *) (const char *) (s); register int __result = __s1[0] - ((const unsigned char *) (const char *) (expected))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((const unsigned char *) (const char *) (expected))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((const unsigned char *) (const char *) (expected))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((const unsigned char *) (const char *) (expected))[3]); } } __result; }))) : __builtin_strcmp (s, expected)))); }) != 0){ fprintf(stderr, "Loading autotuning state error: expected %s, got %s\n", expected, s); error = 1; } else{ *val = n; } } if(error){ fprintf(stderr, "Autotuning state file corrupted\n"); return 0; } return 1; } static int load_float_line(FILE* f, const char* expected, float* val) { char line[LEN], s[LEN]; int error = 0; float n; if(fgets(line, LEN, f) == ((void*)0)){ fprintf(stderr, "Loading autotuning state error: line is not there\n"); error = 1; } else{ sscanf(line, "%s = " "%lg" "\n", s, &n); if(__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p (s) && __builtin_constant_p (expected) && (__s1_len = strlen (s), __s2_len = strlen (expected), (!((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) || __s1_len >= 4) && (!((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) || __s2_len >= 4)) ? __builtin_strcmp (s, expected) : (__builtin_constant_p (s) && ((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) && (__s1_len = strlen (s), __s1_len < 4) ? (__builtin_constant_p (expected) && ((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) ? __builtin_strcmp (s, expected) : (__extension__ ({ const unsigned char *__s2 = (const unsigned char *) (const char *) (expected); int __result = (((const unsigned char *) (const char *) (s))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((const unsigned char *) (const char *) (s))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((const unsigned char *) (const char *) (s))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((const unsigned char *) (const char *) (s))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p (expected) && ((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) && (__s2_len = strlen (expected), __s2_len < 4) ? (__builtin_constant_p (s) && ((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) ? __builtin_strcmp (s, expected) : (__extension__ ({ const unsigned char *__s1 = (const unsigned char *) (const char *) (s); register int __result = __s1[0] - ((const unsigned char *) (const char *) (expected))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((const unsigned char *) (const char *) (expected))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((const unsigned char *) (const char *) (expected))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((const unsigned char *) (const char *) (expected))[3]); } } __result; }))) : __builtin_strcmp (s, expected)))); }) != 0){ fprintf(stderr, "Loading autotuning state error: expected %s, got %s\n", expected, s); error = 1; } else{ *val = n; } } if(error){ fprintf(stderr, "Autotuning state file corrupted\n"); return 0; } return 1; } static int load_double_line(FILE* f, const char* expected, double* val) { char line[LEN], s[LEN]; int error = 0; double n; if(fgets(line, LEN, f) == ((void*)0)){ fprintf(stderr, "Loading autotuning state error: line is not there\n"); error = 1; } else{ sscanf(line, "%s = " "%lg" "\n", s, &n); if(__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p (s) && __builtin_constant_p (expected) && (__s1_len = strlen (s), __s2_len = strlen (expected), (!((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) || __s1_len >= 4) && (!((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) || __s2_len >= 4)) ? __builtin_strcmp (s, expected) : (__builtin_constant_p (s) && ((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) && (__s1_len = strlen (s), __s1_len < 4) ? (__builtin_constant_p (expected) && ((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) ? __builtin_strcmp (s, expected) : (__extension__ ({ const unsigned char *__s2 = (const unsigned char *) (const char *) (expected); int __result = (((const unsigned char *) (const char *) (s))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((const unsigned char *) (const char *) (s))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((const unsigned char *) (const char *) (s))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((const unsigned char *) (const char *) (s))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p (expected) && ((size_t)(const void *)((expected) + 1) - (size_t)(const void *)(expected) == 1) && (__s2_len = strlen (expected), __s2_len < 4) ? (__builtin_constant_p (s) && ((size_t)(const void *)((s) + 1) - (size_t)(const void *)(s) == 1) ? __builtin_strcmp (s, expected) : (__extension__ ({ const unsigned char *__s1 = (const unsigned char *) (const char *) (s); register int __result = __s1[0] - ((const unsigned char *) (const char *) (expected))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((const unsigned char *) (const char *) (expected))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((const unsigned char *) (const char *) (expected))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((const unsigned char *) (const char *) (expected))[3]); } } __result; }))) : __builtin_strcmp (s, expected)))); }) != 0){ fprintf(stderr, "Loading autotuning state error: expected %s, got %s\n", expected, s); error = 1; } else{ *val = n; } } if(error){ fprintf(stderr, "Autotuning state file corrupted\n"); return 0; } return 1; }
 
 int elpa_index_load_autotune_state(elpa_index_t index, int* autotune_level_old, int* autotune_domain, int* min_loc,

@@ -65,15 +65,15 @@ module mod_check_for_gpu
     ! if NOT the first call to check_for_gpu will set the MPI GPU relation and then
     ! _SET_ use_gpu_id such that subsequent calls abide this setting
     function check_for_gpu(obj, myid, numberOfDevices, wantDebug) result(gpuAvailable)
-      use elpa_gpu, only : gpublasDefaultPointerMode
+      use elpa_gpu, only : gpublasDefaultPointerMode, gpu_getdevicecount, gpublas_get_version
       use cuda_functions
       use hip_functions
       use openmp_offload_functions
       use sycl_functions
-      use elpa_gpu, only : gpu_getdevicecount
       use precision
       use elpa_mpi
       use elpa_omp
+
       use elpa_abstract_impl
       use ELPA_utilities, only : error_unit
       implicit none
@@ -88,6 +88,7 @@ module mod_check_for_gpu
       integer(kind=ik)                           :: error, mpi_comm_all, use_gpu_id, min_use_gpu_id
       !logical, save                              :: alreadySET=.false.
       integer(kind=ik)                           :: maxThreads, thread
+      integer(kind=c_int)                        :: cublas_version
       integer(kind=c_int)                        :: syclShowOnlyIntelGpus
       integer(kind=ik)                           :: syclShowAllDevices
       integer(kind=c_intptr_t)                   :: handle_tmp
@@ -96,7 +97,7 @@ module mod_check_for_gpu
       !character(len=1024)           :: envname
       character(len=8)                           :: fmt
       character(len=12)                          :: gpu_string
-
+      integer(kind=ik)                           :: attribute, value
 
       gpuAvailable = .false.
 
@@ -106,7 +107,8 @@ module mod_check_for_gpu
         ! print warning if NVIDIA or AMD without streams
 
         return
-      endif
+      endif ! (obj%gpu_setup%gpuIsAssigned)
+
 
       if (.not.(present(wantDebug))) then
         wantDebugMessage = .false.
@@ -120,7 +122,6 @@ module mod_check_for_gpu
 
       ! myid is given as an argument
 
-
       call obj%get("mpi_comm_parent", mpi_comm_all, error)
       if (error .ne. ELPA_OK) then
         write(error_unit,*) "Problem getting option for mpi_comm_parent. Aborting..."
@@ -132,7 +133,6 @@ module mod_check_for_gpu
 
 
 
-
       if (obj%is_set("use_gpu_id") == 1) then ! useGPUid
         if (.not.(obj%gpu_setup%gpuAlreadySet)) then
           call obj%get("use_gpu_id", use_gpu_id, error)
@@ -140,7 +140,6 @@ module mod_check_for_gpu
             write(error_unit,*) "check_for_gpu: cannot querry use_gpu_id. Aborting..."
             stop 1
           endif
-
           if (use_gpu_id == -99) then
             write(error_unit,*) "Problem you did not set which gpu id this task should use"
           endif
@@ -220,18 +219,6 @@ module mod_check_for_gpu
             stop 1
           endif
 
-!#ifdef  WITH_INTEL_GPU_VERSION
-!        gpuAvailable = .false.
-!        numberOfDevices = -1
-!
-!        numberOfDevices = 1
-!        write(error_unit,*) "Manually setting",numberOfDevices," of GPUs"
-!        if (numberOfDevices .ge. 1) then
-!          gpuAvailable = .true.
-!        endif
-!#endif
-
-
 
           ! make sure that all nodes have the same number of GPU's, otherwise
           ! we run into loadbalancing trouble
@@ -252,6 +239,8 @@ module mod_check_for_gpu
                 print '(3(a,i0))','Found ', numberOfDevices, ' GPUs'
               endif
             endif
+
+            obj%gpu_setup%gpusPerNode = numberOfDevices
 
             fmt = '(I5.5)'
 
@@ -303,6 +292,25 @@ module mod_check_for_gpu
         endif !obj%gpu_setup%gpuAlreadySet
         obj%gpu_setup%gpuIsAssigned = .true.
       endif ! useGPUid
+
+
+
+!#ifdef WITH_AMD_GPU_VERSION
+!      success = gpublas_get_version(obj%gpu_setup%cublasHandleArray(0), cublas_version)
+!      if (.not.(success)) then
+!        write(error_unit,*) "error in gpublas_get_version"
+!        stop 1
+!      endif
+!      if (myid == 0 .and. wantDebugMessage) then
+!        write(error_unit,*) "CUBLAS version: ", cublas_version
+!      endif
+!      ! store
+!      obj%gpu_setup%cublasVersion = cublas_version
+!      obj%gpu_setup%gpublasVersion = cublas_versio
+!#endif
+
+! query device properties
+
 
       if (gpuAvailable) then
         ! print warning if NVIDIA or AMD without streams

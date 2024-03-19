@@ -60,6 +60,7 @@
 module hip_functions
   use, intrinsic :: iso_c_binding
   use precision
+  use rocsolver_functions
   implicit none
 
   public
@@ -122,6 +123,42 @@ module hip_functions
   integer(kind=ik) :: rocblasPointerModeDevice
   integer(kind=ik) :: rocblasPointerModeHost
 
+
+  interface
+    function hip_device_get_attributes_c(value, attribute) result(istat) &
+             bind(C, name="hipDeviceGetAttributeFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(kind=C_INT), value  :: attribute
+      integer(kind=C_INT)         :: value
+      integer(kind=C_INT)         :: istat
+    end function
+  end interface
+
+
+  interface
+    function rocblas_get_version_c(rocblasHandle, version) result(istat) &
+             bind(C, name="rocblasGetVersionFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(kind=C_intptr_T), value  :: rocblasHandle
+      integer(kind=C_INT)              :: version
+      integer(kind=C_INT)              :: istat
+    end function
+  end interface
+
+
+  interface
+    function hip_get_last_error_c() result(istat) &
+             bind(C, name="hipGetLastErrorFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_int)              :: istat
+    end function
+  end interface
+
   ! streams
 
   interface
@@ -177,19 +214,6 @@ module hip_functions
     end function
   end interface
 
-!  interface
-!    function rocsolver_set_stream_c(rocsolverHandle, hipStream) result(istat) &
-!             bind(C, name="rocsolverSetStreamFromC")
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!
-!      integer(kind=C_intptr_T), value  :: rocsolverHandle
-!      integer(kind=C_intptr_T), value  :: hipStream
-!      integer(kind=C_INT)              :: istat
-!    end function
-!  end interface
-
-  ! functions to set and query the GPU devices
   interface
     function rocblas_create_c(hipHandle) result(istat) &
              bind(C, name="rocblasCreateFromC")
@@ -210,26 +234,7 @@ module hip_functions
     end function
   end interface
 
-!  interface
-!    function rocsolver_create_c(rocsolverHandle) result(istat) &
-!             bind(C, name="rocsolverCreateFromC")
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!      integer(kind=C_intptr_T) :: rocsolverHandle
-!      integer(kind=C_INT)      :: istat
-!    end function
-!  end interface
-!
-!  interface
-!    function rocsolver_destroy_c(rocsolverHandle) result(istat) &
-!             bind(C, name="rocsolverDestroyFromC")
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!      integer(kind=C_intptr_T), value :: rocsolverHandle
-!      integer(kind=C_INT)      :: istat
-!    end function
-!  end interface
-
+  ! functions to set and query the GPU devices
   interface
     function hip_setdevice_c(n) result(istat) &
              bind(C, name="hipSetDeviceFromC")
@@ -246,8 +251,8 @@ module hip_functions
              bind(C, name="hipGetDeviceCountFromC")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(kind=C_INT), intent(out) :: n
-      integer(kind=C_INT)              :: istat
+      integer(kind=C_INT), intent(out)         :: n
+      integer(kind=C_INT)                      :: istat
     end function
   end interface
 
@@ -568,7 +573,6 @@ module hip_functions
     end function
   end interface
 
-
   interface
     function hip_malloc_cptr_c(a, width_height) result(istat) &
              bind(C, name="hipMallocFromC")
@@ -581,8 +585,22 @@ module hip_functions
     end function
   end interface
 
+  interface hip_free_host
+    module procedure hip_free_host_intptr
+    module procedure hip_free_host_cptr
+  end interface
   interface
-    function hip_free_host_c(a) result(istat) &
+    function hip_free_host_intptr_c(a) result(istat) &
+             bind(C, name="hipFreeHostFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t), value  :: a
+      integer(kind=C_INT)              :: istat
+    end function
+  end interface
+
+  interface
+    function hip_free_host_cptr_c(a) result(istat) &
              bind(C, name="hipFreeHostFromC")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -591,13 +609,28 @@ module hip_functions
     end function
   end interface
 
+  interface hip_malloc_host
+    module procedure hip_malloc_host_intptr
+    module procedure hip_malloc_host_cptr
+  end interface
   interface
-    function hip_malloc_host_c(a, width_height) result(istat) &
+    function hip_malloc_host_intptr_c(a, width_height) result(istat) &
+             bind(C, name="hipMallocHostFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t)                    :: a
+      integer(kind=c_intptr_t), intent(in), value :: width_height
+      integer(kind=C_INT)                         :: istat
+    end function
+  end interface
+
+  interface
+    function hip_malloc_host_cptr_c(a, width_height) result(istat) &
              bind(C, name="hipMallocHostFromC")
       use, intrinsic :: iso_c_binding
       implicit none
       type(c_ptr)                    :: a
-      integer(kind=c_intptr_t), intent(in), value   :: width_height
+      integer(kind=c_intptr_t), intent(in), value :: width_height
       integer(kind=C_INT)                         :: istat
     end function
   end interface
@@ -625,32 +658,6 @@ module hip_functions
       integer(kind=C_INT)                        :: istat
       integer(kind=c_intptr_t), value            :: hipStream
     end function
-  end interface
-
-  interface
-    subroutine rocsolver_Dtrtri_c(rocsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="rocsolverDtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine rocsolver_Dpotrf_c(rocsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="rocsolverDpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
-    end subroutine
   end interface
 
   interface rocblas_Dgemm
@@ -703,6 +710,7 @@ module hip_functions
     end subroutine
   end interface
 
+
   interface rocblas_Dcopy
     module procedure rocblas_Dcopy_intptr
     module procedure rocblas_Dcopy_cptr
@@ -731,6 +739,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Dtrmm
     module procedure rocblas_Dtrmm_intptr
@@ -764,6 +773,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Dtrsm
     module procedure rocblas_Dtrsm_intptr
@@ -809,32 +819,6 @@ module hip_functions
       real(kind=C_DOUBLE) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: rocblasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine rocsolver_Strtri_c(rocsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="rocsolverStrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine rocsolver_Spotrf_c(rocsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="rocsolverSpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
     end subroutine
   end interface
 
@@ -888,6 +872,7 @@ module hip_functions
     end subroutine
   end interface
 
+
   interface rocblas_Scopy
     module procedure rocblas_Scopy_intptr
     module procedure rocblas_Scopy_cptr
@@ -916,6 +901,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Strmm
     module procedure rocblas_Strmm_intptr
@@ -949,6 +935,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Strsm
     module procedure rocblas_Strsm_intptr
@@ -994,32 +981,6 @@ module hip_functions
       real(kind=C_FLOAT) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: rocblasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine rocsolver_Ztrtri_c(rocsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="rocsolverZtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine rocsolver_Zpotrf_c(rocsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="rocsolverZpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
     end subroutine
   end interface
 
@@ -1073,6 +1034,7 @@ module hip_functions
     end subroutine
   end interface
 
+
   interface rocblas_Zcopy
     module procedure rocblas_Zcopy_intptr
     module procedure rocblas_Zcopy_cptr
@@ -1101,6 +1063,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Ztrmm
     module procedure rocblas_Ztrmm_intptr
@@ -1134,6 +1097,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Ztrsm
     module procedure rocblas_Ztrsm_intptr
@@ -1179,32 +1143,6 @@ module hip_functions
       complex(kind=C_DOUBLE_COMPLEX) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: rocblasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine rocsolver_Ctrtri_c(rocsolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="rocsolverCtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine rocsolver_Cpotrf_c(rocsolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="rocsolverCpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: rocsolverHandle
     end subroutine
   end interface
 
@@ -1258,6 +1196,7 @@ module hip_functions
     end subroutine
   end interface
 
+
   interface rocblas_Ccopy
     module procedure rocblas_Ccopy_intptr
     module procedure rocblas_Ccopy_cptr
@@ -1286,6 +1225,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Ctrmm
     module procedure rocblas_Ctrmm_intptr
@@ -1319,6 +1259,7 @@ module hip_functions
       integer(kind=C_intptr_T), value         :: rocblasHandle
     end subroutine
   end interface
+
 
   interface rocblas_Ctrsm
     module procedure rocblas_Ctrsm_intptr
@@ -1375,7 +1316,7 @@ module hip_functions
 !      character(kind=C_CHAR,len=1) :: name(*)
 !    end subroutine
 !  end interface
-!
+
 !  interface nvtxRangePop
 !    subroutine nvtxRangePop() bind(C, name='nvtxRangePop')
 !    end subroutine
@@ -1420,32 +1361,34 @@ module hip_functions
     end subroutine
   end interface
 
+
   interface rocblas_Ddot
     module procedure rocblas_Ddot_intptr
     module procedure rocblas_Ddot_cptr
   end interface
 
   interface
-    subroutine rocblas_Ddot_intptr_c(rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Ddot_intptr_c(rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasDdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      integer(kind=C_intptr_T), value         :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      integer(kind=C_intptr_T), value         :: x, y, result
     end subroutine
   end interface
 
   interface
-    subroutine rocblas_Ddot_cptr_c(rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Ddot_cptr_c(rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasDdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      type(c_ptr), value                      :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface rocblas_Dscal
     module procedure rocblas_Dscal_intptr
@@ -1476,6 +1419,7 @@ module hip_functions
     end subroutine
   end interface
 
+
   interface rocblas_Daxpy
     module procedure rocblas_Daxpy_intptr
     module procedure rocblas_Daxpy_cptr
@@ -1487,8 +1431,8 @@ module hip_functions
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT), value              :: length, incx, incy
-      real(kind=C_DOUBLE), value              :: alpha
+      integer(kind=C_INT),value               :: length, incx, incy
+      real(kind=C_DOUBLE) ,value                :: alpha
       integer(kind=C_intptr_T), value         :: x, y
     end subroutine
   end interface
@@ -1499,8 +1443,8 @@ module hip_functions
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT), value              :: length, incx, incy
-      real(kind=C_DOUBLE), value              :: alpha
+      integer(kind=C_INT),value               :: length, incx, incy
+      real(kind=C_DOUBLE) ,value                :: alpha
       type(c_ptr), value                      :: x, y
     end subroutine
   end interface
@@ -1511,26 +1455,27 @@ module hip_functions
   end interface
 
   interface
-    subroutine rocblas_Sdot_intptr_c(rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Sdot_intptr_c(rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasSdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      integer(kind=C_intptr_T), value         :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      integer(kind=C_intptr_T), value         :: x, y, result
     end subroutine
   end interface
 
   interface
-    subroutine rocblas_Sdot_cptr_c(rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Sdot_cptr_c(rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasSdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      type(c_ptr), value                      :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface rocblas_Sscal
     module procedure rocblas_Sscal_intptr
@@ -1560,6 +1505,7 @@ module hip_functions
       type(c_ptr), value                      :: x
     end subroutine
   end interface
+
 
   interface rocblas_Saxpy
     module procedure rocblas_Saxpy_intptr
@@ -1596,28 +1542,29 @@ module hip_functions
   end interface
 
   interface
-    subroutine rocblas_Zdot_intptr_c(conj, rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Zdot_intptr_c(conj, rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasZdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      integer(kind=C_intptr_T), value         :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      integer(kind=C_intptr_T), value         :: x, y, result
     end subroutine
   end interface
 
   interface
-    subroutine rocblas_Zdot_cptr_c(conj, rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Zdot_cptr_c(conj, rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasZdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      type(c_ptr), value                      :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface rocblas_Zscal
     module procedure rocblas_Zscal_intptr
@@ -1647,6 +1594,7 @@ module hip_functions
       type(c_ptr), value                      :: x
     end subroutine
   end interface
+
 
   interface rocblas_Zaxpy
     module procedure rocblas_Zaxpy_intptr
@@ -1683,28 +1631,29 @@ module hip_functions
   end interface
 
   interface
-    subroutine rocblas_Cdot_intptr_c(conj, rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Cdot_intptr_c(conj, rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasCdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      integer(kind=C_intptr_T), value         :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      integer(kind=C_intptr_T), value         :: x, y, result
     end subroutine
   end interface
 
   interface
-    subroutine rocblas_Cdot_cptr_c(conj, rocblasHandle, length, x, incx, y, incy, z) &
+    subroutine rocblas_Cdot_cptr_c(conj, rocblasHandle, length, x, incx, y, incy, result) &
                bind(C, name="rocblasCdot_elpa_wrapper")
       use, intrinsic :: iso_c_binding
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: rocblasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
-      type(c_ptr), value                      :: x, y, z
+      integer(kind=C_INT), value              :: length, incx, incy
+      type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface rocblas_Cscal
     module procedure rocblas_Cscal_intptr
@@ -1734,6 +1683,7 @@ module hip_functions
       type(c_ptr), value                      :: x
     end subroutine
   end interface
+
 
   interface rocblas_Caxpy
     module procedure rocblas_Caxpy_intptr
@@ -1766,6 +1716,30 @@ module hip_functions
 
   contains
 
+    function hip_device_get_attributes(value, attribute) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=C_INT)                       :: value, attribute
+      logical                                   :: success
+      success = .true.
+    end function
+
+    function rocblas_get_version(rocblasHandle, version) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=C_intptr_t)                  :: rocblasHandle
+      integer(kind=C_INT)                       :: version
+      logical                                   :: success
+      success = .true.
+    end function
+
+    function hip_get_last_error() result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      logical                                   :: success
+      success = .true.
+    end function
+
     function hip_stream_create(hipStream) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -1791,20 +1765,6 @@ module hip_functions
       success = .true.
     end function
 
-!    function rocsolver_set_stream(rocsolverHandle, hipStream) result(success)
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!      integer(kind=C_intptr_t)                  :: rocsolverHandle
-!      integer(kind=C_intptr_t)                  :: hipStream
-!      logical                                   :: success
-!
-!#ifdef WITH_AMD_ROCSOLVER
-!      success = rocsolver_set_stream_c(rocsolverHandle, hipStream) /= 0
-!#else
-!      success = .true.
-!#endif
-!    end function
-!
 
     function hip_stream_synchronize(hipStream) result(success)
       use, intrinsic :: iso_c_binding
@@ -1852,30 +1812,6 @@ module hip_functions
       success = .true.
     end function
 
-!    function rocsolver_create(rocsolverHandle) result(success)
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!      integer(kind=C_intptr_t)                  :: rocsolverHandle
-!      logical                                   :: success
-!#ifdef WITH_AMD_ROCSOLVER
-!      success = rocsolver_create_c(rocsolverHandle) /= 0
-!#else
-!      success = .true.
-!#endif
-!    end function
-!
-!    function rocsolver_destroy(rocsolverHandle) result(success)
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!      integer(kind=C_intptr_t)                  :: rocsolverHandle
-!      logical                                   :: success
-!#ifdef WITH_AMD_ROCSOLVER
-!      success = rocsolver_destroy_c(rocsolverHandle) /= 0
-!#else
-!      success = .true.
-!#endif
-!    end function
-!
     function hip_setdevice(n) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -1935,7 +1871,16 @@ module hip_functions
       success = .true.
     end function
 
-    function hip_malloc_host(a, width_height) result(success)
+    function hip_malloc_host_intptr(a, width_height) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t)                  :: a
+      integer(kind=c_intptr_t), intent(in)      :: width_height
+      logical                                   :: success
+      success = .true.
+    end function
+
+    function hip_malloc_host_cptr(a, width_height) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
       type(c_ptr)                               :: a
@@ -1944,7 +1889,15 @@ module hip_functions
       success = .true.
     end function
 
-    function hip_free_host(a) result(success)
+    function hip_free_host_intptr(a) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t) :: a
+      logical                  :: success
+      success = .true.
+    end function
+
+    function hip_free_host_cptr(a) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
       type(c_ptr)                   :: a
@@ -1957,7 +1910,7 @@ module hip_functions
       implicit none
       integer(kind=c_intptr_t)                :: a
       integer(kind=ik)                        :: val
-      integer(kind=c_intptr_t), intent(in)      :: size
+      integer(kind=c_intptr_t), intent(in)    :: size
       integer(kind=C_INT)                     :: istat
       logical :: success
       success = .true.
@@ -2191,26 +2144,6 @@ module hip_functions
       success = .true.
     end function
 
-    subroutine rocsolver_Dtrtri(uplo, diag, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
-    end subroutine
-
-    subroutine rocsolver_Dpotrf(uplo, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
-    end subroutine
-
     subroutine rocblas_Dgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, rocblasHandle)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -2317,26 +2250,6 @@ module hip_functions
       real(kind=C_DOUBLE) ,value               :: alpha,beta
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: rocblasHandle
-    end subroutine
-
-    subroutine rocsolver_Strtri(uplo, diag, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
-    end subroutine
-
-    subroutine rocsolver_Spotrf(uplo, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
     end subroutine
 
     subroutine rocblas_Sgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, rocblasHandle)
@@ -2447,26 +2360,6 @@ module hip_functions
       integer(kind=C_intptr_T)        :: rocblasHandle
     end subroutine
 
-    subroutine rocsolver_Ztrtri(uplo, diag, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
-    end subroutine
-
-    subroutine rocsolver_Zpotrf(uplo, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
-    end subroutine
-
     subroutine rocblas_Zgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, rocblasHandle)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -2573,26 +2466,6 @@ module hip_functions
       complex(kind=C_DOUBLE_COMPLEX) ,value               :: alpha,beta
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: rocblasHandle
-    end subroutine
-
-    subroutine rocsolver_Ctrtri(uplo, diag, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
-    end subroutine
-
-    subroutine rocsolver_Cpotrf(uplo, n, a, lda, info, rocsolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: rocsolverHandle
     end subroutine
 
     subroutine rocblas_Cgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, rocblasHandle)
@@ -2735,22 +2608,21 @@ module hip_functions
 
     end subroutine
 
-
-    subroutine rocblas_Ddot_intptr(rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Ddot_intptr(rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine rocblas_Ddot_cptr(rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Ddot_cptr(rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2794,22 +2666,21 @@ module hip_functions
 
     end subroutine
 
-
-    subroutine rocblas_Sdot_intptr(rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Sdot_intptr(rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine rocblas_Sdot_cptr(rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Sdot_cptr(rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2853,24 +2724,23 @@ module hip_functions
 
     end subroutine
 
-
-    subroutine rocblas_Zdot_intptr(conj, rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Zdot_intptr(conj, rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine rocblas_Zdot_cptr(conj, rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Zdot_cptr(conj, rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2914,24 +2784,23 @@ module hip_functions
 
     end subroutine
 
-
-    subroutine rocblas_Cdot_intptr(conj, rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Cdot_intptr(conj, rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine rocblas_Cdot_cptr(conj, rocblasHandle, length, x, incx, y, incy, z)
+    subroutine rocblas_Cdot_cptr(conj, rocblasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: rocblasHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 

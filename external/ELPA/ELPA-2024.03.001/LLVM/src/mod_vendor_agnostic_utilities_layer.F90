@@ -66,7 +66,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 50,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 99,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -84,12 +84,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 68,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 117,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 73,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 122,  successGPU)
       endif
     end
 
@@ -121,7 +121,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 105,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 154,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -139,12 +139,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 123,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 172,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 128,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 177,  successGPU)
       endif
     end
 
@@ -176,7 +176,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 160,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 209,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -194,12 +194,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 178,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 227,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 183,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 232,  successGPU)
       endif
     end
 
@@ -231,7 +231,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 215,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 264,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -249,12 +249,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 233,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 282,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 238,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 287,  successGPU)
       endif
     end
 
@@ -288,7 +288,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 272,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 321,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -306,12 +306,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 290,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 339,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 295,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 344,  successGPU)
       endif
     end
 
@@ -345,7 +345,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 329,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 378,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -363,12 +363,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 347,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 396,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 352,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 401,  successGPU)
       endif
     end
 
@@ -402,7 +402,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 386,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 435,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -420,12 +420,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 404,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 453,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 409,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 458,  successGPU)
       endif
     end
 
@@ -459,7 +459,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 443,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 492,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -477,12 +477,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 461,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 510,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 466,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 515,  successGPU)
       endif
     end
 
@@ -517,7 +517,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 501,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 550,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -535,12 +535,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 519,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 568,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 524,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 573,  successGPU)
       endif
     end
 
@@ -575,7 +575,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 559,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 608,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -593,12 +593,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 577,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 626,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 582,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 631,  successGPU)
       endif
     end
 
@@ -633,7 +633,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 617,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 666,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -651,12 +651,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 635,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 684,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 640,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 689,  successGPU)
       endif
     end
 
@@ -691,7 +691,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 675,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 724,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -709,12 +709,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 693,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 742,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 698,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 747,  successGPU)
       endif
     end
 
@@ -750,7 +750,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 734,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 783,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -768,12 +768,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 752,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 801,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 757,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 806,  successGPU)
       endif
     end
 
@@ -809,7 +809,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 793,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 842,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -827,12 +827,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 811,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 860,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 816,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 865,  successGPU)
       endif
     end
 
@@ -868,7 +868,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 852,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 901,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -886,12 +886,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 870,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 919,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 875,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 924,  successGPU)
       endif
     end
 
@@ -927,7 +927,7 @@ module elpa_gpu_util
 
       if (doSyncBefore) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 911,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 960,  successGPU)
       endif
 
       if (direction .eq. gpuMemcpyHostToDevice) then
@@ -945,12 +945,12 @@ module elpa_gpu_util
 
       if (doSyncAfter) then
         successGPU = gpu_stream_synchronize(my_stream)
-        call check_memcpy_GPU_f(trim(errormessage), 929,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 978,  successGPU)
       endif
       if (doSyncDefault) then
         ! synchronize streamsPerThread; maybe not neccessary
         successGPU = gpu_stream_synchronize()
-        call check_memcpy_GPU_f(trim(errormessage), 934,  successGPU)
+        call check_memcpy_GPU_f(trim(errormessage), 983,  successGPU)
       endif
     end
 

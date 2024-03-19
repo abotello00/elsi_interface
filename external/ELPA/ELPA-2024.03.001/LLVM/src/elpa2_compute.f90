@@ -377,19 +377,25 @@ max_threads, isSkewsymmetric)
     endif
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  !if (wantDebug) call obj%timer%start("mpi_communication")
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
   success = .true.
 
 
@@ -414,15 +420,15 @@ max_threads, isSkewsymmetric)
 
     ! Here we convert the regular host array into a pinned host array
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols* size_of_datatype)
-    call check_alloc_GPU_f("bandred: a_dev", 344,  successGPU)
+    call check_alloc_GPU_f("bandred: a_dev", 350,  successGPU)
 
       successGPU = gpu_host_register(int(loc(vav),kind=c_intptr_t), &
                   nbw * nbw * size_of_datatype,&
                   gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: vav", 352,  successGPU)
+      call check_host_register_GPU_f("bandred: vav", 358,  successGPU)
 
     successGPU = gpu_malloc(vav_dev, nbw*nbw* size_of_datatype)
-    call check_alloc_GPU_f("bandred: vav_dev", 358,  successGPU)
+    call check_alloc_GPU_f("bandred: vav_dev", 364,  successGPU)
   endif ! useGPU
 
   ! Matrix is split into tiles; work is done only for tiles on the diagonal or above
@@ -453,14 +459,14 @@ max_threads, isSkewsymmetric)
     if (which_qr_decomposition == 1) then
       call qr_pqrparam_init(obj,pqrparam(1:11),    nblk,'M',0,   nblk,'M',0,   nblk,'M',1,'s')
       allocate(tauvector(na), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: tauvector", 390,  istat,  errorMessage)
+      call check_allocate_f("bandred: tauvector", 396,  istat,  errorMessage)
 
       allocate(blockheuristic(nblk), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: blockheuristic", 393,  istat,  errorMessage)
+      call check_allocate_f("bandred: blockheuristic", 399,  istat,  errorMessage)
 
       l_rows = local_index(na, my_prow, np_rows, nblk, -1)
       allocate(vmrCPU_qr(max(l_rows,1),na), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vmrCPU_qr", 397,  istat,  errorMessage)
+      call check_allocate_f("bandred: vmrCPU_qr", 403,  istat,  errorMessage)
 
       vmrCols = na
 
@@ -473,10 +479,10 @@ max_threads, isSkewsymmetric)
 
       work_size = int(dwork_size(1))
       allocate(work_blocked(work_size), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: work_blocked", 419,  istat,  errorMessage)
+      call check_allocate_f("bandred: work_blocked", 425,  istat,  errorMessage)
       work_blocked = 0.0_rk
       deallocate(vmrCPU_qr, stat=istat, errmsg=errorMessage)
-      call check_deallocate_f("bandred: vmrCPU_qr", 422,  istat,  errorMessage)
+      call check_deallocate_f("bandred: vmrCPU_qr", 428,  istat,  errorMessage)
 
     endif ! which_qr_decomposition
 
@@ -487,17 +493,17 @@ max_threads, isSkewsymmetric)
  
       successGPU = gpu_host_register(int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: a_mat", 437,  successGPU)
+      call check_host_register_GPU_f("bandred: a_mat", 443,  successGPU)
 
     cur_l_rows = 0
     cur_l_cols = 0
 
     successGPU = gpu_memcpy(a_dev, int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("bandred: a_dev", 464,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev", 470,  successGPU)
 
     successGPU = gpu_malloc(tmat_dev, nbw*nbw*size_of_datatype)
-    call check_alloc_GPU_f("bandred: tmat_dev", 468,  successGPU)
+    call check_alloc_GPU_f("bandred: tmat_dev", 474,  successGPU)
 
 
 
@@ -527,22 +533,22 @@ max_threads, isSkewsymmetric)
     umc_size = max(umc_size,umc_size2)
 
     allocate(vr(l_rows + 1), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("bandred: vr", 505,  istat,  errorMessage)
+    call check_allocate_f("bandred: vr", 511,  istat,  errorMessage)
 
       successGPU = gpu_malloc_host(vmr_host,vmr_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: vmr_host", 511,  successGPU)
+      call check_host_alloc_GPU_f("bandred: vmr_host", 517,  successGPU)
       call c_f_pointer(vmr_host, vmrGPU, (/vmr_size/))
 
     successGPU = gpu_malloc(vmr_dev, vmr_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: vmr_dev", 520,  successGPU)
+    call check_alloc_GPU_f("bandred: vmr_dev", 526,  successGPU)
 
 
       successGPU = gpu_malloc_host(umc_host,umc_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: umc_host", 527,  successGPU)
+      call check_host_alloc_GPU_f("bandred: umc_host", 533,  successGPU)
       call c_f_pointer(umc_host, umcGPU, (/umc_size/))
 
     successGPU = gpu_malloc(umc_dev, umc_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: umc_dev", 536,  successGPU)
+    call check_alloc_GPU_f("bandred: umc_dev", 542,  successGPU)
 
 
 
@@ -572,13 +578,13 @@ max_threads, isSkewsymmetric)
       ! Allocate vmr and umcCPU to their exact sizes so that they can be used in bcasts and reduces
 
       allocate(vmrCPU(max_l_rows,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vmrCPU", 607,  istat,  errorMessage)
+      call check_allocate_f("bandred: vmrCPU", 613,  istat,  errorMessage)
 
       allocate(umcCPU(max_l_cols,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: umcCPU", 610,  istat,  errorMessage)
+      call check_allocate_f("bandred: umcCPU", 616,  istat,  errorMessage)
 
       allocate(vr(l_rows+1), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vr", 613,  istat,  errorMessage)
+      call check_allocate_f("bandred: vr", 619,  istat,  errorMessage)
 
     endif ! use GPU
 
@@ -619,7 +625,7 @@ max_threads, isSkewsymmetric)
                         int(matrixRows*size_of_datatype,kind=c_intptr_t), &
                         int(lr_end*size_of_datatype,kind=c_intptr_t), &
                         int((lc_end - lc_start+1),kind=c_intptr_t),int(gpuMemcpyDeviceToHost,kind=c_int))
-          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 680,  successGPU)
+          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 686,  successGPU)
 
       endif ! do_memcpy
     endif ! useGPU
@@ -767,7 +773,7 @@ max_threads, isSkewsymmetric)
                          int(lr_end*size_of_datatype,kind=c_intptr_t), &
                          int((lc_end - lc_start+1),kind=c_intptr_t), &
                          int(gpuMemcpyHostToDevice,kind=c_int))
-            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 893,  successGPU)
+            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 899,  successGPU)
 
         endif ! do_memcopy
       endif ! (useGPU_reduction_lower_block_to_tridiagonal
@@ -828,7 +834,7 @@ max_threads, isSkewsymmetric)
                        int(lr_end*size_of_datatype,kind=c_intptr_t), &
                        int((lc_end - lc_start+1),kind=c_intptr_t), &
                        int(gpuMemcpyHostToDevice,kind=c_int))
-          call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 1010,  successGPU)
+          call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 1016,  successGPU)
       endif ! do_memcpy
     endif ! useGPU .and. useQR
 
@@ -883,16 +889,16 @@ max_threads, isSkewsymmetric)
 
             successGPU = gpu_memset(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                         0, max_l_rows*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: vmr_dev", 1291,  successGPU)
+            call check_memset_GPU_f("bandred: vmr_dev", 1297,  successGPU)
 
 
           successGPU = gpu_memcpy(vmr_dev, int(loc(vmrGPU(1)),kind=c_intptr_t), &
                         max_l_rows*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1323,  successGPU)
+          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1329,  successGPU)
 
 
             successGPU = gpu_memset(umc_dev, 0, l_cols*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: umc_dev", 1341,  successGPU)
+            call check_memset_GPU_f("bandred: umc_dev", 1347,  successGPU)
 
 
 
@@ -900,7 +906,7 @@ max_threads, isSkewsymmetric)
                         int(loc(umcGPU(1+l_cols*n_cols)),kind=c_intptr_t), &
                         (umc_size-l_cols*n_cols)*size_of_datatype, &
                         gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1384,  successGPU)
+          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1390,  successGPU)
         endif ! useGPU
 
         do i=0,(istep*nbw-1)/tile_size
@@ -983,12 +989,12 @@ max_threads, isSkewsymmetric)
             successGPU = gpu_memcpy(int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                           vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                           (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyDeviceToHost)
-            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1503,  successGPU)
+            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1509,  successGPU)
           endif
 
           successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                         umc_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1523,  successGPU)
+          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1529,  successGPU)
         endif ! useGPU
       endif ! l_cols>0 .and. l_rows>0
 
@@ -1023,7 +1029,7 @@ max_threads, isSkewsymmetric)
 
       if (useGPU) then
         allocate(tmpGPU(l_cols * n_cols), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("bandred: tmpGPU", 1563,  istat,  errorMessage)
+        call check_allocate_f("bandred: tmpGPU", 1569,  istat,  errorMessage)
         if (useNonBlockingCollectivesRows) then
           if (wantDebug) call obj%timer%start("mpi_nbc_communication")
 
@@ -1044,7 +1050,7 @@ max_threads, isSkewsymmetric)
 
         if (allocated(tmpGPU)) then
           deallocate(tmpGPU, stat=istat, errmsg=errorMessage)
-          call check_deallocate_f("bandred: tmpGPU", 1585,  istat,  errorMessage)
+          call check_deallocate_f("bandred: tmpGPU", 1591,  istat,  errorMessage)
         endif
 
       else ! useGPU
@@ -1069,11 +1075,11 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(umc_dev, int(loc(umcGPU(1)),kind=c_intptr_t), &
                     l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1630,  successGPU)
+      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1636,  successGPU)
 
       successGPU = gpu_memcpy(tmat_dev,int(loc(tmat(1,1,istep)),kind=c_intptr_t), &
                     nbw*nbw*size_of_datatype,gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1634,  successGPU)
+      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1640,  successGPU)
 
       call obj%timer%start("gpublas")
       gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -1095,7 +1101,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(vav),kind=c_intptr_t), &
                   vav_dev, nbw*nbw*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1671,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1677,  successGPU)
     else ! useGPU
 
       call obj%timer%start("blas")
@@ -1140,7 +1146,7 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(vav_dev, int(loc(vav),kind=c_intptr_t), &
                        nbw*nbw*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1742,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1748,  successGPU)
     endif
 
 
@@ -1168,7 +1174,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                   umc_dev, umc_size*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1803,  successGPU)
+      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1809,  successGPU)
 
       ! Transpose umc -> umr (stored in vmr, second half)
       if (isSkewsymmetric) then
@@ -1201,7 +1207,7 @@ max_threads, isSkewsymmetric)
       successGPU = gpu_memcpy(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                   int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                   (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1860,  successGPU)
+      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1866,  successGPU)
     else ! useGPU
       call obj%timer%start("blas")
       if (isSkewsymmetric) then
@@ -1282,17 +1288,17 @@ max_threads, isSkewsymmetric)
     if (.not.(useGPU)) then
       if (allocated(vr)) then
         deallocate(vr, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vr", 2029,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vr", 2035,  istat,  errorMessage)
       endif
 
       if (allocated(umcCPU)) then
         deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: umcCPU", 2034,  istat,  errorMessage)
+        call check_deallocate_f("bandred: umcCPU", 2040,  istat,  errorMessage)
       endif
 
       if (allocated(vmrCPU)) then
         deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vmrCPU", 2039,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vmrCPU", 2045,  istat,  errorMessage)
       endif
     endif !useGPU
 
@@ -1310,67 +1316,67 @@ max_threads, isSkewsymmetric)
                   int(a_dev,kind=c_intptr_t), &
                   int(matrixRows*matrixCols* size_of_datatype, kind=c_intptr_t), &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2137,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2143,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(a_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: a_mat ", 2144,  successGPU)
+      call check_host_unregister_GPU_f("bandred: a_mat ", 2150,  successGPU)
 
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("bandred: a_dev ", 2155,  successGPU)
+    call check_dealloc_GPU_f("bandred: a_dev ", 2161,  successGPU)
 
     successGPU = gpu_free(vav_dev)
-    call check_dealloc_GPU_f("bandred: vav_dev ", 2158,  successGPU)
+    call check_dealloc_GPU_f("bandred: vav_dev ", 2164,  successGPU)
 
     successGPU = gpu_free(tmat_dev)
-    call check_dealloc_GPU_f("bandred: tmat_dev ", 2161,  successGPU)
+    call check_dealloc_GPU_f("bandred: tmat_dev ", 2167,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(vav),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: vav", 2167,  successGPU)
+      call check_host_unregister_GPU_f("bandred: vav", 2173,  successGPU)
 
       if (associated(umcGPU)) then
         nullify(umcGPU)
 
         successGPU = gpu_free_host(umc_host)
-        call check_host_dealloc_GPU_f("bandred: umc_host ", 2180,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: umc_host ", 2186,  successGPU)
         successGPU = gpu_free(umc_dev)
-        call check_dealloc_GPU_f("bandred: umc_dev ", 2182,  successGPU)
+        call check_dealloc_GPU_f("bandred: umc_dev ", 2188,  successGPU)
       endif
 
       if (associated(vmrGPU)) then
         nullify(vmrGPU)
 
         successGPU = gpu_free_host(vmr_host)
-        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2189,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2195,  successGPU)
 
         successGPU = gpu_free(vmr_dev)
-        call check_dealloc_GPU_f("bandred: vmr_dev ", 2192,  successGPU)
+        call check_dealloc_GPU_f("bandred: vmr_dev ", 2198,  successGPU)
       endif
 
   endif ! useGPU
   
   if (allocated(vr)) then
     deallocate(vr, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vr", 2215,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vr", 2221,  istat,  errorMessage)
   endif
 
   if (allocated(umcCPU)) then
     deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: umcCPU", 2221,  istat,  errorMessage)
+    call check_deallocate_f("bandred: umcCPU", 2227,  istat,  errorMessage)
   endif
 
   if (allocated(vmrCPU)) then
     deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vmrCPU", 2226,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vmrCPU", 2232,  istat,  errorMessage)
   endif
 
   if (useQR) then
     if (which_qr_decomposition == 1) then
       deallocate(work_blocked, stat=istat, errmsg=errorMessage)
-      call check_deallocate_f("bandred: work_blocked", 2233,  istat,  errorMessage)
+      call check_deallocate_f("bandred: work_blocked", 2239,  istat,  errorMessage)
 
       deallocate(tauvector, stat=istat, errmsg=errorMessage)
-      call check_deallocate_f("bandred: tauvector", 2236,  istat,  errorMessage)
+      call check_deallocate_f("bandred: tauvector", 2242,  istat,  errorMessage)
     endif
   endif
   
@@ -2024,6 +2030,8 @@ subroutine trans_ev_band_to_full_&
   logical                                        :: useNonBlockingCollectivesRows
   integer(kind=c_int)                            :: non_blocking_collectives_rows, non_blocking_collectives_cols
   logical                                        :: success
+  integer(kind=MPI_KIND), allocatable            :: ibreq(:)
+  integer(kind=ik)                               :: nblocks, bc_counter
   integer(kind=c_intptr_t)                       :: gpuHandle, my_stream
 
   success = .true.
@@ -2089,17 +2097,23 @@ subroutine trans_ev_band_to_full_&
   endif
 
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
   max_blocks_row = ((na -1)/nblk)/np_rows + 1 ! Rows of a_mat
   max_blocks_col = ((nqc-1)/nblk)/np_cols + 1 ! Columns of q_mat!
@@ -2112,75 +2126,75 @@ subroutine trans_ev_band_to_full_&
   if (useGPU) then
     ! copy q_mat to q_dev
     successGPU = gpu_malloc(q_dev,ldq*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 289,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 297,  successGPU)
       successGPU = gpu_host_register(int(loc(q_mat),kind=c_intptr_t),&
                     ldq*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 295,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 303,  successGPU)
 
     successGPU = gpu_memcpy(q_dev,int(loc(q_mat),kind=c_intptr_t),&
                   ldq*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 317,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 325,  successGPU)
 
       successGPU = gpu_malloc_host(tmp1_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 324,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 332,  successGPU)
       call c_f_pointer(tmp1_host, tmp1, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(tmp2_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 328,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 336,  successGPU)
       call c_f_pointer(tmp2_host, tmp2, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(hvm_host,max_local_rows*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 332,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 340,  successGPU)
       call c_f_pointer(hvm_host, hvm, (/max_local_rows,cwy_blocking/))
   else ! useGPU
     allocate(tmp1(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp1", 343,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp1", 351,  istat,  errorMessage)
 
     allocate(tmp2(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp2", 346,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp2", 354,  istat,  errorMessage)
 
     allocate(hvm(max_local_rows,cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: hvm", 349,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: hvm", 357,  istat,  errorMessage)
   endif !useGPU
 
   allocate(hvb(max_local_rows*cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: hvb", 353,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: hvb", 361,  istat,  errorMessage)
 
   allocate(tmat_complete(cwy_blocking,cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 356,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 364,  istat,  errorMessage)
 
   if (useGPU) then
       successGPU = gpu_host_register(int(loc(tmat_complete),kind=c_intptr_t), &
                     cwy_blocking * cwy_blocking * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 365,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 373,  successGPU)
   endif
 
 
   if (blocking_factor > 1) then
     allocate(t_tmp(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp", 389,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp", 397,  istat,  errorMessage)
 
     allocate(t_tmp2(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 392,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 400,  istat,  errorMessage)
 
   endif
 
   if (useGPU) then
     successGPU = gpu_malloc(hvm_dev,max_local_rows*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 409,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 417,  successGPU)
 
     successGPU = gpu_malloc(tmp_dev,max_local_cols*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 412,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 420,  successGPU)
 
 
       successGPU = gpu_memset(tmp_dev, 0, max_local_cols*cwy_blocking*size_of_datatype)
-      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 430,  successGPU)
+      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 438,  successGPU)
 
 
 
     successGPU = gpu_malloc(tmat_complete_dev,cwy_blocking*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 477,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 485,  successGPU)
   endif
 
 
@@ -2216,6 +2230,9 @@ subroutine trans_ev_band_to_full_&
 
     nb = 0
     ns = 0
+    bc_counter=0
+    nblocks = n_cols/nblk;
+    allocate(ibreq(0:nblocks-1))
 
     do lc = 1, n_cols
       ncol = (istep-1)*cwy_blocking + nbw + lc ! absolute column number of householder Vector
@@ -2230,12 +2247,10 @@ subroutine trans_ev_band_to_full_&
 
       if (lc==n_cols .or. mod(ncol,nblk)==0) then
         if (useNonBlockingCollectivesCols) then
-          call obj%timer%start("mpi_nbc_communication")
           call mpi_ibcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_REAL8,&
                          int(pcol(ncol, nblk, np_cols),kind=MPI_KIND), int(mpi_comm_cols,kind=MPI_KIND), &
-                         bcast_request1, mpierr)
-          call mpi_wait(bcast_request1, MPI_STATUS_IGNORE, mpierr)
-          call obj%timer%stop("mpi_nbc_communication")
+                         ibreq(bc_counter), mpierr)
+          bc_counter = bc_counter + 1  
         else
           call obj%timer%start("mpi_communication")
           call mpi_bcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_REAL8,&
@@ -2246,6 +2261,13 @@ subroutine trans_ev_band_to_full_&
         ns = nb
       endif
     enddo ! lc
+
+  if(useNonBlockingCollectivesCols) then
+    call obj%timer%start("mpi_nbc_communication")
+    call mpi_waitall(nblocks, ibreq, MPI_STATUSES_IGNORE, mpierr)
+    call obj%timer%stop("mpi_nbc_communication")
+  endif
+  deallocate(ibreq)
 
     ! Expand compressed Householder vectors into matrix hvm
 
@@ -2292,7 +2314,7 @@ subroutine trans_ev_band_to_full_&
 
           call obj%timer%start("mpi_nbc_communication")
           call mpi_iallreduce(t_tmp, t_tmp2, int(cwy_blocking*nbw,kind=MPI_KIND), MPI_REAL8, &
-                           MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
+                         MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
           call mpi_wait(allreduce_request1, MPI_STATUS_IGNORE, mpierr)
           call obj%timer%stop("mpi_nbc_communication")
 
@@ -2339,7 +2361,7 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(hvm_dev, int(loc(hvm),kind=c_intptr_t), &
                         max_local_rows*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1039,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1057,  successGPU)
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
         call gpublas_DGEMM('T', 'N', &
@@ -2350,7 +2372,7 @@ subroutine trans_ev_band_to_full_&
         ! copy data from device to host for a later MPI_ALLREDUCE
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                       tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1070,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1088,  successGPU)
       else ! useGPU
         call obj%timer%start("blas")
         call DGEMM('T', 'N', &
@@ -2366,7 +2388,7 @@ subroutine trans_ev_band_to_full_&
     if (useGPU) then
       successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                    tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1146,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1164,  successGPU)
 
     endif
 
@@ -2395,12 +2417,12 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(tmp_dev, int(loc(tmp2),kind=c_intptr_t), &
                       l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1341,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1359,  successGPU)
 
         ! needed: as long as not device to device copy
         successGPU = gpu_memcpy(tmat_complete_dev, int(loc(tmat_complete),kind=c_intptr_t), &
                       cwy_blocking*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1363,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1381,  successGPU)
 
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -2426,28 +2448,28 @@ subroutine trans_ev_band_to_full_&
   enddo ! istep
 
   deallocate(hvb, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: hvb", 1435,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: hvb", 1453,  istat,  errorMessage)
 
   if (useGPU) then
     successGPU = gpu_free(hvm_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1439,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1457,  successGPU)
 
     successGPU = gpu_free(tmp_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1442,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1460,  successGPU)
 
     successGPU = gpu_free(tmat_complete_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1449,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1467,  successGPU)
 
     ! final transfer of q_dev
     successGPU = gpu_memcpy(int(loc(q_mat),kind=c_intptr_t), q_dev, ldq*matrixCols*size_of_datatype, &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1469,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1487,  successGPU)
 
     successGPU = gpu_free(q_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1473,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1491,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(q_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1479,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1497,  successGPU)
       nullify(tmp1)
       nullify(tmp2)
       nullify(hvm)
@@ -2456,38 +2478,38 @@ subroutine trans_ev_band_to_full_&
 
 
       successGPU = gpu_free_host(tmp1_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1504,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1522,  successGPU)
 
       successGPU = gpu_free_host(tmp2_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1507,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1525,  successGPU)
 
       successGPU = gpu_free_host(hvm_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1510,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1528,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(tmat_complete),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1513,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1531,  successGPU)
   else ! useGPU
     deallocate(tmp1, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1519,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1537,  istat,  errorMessage)
 
     deallocate(tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1522,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1540,  istat,  errorMessage)
 
     deallocate(hvm, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: hvm", 1525,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: hvm", 1543,  istat,  errorMessage)
   endif ! useGPU
 
   deallocate(tmat_complete, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1529,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1547,  istat,  errorMessage)
 
 
   if (blocking_factor > 1) then
 
     deallocate(t_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1556,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1574,  istat,  errorMessage)
 
     deallocate(t_tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1559,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1577,  istat,  errorMessage)
   endif
 
   call obj%timer%stop("trans_ev_band_to_full_&
@@ -2668,27 +2690,36 @@ subroutine tridiag_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+  n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-  my_pe = int(my_peMPI,kind=MPI_KIND)
-  n_pes = int(n_pesMPI,kind=MPI_KIND)
-  my_prow = int(my_prowMPI,kind=MPI_KIND)
-  np_rows = int(np_rowsMPI,kind=MPI_KIND)
-  my_pcol = int(my_pcolMPI,kind=MPI_KIND)
-  np_cols = int(np_colsMPI,kind=MPI_KIND)
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+
+  !my_pe = int(my_peMPI,kind=MPI_KIND)
+  !n_pes = int(n_pesMPI,kind=MPI_KIND)
+  !my_prow = int(my_prowMPI,kind=MPI_KIND)
+  !np_rows = int(np_rowsMPI,kind=MPI_KIND)
+  !my_pcol = int(my_pcolMPI,kind=MPI_KIND)
+  !np_cols = int(np_colsMPI,kind=MPI_KIND)
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
 
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: global_id", 201,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: global_id", 210,  istat,  errorMessage)
 
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
@@ -2712,7 +2743,7 @@ subroutine tridiag_band_&
   ! Set work distribution
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: block_limits", 245,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: block_limits", 254,  istat,  errorMessage)
 
   call divide_band(obj,nblocks_total, n_pes, block_limits)
 
@@ -2722,7 +2753,7 @@ subroutine tridiag_band_&
   ! allocate the part of the band matrix which is needed by this PE
   ! The size is 1 block larger than needed to avoid extensive shifts
   allocate(ab(2*nb,(nblocks+1)*nb), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: ab", 255,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ab", 264,  istat,  errorMessage)
 
   ab = 0.0_rck ! needed for lower half, the extra block should also be set to 0 for safety
 
@@ -2745,7 +2776,7 @@ subroutine tridiag_band_&
   ! and the space requirements to hold the HH vectors
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: limits", 278,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: limits", 287,  istat,  errorMessage)
 
   call determine_workload(obj,na, nb, np_rows, limits)
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -2768,14 +2799,14 @@ subroutine tridiag_band_&
   ! Allocate space for HH vectors
 
   allocate(hh_trans(nb,num_hh_vecs), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_trans", 301,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_trans", 310,  istat,  errorMessage)
 
   ! Allocate and init MPI requests
 
   allocate(ireq_hhr(num_chunks), stat=istat, errmsg=errorMessage) ! Recv requests
-  call check_allocate_f("tridiag_band: ireq_hhr", 306,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhr", 315,  istat,  errorMessage)
   allocate(ireq_hhs(nblocks), stat=istat, errmsg=errorMessage)    ! Send requests
-  call check_allocate_f("tridiag_band: ireq_hhs", 308,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhs", 317,  istat,  errorMessage)
 
   num_hh_vecs = 0
   num_chunks  = 0
@@ -2806,10 +2837,10 @@ subroutine tridiag_band_&
   ! Buffers for gathering/sending the HH vectors
 
   allocate(hh_gath(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! gathers HH vectors
-  call check_allocate_f("tridiag_band: hh_gath", 347,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_gath", 356,  istat,  errorMessage)
 
   allocate(hh_send(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! send buffer for HH vectors
-  call check_allocate_f("tridiag_band: hh_send", 350,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_send", 359,  istat,  errorMessage)
 
   hh_gath(:,:,:) = 0.0_rck
   hh_send(:,:,:) = 0.0_rck
@@ -2817,10 +2848,10 @@ subroutine tridiag_band_&
   ! Some counters
 
   allocate(hh_cnt(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_cnt", 358,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_cnt", 367,  istat,  errorMessage)
 
   allocate(hh_dst(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_dst", 361,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_dst", 370,  istat,  errorMessage)
 
   hh_cnt(:) = 1 ! The first transfomation Vector is always 0 and not calculated at all
   hh_dst(:) = 0 ! PE number for receive
@@ -2829,7 +2860,7 @@ subroutine tridiag_band_&
   ! Limits for sending
 
   allocate(snd_limits(0:np_rows,nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: snd_limits", 372,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: snd_limits", 381,  istat,  errorMessage)
 
   do iblk=1,nblocks
     call determine_workload(obj, na-(iblk+block_limits(my_pe)-1)*nb, nb, np_rows, snd_limits(:,iblk))
@@ -3170,25 +3201,25 @@ endif
   call mpi_barrier(int(mpi_comm_all,kind=MPI_KIND),mpierr)
   if (wantDebug) call obj%timer%stop("mpi_communication")
   deallocate(ab, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ab", 1232,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ab", 1241,  istat,  errorMessage)
 
   deallocate(ireq_hhr, ireq_hhs, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ireq_hhr", 1235,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ireq_hhr", 1244,  istat,  errorMessage)
 
   deallocate(hh_cnt, hh_dst, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_dst", 1238,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_dst", 1247,  istat,  errorMessage)
 
   deallocate(hh_gath, hh_send, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_gath", 1241,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_gath", 1250,  istat,  errorMessage)
 
   deallocate(limits, snd_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: limits", 1244,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: limits", 1253,  istat,  errorMessage)
 
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: block_limits", 1247,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: block_limits", 1256,  istat,  errorMessage)
 
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: global_id", 1250,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: global_id", 1259,  istat,  errorMessage)
 
   call obj%timer%stop("tridiag_band_&
   &real&
@@ -3542,18 +3573,24 @@ subroutine trans_ev_tridi_to_band_&
   kernel_time = 0.0
   kernel_flops = 0
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
-  call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
+  !call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   if (mod(nbw,nblk)/=0) then
     if (my_prow==0 .and. my_pcol==0) then
@@ -3629,7 +3666,7 @@ subroutine trans_ev_tridi_to_band_&
   ! Determine the matrix distribution at the beginning
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: limits", 633,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: limits", 639,  istat,  errorMessage)
   call determine_workload(obj,na, nbw, np_rows, limits)
 
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -3642,12 +3679,12 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%start("cuda_memcpy")
 
       successGPU = gpu_malloc(q_dev, ldq*matrixCols* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: q_dev", 646,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: q_dev", 652,  successGPU)
 
       successGPU =  gpu_memcpy(q_dev, int(loc(q(1,1)),kind=c_intptr_t),  &
                                ldq*matrixCols * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 672,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 678,  successGPU)
 
       ! associate with c_ptr
       q_mpi_dev = transfer(q_dev, q_mpi_dev)
@@ -3657,7 +3694,7 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
       successGPU = gpu_malloc(hh_trans_dev, size(hh_trans,dim=1)*size(hh_trans,dim=2)* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 683,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 689,  successGPU)
       ! associate with c_ptr
       hh_trans_mpi_dev = transfer(hh_trans_dev, hh_trans_mpi_dev)
       ! and associate a fortran pointer
@@ -3667,18 +3704,18 @@ subroutine trans_ev_tridi_to_band_&
                                c_loc(hh_trans(1,1)), &
                                size(hh_trans,dim=1)*size(hh_trans,dim=2) * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 716,  successGPU)
+      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 722,  successGPU)
 
     endif ! allComputeOnGPU
 
     num = (stripe_width*a_dim2*stripe_count)* size_of_datatype
     successGPU = gpu_malloc(aIntern_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 727,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 733,  successGPU)
 
     ! openmp loop here
 
       successGPU = gpu_memset(aIntern_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 743,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 749,  successGPU)
 
 
     if (allComputeOnGPU) then
@@ -3691,17 +3728,17 @@ subroutine trans_ev_tridi_to_band_&
 
     ! "row_group" and "row_group_dev" are needed for GPU optimizations
       successGPU = gpu_malloc_host(row_group_host,l_nev*nblk*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 781,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 787,  successGPU)
       call c_f_pointer(row_group_host, row_group, (/l_nev,nblk/))
 
     row_group(:, :) = 0.0_rck
     num =  (l_nev*nblk)* size_of_datatype
     successGPU = gpu_malloc(row_group_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 792,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 798,  successGPU)
 
 
       successGPU = gpu_memset(row_group_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_group_dev", 807,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_group_dev", 813,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -3728,17 +3765,17 @@ subroutine trans_ev_tridi_to_band_&
   endif !useGPU
 
   allocate(row(l_nev), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: row", 862,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: row", 868,  istat,  errorMessage)
 
   row(:) = 0.0_rck
 
   if (useGPU .and. allComputeOnGPU) then
     num =  (l_nev)* size_of_datatype
     successGPU = gpu_malloc(row_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_dev", 869,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_dev", 875,  successGPU)
 
       successGPU = gpu_memset(row_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_dev", 886,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_dev", 892,  successGPU)
 
 
     ! associate with c_ptr
@@ -3862,7 +3899,7 @@ subroutine trans_ev_tridi_to_band_&
               if (wantDebug) call obj%timer%stop("cuda_aware_gpublas")
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1219,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1225,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
               if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -3909,7 +3946,7 @@ subroutine trans_ev_tridi_to_band_&
             ! is there a way to avoid this device_synchronize ?
             if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
             successGPU = gpu_devicesynchronize()
-            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1277,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1283,  successGPU)
             if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
             if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -3999,19 +4036,19 @@ subroutine trans_ev_tridi_to_band_&
 
   num_result_buffers = 4*nfact
   allocate(result_buffer(l_nev,nblk,num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_buffer", 1520,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_buffer", 1526,  istat,  errorMessage)
 
   allocate(result_send_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_send_request", 1523,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_send_request", 1529,  istat,  errorMessage)
 
   allocate(result_recv_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_recv_request", 1526,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_recv_request", 1532,  istat,  errorMessage)
 
   if (useGPU .and. allComputeOnGPU) then
     num_result_buffers = 4*nfact
     num =  (l_nev*nblk*num_result_buffers)* size_of_datatype
     successGPU = gpu_malloc(result_buffer_dev, num* size_of_datatype)
-    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1532,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1538,  successGPU)
 
     ! associate with c_ptr
     result_buffer_mpi_dev = transfer(result_buffer_dev, result_buffer_mpi_dev)
@@ -4045,16 +4082,16 @@ subroutine trans_ev_tridi_to_band_&
   ! Initialize top/bottom requests
 
   allocate(top_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_send_request", 1589,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_send_request", 1595,  istat,  errorMessage)
 
   allocate(top_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_recv_request", 1592,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_recv_request", 1598,  istat,  errorMessage)
 
   allocate(bottom_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_send_request", 1595,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_send_request", 1601,  istat,  errorMessage)
 
   allocate(bottom_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_recv_request", 1598,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_recv_request", 1604,  istat,  errorMessage)
 
   top_send_request(:) = MPI_REQUEST_NULL
   top_recv_request(:) = MPI_REQUEST_NULL
@@ -4063,16 +4100,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
   allocate(top_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1628,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1634,  istat,  errorMessage)
 
   allocate(top_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1631,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1637,  istat,  errorMessage)
 
   allocate(bottom_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1634,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1640,  istat,  errorMessage)
 
   allocate(bottom_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1637,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1643,  istat,  errorMessage)
 
   top_border_send_buffer(:,:) = 0.0_rck
   top_border_recv_buffer(:,:) = 0.0_rck
@@ -4085,15 +4122,15 @@ subroutine trans_ev_tridi_to_band_&
       ! top_border_recv_buffer and top_border_send_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(top_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1655,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1661,  successGPU)
 
       successGPU = gpu_malloc(top_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1658,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1664,  successGPU)
 
         successGPU = gpu_memset(top_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1673,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1679,  successGPU)
         successGPU = gpu_memset(top_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1675,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1681,  successGPU)
 
 
       ! associate with c_ptr
@@ -4106,15 +4143,15 @@ subroutine trans_ev_tridi_to_band_&
       ! bottom_border_send_buffer and bottom_border_recv_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(bottom_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1710,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1716,  successGPU)
       successGPU = gpu_malloc(bottom_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1712,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1718,  successGPU)
 
 
         successGPU = gpu_memset(bottom_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1728,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1734,  successGPU)
         successGPU = gpu_memset(bottom_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1730,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1736,  successGPU)
 
 
       ! associate with c_ptr
@@ -4130,22 +4167,22 @@ subroutine trans_ev_tridi_to_band_&
       successGPU = gpu_host_register(int(loc(top_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1767,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1773,  successGPU)
 
       successGPU = gpu_host_register(int(loc(top_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1772,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1778,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1777,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1783,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1782,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1788,  successGPU)
   endif ! useGPU
 
 
@@ -4153,11 +4190,11 @@ subroutine trans_ev_tridi_to_band_&
 
   if (useGPU) then
       successGPU = gpu_malloc_host(bcast_buffer_host,nbw*max_blk_size*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1796,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1802,  successGPU)
       call c_f_pointer(bcast_buffer_host, bcast_buffer, (/nbw,max_blk_size/))
   else
     allocate(bcast_buffer(nbw, max_blk_size), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("tridi_to_band: bcast_buffer", 1805,  istat,  errorMessage)
+    call check_allocate_f("tridi_to_band: bcast_buffer", 1811,  istat,  errorMessage)
   endif
 
   bcast_buffer = 0.0_rck
@@ -4165,7 +4202,7 @@ subroutine trans_ev_tridi_to_band_&
   if (useGPU) then
     num =  ( nbw * max_blk_size) * size_of_datatype
     successGPU = gpu_malloc(bcast_buffer_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1813,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1819,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -4176,16 +4213,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
       successGPU = gpu_memset( bcast_buffer_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1834,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1840,  successGPU)
 
 
     num =  (max_blk_size)* size_of_datatype
     successGPU = gpu_malloc( hh_tau_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1850,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1856,  successGPU)
 
 
       successGPU = gpu_memset( hh_tau_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1864,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1870,  successGPU)
 
   endif ! useGPU
 
@@ -4257,7 +4294,7 @@ subroutine trans_ev_tridi_to_band_&
                                      size(hh_trans,dim=1) * (current_tv_off+current_local_n-(current_tv_off+1)+1) * &
                                      size_of_datatype, &
                                      gpuMemcpyDeviceToDevice)
-          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2027,  successGPU)
+          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2033,  successGPU)
           if (wantDebug) call obj%timer%stop("cuda_memcpy")
           current_tv_off = current_tv_off + current_local_n
         endif
@@ -4288,7 +4325,7 @@ subroutine trans_ev_tridi_to_band_&
                                  nbw * current_local_n *    &
                                  size_of_datatype, &
                                  gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2117,  successGPU)
+        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2123,  successGPU)
         if (wantDebug) call obj%timer%stop("memcpy")
       endif ! useGPU
 
@@ -4310,7 +4347,7 @@ subroutine trans_ev_tridi_to_band_&
       if (useGPU) then
 
           successGPU = gpu_memset(bcast_buffer_dev, 0, nbw * size_of_datatype)
-          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2176,  successGPU)
+          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2182,  successGPU)
 
 
         if (wantDebug) call obj%timer%start("extract_hh")
@@ -4349,7 +4386,7 @@ subroutine trans_ev_tridi_to_band_&
                                        c_loc(bottom_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                        stripe_width*nbw* size_of_datatype,      &
                                        gpuMemcpyDeviceToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2378,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2384,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_memcpy")
             else ! allComputeOnGPU
               if (wantDebug) call obj%timer%start("memcpy")
@@ -4358,7 +4395,7 @@ subroutine trans_ev_tridi_to_band_&
                                       int(loc(bottom_border_recv_buffer(1,i)),kind=c_intptr_t), &
                                        stripe_width*nbw*  size_of_datatype,    &
                                        gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2404,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2410,  successGPU)
               if (wantDebug) call obj%timer%stop("memcpy")
             endif ! allComputeOnGPU
           else ! useGPU
@@ -4409,7 +4446,7 @@ subroutine trans_ev_tridi_to_band_&
                                           c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                           stripe_width*top_msg_length* size_of_datatype,      &
                                           gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2659,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2665,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -4418,7 +4455,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy( aIntern_dev+dev_offset , int(loc(top_border_recv_buffer(1,i)),kind=c_intptr_t),  &
                                              stripe_width*top_msg_length* size_of_datatype,      &
                                              gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2684,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2690,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -4464,21 +4501,22 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2946,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2953,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
 
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2954,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2961,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
+                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), &
+                                            aIntern_dev + dev_offset, &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2979,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2987,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -4537,15 +4575,15 @@ subroutine trans_ev_tridi_to_band_&
                                             c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                              stripe_width * bottom_msg_length * size_of_datatype,      &
                                              gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3326,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3335,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset,  &
+                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                            stripe_width*bottom_msg_length* size_of_datatype,  &
                                            gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3351,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3360,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -4601,7 +4639,7 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                            stripe_width* top_msg_length* size_of_datatype,      &
                                            gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3664,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3673,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -4610,7 +4648,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy(aIntern_dev + dev_offset ,int(loc( top_border_recv_buffer(:,i)),kind=c_intptr_t),  &
                                         stripe_width * top_msg_length * size_of_datatype,   &
                                         gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3689,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3698,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -4672,7 +4710,7 @@ subroutine trans_ev_tridi_to_band_&
                                         c_loc(aIntern_mpi_fortran_ptr(1,a_off+1,i)), &
                                         stripe_width* nbw* size_of_datatype,      &
                                         gpuMemcpyDeviceToDevice)
-               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4067,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4076,  successGPU)
                if (wantDebug) call obj%timer%stop("cuda_memcpy")
              else ! allComputeOnGPU
                if (wantDebug) call obj%timer%start("memcpy")
@@ -4680,7 +4718,7 @@ subroutine trans_ev_tridi_to_band_&
                successGPU =  gpu_memcpy(int(loc(top_border_send_buffer(:,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                          stripe_width*nbw * size_of_datatype, &
                                          gpuMemcpyDeviceToHost)
-               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4092,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4101,  successGPU)
                if (wantDebug) call obj%timer%stop("memcpy")
              endif ! allComputeOnGPU
            else ! useGPU
@@ -4933,7 +4971,7 @@ subroutine trans_ev_tridi_to_band_&
             num = stripe_width*this_chunk*size_of_datatype
             successGPU = gpu_memcpy(aIntern_dev+dev_offset, aIntern_dev+dev_offset_1, num, gpuMemcpyDeviceToDevice)
 
-            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4648,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4657,  successGPU)
           end do
           if (wantDebug) call obj%timer%stop("normal_memcpy")
         else ! not useGPU
@@ -5020,7 +5058,7 @@ subroutine trans_ev_tridi_to_band_&
                              q_dev, &
                              ldq*matrixCols * size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4771,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4780,  successGPU)
     if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
   endif
@@ -5037,132 +5075,132 @@ subroutine trans_ev_tridi_to_band_&
   endif
 
   deallocate(row, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: row", 4789,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: row", 4798,  istat,  errorMessage)
 
   deallocate(limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: limits", 4792,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: limits", 4801,  istat,  errorMessage)
 
   deallocate(result_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_send_request", 4795,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_send_request", 4804,  istat,  errorMessage)
 
   deallocate(result_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_recv_request", 4798,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_recv_request", 4807,  istat,  errorMessage)
 
   deallocate(result_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_buffer", 4801,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_buffer", 4810,  istat,  errorMessage)
 
   if (useGPU) then
     if (allComputeOnGPU) then
       successGPU = gpu_free(result_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4806,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4815,  successGPU)
       nullify(result_buffer_mpi_fortran_ptr)
     endif
 
       nullify(bcast_buffer)
 
       successGPU = gpu_free_host(bcast_buffer_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4816,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4825,  successGPU)
   else ! useGPU
     deallocate(bcast_buffer, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("tridi_to_band: bcast_buffer", 4824,  istat,  errorMessage)
+    call check_deallocate_f("tridi_to_band: bcast_buffer", 4833,  istat,  errorMessage)
   endif ! useGPU
 
 
   if (useGPU) then
     successGPU = gpu_free(aIntern_dev)
-    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4830,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4839,  successGPU)
 
     if (allComputeOnGPU) then
       successGPU = gpu_free(q_dev)
-      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4834,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4843,  successGPU)
       nullify(q_mpi_fortran_ptr)
 
       successGPU = gpu_free(hh_trans_dev)
-      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4838,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4847,  successGPU)
       nullify(hh_trans_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4842,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4851,  successGPU)
       nullify(top_border_recv_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4846,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4855,  successGPU)
       nullify(top_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4850,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4859,  successGPU)
       nullify(bottom_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4854,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4863,  successGPU)
       nullify(bottom_border_recv_buffer_mpi_fortran_ptr)
 
       nullify(aIntern_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU = gpu_free(hh_tau_dev)
-    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4861,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4870,  successGPU)
 
       nullify(row_group)
 
       successGPU = gpu_free_host(row_group_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4869,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4878,  successGPU)
 
     successGPU = gpu_free(row_group_dev)
-    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4877,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4886,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(row_group_mpi_fortran_ptr)
 
       successGPU = gpu_free(row_dev)
-      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4883,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4892,  successGPU)
       nullify(row_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU =  gpu_free(bcast_buffer_dev)
-    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4888,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4897,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(bcast_buffer_mpi_fortran_ptr)
     endif
 
       successGPU = gpu_host_unregister(int(loc(top_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4898,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4907,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(top_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4901,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4910,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4904,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4913,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4907,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4916,  successGPU)
 
   endif ! useGPU
 
   deallocate(top_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4927,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4936,  istat,  errorMessage)
 
   deallocate(top_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4930,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4939,  istat,  errorMessage)
 
   deallocate(bottom_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4933,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4942,  istat,  errorMessage)
 
   deallocate(bottom_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4936,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4945,  istat,  errorMessage)
 
   deallocate(top_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_send_request", 4939,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_send_request", 4948,  istat,  errorMessage)
 
   deallocate(top_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_recv_request", 4942,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_recv_request", 4951,  istat,  errorMessage)
 
   deallocate(bottom_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_send_request", 4945,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_send_request", 4954,  istat,  errorMessage)
 
   deallocate(bottom_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4948,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4957,  istat,  errorMessage)
 
   call obj%timer%stop("trans_ev_tridi_to_band_&
                       &real&
@@ -6195,19 +6233,25 @@ max_threads, isSkewsymmetric)
     endif
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  !if (wantDebug) call obj%timer%start("mpi_communication")
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
   success = .true.
 
 
@@ -6232,15 +6276,15 @@ max_threads, isSkewsymmetric)
 
     ! Here we convert the regular host array into a pinned host array
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols* size_of_datatype)
-    call check_alloc_GPU_f("bandred: a_dev", 344,  successGPU)
+    call check_alloc_GPU_f("bandred: a_dev", 350,  successGPU)
 
       successGPU = gpu_host_register(int(loc(vav),kind=c_intptr_t), &
                   nbw * nbw * size_of_datatype,&
                   gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: vav", 352,  successGPU)
+      call check_host_register_GPU_f("bandred: vav", 358,  successGPU)
 
     successGPU = gpu_malloc(vav_dev, nbw*nbw* size_of_datatype)
-    call check_alloc_GPU_f("bandred: vav_dev", 358,  successGPU)
+    call check_alloc_GPU_f("bandred: vav_dev", 364,  successGPU)
   endif ! useGPU
 
   ! Matrix is split into tiles; work is done only for tiles on the diagonal or above
@@ -6271,14 +6315,14 @@ max_threads, isSkewsymmetric)
     if (which_qr_decomposition == 1) then
       call qr_pqrparam_init(obj,pqrparam(1:11),    nblk,'M',0,   nblk,'M',0,   nblk,'M',1,'s')
       allocate(tauvector(na), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: tauvector", 390,  istat,  errorMessage)
+      call check_allocate_f("bandred: tauvector", 396,  istat,  errorMessage)
 
       allocate(blockheuristic(nblk), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: blockheuristic", 393,  istat,  errorMessage)
+      call check_allocate_f("bandred: blockheuristic", 399,  istat,  errorMessage)
 
       l_rows = local_index(na, my_prow, np_rows, nblk, -1)
       allocate(vmrCPU_qr(max(l_rows,1),na), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vmrCPU_qr", 397,  istat,  errorMessage)
+      call check_allocate_f("bandred: vmrCPU_qr", 403,  istat,  errorMessage)
 
       vmrCols = na
 
@@ -6291,10 +6335,10 @@ max_threads, isSkewsymmetric)
 
       work_size = int(dwork_size(1))
       allocate(work_blocked(work_size), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: work_blocked", 419,  istat,  errorMessage)
+      call check_allocate_f("bandred: work_blocked", 425,  istat,  errorMessage)
       work_blocked = 0.0_rk
       deallocate(vmrCPU_qr, stat=istat, errmsg=errorMessage)
-      call check_deallocate_f("bandred: vmrCPU_qr", 422,  istat,  errorMessage)
+      call check_deallocate_f("bandred: vmrCPU_qr", 428,  istat,  errorMessage)
 
     endif ! which_qr_decomposition
 
@@ -6305,17 +6349,17 @@ max_threads, isSkewsymmetric)
  
       successGPU = gpu_host_register(int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: a_mat", 437,  successGPU)
+      call check_host_register_GPU_f("bandred: a_mat", 443,  successGPU)
 
     cur_l_rows = 0
     cur_l_cols = 0
 
     successGPU = gpu_memcpy(a_dev, int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("bandred: a_dev", 464,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev", 470,  successGPU)
 
     successGPU = gpu_malloc(tmat_dev, nbw*nbw*size_of_datatype)
-    call check_alloc_GPU_f("bandred: tmat_dev", 468,  successGPU)
+    call check_alloc_GPU_f("bandred: tmat_dev", 474,  successGPU)
 
 
 
@@ -6345,22 +6389,22 @@ max_threads, isSkewsymmetric)
     umc_size = max(umc_size,umc_size2)
 
     allocate(vr(l_rows + 1), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("bandred: vr", 505,  istat,  errorMessage)
+    call check_allocate_f("bandred: vr", 511,  istat,  errorMessage)
 
       successGPU = gpu_malloc_host(vmr_host,vmr_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: vmr_host", 511,  successGPU)
+      call check_host_alloc_GPU_f("bandred: vmr_host", 517,  successGPU)
       call c_f_pointer(vmr_host, vmrGPU, (/vmr_size/))
 
     successGPU = gpu_malloc(vmr_dev, vmr_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: vmr_dev", 520,  successGPU)
+    call check_alloc_GPU_f("bandred: vmr_dev", 526,  successGPU)
 
 
       successGPU = gpu_malloc_host(umc_host,umc_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: umc_host", 527,  successGPU)
+      call check_host_alloc_GPU_f("bandred: umc_host", 533,  successGPU)
       call c_f_pointer(umc_host, umcGPU, (/umc_size/))
 
     successGPU = gpu_malloc(umc_dev, umc_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: umc_dev", 536,  successGPU)
+    call check_alloc_GPU_f("bandred: umc_dev", 542,  successGPU)
 
 
 
@@ -6390,13 +6434,13 @@ max_threads, isSkewsymmetric)
       ! Allocate vmr and umcCPU to their exact sizes so that they can be used in bcasts and reduces
 
       allocate(vmrCPU(max_l_rows,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vmrCPU", 607,  istat,  errorMessage)
+      call check_allocate_f("bandred: vmrCPU", 613,  istat,  errorMessage)
 
       allocate(umcCPU(max_l_cols,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: umcCPU", 610,  istat,  errorMessage)
+      call check_allocate_f("bandred: umcCPU", 616,  istat,  errorMessage)
 
       allocate(vr(l_rows+1), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vr", 613,  istat,  errorMessage)
+      call check_allocate_f("bandred: vr", 619,  istat,  errorMessage)
 
     endif ! use GPU
 
@@ -6437,7 +6481,7 @@ max_threads, isSkewsymmetric)
                         int(matrixRows*size_of_datatype,kind=c_intptr_t), &
                         int(lr_end*size_of_datatype,kind=c_intptr_t), &
                         int((lc_end - lc_start+1),kind=c_intptr_t),int(gpuMemcpyDeviceToHost,kind=c_int))
-          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 680,  successGPU)
+          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 686,  successGPU)
 
       endif ! do_memcpy
     endif ! useGPU
@@ -6585,7 +6629,7 @@ max_threads, isSkewsymmetric)
                          int(lr_end*size_of_datatype,kind=c_intptr_t), &
                          int((lc_end - lc_start+1),kind=c_intptr_t), &
                          int(gpuMemcpyHostToDevice,kind=c_int))
-            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 893,  successGPU)
+            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 899,  successGPU)
 
         endif ! do_memcopy
       endif ! (useGPU_reduction_lower_block_to_tridiagonal
@@ -6646,7 +6690,7 @@ max_threads, isSkewsymmetric)
                        int(lr_end*size_of_datatype,kind=c_intptr_t), &
                        int((lc_end - lc_start+1),kind=c_intptr_t), &
                        int(gpuMemcpyHostToDevice,kind=c_int))
-          call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 1010,  successGPU)
+          call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 1016,  successGPU)
       endif ! do_memcpy
     endif ! useGPU .and. useQR
 
@@ -6701,16 +6745,16 @@ max_threads, isSkewsymmetric)
 
             successGPU = gpu_memset(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                         0, max_l_rows*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: vmr_dev", 1291,  successGPU)
+            call check_memset_GPU_f("bandred: vmr_dev", 1297,  successGPU)
 
 
           successGPU = gpu_memcpy(vmr_dev, int(loc(vmrGPU(1)),kind=c_intptr_t), &
                         max_l_rows*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1323,  successGPU)
+          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1329,  successGPU)
 
 
             successGPU = gpu_memset(umc_dev, 0, l_cols*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: umc_dev", 1341,  successGPU)
+            call check_memset_GPU_f("bandred: umc_dev", 1347,  successGPU)
 
 
 
@@ -6718,7 +6762,7 @@ max_threads, isSkewsymmetric)
                         int(loc(umcGPU(1+l_cols*n_cols)),kind=c_intptr_t), &
                         (umc_size-l_cols*n_cols)*size_of_datatype, &
                         gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1384,  successGPU)
+          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1390,  successGPU)
         endif ! useGPU
 
         do i=0,(istep*nbw-1)/tile_size
@@ -6801,12 +6845,12 @@ max_threads, isSkewsymmetric)
             successGPU = gpu_memcpy(int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                           vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                           (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyDeviceToHost)
-            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1503,  successGPU)
+            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1509,  successGPU)
           endif
 
           successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                         umc_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1523,  successGPU)
+          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1529,  successGPU)
         endif ! useGPU
       endif ! l_cols>0 .and. l_rows>0
 
@@ -6841,7 +6885,7 @@ max_threads, isSkewsymmetric)
 
       if (useGPU) then
         allocate(tmpGPU(l_cols * n_cols), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("bandred: tmpGPU", 1563,  istat,  errorMessage)
+        call check_allocate_f("bandred: tmpGPU", 1569,  istat,  errorMessage)
         if (useNonBlockingCollectivesRows) then
           if (wantDebug) call obj%timer%start("mpi_nbc_communication")
 
@@ -6862,7 +6906,7 @@ max_threads, isSkewsymmetric)
 
         if (allocated(tmpGPU)) then
           deallocate(tmpGPU, stat=istat, errmsg=errorMessage)
-          call check_deallocate_f("bandred: tmpGPU", 1585,  istat,  errorMessage)
+          call check_deallocate_f("bandred: tmpGPU", 1591,  istat,  errorMessage)
         endif
 
       else ! useGPU
@@ -6887,11 +6931,11 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(umc_dev, int(loc(umcGPU(1)),kind=c_intptr_t), &
                     l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1630,  successGPU)
+      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1636,  successGPU)
 
       successGPU = gpu_memcpy(tmat_dev,int(loc(tmat(1,1,istep)),kind=c_intptr_t), &
                     nbw*nbw*size_of_datatype,gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1634,  successGPU)
+      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1640,  successGPU)
 
       call obj%timer%start("gpublas")
       gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -6913,7 +6957,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(vav),kind=c_intptr_t), &
                   vav_dev, nbw*nbw*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1671,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1677,  successGPU)
     else ! useGPU
 
       call obj%timer%start("blas")
@@ -6958,7 +7002,7 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(vav_dev, int(loc(vav),kind=c_intptr_t), &
                        nbw*nbw*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1742,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1748,  successGPU)
     endif
 
 
@@ -6986,7 +7030,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                   umc_dev, umc_size*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1803,  successGPU)
+      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1809,  successGPU)
 
       ! Transpose umc -> umr (stored in vmr, second half)
       if (isSkewsymmetric) then
@@ -7019,7 +7063,7 @@ max_threads, isSkewsymmetric)
       successGPU = gpu_memcpy(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                   int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                   (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1860,  successGPU)
+      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1866,  successGPU)
     else ! useGPU
       call obj%timer%start("blas")
       if (isSkewsymmetric) then
@@ -7100,17 +7144,17 @@ max_threads, isSkewsymmetric)
     if (.not.(useGPU)) then
       if (allocated(vr)) then
         deallocate(vr, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vr", 2029,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vr", 2035,  istat,  errorMessage)
       endif
 
       if (allocated(umcCPU)) then
         deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: umcCPU", 2034,  istat,  errorMessage)
+        call check_deallocate_f("bandred: umcCPU", 2040,  istat,  errorMessage)
       endif
 
       if (allocated(vmrCPU)) then
         deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vmrCPU", 2039,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vmrCPU", 2045,  istat,  errorMessage)
       endif
     endif !useGPU
 
@@ -7128,67 +7172,67 @@ max_threads, isSkewsymmetric)
                   int(a_dev,kind=c_intptr_t), &
                   int(matrixRows*matrixCols* size_of_datatype, kind=c_intptr_t), &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2137,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2143,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(a_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: a_mat ", 2144,  successGPU)
+      call check_host_unregister_GPU_f("bandred: a_mat ", 2150,  successGPU)
 
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("bandred: a_dev ", 2155,  successGPU)
+    call check_dealloc_GPU_f("bandred: a_dev ", 2161,  successGPU)
 
     successGPU = gpu_free(vav_dev)
-    call check_dealloc_GPU_f("bandred: vav_dev ", 2158,  successGPU)
+    call check_dealloc_GPU_f("bandred: vav_dev ", 2164,  successGPU)
 
     successGPU = gpu_free(tmat_dev)
-    call check_dealloc_GPU_f("bandred: tmat_dev ", 2161,  successGPU)
+    call check_dealloc_GPU_f("bandred: tmat_dev ", 2167,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(vav),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: vav", 2167,  successGPU)
+      call check_host_unregister_GPU_f("bandred: vav", 2173,  successGPU)
 
       if (associated(umcGPU)) then
         nullify(umcGPU)
 
         successGPU = gpu_free_host(umc_host)
-        call check_host_dealloc_GPU_f("bandred: umc_host ", 2180,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: umc_host ", 2186,  successGPU)
         successGPU = gpu_free(umc_dev)
-        call check_dealloc_GPU_f("bandred: umc_dev ", 2182,  successGPU)
+        call check_dealloc_GPU_f("bandred: umc_dev ", 2188,  successGPU)
       endif
 
       if (associated(vmrGPU)) then
         nullify(vmrGPU)
 
         successGPU = gpu_free_host(vmr_host)
-        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2189,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2195,  successGPU)
 
         successGPU = gpu_free(vmr_dev)
-        call check_dealloc_GPU_f("bandred: vmr_dev ", 2192,  successGPU)
+        call check_dealloc_GPU_f("bandred: vmr_dev ", 2198,  successGPU)
       endif
 
   endif ! useGPU
   
   if (allocated(vr)) then
     deallocate(vr, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vr", 2215,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vr", 2221,  istat,  errorMessage)
   endif
 
   if (allocated(umcCPU)) then
     deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: umcCPU", 2221,  istat,  errorMessage)
+    call check_deallocate_f("bandred: umcCPU", 2227,  istat,  errorMessage)
   endif
 
   if (allocated(vmrCPU)) then
     deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vmrCPU", 2226,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vmrCPU", 2232,  istat,  errorMessage)
   endif
 
   if (useQR) then
     if (which_qr_decomposition == 1) then
       deallocate(work_blocked, stat=istat, errmsg=errorMessage)
-      call check_deallocate_f("bandred: work_blocked", 2233,  istat,  errorMessage)
+      call check_deallocate_f("bandred: work_blocked", 2239,  istat,  errorMessage)
 
       deallocate(tauvector, stat=istat, errmsg=errorMessage)
-      call check_deallocate_f("bandred: tauvector", 2236,  istat,  errorMessage)
+      call check_deallocate_f("bandred: tauvector", 2242,  istat,  errorMessage)
     endif
   endif
   
@@ -7842,6 +7886,8 @@ subroutine trans_ev_band_to_full_&
   logical                                        :: useNonBlockingCollectivesRows
   integer(kind=c_int)                            :: non_blocking_collectives_rows, non_blocking_collectives_cols
   logical                                        :: success
+  integer(kind=MPI_KIND), allocatable            :: ibreq(:)
+  integer(kind=ik)                               :: nblocks, bc_counter
   integer(kind=c_intptr_t)                       :: gpuHandle, my_stream
 
   success = .true.
@@ -7907,17 +7953,23 @@ subroutine trans_ev_band_to_full_&
   endif
 
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
   max_blocks_row = ((na -1)/nblk)/np_rows + 1 ! Rows of a_mat
   max_blocks_col = ((nqc-1)/nblk)/np_cols + 1 ! Columns of q_mat!
@@ -7930,75 +7982,75 @@ subroutine trans_ev_band_to_full_&
   if (useGPU) then
     ! copy q_mat to q_dev
     successGPU = gpu_malloc(q_dev,ldq*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 289,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 297,  successGPU)
       successGPU = gpu_host_register(int(loc(q_mat),kind=c_intptr_t),&
                     ldq*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 295,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 303,  successGPU)
 
     successGPU = gpu_memcpy(q_dev,int(loc(q_mat),kind=c_intptr_t),&
                   ldq*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 317,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 325,  successGPU)
 
       successGPU = gpu_malloc_host(tmp1_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 324,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 332,  successGPU)
       call c_f_pointer(tmp1_host, tmp1, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(tmp2_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 328,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 336,  successGPU)
       call c_f_pointer(tmp2_host, tmp2, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(hvm_host,max_local_rows*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 332,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 340,  successGPU)
       call c_f_pointer(hvm_host, hvm, (/max_local_rows,cwy_blocking/))
   else ! useGPU
     allocate(tmp1(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp1", 343,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp1", 351,  istat,  errorMessage)
 
     allocate(tmp2(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp2", 346,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp2", 354,  istat,  errorMessage)
 
     allocate(hvm(max_local_rows,cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: hvm", 349,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: hvm", 357,  istat,  errorMessage)
   endif !useGPU
 
   allocate(hvb(max_local_rows*cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: hvb", 353,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: hvb", 361,  istat,  errorMessage)
 
   allocate(tmat_complete(cwy_blocking,cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 356,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 364,  istat,  errorMessage)
 
   if (useGPU) then
       successGPU = gpu_host_register(int(loc(tmat_complete),kind=c_intptr_t), &
                     cwy_blocking * cwy_blocking * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 365,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 373,  successGPU)
   endif
 
 
   if (blocking_factor > 1) then
     allocate(t_tmp(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp", 389,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp", 397,  istat,  errorMessage)
 
     allocate(t_tmp2(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 392,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 400,  istat,  errorMessage)
 
   endif
 
   if (useGPU) then
     successGPU = gpu_malloc(hvm_dev,max_local_rows*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 409,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 417,  successGPU)
 
     successGPU = gpu_malloc(tmp_dev,max_local_cols*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 412,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 420,  successGPU)
 
 
       successGPU = gpu_memset(tmp_dev, 0, max_local_cols*cwy_blocking*size_of_datatype)
-      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 430,  successGPU)
+      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 438,  successGPU)
 
 
 
     successGPU = gpu_malloc(tmat_complete_dev,cwy_blocking*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 477,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 485,  successGPU)
   endif
 
 
@@ -8034,6 +8086,9 @@ subroutine trans_ev_band_to_full_&
 
     nb = 0
     ns = 0
+    bc_counter=0
+    nblocks = n_cols/nblk;
+    allocate(ibreq(0:nblocks-1))
 
     do lc = 1, n_cols
       ncol = (istep-1)*cwy_blocking + nbw + lc ! absolute column number of householder Vector
@@ -8048,12 +8103,10 @@ subroutine trans_ev_band_to_full_&
 
       if (lc==n_cols .or. mod(ncol,nblk)==0) then
         if (useNonBlockingCollectivesCols) then
-          call obj%timer%start("mpi_nbc_communication")
           call mpi_ibcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_REAL4,&
                          int(pcol(ncol, nblk, np_cols),kind=MPI_KIND), int(mpi_comm_cols,kind=MPI_KIND), &
-                         bcast_request1, mpierr)
-          call mpi_wait(bcast_request1, MPI_STATUS_IGNORE, mpierr)
-          call obj%timer%stop("mpi_nbc_communication")
+                         ibreq(bc_counter), mpierr)
+          bc_counter = bc_counter + 1  
         else
           call obj%timer%start("mpi_communication")
           call mpi_bcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_REAL4,&
@@ -8064,6 +8117,13 @@ subroutine trans_ev_band_to_full_&
         ns = nb
       endif
     enddo ! lc
+
+  if(useNonBlockingCollectivesCols) then
+    call obj%timer%start("mpi_nbc_communication")
+    call mpi_waitall(nblocks, ibreq, MPI_STATUSES_IGNORE, mpierr)
+    call obj%timer%stop("mpi_nbc_communication")
+  endif
+  deallocate(ibreq)
 
     ! Expand compressed Householder vectors into matrix hvm
 
@@ -8110,7 +8170,7 @@ subroutine trans_ev_band_to_full_&
 
           call obj%timer%start("mpi_nbc_communication")
           call mpi_iallreduce(t_tmp, t_tmp2, int(cwy_blocking*nbw,kind=MPI_KIND), MPI_REAL4, &
-                           MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
+                         MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
           call mpi_wait(allreduce_request1, MPI_STATUS_IGNORE, mpierr)
           call obj%timer%stop("mpi_nbc_communication")
 
@@ -8157,7 +8217,7 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(hvm_dev, int(loc(hvm),kind=c_intptr_t), &
                         max_local_rows*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1039,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1057,  successGPU)
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
         call gpublas_SGEMM('T', 'N', &
@@ -8168,7 +8228,7 @@ subroutine trans_ev_band_to_full_&
         ! copy data from device to host for a later MPI_ALLREDUCE
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                       tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1070,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1088,  successGPU)
       else ! useGPU
         call obj%timer%start("blas")
         call SGEMM('T', 'N', &
@@ -8184,7 +8244,7 @@ subroutine trans_ev_band_to_full_&
     if (useGPU) then
       successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                    tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1146,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1164,  successGPU)
 
     endif
 
@@ -8213,12 +8273,12 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(tmp_dev, int(loc(tmp2),kind=c_intptr_t), &
                       l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1341,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1359,  successGPU)
 
         ! needed: as long as not device to device copy
         successGPU = gpu_memcpy(tmat_complete_dev, int(loc(tmat_complete),kind=c_intptr_t), &
                       cwy_blocking*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1363,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1381,  successGPU)
 
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -8244,28 +8304,28 @@ subroutine trans_ev_band_to_full_&
   enddo ! istep
 
   deallocate(hvb, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: hvb", 1435,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: hvb", 1453,  istat,  errorMessage)
 
   if (useGPU) then
     successGPU = gpu_free(hvm_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1439,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1457,  successGPU)
 
     successGPU = gpu_free(tmp_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1442,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1460,  successGPU)
 
     successGPU = gpu_free(tmat_complete_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1449,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1467,  successGPU)
 
     ! final transfer of q_dev
     successGPU = gpu_memcpy(int(loc(q_mat),kind=c_intptr_t), q_dev, ldq*matrixCols*size_of_datatype, &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1469,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1487,  successGPU)
 
     successGPU = gpu_free(q_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1473,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1491,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(q_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1479,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1497,  successGPU)
       nullify(tmp1)
       nullify(tmp2)
       nullify(hvm)
@@ -8274,38 +8334,38 @@ subroutine trans_ev_band_to_full_&
 
 
       successGPU = gpu_free_host(tmp1_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1504,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1522,  successGPU)
 
       successGPU = gpu_free_host(tmp2_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1507,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1525,  successGPU)
 
       successGPU = gpu_free_host(hvm_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1510,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1528,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(tmat_complete),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1513,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1531,  successGPU)
   else ! useGPU
     deallocate(tmp1, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1519,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1537,  istat,  errorMessage)
 
     deallocate(tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1522,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1540,  istat,  errorMessage)
 
     deallocate(hvm, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: hvm", 1525,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: hvm", 1543,  istat,  errorMessage)
   endif ! useGPU
 
   deallocate(tmat_complete, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1529,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1547,  istat,  errorMessage)
 
 
   if (blocking_factor > 1) then
 
     deallocate(t_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1556,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1574,  istat,  errorMessage)
 
     deallocate(t_tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1559,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1577,  istat,  errorMessage)
   endif
 
   call obj%timer%stop("trans_ev_band_to_full_&
@@ -8486,27 +8546,36 @@ subroutine tridiag_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+  n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-  my_pe = int(my_peMPI,kind=MPI_KIND)
-  n_pes = int(n_pesMPI,kind=MPI_KIND)
-  my_prow = int(my_prowMPI,kind=MPI_KIND)
-  np_rows = int(np_rowsMPI,kind=MPI_KIND)
-  my_pcol = int(my_pcolMPI,kind=MPI_KIND)
-  np_cols = int(np_colsMPI,kind=MPI_KIND)
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+
+  !my_pe = int(my_peMPI,kind=MPI_KIND)
+  !n_pes = int(n_pesMPI,kind=MPI_KIND)
+  !my_prow = int(my_prowMPI,kind=MPI_KIND)
+  !np_rows = int(np_rowsMPI,kind=MPI_KIND)
+  !my_pcol = int(my_pcolMPI,kind=MPI_KIND)
+  !np_cols = int(np_colsMPI,kind=MPI_KIND)
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
 
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: global_id", 201,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: global_id", 210,  istat,  errorMessage)
 
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
@@ -8530,7 +8599,7 @@ subroutine tridiag_band_&
   ! Set work distribution
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: block_limits", 245,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: block_limits", 254,  istat,  errorMessage)
 
   call divide_band(obj,nblocks_total, n_pes, block_limits)
 
@@ -8540,7 +8609,7 @@ subroutine tridiag_band_&
   ! allocate the part of the band matrix which is needed by this PE
   ! The size is 1 block larger than needed to avoid extensive shifts
   allocate(ab(2*nb,(nblocks+1)*nb), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: ab", 255,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ab", 264,  istat,  errorMessage)
 
   ab = 0.0_rck ! needed for lower half, the extra block should also be set to 0 for safety
 
@@ -8563,7 +8632,7 @@ subroutine tridiag_band_&
   ! and the space requirements to hold the HH vectors
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: limits", 278,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: limits", 287,  istat,  errorMessage)
 
   call determine_workload(obj,na, nb, np_rows, limits)
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -8586,14 +8655,14 @@ subroutine tridiag_band_&
   ! Allocate space for HH vectors
 
   allocate(hh_trans(nb,num_hh_vecs), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_trans", 301,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_trans", 310,  istat,  errorMessage)
 
   ! Allocate and init MPI requests
 
   allocate(ireq_hhr(num_chunks), stat=istat, errmsg=errorMessage) ! Recv requests
-  call check_allocate_f("tridiag_band: ireq_hhr", 306,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhr", 315,  istat,  errorMessage)
   allocate(ireq_hhs(nblocks), stat=istat, errmsg=errorMessage)    ! Send requests
-  call check_allocate_f("tridiag_band: ireq_hhs", 308,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhs", 317,  istat,  errorMessage)
 
   num_hh_vecs = 0
   num_chunks  = 0
@@ -8624,10 +8693,10 @@ subroutine tridiag_band_&
   ! Buffers for gathering/sending the HH vectors
 
   allocate(hh_gath(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! gathers HH vectors
-  call check_allocate_f("tridiag_band: hh_gath", 347,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_gath", 356,  istat,  errorMessage)
 
   allocate(hh_send(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! send buffer for HH vectors
-  call check_allocate_f("tridiag_band: hh_send", 350,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_send", 359,  istat,  errorMessage)
 
   hh_gath(:,:,:) = 0.0_rck
   hh_send(:,:,:) = 0.0_rck
@@ -8635,10 +8704,10 @@ subroutine tridiag_band_&
   ! Some counters
 
   allocate(hh_cnt(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_cnt", 358,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_cnt", 367,  istat,  errorMessage)
 
   allocate(hh_dst(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_dst", 361,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_dst", 370,  istat,  errorMessage)
 
   hh_cnt(:) = 1 ! The first transfomation Vector is always 0 and not calculated at all
   hh_dst(:) = 0 ! PE number for receive
@@ -8647,7 +8716,7 @@ subroutine tridiag_band_&
   ! Limits for sending
 
   allocate(snd_limits(0:np_rows,nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: snd_limits", 372,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: snd_limits", 381,  istat,  errorMessage)
 
   do iblk=1,nblocks
     call determine_workload(obj, na-(iblk+block_limits(my_pe)-1)*nb, nb, np_rows, snd_limits(:,iblk))
@@ -8988,25 +9057,25 @@ endif
   call mpi_barrier(int(mpi_comm_all,kind=MPI_KIND),mpierr)
   if (wantDebug) call obj%timer%stop("mpi_communication")
   deallocate(ab, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ab", 1232,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ab", 1241,  istat,  errorMessage)
 
   deallocate(ireq_hhr, ireq_hhs, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ireq_hhr", 1235,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ireq_hhr", 1244,  istat,  errorMessage)
 
   deallocate(hh_cnt, hh_dst, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_dst", 1238,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_dst", 1247,  istat,  errorMessage)
 
   deallocate(hh_gath, hh_send, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_gath", 1241,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_gath", 1250,  istat,  errorMessage)
 
   deallocate(limits, snd_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: limits", 1244,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: limits", 1253,  istat,  errorMessage)
 
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: block_limits", 1247,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: block_limits", 1256,  istat,  errorMessage)
 
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: global_id", 1250,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: global_id", 1259,  istat,  errorMessage)
 
   call obj%timer%stop("tridiag_band_&
   &real&
@@ -9360,18 +9429,24 @@ subroutine trans_ev_tridi_to_band_&
   kernel_time = 0.0
   kernel_flops = 0
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
-  call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
+  !call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   if (mod(nbw,nblk)/=0) then
     if (my_prow==0 .and. my_pcol==0) then
@@ -9449,7 +9524,7 @@ subroutine trans_ev_tridi_to_band_&
   ! Determine the matrix distribution at the beginning
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: limits", 633,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: limits", 639,  istat,  errorMessage)
   call determine_workload(obj,na, nbw, np_rows, limits)
 
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -9462,12 +9537,12 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%start("cuda_memcpy")
 
       successGPU = gpu_malloc(q_dev, ldq*matrixCols* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: q_dev", 646,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: q_dev", 652,  successGPU)
 
       successGPU =  gpu_memcpy(q_dev, int(loc(q(1,1)),kind=c_intptr_t),  &
                                ldq*matrixCols * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 672,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 678,  successGPU)
 
       ! associate with c_ptr
       q_mpi_dev = transfer(q_dev, q_mpi_dev)
@@ -9477,7 +9552,7 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
       successGPU = gpu_malloc(hh_trans_dev, size(hh_trans,dim=1)*size(hh_trans,dim=2)* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 683,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 689,  successGPU)
       ! associate with c_ptr
       hh_trans_mpi_dev = transfer(hh_trans_dev, hh_trans_mpi_dev)
       ! and associate a fortran pointer
@@ -9487,18 +9562,18 @@ subroutine trans_ev_tridi_to_band_&
                                c_loc(hh_trans(1,1)), &
                                size(hh_trans,dim=1)*size(hh_trans,dim=2) * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 716,  successGPU)
+      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 722,  successGPU)
 
     endif ! allComputeOnGPU
 
     num = (stripe_width*a_dim2*stripe_count)* size_of_datatype
     successGPU = gpu_malloc(aIntern_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 727,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 733,  successGPU)
 
     ! openmp loop here
 
       successGPU = gpu_memset(aIntern_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 743,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 749,  successGPU)
 
 
     if (allComputeOnGPU) then
@@ -9511,17 +9586,17 @@ subroutine trans_ev_tridi_to_band_&
 
     ! "row_group" and "row_group_dev" are needed for GPU optimizations
       successGPU = gpu_malloc_host(row_group_host,l_nev*nblk*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 781,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 787,  successGPU)
       call c_f_pointer(row_group_host, row_group, (/l_nev,nblk/))
 
     row_group(:, :) = 0.0_rck
     num =  (l_nev*nblk)* size_of_datatype
     successGPU = gpu_malloc(row_group_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 792,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 798,  successGPU)
 
 
       successGPU = gpu_memset(row_group_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_group_dev", 807,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_group_dev", 813,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -9548,17 +9623,17 @@ subroutine trans_ev_tridi_to_band_&
   endif !useGPU
 
   allocate(row(l_nev), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: row", 862,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: row", 868,  istat,  errorMessage)
 
   row(:) = 0.0_rck
 
   if (useGPU .and. allComputeOnGPU) then
     num =  (l_nev)* size_of_datatype
     successGPU = gpu_malloc(row_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_dev", 869,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_dev", 875,  successGPU)
 
       successGPU = gpu_memset(row_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_dev", 886,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_dev", 892,  successGPU)
 
 
     ! associate with c_ptr
@@ -9682,7 +9757,7 @@ subroutine trans_ev_tridi_to_band_&
               if (wantDebug) call obj%timer%stop("cuda_aware_gpublas")
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1219,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1225,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
               if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -9729,7 +9804,7 @@ subroutine trans_ev_tridi_to_band_&
             ! is there a way to avoid this device_synchronize ?
             if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
             successGPU = gpu_devicesynchronize()
-            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1277,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1283,  successGPU)
             if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
             if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -9819,19 +9894,19 @@ subroutine trans_ev_tridi_to_band_&
 
   num_result_buffers = 4*nfact
   allocate(result_buffer(l_nev,nblk,num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_buffer", 1520,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_buffer", 1526,  istat,  errorMessage)
 
   allocate(result_send_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_send_request", 1523,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_send_request", 1529,  istat,  errorMessage)
 
   allocate(result_recv_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_recv_request", 1526,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_recv_request", 1532,  istat,  errorMessage)
 
   if (useGPU .and. allComputeOnGPU) then
     num_result_buffers = 4*nfact
     num =  (l_nev*nblk*num_result_buffers)* size_of_datatype
     successGPU = gpu_malloc(result_buffer_dev, num* size_of_datatype)
-    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1532,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1538,  successGPU)
 
     ! associate with c_ptr
     result_buffer_mpi_dev = transfer(result_buffer_dev, result_buffer_mpi_dev)
@@ -9865,16 +9940,16 @@ subroutine trans_ev_tridi_to_band_&
   ! Initialize top/bottom requests
 
   allocate(top_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_send_request", 1589,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_send_request", 1595,  istat,  errorMessage)
 
   allocate(top_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_recv_request", 1592,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_recv_request", 1598,  istat,  errorMessage)
 
   allocate(bottom_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_send_request", 1595,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_send_request", 1601,  istat,  errorMessage)
 
   allocate(bottom_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_recv_request", 1598,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_recv_request", 1604,  istat,  errorMessage)
 
   top_send_request(:) = MPI_REQUEST_NULL
   top_recv_request(:) = MPI_REQUEST_NULL
@@ -9883,16 +9958,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
   allocate(top_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1628,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1634,  istat,  errorMessage)
 
   allocate(top_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1631,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1637,  istat,  errorMessage)
 
   allocate(bottom_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1634,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1640,  istat,  errorMessage)
 
   allocate(bottom_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1637,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1643,  istat,  errorMessage)
 
   top_border_send_buffer(:,:) = 0.0_rck
   top_border_recv_buffer(:,:) = 0.0_rck
@@ -9905,15 +9980,15 @@ subroutine trans_ev_tridi_to_band_&
       ! top_border_recv_buffer and top_border_send_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(top_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1655,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1661,  successGPU)
 
       successGPU = gpu_malloc(top_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1658,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1664,  successGPU)
 
         successGPU = gpu_memset(top_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1673,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1679,  successGPU)
         successGPU = gpu_memset(top_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1675,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1681,  successGPU)
 
 
       ! associate with c_ptr
@@ -9926,15 +10001,15 @@ subroutine trans_ev_tridi_to_band_&
       ! bottom_border_send_buffer and bottom_border_recv_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(bottom_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1710,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1716,  successGPU)
       successGPU = gpu_malloc(bottom_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1712,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1718,  successGPU)
 
 
         successGPU = gpu_memset(bottom_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1728,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1734,  successGPU)
         successGPU = gpu_memset(bottom_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1730,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1736,  successGPU)
 
 
       ! associate with c_ptr
@@ -9950,22 +10025,22 @@ subroutine trans_ev_tridi_to_band_&
       successGPU = gpu_host_register(int(loc(top_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1767,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1773,  successGPU)
 
       successGPU = gpu_host_register(int(loc(top_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1772,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1778,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1777,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1783,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1782,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1788,  successGPU)
   endif ! useGPU
 
 
@@ -9973,11 +10048,11 @@ subroutine trans_ev_tridi_to_band_&
 
   if (useGPU) then
       successGPU = gpu_malloc_host(bcast_buffer_host,nbw*max_blk_size*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1796,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1802,  successGPU)
       call c_f_pointer(bcast_buffer_host, bcast_buffer, (/nbw,max_blk_size/))
   else
     allocate(bcast_buffer(nbw, max_blk_size), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("tridi_to_band: bcast_buffer", 1805,  istat,  errorMessage)
+    call check_allocate_f("tridi_to_band: bcast_buffer", 1811,  istat,  errorMessage)
   endif
 
   bcast_buffer = 0.0_rck
@@ -9985,7 +10060,7 @@ subroutine trans_ev_tridi_to_band_&
   if (useGPU) then
     num =  ( nbw * max_blk_size) * size_of_datatype
     successGPU = gpu_malloc(bcast_buffer_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1813,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1819,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -9996,16 +10071,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
       successGPU = gpu_memset( bcast_buffer_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1834,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1840,  successGPU)
 
 
     num =  (max_blk_size)* size_of_datatype
     successGPU = gpu_malloc( hh_tau_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1850,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1856,  successGPU)
 
 
       successGPU = gpu_memset( hh_tau_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1864,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1870,  successGPU)
 
   endif ! useGPU
 
@@ -10077,7 +10152,7 @@ subroutine trans_ev_tridi_to_band_&
                                      size(hh_trans,dim=1) * (current_tv_off+current_local_n-(current_tv_off+1)+1) * &
                                      size_of_datatype, &
                                      gpuMemcpyDeviceToDevice)
-          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2027,  successGPU)
+          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2033,  successGPU)
           if (wantDebug) call obj%timer%stop("cuda_memcpy")
           current_tv_off = current_tv_off + current_local_n
         endif
@@ -10108,7 +10183,7 @@ subroutine trans_ev_tridi_to_band_&
                                  nbw * current_local_n *    &
                                  size_of_datatype, &
                                  gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2117,  successGPU)
+        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2123,  successGPU)
         if (wantDebug) call obj%timer%stop("memcpy")
       endif ! useGPU
 
@@ -10130,7 +10205,7 @@ subroutine trans_ev_tridi_to_band_&
       if (useGPU) then
 
           successGPU = gpu_memset(bcast_buffer_dev, 0, nbw * size_of_datatype)
-          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2176,  successGPU)
+          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2182,  successGPU)
 
 
         if (wantDebug) call obj%timer%start("extract_hh")
@@ -10169,7 +10244,7 @@ subroutine trans_ev_tridi_to_band_&
                                        c_loc(bottom_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                        stripe_width*nbw* size_of_datatype,      &
                                        gpuMemcpyDeviceToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2378,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2384,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_memcpy")
             else ! allComputeOnGPU
               if (wantDebug) call obj%timer%start("memcpy")
@@ -10178,7 +10253,7 @@ subroutine trans_ev_tridi_to_band_&
                                       int(loc(bottom_border_recv_buffer(1,i)),kind=c_intptr_t), &
                                        stripe_width*nbw*  size_of_datatype,    &
                                        gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2404,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2410,  successGPU)
               if (wantDebug) call obj%timer%stop("memcpy")
             endif ! allComputeOnGPU
           else ! useGPU
@@ -10229,7 +10304,7 @@ subroutine trans_ev_tridi_to_band_&
                                           c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                           stripe_width*top_msg_length* size_of_datatype,      &
                                           gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2659,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2665,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -10238,7 +10313,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy( aIntern_dev+dev_offset , int(loc(top_border_recv_buffer(1,i)),kind=c_intptr_t),  &
                                              stripe_width*top_msg_length* size_of_datatype,      &
                                              gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2684,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2690,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -10284,21 +10359,22 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2946,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2953,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
 
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2954,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2961,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
+                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), &
+                                            aIntern_dev + dev_offset, &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2979,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2987,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -10357,15 +10433,15 @@ subroutine trans_ev_tridi_to_band_&
                                             c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                              stripe_width * bottom_msg_length * size_of_datatype,      &
                                              gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3326,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3335,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset,  &
+                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                            stripe_width*bottom_msg_length* size_of_datatype,  &
                                            gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3351,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3360,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -10421,7 +10497,7 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                            stripe_width* top_msg_length* size_of_datatype,      &
                                            gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3664,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3673,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -10430,7 +10506,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy(aIntern_dev + dev_offset ,int(loc( top_border_recv_buffer(:,i)),kind=c_intptr_t),  &
                                         stripe_width * top_msg_length * size_of_datatype,   &
                                         gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3689,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3698,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -10492,7 +10568,7 @@ subroutine trans_ev_tridi_to_band_&
                                         c_loc(aIntern_mpi_fortran_ptr(1,a_off+1,i)), &
                                         stripe_width* nbw* size_of_datatype,      &
                                         gpuMemcpyDeviceToDevice)
-               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4067,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4076,  successGPU)
                if (wantDebug) call obj%timer%stop("cuda_memcpy")
              else ! allComputeOnGPU
                if (wantDebug) call obj%timer%start("memcpy")
@@ -10500,7 +10576,7 @@ subroutine trans_ev_tridi_to_band_&
                successGPU =  gpu_memcpy(int(loc(top_border_send_buffer(:,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                          stripe_width*nbw * size_of_datatype, &
                                          gpuMemcpyDeviceToHost)
-               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4092,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4101,  successGPU)
                if (wantDebug) call obj%timer%stop("memcpy")
              endif ! allComputeOnGPU
            else ! useGPU
@@ -10753,7 +10829,7 @@ subroutine trans_ev_tridi_to_band_&
             num = stripe_width*this_chunk*size_of_datatype
             successGPU = gpu_memcpy(aIntern_dev+dev_offset, aIntern_dev+dev_offset_1, num, gpuMemcpyDeviceToDevice)
 
-            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4648,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4657,  successGPU)
           end do
           if (wantDebug) call obj%timer%stop("normal_memcpy")
         else ! not useGPU
@@ -10840,7 +10916,7 @@ subroutine trans_ev_tridi_to_band_&
                              q_dev, &
                              ldq*matrixCols * size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4771,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4780,  successGPU)
     if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
   endif
@@ -10857,132 +10933,132 @@ subroutine trans_ev_tridi_to_band_&
   endif
 
   deallocate(row, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: row", 4789,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: row", 4798,  istat,  errorMessage)
 
   deallocate(limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: limits", 4792,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: limits", 4801,  istat,  errorMessage)
 
   deallocate(result_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_send_request", 4795,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_send_request", 4804,  istat,  errorMessage)
 
   deallocate(result_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_recv_request", 4798,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_recv_request", 4807,  istat,  errorMessage)
 
   deallocate(result_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_buffer", 4801,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_buffer", 4810,  istat,  errorMessage)
 
   if (useGPU) then
     if (allComputeOnGPU) then
       successGPU = gpu_free(result_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4806,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4815,  successGPU)
       nullify(result_buffer_mpi_fortran_ptr)
     endif
 
       nullify(bcast_buffer)
 
       successGPU = gpu_free_host(bcast_buffer_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4816,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4825,  successGPU)
   else ! useGPU
     deallocate(bcast_buffer, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("tridi_to_band: bcast_buffer", 4824,  istat,  errorMessage)
+    call check_deallocate_f("tridi_to_band: bcast_buffer", 4833,  istat,  errorMessage)
   endif ! useGPU
 
 
   if (useGPU) then
     successGPU = gpu_free(aIntern_dev)
-    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4830,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4839,  successGPU)
 
     if (allComputeOnGPU) then
       successGPU = gpu_free(q_dev)
-      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4834,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4843,  successGPU)
       nullify(q_mpi_fortran_ptr)
 
       successGPU = gpu_free(hh_trans_dev)
-      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4838,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4847,  successGPU)
       nullify(hh_trans_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4842,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4851,  successGPU)
       nullify(top_border_recv_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4846,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4855,  successGPU)
       nullify(top_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4850,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4859,  successGPU)
       nullify(bottom_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4854,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4863,  successGPU)
       nullify(bottom_border_recv_buffer_mpi_fortran_ptr)
 
       nullify(aIntern_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU = gpu_free(hh_tau_dev)
-    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4861,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4870,  successGPU)
 
       nullify(row_group)
 
       successGPU = gpu_free_host(row_group_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4869,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4878,  successGPU)
 
     successGPU = gpu_free(row_group_dev)
-    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4877,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4886,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(row_group_mpi_fortran_ptr)
 
       successGPU = gpu_free(row_dev)
-      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4883,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4892,  successGPU)
       nullify(row_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU =  gpu_free(bcast_buffer_dev)
-    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4888,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4897,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(bcast_buffer_mpi_fortran_ptr)
     endif
 
       successGPU = gpu_host_unregister(int(loc(top_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4898,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4907,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(top_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4901,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4910,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4904,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4913,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4907,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4916,  successGPU)
 
   endif ! useGPU
 
   deallocate(top_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4927,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4936,  istat,  errorMessage)
 
   deallocate(top_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4930,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4939,  istat,  errorMessage)
 
   deallocate(bottom_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4933,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4942,  istat,  errorMessage)
 
   deallocate(bottom_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4936,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4945,  istat,  errorMessage)
 
   deallocate(top_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_send_request", 4939,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_send_request", 4948,  istat,  errorMessage)
 
   deallocate(top_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_recv_request", 4942,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_recv_request", 4951,  istat,  errorMessage)
 
   deallocate(bottom_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_send_request", 4945,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_send_request", 4954,  istat,  errorMessage)
 
   deallocate(bottom_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4948,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4957,  istat,  errorMessage)
 
   call obj%timer%stop("trans_ev_tridi_to_band_&
                       &real&
@@ -12002,19 +12078,25 @@ max_threads, isSkewsymmetric)
     useGPU_reduction_lower_block_to_tridiagonal = .true.
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  !if (wantDebug) call obj%timer%start("mpi_communication")
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
   success = .true.
 
 
@@ -12039,15 +12121,15 @@ max_threads, isSkewsymmetric)
 
     ! Here we convert the regular host array into a pinned host array
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols* size_of_datatype)
-    call check_alloc_GPU_f("bandred: a_dev", 344,  successGPU)
+    call check_alloc_GPU_f("bandred: a_dev", 350,  successGPU)
 
       successGPU = gpu_host_register(int(loc(vav),kind=c_intptr_t), &
                   nbw * nbw * size_of_datatype,&
                   gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: vav", 352,  successGPU)
+      call check_host_register_GPU_f("bandred: vav", 358,  successGPU)
 
     successGPU = gpu_malloc(vav_dev, nbw*nbw* size_of_datatype)
-    call check_alloc_GPU_f("bandred: vav_dev", 358,  successGPU)
+    call check_alloc_GPU_f("bandred: vav_dev", 364,  successGPU)
   endif ! useGPU
 
   ! Matrix is split into tiles; work is done only for tiles on the diagonal or above
@@ -12079,17 +12161,17 @@ max_threads, isSkewsymmetric)
  
       successGPU = gpu_host_register(int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: a_mat", 437,  successGPU)
+      call check_host_register_GPU_f("bandred: a_mat", 443,  successGPU)
 
     cur_l_rows = 0
     cur_l_cols = 0
 
     successGPU = gpu_memcpy(a_dev, int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("bandred: a_dev", 464,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev", 470,  successGPU)
 
     successGPU = gpu_malloc(tmat_dev, nbw*nbw*size_of_datatype)
-    call check_alloc_GPU_f("bandred: tmat_dev", 468,  successGPU)
+    call check_alloc_GPU_f("bandred: tmat_dev", 474,  successGPU)
 
 
 
@@ -12119,22 +12201,22 @@ max_threads, isSkewsymmetric)
     umc_size = max(umc_size,umc_size2)
 
     allocate(vr(l_rows + 1), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("bandred: vr", 505,  istat,  errorMessage)
+    call check_allocate_f("bandred: vr", 511,  istat,  errorMessage)
 
       successGPU = gpu_malloc_host(vmr_host,vmr_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: vmr_host", 511,  successGPU)
+      call check_host_alloc_GPU_f("bandred: vmr_host", 517,  successGPU)
       call c_f_pointer(vmr_host, vmrGPU, (/vmr_size/))
 
     successGPU = gpu_malloc(vmr_dev, vmr_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: vmr_dev", 520,  successGPU)
+    call check_alloc_GPU_f("bandred: vmr_dev", 526,  successGPU)
 
 
       successGPU = gpu_malloc_host(umc_host,umc_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: umc_host", 527,  successGPU)
+      call check_host_alloc_GPU_f("bandred: umc_host", 533,  successGPU)
       call c_f_pointer(umc_host, umcGPU, (/umc_size/))
 
     successGPU = gpu_malloc(umc_dev, umc_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: umc_dev", 536,  successGPU)
+    call check_alloc_GPU_f("bandred: umc_dev", 542,  successGPU)
 
 
 
@@ -12164,13 +12246,13 @@ max_threads, isSkewsymmetric)
       ! Allocate vmr and umcCPU to their exact sizes so that they can be used in bcasts and reduces
 
       allocate(vmrCPU(max_l_rows,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vmrCPU", 607,  istat,  errorMessage)
+      call check_allocate_f("bandred: vmrCPU", 613,  istat,  errorMessage)
 
       allocate(umcCPU(max_l_cols,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: umcCPU", 610,  istat,  errorMessage)
+      call check_allocate_f("bandred: umcCPU", 616,  istat,  errorMessage)
 
       allocate(vr(l_rows+1), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vr", 613,  istat,  errorMessage)
+      call check_allocate_f("bandred: vr", 619,  istat,  errorMessage)
 
     endif ! use GPU
 
@@ -12211,7 +12293,7 @@ max_threads, isSkewsymmetric)
                         int(matrixRows*size_of_datatype,kind=c_intptr_t), &
                         int(lr_end*size_of_datatype,kind=c_intptr_t), &
                         int((lc_end - lc_start+1),kind=c_intptr_t),int(gpuMemcpyDeviceToHost,kind=c_int))
-          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 680,  successGPU)
+          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 686,  successGPU)
 
       endif ! do_memcpy
     endif ! useGPU
@@ -12344,7 +12426,7 @@ max_threads, isSkewsymmetric)
                          int(lr_end*size_of_datatype,kind=c_intptr_t), &
                          int((lc_end - lc_start+1),kind=c_intptr_t), &
                          int(gpuMemcpyHostToDevice,kind=c_int))
-            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 893,  successGPU)
+            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 899,  successGPU)
 
         endif ! do_memcopy
       endif ! (useGPU_reduction_lower_block_to_tridiagonal
@@ -12444,16 +12526,16 @@ max_threads, isSkewsymmetric)
 
             successGPU = gpu_memset(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                         0, max_l_rows*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: vmr_dev", 1291,  successGPU)
+            call check_memset_GPU_f("bandred: vmr_dev", 1297,  successGPU)
 
 
           successGPU = gpu_memcpy(vmr_dev, int(loc(vmrGPU(1)),kind=c_intptr_t), &
                         max_l_rows*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1323,  successGPU)
+          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1329,  successGPU)
 
 
             successGPU = gpu_memset(umc_dev, 0, l_cols*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: umc_dev", 1341,  successGPU)
+            call check_memset_GPU_f("bandred: umc_dev", 1347,  successGPU)
 
 
 
@@ -12461,7 +12543,7 @@ max_threads, isSkewsymmetric)
                         int(loc(umcGPU(1+l_cols*n_cols)),kind=c_intptr_t), &
                         (umc_size-l_cols*n_cols)*size_of_datatype, &
                         gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1384,  successGPU)
+          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1390,  successGPU)
         endif ! useGPU
 
         do i=0,(istep*nbw-1)/tile_size
@@ -12544,12 +12626,12 @@ max_threads, isSkewsymmetric)
             successGPU = gpu_memcpy(int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                           vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                           (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyDeviceToHost)
-            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1503,  successGPU)
+            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1509,  successGPU)
           endif
 
           successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                         umc_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1523,  successGPU)
+          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1529,  successGPU)
         endif ! useGPU
       endif ! l_cols>0 .and. l_rows>0
 
@@ -12584,7 +12666,7 @@ max_threads, isSkewsymmetric)
 
       if (useGPU) then
         allocate(tmpGPU(l_cols * n_cols), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("bandred: tmpGPU", 1563,  istat,  errorMessage)
+        call check_allocate_f("bandred: tmpGPU", 1569,  istat,  errorMessage)
         if (useNonBlockingCollectivesRows) then
           if (wantDebug) call obj%timer%start("mpi_nbc_communication")
 
@@ -12605,7 +12687,7 @@ max_threads, isSkewsymmetric)
 
         if (allocated(tmpGPU)) then
           deallocate(tmpGPU, stat=istat, errmsg=errorMessage)
-          call check_deallocate_f("bandred: tmpGPU", 1585,  istat,  errorMessage)
+          call check_deallocate_f("bandred: tmpGPU", 1591,  istat,  errorMessage)
         endif
 
       else ! useGPU
@@ -12630,11 +12712,11 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(umc_dev, int(loc(umcGPU(1)),kind=c_intptr_t), &
                     l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1630,  successGPU)
+      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1636,  successGPU)
 
       successGPU = gpu_memcpy(tmat_dev,int(loc(tmat(1,1,istep)),kind=c_intptr_t), &
                     nbw*nbw*size_of_datatype,gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1634,  successGPU)
+      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1640,  successGPU)
 
       call obj%timer%start("gpublas")
       gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -12656,7 +12738,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(vav),kind=c_intptr_t), &
                   vav_dev, nbw*nbw*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1671,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1677,  successGPU)
     else ! useGPU
 
       call obj%timer%start("blas")
@@ -12691,7 +12773,7 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(vav_dev, int(loc(vav),kind=c_intptr_t), &
                        nbw*nbw*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1742,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1748,  successGPU)
     endif
 
 
@@ -12719,7 +12801,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                   umc_dev, umc_size*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1803,  successGPU)
+      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1809,  successGPU)
 
       ! Transpose umc -> umr (stored in vmr, second half)
       if (isSkewsymmetric) then
@@ -12752,7 +12834,7 @@ max_threads, isSkewsymmetric)
       successGPU = gpu_memcpy(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                   int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                   (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1860,  successGPU)
+      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1866,  successGPU)
     else ! useGPU
       call obj%timer%start("blas")
       call ZGEMM('N', 'N', int(l_cols,kind=BLAS_KIND), int(n_cols,kind=BLAS_KIND), int(n_cols,kind=BLAS_KIND),     &
@@ -12828,17 +12910,17 @@ max_threads, isSkewsymmetric)
     if (.not.(useGPU)) then
       if (allocated(vr)) then
         deallocate(vr, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vr", 2029,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vr", 2035,  istat,  errorMessage)
       endif
 
       if (allocated(umcCPU)) then
         deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: umcCPU", 2034,  istat,  errorMessage)
+        call check_deallocate_f("bandred: umcCPU", 2040,  istat,  errorMessage)
       endif
 
       if (allocated(vmrCPU)) then
         deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vmrCPU", 2039,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vmrCPU", 2045,  istat,  errorMessage)
       endif
     endif !useGPU
 
@@ -12856,58 +12938,58 @@ max_threads, isSkewsymmetric)
                   int(a_dev,kind=c_intptr_t), &
                   int(matrixRows*matrixCols* size_of_datatype, kind=c_intptr_t), &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2137,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2143,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(a_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: a_mat ", 2144,  successGPU)
+      call check_host_unregister_GPU_f("bandred: a_mat ", 2150,  successGPU)
 
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("bandred: a_dev ", 2155,  successGPU)
+    call check_dealloc_GPU_f("bandred: a_dev ", 2161,  successGPU)
 
     successGPU = gpu_free(vav_dev)
-    call check_dealloc_GPU_f("bandred: vav_dev ", 2158,  successGPU)
+    call check_dealloc_GPU_f("bandred: vav_dev ", 2164,  successGPU)
 
     successGPU = gpu_free(tmat_dev)
-    call check_dealloc_GPU_f("bandred: tmat_dev ", 2161,  successGPU)
+    call check_dealloc_GPU_f("bandred: tmat_dev ", 2167,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(vav),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: vav", 2167,  successGPU)
+      call check_host_unregister_GPU_f("bandred: vav", 2173,  successGPU)
 
       if (associated(umcGPU)) then
         nullify(umcGPU)
 
         successGPU = gpu_free_host(umc_host)
-        call check_host_dealloc_GPU_f("bandred: umc_host ", 2180,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: umc_host ", 2186,  successGPU)
         successGPU = gpu_free(umc_dev)
-        call check_dealloc_GPU_f("bandred: umc_dev ", 2182,  successGPU)
+        call check_dealloc_GPU_f("bandred: umc_dev ", 2188,  successGPU)
       endif
 
       if (associated(vmrGPU)) then
         nullify(vmrGPU)
 
         successGPU = gpu_free_host(vmr_host)
-        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2189,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2195,  successGPU)
 
         successGPU = gpu_free(vmr_dev)
-        call check_dealloc_GPU_f("bandred: vmr_dev ", 2192,  successGPU)
+        call check_dealloc_GPU_f("bandred: vmr_dev ", 2198,  successGPU)
       endif
 
   endif ! useGPU
   
   if (allocated(vr)) then
     deallocate(vr, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vr", 2215,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vr", 2221,  istat,  errorMessage)
   endif
 
   if (allocated(umcCPU)) then
     deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: umcCPU", 2221,  istat,  errorMessage)
+    call check_deallocate_f("bandred: umcCPU", 2227,  istat,  errorMessage)
   endif
 
   if (allocated(vmrCPU)) then
     deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vmrCPU", 2226,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vmrCPU", 2232,  istat,  errorMessage)
   endif
 
   
@@ -13359,6 +13441,8 @@ subroutine trans_ev_band_to_full_&
   logical                                        :: useNonBlockingCollectivesRows
   integer(kind=c_int)                            :: non_blocking_collectives_rows, non_blocking_collectives_cols
   logical                                        :: success
+  integer(kind=MPI_KIND), allocatable            :: ibreq(:)
+  integer(kind=ik)                               :: nblocks, bc_counter
   integer(kind=c_intptr_t)                       :: gpuHandle, my_stream
 
   success = .true.
@@ -13424,17 +13508,23 @@ subroutine trans_ev_band_to_full_&
   endif
 
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
   max_blocks_row = ((na -1)/nblk)/np_rows + 1 ! Rows of a_mat
   max_blocks_col = ((nqc-1)/nblk)/np_cols + 1 ! Columns of q_mat!
@@ -13447,75 +13537,75 @@ subroutine trans_ev_band_to_full_&
   if (useGPU) then
     ! copy q_mat to q_dev
     successGPU = gpu_malloc(q_dev,ldq*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 289,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 297,  successGPU)
       successGPU = gpu_host_register(int(loc(q_mat),kind=c_intptr_t),&
                     ldq*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 295,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 303,  successGPU)
 
     successGPU = gpu_memcpy(q_dev,int(loc(q_mat),kind=c_intptr_t),&
                   ldq*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 317,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 325,  successGPU)
 
       successGPU = gpu_malloc_host(tmp1_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 324,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 332,  successGPU)
       call c_f_pointer(tmp1_host, tmp1, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(tmp2_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 328,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 336,  successGPU)
       call c_f_pointer(tmp2_host, tmp2, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(hvm_host,max_local_rows*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 332,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 340,  successGPU)
       call c_f_pointer(hvm_host, hvm, (/max_local_rows,cwy_blocking/))
   else ! useGPU
     allocate(tmp1(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp1", 343,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp1", 351,  istat,  errorMessage)
 
     allocate(tmp2(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp2", 346,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp2", 354,  istat,  errorMessage)
 
     allocate(hvm(max_local_rows,cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: hvm", 349,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: hvm", 357,  istat,  errorMessage)
   endif !useGPU
 
   allocate(hvb(max_local_rows*cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: hvb", 353,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: hvb", 361,  istat,  errorMessage)
 
   allocate(tmat_complete(cwy_blocking,cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 356,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 364,  istat,  errorMessage)
 
   if (useGPU) then
       successGPU = gpu_host_register(int(loc(tmat_complete),kind=c_intptr_t), &
                     cwy_blocking * cwy_blocking * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 365,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 373,  successGPU)
   endif
 
 
   if (blocking_factor > 1) then
     allocate(t_tmp(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp", 389,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp", 397,  istat,  errorMessage)
 
     allocate(t_tmp2(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 392,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 400,  istat,  errorMessage)
 
   endif
 
   if (useGPU) then
     successGPU = gpu_malloc(hvm_dev,max_local_rows*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 409,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 417,  successGPU)
 
     successGPU = gpu_malloc(tmp_dev,max_local_cols*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 412,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 420,  successGPU)
 
 
       successGPU = gpu_memset(tmp_dev, 0, max_local_cols*cwy_blocking*size_of_datatype)
-      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 430,  successGPU)
+      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 438,  successGPU)
 
 
 
     successGPU = gpu_malloc(tmat_complete_dev,cwy_blocking*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 477,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 485,  successGPU)
   endif
 
 
@@ -13551,6 +13641,9 @@ subroutine trans_ev_band_to_full_&
 
     nb = 0
     ns = 0
+    bc_counter=0
+    nblocks = n_cols/nblk;
+    allocate(ibreq(0:nblocks-1))
 
     do lc = 1, n_cols
       ncol = (istep-1)*cwy_blocking + nbw + lc ! absolute column number of householder Vector
@@ -13565,12 +13658,10 @@ subroutine trans_ev_band_to_full_&
 
       if (lc==n_cols .or. mod(ncol,nblk)==0) then
         if (useNonBlockingCollectivesCols) then
-          call obj%timer%start("mpi_nbc_communication")
           call mpi_ibcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_DOUBLE_COMPLEX,&
                          int(pcol(ncol, nblk, np_cols),kind=MPI_KIND), int(mpi_comm_cols,kind=MPI_KIND), &
-                         bcast_request1, mpierr)
-          call mpi_wait(bcast_request1, MPI_STATUS_IGNORE, mpierr)
-          call obj%timer%stop("mpi_nbc_communication")
+                         ibreq(bc_counter), mpierr)
+          bc_counter = bc_counter + 1  
         else
           call obj%timer%start("mpi_communication")
           call mpi_bcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_DOUBLE_COMPLEX,&
@@ -13581,6 +13672,13 @@ subroutine trans_ev_band_to_full_&
         ns = nb
       endif
     enddo ! lc
+
+  if(useNonBlockingCollectivesCols) then
+    call obj%timer%start("mpi_nbc_communication")
+    call mpi_waitall(nblocks, ibreq, MPI_STATUSES_IGNORE, mpierr)
+    call obj%timer%stop("mpi_nbc_communication")
+  endif
+  deallocate(ibreq)
 
     ! Expand compressed Householder vectors into matrix hvm
 
@@ -13627,7 +13725,7 @@ subroutine trans_ev_band_to_full_&
 
           call obj%timer%start("mpi_nbc_communication")
           call mpi_iallreduce(t_tmp, t_tmp2, int(cwy_blocking*nbw,kind=MPI_KIND), MPI_DOUBLE_COMPLEX, &
-                           MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
+                         MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
           call mpi_wait(allreduce_request1, MPI_STATUS_IGNORE, mpierr)
           call obj%timer%stop("mpi_nbc_communication")
 
@@ -13674,7 +13772,7 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(hvm_dev, int(loc(hvm),kind=c_intptr_t), &
                         max_local_rows*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1039,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1057,  successGPU)
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
         call gpublas_ZGEMM('C', 'N', &
@@ -13685,7 +13783,7 @@ subroutine trans_ev_band_to_full_&
         ! copy data from device to host for a later MPI_ALLREDUCE
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                       tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1070,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1088,  successGPU)
       else ! useGPU
         call obj%timer%start("blas")
         call ZGEMM('C', 'N', &
@@ -13701,7 +13799,7 @@ subroutine trans_ev_band_to_full_&
     if (useGPU) then
       successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                    tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1146,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1164,  successGPU)
 
     endif
 
@@ -13730,12 +13828,12 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(tmp_dev, int(loc(tmp2),kind=c_intptr_t), &
                       l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1341,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1359,  successGPU)
 
         ! needed: as long as not device to device copy
         successGPU = gpu_memcpy(tmat_complete_dev, int(loc(tmat_complete),kind=c_intptr_t), &
                       cwy_blocking*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1363,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1381,  successGPU)
 
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -13761,28 +13859,28 @@ subroutine trans_ev_band_to_full_&
   enddo ! istep
 
   deallocate(hvb, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: hvb", 1435,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: hvb", 1453,  istat,  errorMessage)
 
   if (useGPU) then
     successGPU = gpu_free(hvm_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1439,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1457,  successGPU)
 
     successGPU = gpu_free(tmp_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1442,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1460,  successGPU)
 
     successGPU = gpu_free(tmat_complete_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1449,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1467,  successGPU)
 
     ! final transfer of q_dev
     successGPU = gpu_memcpy(int(loc(q_mat),kind=c_intptr_t), q_dev, ldq*matrixCols*size_of_datatype, &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1469,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1487,  successGPU)
 
     successGPU = gpu_free(q_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1473,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1491,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(q_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1479,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1497,  successGPU)
       nullify(tmp1)
       nullify(tmp2)
       nullify(hvm)
@@ -13791,38 +13889,38 @@ subroutine trans_ev_band_to_full_&
 
 
       successGPU = gpu_free_host(tmp1_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1504,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1522,  successGPU)
 
       successGPU = gpu_free_host(tmp2_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1507,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1525,  successGPU)
 
       successGPU = gpu_free_host(hvm_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1510,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1528,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(tmat_complete),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1513,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1531,  successGPU)
   else ! useGPU
     deallocate(tmp1, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1519,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1537,  istat,  errorMessage)
 
     deallocate(tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1522,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1540,  istat,  errorMessage)
 
     deallocate(hvm, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: hvm", 1525,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: hvm", 1543,  istat,  errorMessage)
   endif ! useGPU
 
   deallocate(tmat_complete, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1529,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1547,  istat,  errorMessage)
 
 
   if (blocking_factor > 1) then
 
     deallocate(t_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1556,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1574,  istat,  errorMessage)
 
     deallocate(t_tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1559,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1577,  istat,  errorMessage)
   endif
 
   call obj%timer%stop("trans_ev_band_to_full_&
@@ -14004,27 +14102,36 @@ subroutine tridiag_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+  n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-  my_pe = int(my_peMPI,kind=MPI_KIND)
-  n_pes = int(n_pesMPI,kind=MPI_KIND)
-  my_prow = int(my_prowMPI,kind=MPI_KIND)
-  np_rows = int(np_rowsMPI,kind=MPI_KIND)
-  my_pcol = int(my_pcolMPI,kind=MPI_KIND)
-  np_cols = int(np_colsMPI,kind=MPI_KIND)
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+
+  !my_pe = int(my_peMPI,kind=MPI_KIND)
+  !n_pes = int(n_pesMPI,kind=MPI_KIND)
+  !my_prow = int(my_prowMPI,kind=MPI_KIND)
+  !np_rows = int(np_rowsMPI,kind=MPI_KIND)
+  !my_pcol = int(my_pcolMPI,kind=MPI_KIND)
+  !np_cols = int(np_colsMPI,kind=MPI_KIND)
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
 
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: global_id", 201,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: global_id", 210,  istat,  errorMessage)
 
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
@@ -14048,7 +14155,7 @@ subroutine tridiag_band_&
   ! Set work distribution
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: block_limits", 245,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: block_limits", 254,  istat,  errorMessage)
 
   call divide_band(obj,nblocks_total, n_pes, block_limits)
 
@@ -14058,7 +14165,7 @@ subroutine tridiag_band_&
   ! allocate the part of the band matrix which is needed by this PE
   ! The size is 1 block larger than needed to avoid extensive shifts
   allocate(ab(2*nb,(nblocks+1)*nb), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: ab", 255,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ab", 264,  istat,  errorMessage)
 
   ab = 0.0_rck ! needed for lower half, the extra block should also be set to 0 for safety
 
@@ -14081,7 +14188,7 @@ subroutine tridiag_band_&
   ! and the space requirements to hold the HH vectors
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: limits", 278,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: limits", 287,  istat,  errorMessage)
 
   call determine_workload(obj,na, nb, np_rows, limits)
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -14104,14 +14211,14 @@ subroutine tridiag_band_&
   ! Allocate space for HH vectors
 
   allocate(hh_trans(nb,num_hh_vecs), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_trans", 301,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_trans", 310,  istat,  errorMessage)
 
   ! Allocate and init MPI requests
 
   allocate(ireq_hhr(num_chunks), stat=istat, errmsg=errorMessage) ! Recv requests
-  call check_allocate_f("tridiag_band: ireq_hhr", 306,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhr", 315,  istat,  errorMessage)
   allocate(ireq_hhs(nblocks), stat=istat, errmsg=errorMessage)    ! Send requests
-  call check_allocate_f("tridiag_band: ireq_hhs", 308,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhs", 317,  istat,  errorMessage)
 
   num_hh_vecs = 0
   num_chunks  = 0
@@ -14142,10 +14249,10 @@ subroutine tridiag_band_&
   ! Buffers for gathering/sending the HH vectors
 
   allocate(hh_gath(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! gathers HH vectors
-  call check_allocate_f("tridiag_band: hh_gath", 347,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_gath", 356,  istat,  errorMessage)
 
   allocate(hh_send(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! send buffer for HH vectors
-  call check_allocate_f("tridiag_band: hh_send", 350,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_send", 359,  istat,  errorMessage)
 
   hh_gath(:,:,:) = 0.0_rck
   hh_send(:,:,:) = 0.0_rck
@@ -14153,10 +14260,10 @@ subroutine tridiag_band_&
   ! Some counters
 
   allocate(hh_cnt(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_cnt", 358,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_cnt", 367,  istat,  errorMessage)
 
   allocate(hh_dst(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_dst", 361,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_dst", 370,  istat,  errorMessage)
 
   hh_cnt(:) = 1 ! The first transfomation Vector is always 0 and not calculated at all
   hh_dst(:) = 0 ! PE number for receive
@@ -14165,7 +14272,7 @@ subroutine tridiag_band_&
   ! Limits for sending
 
   allocate(snd_limits(0:np_rows,nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: snd_limits", 372,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: snd_limits", 381,  istat,  errorMessage)
 
   do iblk=1,nblocks
     call determine_workload(obj, na-(iblk+block_limits(my_pe)-1)*nb, nb, np_rows, snd_limits(:,iblk))
@@ -14470,25 +14577,25 @@ endif
   call mpi_barrier(int(mpi_comm_all,kind=MPI_KIND),mpierr)
   if (wantDebug) call obj%timer%stop("mpi_communication")
   deallocate(ab, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ab", 1232,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ab", 1241,  istat,  errorMessage)
 
   deallocate(ireq_hhr, ireq_hhs, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ireq_hhr", 1235,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ireq_hhr", 1244,  istat,  errorMessage)
 
   deallocate(hh_cnt, hh_dst, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_dst", 1238,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_dst", 1247,  istat,  errorMessage)
 
   deallocate(hh_gath, hh_send, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_gath", 1241,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_gath", 1250,  istat,  errorMessage)
 
   deallocate(limits, snd_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: limits", 1244,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: limits", 1253,  istat,  errorMessage)
 
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: block_limits", 1247,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: block_limits", 1256,  istat,  errorMessage)
 
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: global_id", 1250,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: global_id", 1259,  istat,  errorMessage)
 
   call obj%timer%stop("tridiag_band_&
   &complex&
@@ -14843,18 +14950,24 @@ subroutine trans_ev_tridi_to_band_&
   kernel_time = 0.0
   kernel_flops = 0
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
-  call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
+  !call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   if (mod(nbw,nblk)/=0) then
     if (my_prow==0 .and. my_pcol==0) then
@@ -14930,7 +15043,7 @@ subroutine trans_ev_tridi_to_band_&
   ! Determine the matrix distribution at the beginning
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: limits", 633,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: limits", 639,  istat,  errorMessage)
   call determine_workload(obj,na, nbw, np_rows, limits)
 
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -14943,12 +15056,12 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%start("cuda_memcpy")
 
       successGPU = gpu_malloc(q_dev, ldq*matrixCols* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: q_dev", 646,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: q_dev", 652,  successGPU)
 
       successGPU =  gpu_memcpy(q_dev, int(loc(q(1,1)),kind=c_intptr_t),  &
                                ldq*matrixCols * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 672,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 678,  successGPU)
 
       ! associate with c_ptr
       q_mpi_dev = transfer(q_dev, q_mpi_dev)
@@ -14958,7 +15071,7 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
       successGPU = gpu_malloc(hh_trans_dev, size(hh_trans,dim=1)*size(hh_trans,dim=2)* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 683,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 689,  successGPU)
       ! associate with c_ptr
       hh_trans_mpi_dev = transfer(hh_trans_dev, hh_trans_mpi_dev)
       ! and associate a fortran pointer
@@ -14968,18 +15081,18 @@ subroutine trans_ev_tridi_to_band_&
                                c_loc(hh_trans(1,1)), &
                                size(hh_trans,dim=1)*size(hh_trans,dim=2) * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 716,  successGPU)
+      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 722,  successGPU)
 
     endif ! allComputeOnGPU
 
     num = (stripe_width*a_dim2*stripe_count)* size_of_datatype
     successGPU = gpu_malloc(aIntern_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 727,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 733,  successGPU)
 
     ! openmp loop here
 
       successGPU = gpu_memset(aIntern_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 743,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 749,  successGPU)
 
 
     if (allComputeOnGPU) then
@@ -14992,17 +15105,17 @@ subroutine trans_ev_tridi_to_band_&
 
     ! "row_group" and "row_group_dev" are needed for GPU optimizations
       successGPU = gpu_malloc_host(row_group_host,l_nev*nblk*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 781,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 787,  successGPU)
       call c_f_pointer(row_group_host, row_group, (/l_nev,nblk/))
 
     row_group(:, :) = 0.0_rck
     num =  (l_nev*nblk)* size_of_datatype
     successGPU = gpu_malloc(row_group_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 792,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 798,  successGPU)
 
 
       successGPU = gpu_memset(row_group_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_group_dev", 807,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_group_dev", 813,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -15029,17 +15142,17 @@ subroutine trans_ev_tridi_to_band_&
   endif !useGPU
 
   allocate(row(l_nev), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: row", 862,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: row", 868,  istat,  errorMessage)
 
   row(:) = 0.0_rck
 
   if (useGPU .and. allComputeOnGPU) then
     num =  (l_nev)* size_of_datatype
     successGPU = gpu_malloc(row_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_dev", 869,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_dev", 875,  successGPU)
 
       successGPU = gpu_memset(row_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_dev", 886,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_dev", 892,  successGPU)
 
 
     ! associate with c_ptr
@@ -15163,7 +15276,7 @@ subroutine trans_ev_tridi_to_band_&
               if (wantDebug) call obj%timer%stop("cuda_aware_gpublas")
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1219,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1225,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
               if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -15210,7 +15323,7 @@ subroutine trans_ev_tridi_to_band_&
             ! is there a way to avoid this device_synchronize ?
             if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
             successGPU = gpu_devicesynchronize()
-            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1277,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1283,  successGPU)
             if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
             if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -15300,19 +15413,19 @@ subroutine trans_ev_tridi_to_band_&
 
   num_result_buffers = 4*nfact
   allocate(result_buffer(l_nev,nblk,num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_buffer", 1520,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_buffer", 1526,  istat,  errorMessage)
 
   allocate(result_send_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_send_request", 1523,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_send_request", 1529,  istat,  errorMessage)
 
   allocate(result_recv_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_recv_request", 1526,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_recv_request", 1532,  istat,  errorMessage)
 
   if (useGPU .and. allComputeOnGPU) then
     num_result_buffers = 4*nfact
     num =  (l_nev*nblk*num_result_buffers)* size_of_datatype
     successGPU = gpu_malloc(result_buffer_dev, num* size_of_datatype)
-    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1532,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1538,  successGPU)
 
     ! associate with c_ptr
     result_buffer_mpi_dev = transfer(result_buffer_dev, result_buffer_mpi_dev)
@@ -15346,16 +15459,16 @@ subroutine trans_ev_tridi_to_band_&
   ! Initialize top/bottom requests
 
   allocate(top_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_send_request", 1589,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_send_request", 1595,  istat,  errorMessage)
 
   allocate(top_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_recv_request", 1592,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_recv_request", 1598,  istat,  errorMessage)
 
   allocate(bottom_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_send_request", 1595,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_send_request", 1601,  istat,  errorMessage)
 
   allocate(bottom_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_recv_request", 1598,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_recv_request", 1604,  istat,  errorMessage)
 
   top_send_request(:) = MPI_REQUEST_NULL
   top_recv_request(:) = MPI_REQUEST_NULL
@@ -15364,16 +15477,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
   allocate(top_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1628,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1634,  istat,  errorMessage)
 
   allocate(top_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1631,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1637,  istat,  errorMessage)
 
   allocate(bottom_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1634,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1640,  istat,  errorMessage)
 
   allocate(bottom_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1637,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1643,  istat,  errorMessage)
 
   top_border_send_buffer(:,:) = 0.0_rck
   top_border_recv_buffer(:,:) = 0.0_rck
@@ -15386,15 +15499,15 @@ subroutine trans_ev_tridi_to_band_&
       ! top_border_recv_buffer and top_border_send_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(top_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1655,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1661,  successGPU)
 
       successGPU = gpu_malloc(top_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1658,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1664,  successGPU)
 
         successGPU = gpu_memset(top_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1673,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1679,  successGPU)
         successGPU = gpu_memset(top_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1675,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1681,  successGPU)
 
 
       ! associate with c_ptr
@@ -15407,15 +15520,15 @@ subroutine trans_ev_tridi_to_band_&
       ! bottom_border_send_buffer and bottom_border_recv_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(bottom_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1710,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1716,  successGPU)
       successGPU = gpu_malloc(bottom_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1712,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1718,  successGPU)
 
 
         successGPU = gpu_memset(bottom_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1728,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1734,  successGPU)
         successGPU = gpu_memset(bottom_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1730,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1736,  successGPU)
 
 
       ! associate with c_ptr
@@ -15431,22 +15544,22 @@ subroutine trans_ev_tridi_to_band_&
       successGPU = gpu_host_register(int(loc(top_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1767,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1773,  successGPU)
 
       successGPU = gpu_host_register(int(loc(top_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1772,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1778,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1777,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1783,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1782,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1788,  successGPU)
   endif ! useGPU
 
 
@@ -15454,11 +15567,11 @@ subroutine trans_ev_tridi_to_band_&
 
   if (useGPU) then
       successGPU = gpu_malloc_host(bcast_buffer_host,nbw*max_blk_size*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1796,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1802,  successGPU)
       call c_f_pointer(bcast_buffer_host, bcast_buffer, (/nbw,max_blk_size/))
   else
     allocate(bcast_buffer(nbw, max_blk_size), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("tridi_to_band: bcast_buffer", 1805,  istat,  errorMessage)
+    call check_allocate_f("tridi_to_band: bcast_buffer", 1811,  istat,  errorMessage)
   endif
 
   bcast_buffer = 0.0_rck
@@ -15466,7 +15579,7 @@ subroutine trans_ev_tridi_to_band_&
   if (useGPU) then
     num =  ( nbw * max_blk_size) * size_of_datatype
     successGPU = gpu_malloc(bcast_buffer_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1813,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1819,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -15477,16 +15590,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
       successGPU = gpu_memset( bcast_buffer_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1834,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1840,  successGPU)
 
 
     num =  (max_blk_size)* size_of_datatype
     successGPU = gpu_malloc( hh_tau_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1850,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1856,  successGPU)
 
 
       successGPU = gpu_memset( hh_tau_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1864,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1870,  successGPU)
 
   endif ! useGPU
 
@@ -15558,7 +15671,7 @@ subroutine trans_ev_tridi_to_band_&
                                      size(hh_trans,dim=1) * (current_tv_off+current_local_n-(current_tv_off+1)+1) * &
                                      size_of_datatype, &
                                      gpuMemcpyDeviceToDevice)
-          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2027,  successGPU)
+          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2033,  successGPU)
           if (wantDebug) call obj%timer%stop("cuda_memcpy")
           current_tv_off = current_tv_off + current_local_n
         endif
@@ -15589,7 +15702,7 @@ subroutine trans_ev_tridi_to_band_&
                                  nbw * current_local_n *    &
                                  size_of_datatype, &
                                  gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2117,  successGPU)
+        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2123,  successGPU)
         if (wantDebug) call obj%timer%stop("memcpy")
       endif ! useGPU
 
@@ -15611,7 +15724,7 @@ subroutine trans_ev_tridi_to_band_&
       if (useGPU) then
 
           successGPU = gpu_memset(bcast_buffer_dev, 0, nbw * size_of_datatype)
-          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2176,  successGPU)
+          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2182,  successGPU)
 
 
         if (wantDebug) call obj%timer%start("extract_hh")
@@ -15650,7 +15763,7 @@ subroutine trans_ev_tridi_to_band_&
                                        c_loc(bottom_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                        stripe_width*nbw* size_of_datatype,      &
                                        gpuMemcpyDeviceToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2378,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2384,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_memcpy")
             else ! allComputeOnGPU
               if (wantDebug) call obj%timer%start("memcpy")
@@ -15659,7 +15772,7 @@ subroutine trans_ev_tridi_to_band_&
                                       int(loc(bottom_border_recv_buffer(1,i)),kind=c_intptr_t), &
                                        stripe_width*nbw*  size_of_datatype,    &
                                        gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2404,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2410,  successGPU)
               if (wantDebug) call obj%timer%stop("memcpy")
             endif ! allComputeOnGPU
           else ! useGPU
@@ -15710,7 +15823,7 @@ subroutine trans_ev_tridi_to_band_&
                                           c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                           stripe_width*top_msg_length* size_of_datatype,      &
                                           gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2659,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2665,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -15719,7 +15832,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy( aIntern_dev+dev_offset , int(loc(top_border_recv_buffer(1,i)),kind=c_intptr_t),  &
                                              stripe_width*top_msg_length* size_of_datatype,      &
                                              gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2684,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2690,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -15765,21 +15878,22 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2946,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2953,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
 
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2954,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2961,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
+                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), &
+                                            aIntern_dev + dev_offset, &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2979,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2987,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -15838,15 +15952,15 @@ subroutine trans_ev_tridi_to_band_&
                                             c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                              stripe_width * bottom_msg_length * size_of_datatype,      &
                                              gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3326,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3335,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset,  &
+                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                            stripe_width*bottom_msg_length* size_of_datatype,  &
                                            gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3351,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3360,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -15902,7 +16016,7 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                            stripe_width* top_msg_length* size_of_datatype,      &
                                            gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3664,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3673,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -15911,7 +16025,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy(aIntern_dev + dev_offset ,int(loc( top_border_recv_buffer(:,i)),kind=c_intptr_t),  &
                                         stripe_width * top_msg_length * size_of_datatype,   &
                                         gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3689,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3698,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -15973,7 +16087,7 @@ subroutine trans_ev_tridi_to_band_&
                                         c_loc(aIntern_mpi_fortran_ptr(1,a_off+1,i)), &
                                         stripe_width* nbw* size_of_datatype,      &
                                         gpuMemcpyDeviceToDevice)
-               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4067,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4076,  successGPU)
                if (wantDebug) call obj%timer%stop("cuda_memcpy")
              else ! allComputeOnGPU
                if (wantDebug) call obj%timer%start("memcpy")
@@ -15981,7 +16095,7 @@ subroutine trans_ev_tridi_to_band_&
                successGPU =  gpu_memcpy(int(loc(top_border_send_buffer(:,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                          stripe_width*nbw * size_of_datatype, &
                                          gpuMemcpyDeviceToHost)
-               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4092,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4101,  successGPU)
                if (wantDebug) call obj%timer%stop("memcpy")
              endif ! allComputeOnGPU
            else ! useGPU
@@ -16234,7 +16348,7 @@ subroutine trans_ev_tridi_to_band_&
             num = stripe_width*this_chunk*size_of_datatype
             successGPU = gpu_memcpy(aIntern_dev+dev_offset, aIntern_dev+dev_offset_1, num, gpuMemcpyDeviceToDevice)
 
-            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4648,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4657,  successGPU)
           end do
           if (wantDebug) call obj%timer%stop("normal_memcpy")
         else ! not useGPU
@@ -16321,7 +16435,7 @@ subroutine trans_ev_tridi_to_band_&
                              q_dev, &
                              ldq*matrixCols * size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4771,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4780,  successGPU)
     if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
   endif
@@ -16338,132 +16452,132 @@ subroutine trans_ev_tridi_to_band_&
   endif
 
   deallocate(row, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: row", 4789,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: row", 4798,  istat,  errorMessage)
 
   deallocate(limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: limits", 4792,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: limits", 4801,  istat,  errorMessage)
 
   deallocate(result_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_send_request", 4795,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_send_request", 4804,  istat,  errorMessage)
 
   deallocate(result_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_recv_request", 4798,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_recv_request", 4807,  istat,  errorMessage)
 
   deallocate(result_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_buffer", 4801,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_buffer", 4810,  istat,  errorMessage)
 
   if (useGPU) then
     if (allComputeOnGPU) then
       successGPU = gpu_free(result_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4806,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4815,  successGPU)
       nullify(result_buffer_mpi_fortran_ptr)
     endif
 
       nullify(bcast_buffer)
 
       successGPU = gpu_free_host(bcast_buffer_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4816,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4825,  successGPU)
   else ! useGPU
     deallocate(bcast_buffer, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("tridi_to_band: bcast_buffer", 4824,  istat,  errorMessage)
+    call check_deallocate_f("tridi_to_band: bcast_buffer", 4833,  istat,  errorMessage)
   endif ! useGPU
 
 
   if (useGPU) then
     successGPU = gpu_free(aIntern_dev)
-    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4830,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4839,  successGPU)
 
     if (allComputeOnGPU) then
       successGPU = gpu_free(q_dev)
-      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4834,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4843,  successGPU)
       nullify(q_mpi_fortran_ptr)
 
       successGPU = gpu_free(hh_trans_dev)
-      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4838,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4847,  successGPU)
       nullify(hh_trans_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4842,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4851,  successGPU)
       nullify(top_border_recv_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4846,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4855,  successGPU)
       nullify(top_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4850,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4859,  successGPU)
       nullify(bottom_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4854,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4863,  successGPU)
       nullify(bottom_border_recv_buffer_mpi_fortran_ptr)
 
       nullify(aIntern_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU = gpu_free(hh_tau_dev)
-    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4861,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4870,  successGPU)
 
       nullify(row_group)
 
       successGPU = gpu_free_host(row_group_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4869,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4878,  successGPU)
 
     successGPU = gpu_free(row_group_dev)
-    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4877,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4886,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(row_group_mpi_fortran_ptr)
 
       successGPU = gpu_free(row_dev)
-      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4883,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4892,  successGPU)
       nullify(row_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU =  gpu_free(bcast_buffer_dev)
-    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4888,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4897,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(bcast_buffer_mpi_fortran_ptr)
     endif
 
       successGPU = gpu_host_unregister(int(loc(top_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4898,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4907,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(top_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4901,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4910,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4904,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4913,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4907,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4916,  successGPU)
 
   endif ! useGPU
 
   deallocate(top_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4927,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4936,  istat,  errorMessage)
 
   deallocate(top_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4930,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4939,  istat,  errorMessage)
 
   deallocate(bottom_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4933,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4942,  istat,  errorMessage)
 
   deallocate(bottom_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4936,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4945,  istat,  errorMessage)
 
   deallocate(top_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_send_request", 4939,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_send_request", 4948,  istat,  errorMessage)
 
   deallocate(top_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_recv_request", 4942,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_recv_request", 4951,  istat,  errorMessage)
 
   deallocate(bottom_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_send_request", 4945,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_send_request", 4954,  istat,  errorMessage)
 
   deallocate(bottom_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4948,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4957,  istat,  errorMessage)
 
   call obj%timer%stop("trans_ev_tridi_to_band_&
                       &complex&
@@ -16737,19 +16851,25 @@ max_threads, isSkewsymmetric)
     useGPU_reduction_lower_block_to_tridiagonal = .true.
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  !if (wantDebug) call obj%timer%start("mpi_communication")
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
   success = .true.
 
 
@@ -16774,15 +16894,15 @@ max_threads, isSkewsymmetric)
 
     ! Here we convert the regular host array into a pinned host array
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols* size_of_datatype)
-    call check_alloc_GPU_f("bandred: a_dev", 344,  successGPU)
+    call check_alloc_GPU_f("bandred: a_dev", 350,  successGPU)
 
       successGPU = gpu_host_register(int(loc(vav),kind=c_intptr_t), &
                   nbw * nbw * size_of_datatype,&
                   gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: vav", 352,  successGPU)
+      call check_host_register_GPU_f("bandred: vav", 358,  successGPU)
 
     successGPU = gpu_malloc(vav_dev, nbw*nbw* size_of_datatype)
-    call check_alloc_GPU_f("bandred: vav_dev", 358,  successGPU)
+    call check_alloc_GPU_f("bandred: vav_dev", 364,  successGPU)
   endif ! useGPU
 
   ! Matrix is split into tiles; work is done only for tiles on the diagonal or above
@@ -16814,17 +16934,17 @@ max_threads, isSkewsymmetric)
  
       successGPU = gpu_host_register(int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("bandred: a_mat", 437,  successGPU)
+      call check_host_register_GPU_f("bandred: a_mat", 443,  successGPU)
 
     cur_l_rows = 0
     cur_l_cols = 0
 
     successGPU = gpu_memcpy(a_dev, int(loc(a_mat),kind=c_intptr_t), &
                   matrixRows*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("bandred: a_dev", 464,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev", 470,  successGPU)
 
     successGPU = gpu_malloc(tmat_dev, nbw*nbw*size_of_datatype)
-    call check_alloc_GPU_f("bandred: tmat_dev", 468,  successGPU)
+    call check_alloc_GPU_f("bandred: tmat_dev", 474,  successGPU)
 
 
 
@@ -16854,22 +16974,22 @@ max_threads, isSkewsymmetric)
     umc_size = max(umc_size,umc_size2)
 
     allocate(vr(l_rows + 1), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("bandred: vr", 505,  istat,  errorMessage)
+    call check_allocate_f("bandred: vr", 511,  istat,  errorMessage)
 
       successGPU = gpu_malloc_host(vmr_host,vmr_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: vmr_host", 511,  successGPU)
+      call check_host_alloc_GPU_f("bandred: vmr_host", 517,  successGPU)
       call c_f_pointer(vmr_host, vmrGPU, (/vmr_size/))
 
     successGPU = gpu_malloc(vmr_dev, vmr_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: vmr_dev", 520,  successGPU)
+    call check_alloc_GPU_f("bandred: vmr_dev", 526,  successGPU)
 
 
       successGPU = gpu_malloc_host(umc_host,umc_size*size_of_datatype)
-      call check_host_alloc_GPU_f("bandred: umc_host", 527,  successGPU)
+      call check_host_alloc_GPU_f("bandred: umc_host", 533,  successGPU)
       call c_f_pointer(umc_host, umcGPU, (/umc_size/))
 
     successGPU = gpu_malloc(umc_dev, umc_size*size_of_datatype)
-    call check_alloc_GPU_f("bandred: umc_dev", 536,  successGPU)
+    call check_alloc_GPU_f("bandred: umc_dev", 542,  successGPU)
 
 
 
@@ -16899,13 +17019,13 @@ max_threads, isSkewsymmetric)
       ! Allocate vmr and umcCPU to their exact sizes so that they can be used in bcasts and reduces
 
       allocate(vmrCPU(max_l_rows,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vmrCPU", 607,  istat,  errorMessage)
+      call check_allocate_f("bandred: vmrCPU", 613,  istat,  errorMessage)
 
       allocate(umcCPU(max_l_cols,2*n_cols), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: umcCPU", 610,  istat,  errorMessage)
+      call check_allocate_f("bandred: umcCPU", 616,  istat,  errorMessage)
 
       allocate(vr(l_rows+1), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("bandred: vr", 613,  istat,  errorMessage)
+      call check_allocate_f("bandred: vr", 619,  istat,  errorMessage)
 
     endif ! use GPU
 
@@ -16946,7 +17066,7 @@ max_threads, isSkewsymmetric)
                         int(matrixRows*size_of_datatype,kind=c_intptr_t), &
                         int(lr_end*size_of_datatype,kind=c_intptr_t), &
                         int((lc_end - lc_start+1),kind=c_intptr_t),int(gpuMemcpyDeviceToHost,kind=c_int))
-          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 680,  successGPU)
+          call check_memcpy_GPU_f("bandred: a_dev -> a_mat", 686,  successGPU)
 
       endif ! do_memcpy
     endif ! useGPU
@@ -17079,7 +17199,7 @@ max_threads, isSkewsymmetric)
                          int(lr_end*size_of_datatype,kind=c_intptr_t), &
                          int((lc_end - lc_start+1),kind=c_intptr_t), &
                          int(gpuMemcpyHostToDevice,kind=c_int))
-            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 893,  successGPU)
+            call check_memcpy_GPU_f("bandred: a_mat -> a_dev", 899,  successGPU)
 
         endif ! do_memcopy
       endif ! (useGPU_reduction_lower_block_to_tridiagonal
@@ -17179,16 +17299,16 @@ max_threads, isSkewsymmetric)
 
             successGPU = gpu_memset(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                         0, max_l_rows*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: vmr_dev", 1291,  successGPU)
+            call check_memset_GPU_f("bandred: vmr_dev", 1297,  successGPU)
 
 
           successGPU = gpu_memcpy(vmr_dev, int(loc(vmrGPU(1)),kind=c_intptr_t), &
                         max_l_rows*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1323,  successGPU)
+          call check_memcpy_GPU_f("bandred: vmrGPU -> vmr_dev", 1329,  successGPU)
 
 
             successGPU = gpu_memset(umc_dev, 0, l_cols*n_cols*size_of_datatype)
-            call check_memset_GPU_f("bandred: umc_dev", 1341,  successGPU)
+            call check_memset_GPU_f("bandred: umc_dev", 1347,  successGPU)
 
 
 
@@ -17196,7 +17316,7 @@ max_threads, isSkewsymmetric)
                         int(loc(umcGPU(1+l_cols*n_cols)),kind=c_intptr_t), &
                         (umc_size-l_cols*n_cols)*size_of_datatype, &
                         gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1384,  successGPU)
+          call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev", 1390,  successGPU)
         endif ! useGPU
 
         do i=0,(istep*nbw-1)/tile_size
@@ -17279,12 +17399,12 @@ max_threads, isSkewsymmetric)
             successGPU = gpu_memcpy(int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                           vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                           (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyDeviceToHost)
-            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1503,  successGPU)
+            call check_memcpy_GPU_f("bandred: vmr_dev -> vmrGPU", 1509,  successGPU)
           endif
 
           successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                         umc_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1523,  successGPU)
+          call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU", 1529,  successGPU)
         endif ! useGPU
       endif ! l_cols>0 .and. l_rows>0
 
@@ -17319,7 +17439,7 @@ max_threads, isSkewsymmetric)
 
       if (useGPU) then
         allocate(tmpGPU(l_cols * n_cols), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("bandred: tmpGPU", 1563,  istat,  errorMessage)
+        call check_allocate_f("bandred: tmpGPU", 1569,  istat,  errorMessage)
         if (useNonBlockingCollectivesRows) then
           if (wantDebug) call obj%timer%start("mpi_nbc_communication")
 
@@ -17340,7 +17460,7 @@ max_threads, isSkewsymmetric)
 
         if (allocated(tmpGPU)) then
           deallocate(tmpGPU, stat=istat, errmsg=errorMessage)
-          call check_deallocate_f("bandred: tmpGPU", 1585,  istat,  errorMessage)
+          call check_deallocate_f("bandred: tmpGPU", 1591,  istat,  errorMessage)
         endif
 
       else ! useGPU
@@ -17365,11 +17485,11 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(umc_dev, int(loc(umcGPU(1)),kind=c_intptr_t), &
                     l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1630,  successGPU)
+      call check_memcpy_GPU_f("bandred: umcGPU -> umc_dev ", 1636,  successGPU)
 
       successGPU = gpu_memcpy(tmat_dev,int(loc(tmat(1,1,istep)),kind=c_intptr_t), &
                     nbw*nbw*size_of_datatype,gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1634,  successGPU)
+      call check_memcpy_GPU_f("bandred: tmat -> tmat_dev ", 1640,  successGPU)
 
       call obj%timer%start("gpublas")
       gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -17391,7 +17511,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(vav),kind=c_intptr_t), &
                   vav_dev, nbw*nbw*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1671,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav_dev -> vav ", 1677,  successGPU)
     else ! useGPU
 
       call obj%timer%start("blas")
@@ -17426,7 +17546,7 @@ max_threads, isSkewsymmetric)
     if (useGPU) then
       successGPU = gpu_memcpy(vav_dev, int(loc(vav),kind=c_intptr_t), &
                        nbw*nbw*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1742,  successGPU)
+      call check_memcpy_GPU_f("bandred: vav -> vav_dev ", 1748,  successGPU)
     endif
 
 
@@ -17454,7 +17574,7 @@ max_threads, isSkewsymmetric)
 
       successGPU = gpu_memcpy(int(loc(umcGPU(1)),kind=c_intptr_t), &
                   umc_dev, umc_size*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1803,  successGPU)
+      call check_memcpy_GPU_f("bandred: umc_dev -> umcGPU ", 1809,  successGPU)
 
       ! Transpose umc -> umr (stored in vmr, second half)
       if (isSkewsymmetric) then
@@ -17487,7 +17607,7 @@ max_threads, isSkewsymmetric)
       successGPU = gpu_memcpy(vmr_dev+max_l_rows*n_cols*size_of_datatype, &
                   int(loc(vmrGPU(1+max_l_rows*n_cols)),kind=c_intptr_t), &
                   (vmr_size-max_l_rows*n_cols)*size_of_datatype, gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1860,  successGPU)
+      call check_memcpy_GPU_f("bandred: vmr -> vmrGPU ", 1866,  successGPU)
     else ! useGPU
       call obj%timer%start("blas")
       call CGEMM('N', 'N', int(l_cols,kind=BLAS_KIND), int(n_cols,kind=BLAS_KIND), int(n_cols,kind=BLAS_KIND),     &
@@ -17563,17 +17683,17 @@ max_threads, isSkewsymmetric)
     if (.not.(useGPU)) then
       if (allocated(vr)) then
         deallocate(vr, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vr", 2029,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vr", 2035,  istat,  errorMessage)
       endif
 
       if (allocated(umcCPU)) then
         deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: umcCPU", 2034,  istat,  errorMessage)
+        call check_deallocate_f("bandred: umcCPU", 2040,  istat,  errorMessage)
       endif
 
       if (allocated(vmrCPU)) then
         deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("bandred: vmrCPU", 2039,  istat,  errorMessage)
+        call check_deallocate_f("bandred: vmrCPU", 2045,  istat,  errorMessage)
       endif
     endif !useGPU
 
@@ -17591,58 +17711,58 @@ max_threads, isSkewsymmetric)
                   int(a_dev,kind=c_intptr_t), &
                   int(matrixRows*matrixCols* size_of_datatype, kind=c_intptr_t), &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2137,  successGPU)
+    call check_memcpy_GPU_f("bandred: a_dev -> a_mat ", 2143,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(a_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: a_mat ", 2144,  successGPU)
+      call check_host_unregister_GPU_f("bandred: a_mat ", 2150,  successGPU)
 
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("bandred: a_dev ", 2155,  successGPU)
+    call check_dealloc_GPU_f("bandred: a_dev ", 2161,  successGPU)
 
     successGPU = gpu_free(vav_dev)
-    call check_dealloc_GPU_f("bandred: vav_dev ", 2158,  successGPU)
+    call check_dealloc_GPU_f("bandred: vav_dev ", 2164,  successGPU)
 
     successGPU = gpu_free(tmat_dev)
-    call check_dealloc_GPU_f("bandred: tmat_dev ", 2161,  successGPU)
+    call check_dealloc_GPU_f("bandred: tmat_dev ", 2167,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(vav),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("bandred: vav", 2167,  successGPU)
+      call check_host_unregister_GPU_f("bandred: vav", 2173,  successGPU)
 
       if (associated(umcGPU)) then
         nullify(umcGPU)
 
         successGPU = gpu_free_host(umc_host)
-        call check_host_dealloc_GPU_f("bandred: umc_host ", 2180,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: umc_host ", 2186,  successGPU)
         successGPU = gpu_free(umc_dev)
-        call check_dealloc_GPU_f("bandred: umc_dev ", 2182,  successGPU)
+        call check_dealloc_GPU_f("bandred: umc_dev ", 2188,  successGPU)
       endif
 
       if (associated(vmrGPU)) then
         nullify(vmrGPU)
 
         successGPU = gpu_free_host(vmr_host)
-        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2189,  successGPU)
+        call check_host_dealloc_GPU_f("bandred: vmr_host ", 2195,  successGPU)
 
         successGPU = gpu_free(vmr_dev)
-        call check_dealloc_GPU_f("bandred: vmr_dev ", 2192,  successGPU)
+        call check_dealloc_GPU_f("bandred: vmr_dev ", 2198,  successGPU)
       endif
 
   endif ! useGPU
   
   if (allocated(vr)) then
     deallocate(vr, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vr", 2215,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vr", 2221,  istat,  errorMessage)
   endif
 
   if (allocated(umcCPU)) then
     deallocate(umcCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: umcCPU", 2221,  istat,  errorMessage)
+    call check_deallocate_f("bandred: umcCPU", 2227,  istat,  errorMessage)
   endif
 
   if (allocated(vmrCPU)) then
     deallocate(vmrCPU, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("bandred: vmrCPU", 2226,  istat,  errorMessage)
+    call check_deallocate_f("bandred: vmrCPU", 2232,  istat,  errorMessage)
   endif
 
   
@@ -18094,6 +18214,8 @@ subroutine trans_ev_band_to_full_&
   logical                                        :: useNonBlockingCollectivesRows
   integer(kind=c_int)                            :: non_blocking_collectives_rows, non_blocking_collectives_cols
   logical                                        :: success
+  integer(kind=MPI_KIND), allocatable            :: ibreq(:)
+  integer(kind=ik)                               :: nblocks, bc_counter
   integer(kind=c_intptr_t)                       :: gpuHandle, my_stream
 
   success = .true.
@@ -18159,17 +18281,23 @@ subroutine trans_ev_band_to_full_&
   endif
 
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
   max_blocks_row = ((na -1)/nblk)/np_rows + 1 ! Rows of a_mat
   max_blocks_col = ((nqc-1)/nblk)/np_cols + 1 ! Columns of q_mat!
@@ -18182,75 +18310,75 @@ subroutine trans_ev_band_to_full_&
   if (useGPU) then
     ! copy q_mat to q_dev
     successGPU = gpu_malloc(q_dev,ldq*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 289,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: q_dev", 297,  successGPU)
       successGPU = gpu_host_register(int(loc(q_mat),kind=c_intptr_t),&
                     ldq*matrixCols*size_of_datatype, gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 295,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: q_mat", 303,  successGPU)
 
     successGPU = gpu_memcpy(q_dev,int(loc(q_mat),kind=c_intptr_t),&
                   ldq*matrixCols*size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 317,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_mat -> q_dev", 325,  successGPU)
 
       successGPU = gpu_malloc_host(tmp1_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 324,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp1_host", 332,  successGPU)
       call c_f_pointer(tmp1_host, tmp1, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(tmp2_host,max_local_cols*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 328,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: tmp2_host", 336,  successGPU)
       call c_f_pointer(tmp2_host, tmp2, (/max_local_cols*cwy_blocking/))
 
       successGPU = gpu_malloc_host(hvm_host,max_local_rows*cwy_blocking*size_of_datatype)
-      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 332,  successGPU)
+      call check_host_alloc_GPU_f("trans_ev_band_to_full: hvm_host", 340,  successGPU)
       call c_f_pointer(hvm_host, hvm, (/max_local_rows,cwy_blocking/))
   else ! useGPU
     allocate(tmp1(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp1", 343,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp1", 351,  istat,  errorMessage)
 
     allocate(tmp2(max_local_cols*cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: tmp2", 346,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: tmp2", 354,  istat,  errorMessage)
 
     allocate(hvm(max_local_rows,cwy_blocking), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: hvm", 349,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: hvm", 357,  istat,  errorMessage)
   endif !useGPU
 
   allocate(hvb(max_local_rows*cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: hvb", 353,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: hvb", 361,  istat,  errorMessage)
 
   allocate(tmat_complete(cwy_blocking,cwy_blocking), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 356,  istat,  errorMessage)
+  call check_allocate_f("trans_ev_band_to_full: tmat_complete", 364,  istat,  errorMessage)
 
   if (useGPU) then
       successGPU = gpu_host_register(int(loc(tmat_complete),kind=c_intptr_t), &
                     cwy_blocking * cwy_blocking * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 365,  successGPU)
+      call check_host_register_GPU_f("trans_ev_band_to_full: tmat_complete", 373,  successGPU)
   endif
 
 
   if (blocking_factor > 1) then
     allocate(t_tmp(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp", 389,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp", 397,  istat,  errorMessage)
 
     allocate(t_tmp2(cwy_blocking,nbw), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 392,  istat,  errorMessage)
+    call check_allocate_f("trans_ev_band_to_full: t_tmp2", 400,  istat,  errorMessage)
 
   endif
 
   if (useGPU) then
     successGPU = gpu_malloc(hvm_dev,max_local_rows*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 409,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: hvm_dev", 417,  successGPU)
 
     successGPU = gpu_malloc(tmp_dev,max_local_cols*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 412,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmp_dev", 420,  successGPU)
 
 
       successGPU = gpu_memset(tmp_dev, 0, max_local_cols*cwy_blocking*size_of_datatype)
-      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 430,  successGPU)
+      call check_memset_GPU_f("trans_ev_band_to_full: tmp_dev", 438,  successGPU)
 
 
 
     successGPU = gpu_malloc(tmat_complete_dev,cwy_blocking*cwy_blocking*size_of_datatype)
-    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 477,  successGPU)
+    call check_alloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 485,  successGPU)
   endif
 
 
@@ -18286,6 +18414,9 @@ subroutine trans_ev_band_to_full_&
 
     nb = 0
     ns = 0
+    bc_counter=0
+    nblocks = n_cols/nblk;
+    allocate(ibreq(0:nblocks-1))
 
     do lc = 1, n_cols
       ncol = (istep-1)*cwy_blocking + nbw + lc ! absolute column number of householder Vector
@@ -18300,12 +18431,10 @@ subroutine trans_ev_band_to_full_&
 
       if (lc==n_cols .or. mod(ncol,nblk)==0) then
         if (useNonBlockingCollectivesCols) then
-          call obj%timer%start("mpi_nbc_communication")
           call mpi_ibcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_COMPLEX,&
                          int(pcol(ncol, nblk, np_cols),kind=MPI_KIND), int(mpi_comm_cols,kind=MPI_KIND), &
-                         bcast_request1, mpierr)
-          call mpi_wait(bcast_request1, MPI_STATUS_IGNORE, mpierr)
-          call obj%timer%stop("mpi_nbc_communication")
+                         ibreq(bc_counter), mpierr)
+          bc_counter = bc_counter + 1  
         else
           call obj%timer%start("mpi_communication")
           call mpi_bcast(hvb(ns+1), int(nb-ns,kind=MPI_KIND), MPI_COMPLEX,&
@@ -18316,6 +18445,13 @@ subroutine trans_ev_band_to_full_&
         ns = nb
       endif
     enddo ! lc
+
+  if(useNonBlockingCollectivesCols) then
+    call obj%timer%start("mpi_nbc_communication")
+    call mpi_waitall(nblocks, ibreq, MPI_STATUSES_IGNORE, mpierr)
+    call obj%timer%stop("mpi_nbc_communication")
+  endif
+  deallocate(ibreq)
 
     ! Expand compressed Householder vectors into matrix hvm
 
@@ -18362,7 +18498,7 @@ subroutine trans_ev_band_to_full_&
 
           call obj%timer%start("mpi_nbc_communication")
           call mpi_iallreduce(t_tmp, t_tmp2, int(cwy_blocking*nbw,kind=MPI_KIND), MPI_COMPLEX, &
-                           MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
+                         MPI_SUM, int(mpi_comm_rows,kind=MPI_KIND), allreduce_request1, mpierr)
           call mpi_wait(allreduce_request1, MPI_STATUS_IGNORE, mpierr)
           call obj%timer%stop("mpi_nbc_communication")
 
@@ -18409,7 +18545,7 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(hvm_dev, int(loc(hvm),kind=c_intptr_t), &
                         max_local_rows*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1039,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: hvm -> hvm_dev", 1057,  successGPU)
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
         call gpublas_CGEMM('C', 'N', &
@@ -18420,7 +18556,7 @@ subroutine trans_ev_band_to_full_&
         ! copy data from device to host for a later MPI_ALLREDUCE
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                       tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1070,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1088,  successGPU)
       else ! useGPU
         call obj%timer%start("blas")
         call CGEMM('C', 'N', &
@@ -18436,7 +18572,7 @@ subroutine trans_ev_band_to_full_&
     if (useGPU) then
       successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), &
                    tmp_dev, l_cols*n_cols*size_of_datatype, gpuMemcpyDeviceToHost)
-      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1146,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_band_to_full: tmp_dev -> tmp1", 1164,  successGPU)
 
     endif
 
@@ -18465,12 +18601,12 @@ subroutine trans_ev_band_to_full_&
       if (useGPU) then
         successGPU = gpu_memcpy(tmp_dev, int(loc(tmp2),kind=c_intptr_t), &
                       l_cols*n_cols*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1341,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmp2 -> tmp_dev", 1359,  successGPU)
 
         ! needed: as long as not device to device copy
         successGPU = gpu_memcpy(tmat_complete_dev, int(loc(tmat_complete),kind=c_intptr_t), &
                       cwy_blocking*cwy_blocking*size_of_datatype, gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1363,  successGPU)
+        call check_memcpy_GPU_f("trans_ev_band_to_full: tmat_complete -> tmat_complete_dev", 1381,  successGPU)
 
         call obj%timer%start("gpublas")
         gpuHandle = obj%gpu_setup%gpublasHandleArray(0)
@@ -18496,28 +18632,28 @@ subroutine trans_ev_band_to_full_&
   enddo ! istep
 
   deallocate(hvb, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: hvb", 1435,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: hvb", 1453,  istat,  errorMessage)
 
   if (useGPU) then
     successGPU = gpu_free(hvm_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1439,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: hvm_dev", 1457,  successGPU)
 
     successGPU = gpu_free(tmp_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1442,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmp_dev", 1460,  successGPU)
 
     successGPU = gpu_free(tmat_complete_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1449,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: tmat_complete_dev", 1467,  successGPU)
 
     ! final transfer of q_dev
     successGPU = gpu_memcpy(int(loc(q_mat),kind=c_intptr_t), q_dev, ldq*matrixCols*size_of_datatype, &
                   gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1469,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_band_to_full: q_dev -> q_mat", 1487,  successGPU)
 
     successGPU = gpu_free(q_dev)
-    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1473,  successGPU)
+    call check_dealloc_GPU_f("trans_ev_band_to_full: q_dev", 1491,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(q_mat),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1479,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: q_mat", 1497,  successGPU)
       nullify(tmp1)
       nullify(tmp2)
       nullify(hvm)
@@ -18526,38 +18662,38 @@ subroutine trans_ev_band_to_full_&
 
 
       successGPU = gpu_free_host(tmp1_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1504,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp1_host", 1522,  successGPU)
 
       successGPU = gpu_free_host(tmp2_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1507,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: tmp2_host", 1525,  successGPU)
 
       successGPU = gpu_free_host(hvm_host)
-      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1510,  successGPU)
+      call check_host_dealloc_GPU_f("trans_ev_band_to_full: hvm_host", 1528,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(tmat_complete),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1513,  successGPU)
+      call check_host_unregister_GPU_f("trans_ev_band_to_full: tmat_complete", 1531,  successGPU)
   else ! useGPU
     deallocate(tmp1, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1519,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp1", 1537,  istat,  errorMessage)
 
     deallocate(tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1522,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: tmp2", 1540,  istat,  errorMessage)
 
     deallocate(hvm, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: hvm", 1525,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: hvm", 1543,  istat,  errorMessage)
   endif ! useGPU
 
   deallocate(tmat_complete, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1529,  istat,  errorMessage)
+  call check_deallocate_f("trans_ev_band_to_full: tmat_complete", 1547,  istat,  errorMessage)
 
 
   if (blocking_factor > 1) then
 
     deallocate(t_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1556,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp", 1574,  istat,  errorMessage)
 
     deallocate(t_tmp2, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1559,  istat,  errorMessage)
+    call check_deallocate_f("trans_ev_band_to_full: t_tmp2", 1577,  istat,  errorMessage)
   endif
 
   call obj%timer%stop("trans_ev_band_to_full_&
@@ -18739,27 +18875,36 @@ subroutine tridiag_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+  n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-  my_pe = int(my_peMPI,kind=MPI_KIND)
-  n_pes = int(n_pesMPI,kind=MPI_KIND)
-  my_prow = int(my_prowMPI,kind=MPI_KIND)
-  np_rows = int(np_rowsMPI,kind=MPI_KIND)
-  my_pcol = int(my_pcolMPI,kind=MPI_KIND)
-  np_cols = int(np_colsMPI,kind=MPI_KIND)
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND),my_prowMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND),np_rowsMPI ,mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND),my_pcolMPI ,mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND),np_colsMPI ,mpierr)
+
+  !my_pe = int(my_peMPI,kind=MPI_KIND)
+  !n_pes = int(n_pesMPI,kind=MPI_KIND)
+  !my_prow = int(my_prowMPI,kind=MPI_KIND)
+  !np_rows = int(np_rowsMPI,kind=MPI_KIND)
+  !my_pcol = int(my_pcolMPI,kind=MPI_KIND)
+  !np_cols = int(np_colsMPI,kind=MPI_KIND)
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
 
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: global_id", 201,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: global_id", 210,  istat,  errorMessage)
 
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
@@ -18783,7 +18928,7 @@ subroutine tridiag_band_&
   ! Set work distribution
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: block_limits", 245,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: block_limits", 254,  istat,  errorMessage)
 
   call divide_band(obj,nblocks_total, n_pes, block_limits)
 
@@ -18793,7 +18938,7 @@ subroutine tridiag_band_&
   ! allocate the part of the band matrix which is needed by this PE
   ! The size is 1 block larger than needed to avoid extensive shifts
   allocate(ab(2*nb,(nblocks+1)*nb), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: ab", 255,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ab", 264,  istat,  errorMessage)
 
   ab = 0.0_rck ! needed for lower half, the extra block should also be set to 0 for safety
 
@@ -18816,7 +18961,7 @@ subroutine tridiag_band_&
   ! and the space requirements to hold the HH vectors
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: limits", 278,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: limits", 287,  istat,  errorMessage)
 
   call determine_workload(obj,na, nb, np_rows, limits)
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -18839,14 +18984,14 @@ subroutine tridiag_band_&
   ! Allocate space for HH vectors
 
   allocate(hh_trans(nb,num_hh_vecs), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_trans", 301,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_trans", 310,  istat,  errorMessage)
 
   ! Allocate and init MPI requests
 
   allocate(ireq_hhr(num_chunks), stat=istat, errmsg=errorMessage) ! Recv requests
-  call check_allocate_f("tridiag_band: ireq_hhr", 306,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhr", 315,  istat,  errorMessage)
   allocate(ireq_hhs(nblocks), stat=istat, errmsg=errorMessage)    ! Send requests
-  call check_allocate_f("tridiag_band: ireq_hhs", 308,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: ireq_hhs", 317,  istat,  errorMessage)
 
   num_hh_vecs = 0
   num_chunks  = 0
@@ -18877,10 +19022,10 @@ subroutine tridiag_band_&
   ! Buffers for gathering/sending the HH vectors
 
   allocate(hh_gath(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! gathers HH vectors
-  call check_allocate_f("tridiag_band: hh_gath", 347,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_gath", 356,  istat,  errorMessage)
 
   allocate(hh_send(nb,max_blk_size,nblocks), stat=istat, errmsg=errorMessage) ! send buffer for HH vectors
-  call check_allocate_f("tridiag_band: hh_send", 350,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_send", 359,  istat,  errorMessage)
 
   hh_gath(:,:,:) = 0.0_rck
   hh_send(:,:,:) = 0.0_rck
@@ -18888,10 +19033,10 @@ subroutine tridiag_band_&
   ! Some counters
 
   allocate(hh_cnt(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_cnt", 358,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_cnt", 367,  istat,  errorMessage)
 
   allocate(hh_dst(nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: hh_dst", 361,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: hh_dst", 370,  istat,  errorMessage)
 
   hh_cnt(:) = 1 ! The first transfomation Vector is always 0 and not calculated at all
   hh_dst(:) = 0 ! PE number for receive
@@ -18900,7 +19045,7 @@ subroutine tridiag_band_&
   ! Limits for sending
 
   allocate(snd_limits(0:np_rows,nblocks), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridiag_band: snd_limits", 372,  istat,  errorMessage)
+  call check_allocate_f("tridiag_band: snd_limits", 381,  istat,  errorMessage)
 
   do iblk=1,nblocks
     call determine_workload(obj, na-(iblk+block_limits(my_pe)-1)*nb, nb, np_rows, snd_limits(:,iblk))
@@ -19205,25 +19350,25 @@ endif
   call mpi_barrier(int(mpi_comm_all,kind=MPI_KIND),mpierr)
   if (wantDebug) call obj%timer%stop("mpi_communication")
   deallocate(ab, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ab", 1232,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ab", 1241,  istat,  errorMessage)
 
   deallocate(ireq_hhr, ireq_hhs, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: ireq_hhr", 1235,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: ireq_hhr", 1244,  istat,  errorMessage)
 
   deallocate(hh_cnt, hh_dst, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_dst", 1238,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_dst", 1247,  istat,  errorMessage)
 
   deallocate(hh_gath, hh_send, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: hh_gath", 1241,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: hh_gath", 1250,  istat,  errorMessage)
 
   deallocate(limits, snd_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: limits", 1244,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: limits", 1253,  istat,  errorMessage)
 
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: block_limits", 1247,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: block_limits", 1256,  istat,  errorMessage)
 
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridiag_band: global_id", 1250,  istat,  errorMessage)
+  call check_deallocate_f("tridiag_band: global_id", 1259,  istat,  errorMessage)
 
   call obj%timer%stop("tridiag_band_&
   &complex&
@@ -19578,18 +19723,24 @@ subroutine trans_ev_tridi_to_band_&
   kernel_time = 0.0
   kernel_flops = 0
 
-  if (wantDebug) call obj%timer%start("mpi_communication")
-  call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
-  call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
-  call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  if (wantDebug) call obj%timer%stop("mpi_communication")
+  !if (wantDebug) call obj%timer%start("mpi_communication")
+  !call MPI_Comm_rank(int(mpi_comm_rows,kind=MPI_KIND) , my_prowMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_rows,kind=MPI_KIND) , np_rowsMPI , mpierr)
+  !call MPI_Comm_rank(int(mpi_comm_cols,kind=MPI_KIND) , my_pcolMPI , mpierr)
+  !call MPI_Comm_size(int(mpi_comm_cols,kind=MPI_KIND) , np_colsMPI , mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !if (wantDebug) call obj%timer%stop("mpi_communication")
 
   if (mod(nbw,nblk)/=0) then
     if (my_prow==0 .and. my_pcol==0) then
@@ -19664,7 +19815,7 @@ subroutine trans_ev_tridi_to_band_&
   ! Determine the matrix distribution at the beginning
 
   allocate(limits(0:np_rows), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: limits", 633,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: limits", 639,  istat,  errorMessage)
   call determine_workload(obj,na, nbw, np_rows, limits)
 
   max_blk_size = maxval(limits(1:np_rows) - limits(0:np_rows-1))
@@ -19677,12 +19828,12 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%start("cuda_memcpy")
 
       successGPU = gpu_malloc(q_dev, ldq*matrixCols* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: q_dev", 646,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: q_dev", 652,  successGPU)
 
       successGPU =  gpu_memcpy(q_dev, int(loc(q(1,1)),kind=c_intptr_t),  &
                                ldq*matrixCols * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 672,  successGPU)
+      call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q -> q_dev", 678,  successGPU)
 
       ! associate with c_ptr
       q_mpi_dev = transfer(q_dev, q_mpi_dev)
@@ -19692,7 +19843,7 @@ subroutine trans_ev_tridi_to_band_&
       if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
       successGPU = gpu_malloc(hh_trans_dev, size(hh_trans,dim=1)*size(hh_trans,dim=2)* size_of_datatype)
-      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 683,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: hh_trans_dev", 689,  successGPU)
       ! associate with c_ptr
       hh_trans_mpi_dev = transfer(hh_trans_dev, hh_trans_mpi_dev)
       ! and associate a fortran pointer
@@ -19702,18 +19853,18 @@ subroutine trans_ev_tridi_to_band_&
                                c_loc(hh_trans(1,1)), &
                                size(hh_trans,dim=1)*size(hh_trans,dim=2) * size_of_datatype, &
                                gpuMemcpyHostToDevice)
-      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 716,  successGPU)
+      call check_memcpy_GPU_f("tridi_to_band: hh_trans -> hh_trans_dev", 722,  successGPU)
 
     endif ! allComputeOnGPU
 
     num = (stripe_width*a_dim2*stripe_count)* size_of_datatype
     successGPU = gpu_malloc(aIntern_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 727,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: aIntern_dev", 733,  successGPU)
 
     ! openmp loop here
 
       successGPU = gpu_memset(aIntern_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 743,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: aIntern_dev", 749,  successGPU)
 
 
     if (allComputeOnGPU) then
@@ -19726,17 +19877,17 @@ subroutine trans_ev_tridi_to_band_&
 
     ! "row_group" and "row_group_dev" are needed for GPU optimizations
       successGPU = gpu_malloc_host(row_group_host,l_nev*nblk*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 781,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: row_group_host", 787,  successGPU)
       call c_f_pointer(row_group_host, row_group, (/l_nev,nblk/))
 
     row_group(:, :) = 0.0_rck
     num =  (l_nev*nblk)* size_of_datatype
     successGPU = gpu_malloc(row_group_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 792,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_group_dev", 798,  successGPU)
 
 
       successGPU = gpu_memset(row_group_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_group_dev", 807,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_group_dev", 813,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -19763,17 +19914,17 @@ subroutine trans_ev_tridi_to_band_&
   endif !useGPU
 
   allocate(row(l_nev), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: row", 862,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: row", 868,  istat,  errorMessage)
 
   row(:) = 0.0_rck
 
   if (useGPU .and. allComputeOnGPU) then
     num =  (l_nev)* size_of_datatype
     successGPU = gpu_malloc(row_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: row_dev", 869,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: row_dev", 875,  successGPU)
 
       successGPU = gpu_memset(row_dev , 0, num)
-      call check_memset_GPU_f("tridi_to_band: row_dev", 886,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: row_dev", 892,  successGPU)
 
 
     ! associate with c_ptr
@@ -19897,7 +20048,7 @@ subroutine trans_ev_tridi_to_band_&
               if (wantDebug) call obj%timer%stop("cuda_aware_gpublas")
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1219,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1225,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
               if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -19944,7 +20095,7 @@ subroutine trans_ev_tridi_to_band_&
             ! is there a way to avoid this device_synchronize ?
             if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
             successGPU = gpu_devicesynchronize()
-            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1277,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 1283,  successGPU)
             if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
 
             if (wantDebug) call obj%timer%start("cuda_mpi_communication")
@@ -20034,19 +20185,19 @@ subroutine trans_ev_tridi_to_band_&
 
   num_result_buffers = 4*nfact
   allocate(result_buffer(l_nev,nblk,num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_buffer", 1520,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_buffer", 1526,  istat,  errorMessage)
 
   allocate(result_send_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_send_request", 1523,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_send_request", 1529,  istat,  errorMessage)
 
   allocate(result_recv_request(num_result_buffers), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: result_recv_request", 1526,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: result_recv_request", 1532,  istat,  errorMessage)
 
   if (useGPU .and. allComputeOnGPU) then
     num_result_buffers = 4*nfact
     num =  (l_nev*nblk*num_result_buffers)* size_of_datatype
     successGPU = gpu_malloc(result_buffer_dev, num* size_of_datatype)
-    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1532,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: result_buffer_dev", 1538,  successGPU)
 
     ! associate with c_ptr
     result_buffer_mpi_dev = transfer(result_buffer_dev, result_buffer_mpi_dev)
@@ -20080,16 +20231,16 @@ subroutine trans_ev_tridi_to_band_&
   ! Initialize top/bottom requests
 
   allocate(top_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_send_request", 1589,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_send_request", 1595,  istat,  errorMessage)
 
   allocate(top_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_recv_request", 1592,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_recv_request", 1598,  istat,  errorMessage)
 
   allocate(bottom_send_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_send_request", 1595,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_send_request", 1601,  istat,  errorMessage)
 
   allocate(bottom_recv_request(stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_recv_request", 1598,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_recv_request", 1604,  istat,  errorMessage)
 
   top_send_request(:) = MPI_REQUEST_NULL
   top_recv_request(:) = MPI_REQUEST_NULL
@@ -20098,16 +20249,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
   allocate(top_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1628,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_send_buffer", 1634,  istat,  errorMessage)
 
   allocate(top_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1631,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: top_border_recv_buffer", 1637,  istat,  errorMessage)
 
   allocate(bottom_border_send_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1634,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_send_buffer", 1640,  istat,  errorMessage)
 
   allocate(bottom_border_recv_buffer(stripe_width*nbw, stripe_count), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1637,  istat,  errorMessage)
+  call check_allocate_f("tridi_to_band: bottom_border_recv_buffer", 1643,  istat,  errorMessage)
 
   top_border_send_buffer(:,:) = 0.0_rck
   top_border_recv_buffer(:,:) = 0.0_rck
@@ -20120,15 +20271,15 @@ subroutine trans_ev_tridi_to_band_&
       ! top_border_recv_buffer and top_border_send_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(top_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1655,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1661,  successGPU)
 
       successGPU = gpu_malloc(top_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1658,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1664,  successGPU)
 
         successGPU = gpu_memset(top_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1673,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 1679,  successGPU)
         successGPU = gpu_memset(top_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1675,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: top_border_send_buffer_dev", 1681,  successGPU)
 
 
       ! associate with c_ptr
@@ -20141,15 +20292,15 @@ subroutine trans_ev_tridi_to_band_&
       ! bottom_border_send_buffer and bottom_border_recv_buffer
       num =  ( stripe_width*nbw*stripe_count) * size_of_datatype
       successGPU = gpu_malloc(bottom_border_send_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1710,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1716,  successGPU)
       successGPU = gpu_malloc(bottom_border_recv_buffer_dev, num)
-      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1712,  successGPU)
+      call check_alloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1718,  successGPU)
 
 
         successGPU = gpu_memset(bottom_border_send_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1728,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 1734,  successGPU)
         successGPU = gpu_memset(bottom_border_recv_buffer_dev, 0, num)
-        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1730,  successGPU)
+        call check_memset_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 1736,  successGPU)
 
 
       ! associate with c_ptr
@@ -20165,22 +20316,22 @@ subroutine trans_ev_tridi_to_band_&
       successGPU = gpu_host_register(int(loc(top_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1767,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_send_buffer", 1773,  successGPU)
 
       successGPU = gpu_host_register(int(loc(top_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1772,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: top_border_recv_buffer", 1778,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_send_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1777,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_send_buffer", 1783,  successGPU)
 
       successGPU = gpu_host_register(int(loc(bottom_border_recv_buffer),kind=c_intptr_t), &
                     stripe_width*nbw* stripe_count * size_of_datatype,&
                     gpuHostRegisterDefault)
-      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1782,  successGPU)
+      call check_host_register_GPU_f("tridi_to_band: bottom_border_recv_buffer", 1788,  successGPU)
   endif ! useGPU
 
 
@@ -20188,11 +20339,11 @@ subroutine trans_ev_tridi_to_band_&
 
   if (useGPU) then
       successGPU = gpu_malloc_host(bcast_buffer_host,nbw*max_blk_size*size_of_datatype)
-      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1796,  successGPU)
+      call check_host_alloc_GPU_f("tridi_to_band: bcast_buffer_host", 1802,  successGPU)
       call c_f_pointer(bcast_buffer_host, bcast_buffer, (/nbw,max_blk_size/))
   else
     allocate(bcast_buffer(nbw, max_blk_size), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("tridi_to_band: bcast_buffer", 1805,  istat,  errorMessage)
+    call check_allocate_f("tridi_to_band: bcast_buffer", 1811,  istat,  errorMessage)
   endif
 
   bcast_buffer = 0.0_rck
@@ -20200,7 +20351,7 @@ subroutine trans_ev_tridi_to_band_&
   if (useGPU) then
     num =  ( nbw * max_blk_size) * size_of_datatype
     successGPU = gpu_malloc(bcast_buffer_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1813,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: bcast_buffer_dev", 1819,  successGPU)
 
     if (allComputeOnGPU) then
       ! associate with c_ptr
@@ -20211,16 +20362,16 @@ subroutine trans_ev_tridi_to_band_&
 
 
       successGPU = gpu_memset( bcast_buffer_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1834,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 1840,  successGPU)
 
 
     num =  (max_blk_size)* size_of_datatype
     successGPU = gpu_malloc( hh_tau_dev, num)
-    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1850,  successGPU)
+    call check_alloc_GPU_f("tridi_to_band: hh_tau_dev", 1856,  successGPU)
 
 
       successGPU = gpu_memset( hh_tau_dev, 0, num)
-      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1864,  successGPU)
+      call check_memset_GPU_f("tridi_to_band: hh_tau_dev", 1870,  successGPU)
 
   endif ! useGPU
 
@@ -20292,7 +20443,7 @@ subroutine trans_ev_tridi_to_band_&
                                      size(hh_trans,dim=1) * (current_tv_off+current_local_n-(current_tv_off+1)+1) * &
                                      size_of_datatype, &
                                      gpuMemcpyDeviceToDevice)
-          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2027,  successGPU)
+          call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2033,  successGPU)
           if (wantDebug) call obj%timer%stop("cuda_memcpy")
           current_tv_off = current_tv_off + current_local_n
         endif
@@ -20323,7 +20474,7 @@ subroutine trans_ev_tridi_to_band_&
                                  nbw * current_local_n *    &
                                  size_of_datatype, &
                                  gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2117,  successGPU)
+        call check_memcpy_GPU_f("tridi_to_band: bcast_buffer -> bcast_buffer_dev", 2123,  successGPU)
         if (wantDebug) call obj%timer%stop("memcpy")
       endif ! useGPU
 
@@ -20345,7 +20496,7 @@ subroutine trans_ev_tridi_to_band_&
       if (useGPU) then
 
           successGPU = gpu_memset(bcast_buffer_dev, 0, nbw * size_of_datatype)
-          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2176,  successGPU)
+          call check_memset_GPU_f("tridi_to_band: bcast_buffer_dev", 2182,  successGPU)
 
 
         if (wantDebug) call obj%timer%start("extract_hh")
@@ -20384,7 +20535,7 @@ subroutine trans_ev_tridi_to_band_&
                                        c_loc(bottom_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                        stripe_width*nbw* size_of_datatype,      &
                                        gpuMemcpyDeviceToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2378,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2384,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_memcpy")
             else ! allComputeOnGPU
               if (wantDebug) call obj%timer%start("memcpy")
@@ -20393,7 +20544,7 @@ subroutine trans_ev_tridi_to_band_&
                                       int(loc(bottom_border_recv_buffer(1,i)),kind=c_intptr_t), &
                                        stripe_width*nbw*  size_of_datatype,    &
                                        gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2404,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: bottom_border_recv_buffer -> aIntern_dev", 2410,  successGPU)
               if (wantDebug) call obj%timer%stop("memcpy")
             endif ! allComputeOnGPU
           else ! useGPU
@@ -20444,7 +20595,7 @@ subroutine trans_ev_tridi_to_band_&
                                           c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                           stripe_width*top_msg_length* size_of_datatype,      &
                                           gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2659,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2665,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -20453,7 +20604,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy( aIntern_dev+dev_offset , int(loc(top_border_recv_buffer(1,i)),kind=c_intptr_t),  &
                                              stripe_width*top_msg_length* size_of_datatype,      &
                                              gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2684,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 2690,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -20499,21 +20650,22 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2946,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 2953,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
 
               if (wantDebug) call obj%timer%start("cuda_aware_device_synchronize")
               successGPU = gpu_devicesynchronize()
-              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2954,  successGPU)
+              call check_memcpy_GPU_f("tridi_to_band: device_synchronize", 2961,  successGPU)
               if (wantDebug) call obj%timer%stop("cuda_aware_device_synchronize")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
+                  successGPU =  gpu_memcpy( int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), &
+                                            aIntern_dev + dev_offset, &
                                             stripe_width * bottom_msg_length * size_of_datatype,      &
                                             gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2979,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 2987,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -20572,15 +20724,15 @@ subroutine trans_ev_tridi_to_band_&
                                             c_loc(aIntern_mpi_fortran_ptr(1,n_off+1,i)), &
                                              stripe_width * bottom_msg_length * size_of_datatype,      &
                                              gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3326,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer_dev", 3335,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
                   dev_offset = (0 + (n_off * stripe_width) + ( (i-1) * stripe_width * a_dim2 )) * size_of_datatype
-                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset,  &
+                  successGPU =  gpu_memcpy(int(loc(bottom_border_send_buffer(1,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                            stripe_width*bottom_msg_length* size_of_datatype,  &
                                            gpuMemcpyDeviceToHost)
-                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3351,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> bottom_border_send_buffer", 3360,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
 
@@ -20636,7 +20788,7 @@ subroutine trans_ev_tridi_to_band_&
                                            c_loc(top_border_recv_buffer_mpi_fortran_ptr(1,i)),  &
                                            stripe_width* top_msg_length* size_of_datatype,      &
                                            gpuMemcpyDeviceToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3664,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3673,  successGPU)
                   if (wantDebug) call obj%timer%stop("cuda_memcpy")
                 else ! allComputeOnGPU
                   if (wantDebug) call obj%timer%start("memcpy")
@@ -20645,7 +20797,7 @@ subroutine trans_ev_tridi_to_band_&
                   successGPU =  gpu_memcpy(aIntern_dev + dev_offset ,int(loc( top_border_recv_buffer(:,i)),kind=c_intptr_t),  &
                                         stripe_width * top_msg_length * size_of_datatype,   &
                                         gpuMemcpyHostToDevice)
-                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3689,  successGPU)
+                  call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 3698,  successGPU)
                   if (wantDebug) call obj%timer%stop("memcpy")
                 endif ! allComputeOnGPU
               else ! useGPU
@@ -20707,7 +20859,7 @@ subroutine trans_ev_tridi_to_band_&
                                         c_loc(aIntern_mpi_fortran_ptr(1,a_off+1,i)), &
                                         stripe_width* nbw* size_of_datatype,      &
                                         gpuMemcpyDeviceToDevice)
-               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4067,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: top_border_recv_buffer -> aIntern_dev", 4076,  successGPU)
                if (wantDebug) call obj%timer%stop("cuda_memcpy")
              else ! allComputeOnGPU
                if (wantDebug) call obj%timer%start("memcpy")
@@ -20715,7 +20867,7 @@ subroutine trans_ev_tridi_to_band_&
                successGPU =  gpu_memcpy(int(loc(top_border_send_buffer(:,i)),kind=c_intptr_t), aIntern_dev + dev_offset, &
                                          stripe_width*nbw * size_of_datatype, &
                                          gpuMemcpyDeviceToHost)
-               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4092,  successGPU)
+               call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> top_border_send_buffer", 4101,  successGPU)
                if (wantDebug) call obj%timer%stop("memcpy")
              endif ! allComputeOnGPU
            else ! useGPU
@@ -20968,7 +21120,7 @@ subroutine trans_ev_tridi_to_band_&
             num = stripe_width*this_chunk*size_of_datatype
             successGPU = gpu_memcpy(aIntern_dev+dev_offset, aIntern_dev+dev_offset_1, num, gpuMemcpyDeviceToDevice)
 
-            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4648,  successGPU)
+            call check_memcpy_GPU_f("tridi_to_band: aIntern_dev -> aIntern_dev", 4657,  successGPU)
           end do
           if (wantDebug) call obj%timer%stop("normal_memcpy")
         else ! not useGPU
@@ -21055,7 +21207,7 @@ subroutine trans_ev_tridi_to_band_&
                              q_dev, &
                              ldq*matrixCols * size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4771,  successGPU)
+    call check_memcpy_GPU_f("trans_ev_tridi_to_band 1: q_dev -> q", 4780,  successGPU)
     if (wantDebug) call obj%timer%stop("cuda_memcpy")
 
   endif
@@ -21072,132 +21224,132 @@ subroutine trans_ev_tridi_to_band_&
   endif
 
   deallocate(row, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: row", 4789,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: row", 4798,  istat,  errorMessage)
 
   deallocate(limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: limits", 4792,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: limits", 4801,  istat,  errorMessage)
 
   deallocate(result_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_send_request", 4795,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_send_request", 4804,  istat,  errorMessage)
 
   deallocate(result_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_recv_request", 4798,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_recv_request", 4807,  istat,  errorMessage)
 
   deallocate(result_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: result_buffer", 4801,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: result_buffer", 4810,  istat,  errorMessage)
 
   if (useGPU) then
     if (allComputeOnGPU) then
       successGPU = gpu_free(result_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4806,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: result_buffer_dev", 4815,  successGPU)
       nullify(result_buffer_mpi_fortran_ptr)
     endif
 
       nullify(bcast_buffer)
 
       successGPU = gpu_free_host(bcast_buffer_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4816,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: bcast_buffer_host", 4825,  successGPU)
   else ! useGPU
     deallocate(bcast_buffer, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("tridi_to_band: bcast_buffer", 4824,  istat,  errorMessage)
+    call check_deallocate_f("tridi_to_band: bcast_buffer", 4833,  istat,  errorMessage)
   endif ! useGPU
 
 
   if (useGPU) then
     successGPU = gpu_free(aIntern_dev)
-    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4830,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: aIntern_dev", 4839,  successGPU)
 
     if (allComputeOnGPU) then
       successGPU = gpu_free(q_dev)
-      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4834,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: q_dev", 4843,  successGPU)
       nullify(q_mpi_fortran_ptr)
 
       successGPU = gpu_free(hh_trans_dev)
-      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4838,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: hh_trans_dev", 4847,  successGPU)
       nullify(hh_trans_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4842,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_recv_buffer_dev", 4851,  successGPU)
       nullify(top_border_recv_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(top_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4846,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: top_border_send_buffer_dev", 4855,  successGPU)
       nullify(top_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_send_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4850,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_send_buffer_dev", 4859,  successGPU)
       nullify(bottom_border_send_buffer_mpi_fortran_ptr)
 
       successGPU = gpu_free(bottom_border_recv_buffer_dev)
-      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4854,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: bottom_border_recv_buffer_dev", 4863,  successGPU)
       nullify(bottom_border_recv_buffer_mpi_fortran_ptr)
 
       nullify(aIntern_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU = gpu_free(hh_tau_dev)
-    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4861,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: hh_tau_dev", 4870,  successGPU)
 
       nullify(row_group)
 
       successGPU = gpu_free_host(row_group_host)
-      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4869,  successGPU)
+      call check_host_dealloc_GPU_f("tridi_to_band: row_group_host", 4878,  successGPU)
 
     successGPU = gpu_free(row_group_dev)
-    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4877,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: row_group_dev", 4886,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(row_group_mpi_fortran_ptr)
 
       successGPU = gpu_free(row_dev)
-      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4883,  successGPU)
+      call check_dealloc_GPU_f("tridi_to_band: row_dev", 4892,  successGPU)
       nullify(row_mpi_fortran_ptr)
     endif ! allComputeOnGPU
 
     successGPU =  gpu_free(bcast_buffer_dev)
-    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4888,  successGPU)
+    call check_dealloc_GPU_f("tridi_to_band: bcast_buffer_dev", 4897,  successGPU)
 
     if (allComputeOnGPU) then
       nullify(bcast_buffer_mpi_fortran_ptr)
     endif
 
       successGPU = gpu_host_unregister(int(loc(top_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4898,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_send_buffer", 4907,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(top_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4901,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: top_border_recv_buffer", 4910,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_send_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4904,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_send_buffer", 4913,  successGPU)
 
       successGPU = gpu_host_unregister(int(loc(bottom_border_recv_buffer),kind=c_intptr_t))
-      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4907,  successGPU)
+      call check_host_unregister_GPU_f("tridi_to_band: bottom_border_recv_buffer", 4916,  successGPU)
 
   endif ! useGPU
 
   deallocate(top_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4927,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_send_buffer", 4936,  istat,  errorMessage)
 
   deallocate(top_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4930,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_border_recv_buffer", 4939,  istat,  errorMessage)
 
   deallocate(bottom_border_send_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4933,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_send_buffer", 4942,  istat,  errorMessage)
 
   deallocate(bottom_border_recv_buffer, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4936,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_border_recv_buffer", 4945,  istat,  errorMessage)
 
   deallocate(top_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_send_request", 4939,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_send_request", 4948,  istat,  errorMessage)
 
   deallocate(top_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: top_recv_request", 4942,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: top_recv_request", 4951,  istat,  errorMessage)
 
   deallocate(bottom_send_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_send_request", 4945,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_send_request", 4954,  istat,  errorMessage)
 
   deallocate(bottom_recv_request, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4948,  istat,  errorMessage)
+  call check_deallocate_f("tridi_to_band: bottom_recv_request", 4957,  istat,  errorMessage)
 
   call obj%timer%stop("trans_ev_tridi_to_band_&
                       &complex&

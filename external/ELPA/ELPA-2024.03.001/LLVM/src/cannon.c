@@ -3202,6 +3202,8 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 # 1 "/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../compiler/include/math_common_undefine.h" 1 3
 # 223 "/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../compiler/include/complex.h" 2 3
 # 62 "../src/elpa_generalized/cannon.c" 2
+# 1 "/opt/intel/oneapi/compiler/2023.1.0/linux/lib/clang/16/include/stdbool.h" 1 3
+# 63 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -3222,8 +3224,8 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 63 "../src/elpa_generalized/cannon.c" 2
-# 87 "../src/elpa_generalized/cannon.c"
+# 64 "../src/elpa_generalized/cannon.c" 2
+# 120 "../src/elpa_generalized/cannon.c"
 # 1 "/opt/intel/oneapi/mpi/2021.9.0/include/mpi.h" 1
 # 126 "/opt/intel/oneapi/mpi/2021.9.0/include/mpi.h"
 # 1 "/opt/intel/oneapi/compiler/2023.1.0/linux/lib/clang/16/include/stdint.h" 1 3
@@ -5273,14 +5275,14 @@ int PMPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
                          MPIX_Grequest_poll_function *poll_fn,
                          MPIX_Grequest_wait_function *wait_fn, void *extra_state,
                          MPI_Request *request) ;
-# 88 "../src/elpa_generalized/cannon.c" 2
-# 127 "../src/elpa_generalized/cannon.c"
+# 121 "../src/elpa_generalized/cannon.c" 2
+# 160 "../src/elpa_generalized/cannon.c"
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 128 "../src/elpa_generalized/cannon.c" 2
+# 161 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 86 "../src/elpa_generalized/cannon_forw_template.c"
+# 90 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 87 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -5300,7 +5302,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -5321,23 +5323,24 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 90 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, double *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 102 "../src/elpa_generalized/cannon_forw_template.c"
-   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, where_to_send_A, from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
-   double *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
+# 106 "../src/elpa_generalized/cannon_forw_template.c"
+   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
+
+   double *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
    int row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
-   double done = 1.0;
-   double dzero = 0.0;
+   double dOne = 1.0;
+   double dZero = 0.0;
    int one = 1;
    int zero = 0;
    int na_rows, na_cols;
@@ -5352,18 +5355,19 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 135 "../src/elpa_generalized/cannon_forw_template.c"
+# 140 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
 
       return;
    }
+
    if (np_cols < np_rows != 0)
    {
 
 
-      return;
+       return;
    }
 
    ratio = np_cols/np_rows;
@@ -5389,8 +5393,9 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
       else {
          Buf_cols = na_cols + nblk - na_cols%nblk;
       }
-  }
-  if (na%nblk == 0) {
+   }
+
+   if (na%nblk == 0) {
       if (my_prow <= last_proc_row) {
          Buf_rows = na_rows + 1;
       }
@@ -5409,6 +5414,7 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
+
    intNumber = ceil((double)na/(double)(np_cols*nblk));
    Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
 
@@ -5425,44 +5431,54 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
+   int useGPU = 0;
+# 230 "../src/elpa_generalized/cannon_forw_template.c"
+   if(ratio != 1) {
 
 
 
-   if(ratio != 1)
       dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+
+
+
+   }
    Size_receive_A = 0;
 
 
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-           MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)0x4c00080b),(int) where_to_send_A, (int) zero, Buf_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
-           MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_A_nowMPI);
-           Size_receive_A_now = (int) Size_receive_A_nowMPI;
-           Size_receive_A_now = Size_receive_A_now/na_rows;
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A , (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
+            MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_A_nowMPI);
+            Size_receive_A_now = (int) Size_receive_A_nowMPI;
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
-  }
+       }
+
          Size_receive_A = Size_receive_A + Size_receive_A_now;
 
 
-         intNumber = from_where_to_receive_A/np_rows;
+         intNumber = pcol_from_where_to_receive_A/np_rows;
 
          CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
-         if (where_to_send_A != my_pcol) {
+         if (pcol_where_to_send_A != my_pcol) {
             CopyFrom = Buf_A;
-  }
+       }
          else {
             CopyFrom = A;
-  }
+       }
+
          intNumber = ceil((double)Size_receive_A_now/(double)nblk);
          for(j = 0; j < intNumber; j++)
          {
@@ -5474,14 +5490,17 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
             CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
+
       else {
          if(my_prow > 0)
          {
             dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)0x4c00080b), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A , (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-     Size_receive_A = Size_receive_A/na_rows;
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
@@ -5564,8 +5583,9 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    Curr_pos_in_U_stored = Size_U_skewed;
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
 
@@ -5582,8 +5602,8 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00080b), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -5632,31 +5652,38 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
             rows_in_block_A = rows_in_block_A + nblk;
-  }
+       }
          if (rows_in_block_A > na_rows) {
             rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
             cols_in_block = nblk;
-  }
+       }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
-  }
+       }
 
          rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
             rows_in_block_U = rows_in_block_U + nblk;
-  }
+       }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
          }
+
          if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
             if (j == 1) {
-               dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
-     }
+               dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
+          }
             else {
-               dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
-     }
+               dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
+          }
+
+
+
          }
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
@@ -5746,12 +5773,18 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
          if (j == 1) {
-            dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+            dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
   }
          else {
-            dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
+            dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
+
+
+
       }
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
@@ -5761,13 +5794,10 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
 
 
 
-   pdtran_(&na, &na, &done, M, &one, &one, a_desc, &dzero, M_T, &one, &one, a_desc);
 
 
-
-
-
-
+   pdtran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+# 603 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -5820,9 +5850,9 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      if(from_where_to_receive_A < proc_col_min)
-         proc_col_min = from_where_to_receive_A;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      if(pcol_from_where_to_receive_A < proc_col_min)
+         proc_col_min = pcol_from_where_to_receive_A;
    }
 
    Size_receive_A = 0;
@@ -5830,15 +5860,15 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
@@ -5848,18 +5878,18 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
             cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
 
 
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((double)(((double)from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk;
+               rows_in_buffer_A_now = na_rows - ceil((double)(((double)pcol_from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
                rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = from_where_to_receive_A/np_rows;
+            intNumber = pcol_from_where_to_receive_A/np_rows;
             if (proc_col_min <= my_prow) {
                CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
      }
@@ -5911,18 +5941,18 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
       {
          if(my_prow > 0)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((double)(((double)from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk;
+               rows_in_buffer_A = na_rows - ceil((double)(((double)pcol_from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk;
             }
          }
          else
@@ -5952,8 +5982,8 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
 
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
@@ -5974,8 +6004,8 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -6076,12 +6106,17 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
                else {
                   rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
+
+
+
                if ((j == 1)&&(ii == 0)) {
-                  dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+                  dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
         }
                else {
-                  dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+                  dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
+
+
 
                LDA_A_new = LDA_A_new - nblk;
 
@@ -6112,7 +6147,7 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-  MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI);
+       MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
@@ -6202,12 +6237,17 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
             else {
                rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
+
+
+
             if ((j == 1)&&(ii == 0)) {
-               dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+               dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
      }
             else {
-               dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+               dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
      }
+
+
 
             LDA_A_new = LDA_A_new - nblk;
 
@@ -6223,8 +6263,20 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
 
-   pdtran_(&na, &na, &done, Res, &one, &one, a_desc, &dzero, M, &one, &one, a_desc);
+
+
+
+   pdtran_(&na, &na, &dOne, Res, &one, &one, a_desc, &dZero, M, &one, &one, a_desc);
+
+
+
+
+
+
+
    pdlacpy_("U", &na, &na, M, &one, &one, a_desc, Res, &one, &one, a_desc);
+
+
 
 
    free(Buf_to_send_A);
@@ -6262,15 +6314,10 @@ void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_c
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-
-
-
-
-
-
+# 1133 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_d(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
-# 129 "../src/elpa_generalized/cannon.c" 2
+# 162 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_back_template.c" 1
 # 85 "../src/elpa_generalized/cannon_back_template.c"
 void cannons_triang_rectangular_d(double* U, double* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, double *Res, MPI_Comm row_comm, MPI_Comm col_comm)
@@ -6709,11 +6756,11 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 
   cannons_triang_rectangular_d(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
-# 130 "../src/elpa_generalized/cannon.c" 2
-# 149 "../src/elpa_generalized/cannon.c"
+# 163 "../src/elpa_generalized/cannon.c" 2
+# 182 "../src/elpa_generalized/cannon.c"
 void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_colsCast, int* a_desc,
                            double *Res, int ToStore, int row_comm, int col_comm);
-# 167 "../src/elpa_generalized/cannon.c"
+# 200 "../src/elpa_generalized/cannon.c"
 void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, double *Res, int row_comm, int col_comm);
 
@@ -6722,11 +6769,11 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 
 
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 175 "../src/elpa_generalized/cannon.c" 2
+# 208 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 86 "../src/elpa_generalized/cannon_forw_template.c"
+# 90 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 87 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -6746,7 +6793,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -6767,23 +6814,24 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 90 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, float *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 102 "../src/elpa_generalized/cannon_forw_template.c"
-   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, where_to_send_A, from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
-   float *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
+# 106 "../src/elpa_generalized/cannon_forw_template.c"
+   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
+
+   float *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
    int row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
-   float done = 1.0;
-   float dzero = 0.0;
+   float dOne = 1.0;
+   float dZero = 0.0;
    int one = 1;
    int zero = 0;
    int na_rows, na_cols;
@@ -6798,18 +6846,19 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 135 "../src/elpa_generalized/cannon_forw_template.c"
+# 140 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
 
       return;
    }
+
    if (np_cols < np_rows != 0)
    {
 
 
-      return;
+       return;
    }
 
    ratio = np_cols/np_rows;
@@ -6835,8 +6884,9 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
       else {
          Buf_cols = na_cols + nblk - na_cols%nblk;
       }
-  }
-  if (na%nblk == 0) {
+   }
+
+   if (na%nblk == 0) {
       if (my_prow <= last_proc_row) {
          Buf_rows = na_rows + 1;
       }
@@ -6855,6 +6905,7 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
+
    intNumber = ceil((float)na/(float)(np_cols*nblk));
    Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
 
@@ -6871,44 +6922,54 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
+   int useGPU = 0;
+# 230 "../src/elpa_generalized/cannon_forw_template.c"
+   if(ratio != 1) {
 
 
 
-   if(ratio != 1)
       slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+
+
+
+   }
    Size_receive_A = 0;
 
 
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-           MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)0x4c00040a),(int) where_to_send_A, (int) zero, Buf_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
-           MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_A_nowMPI);
-           Size_receive_A_now = (int) Size_receive_A_nowMPI;
-           Size_receive_A_now = Size_receive_A_now/na_rows;
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A , (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
+            MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_A_nowMPI);
+            Size_receive_A_now = (int) Size_receive_A_nowMPI;
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
-  }
+       }
+
          Size_receive_A = Size_receive_A + Size_receive_A_now;
 
 
-         intNumber = from_where_to_receive_A/np_rows;
+         intNumber = pcol_from_where_to_receive_A/np_rows;
 
          CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
-         if (where_to_send_A != my_pcol) {
+         if (pcol_where_to_send_A != my_pcol) {
             CopyFrom = Buf_A;
-  }
+       }
          else {
             CopyFrom = A;
-  }
+       }
+
          intNumber = ceil((float)Size_receive_A_now/(float)nblk);
          for(j = 0; j < intNumber; j++)
          {
@@ -6920,14 +6981,17 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
             CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
+
       else {
          if(my_prow > 0)
          {
             slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)0x4c00040a), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A , (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-     Size_receive_A = Size_receive_A/na_rows;
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
@@ -7010,8 +7074,9 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    Curr_pos_in_U_stored = Size_U_skewed;
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
 
@@ -7028,8 +7093,8 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00040a), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -7078,31 +7143,38 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
             rows_in_block_A = rows_in_block_A + nblk;
-  }
+       }
          if (rows_in_block_A > na_rows) {
             rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
             cols_in_block = nblk;
-  }
+       }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
-  }
+       }
 
          rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
             rows_in_block_U = rows_in_block_U + nblk;
-  }
+       }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
          }
+
          if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
             if (j == 1) {
-               sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
-     }
+               sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
+          }
             else {
-               sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
-     }
+               sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
+          }
+
+
+
          }
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
@@ -7192,12 +7264,18 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
          if (j == 1) {
-            sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+            sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
   }
          else {
-            sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
+            sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
+
+
+
       }
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
@@ -7207,13 +7285,10 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
 
 
 
-   pstran_(&na, &na, &done, M, &one, &one, a_desc, &dzero, M_T, &one, &one, a_desc);
 
 
-
-
-
-
+   pstran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+# 603 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -7266,9 +7341,9 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      if(from_where_to_receive_A < proc_col_min)
-         proc_col_min = from_where_to_receive_A;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      if(pcol_from_where_to_receive_A < proc_col_min)
+         proc_col_min = pcol_from_where_to_receive_A;
    }
 
    Size_receive_A = 0;
@@ -7276,15 +7351,15 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
@@ -7294,18 +7369,18 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
             cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
 
 
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((float)(((float)from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk;
+               rows_in_buffer_A_now = na_rows - ceil((float)(((float)pcol_from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
                rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = from_where_to_receive_A/np_rows;
+            intNumber = pcol_from_where_to_receive_A/np_rows;
             if (proc_col_min <= my_prow) {
                CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
      }
@@ -7357,18 +7432,18 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
       {
          if(my_prow > 0)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((float)(((float)from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk;
+               rows_in_buffer_A = na_rows - ceil((float)(((float)pcol_from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk;
             }
          }
          else
@@ -7398,8 +7473,8 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
 
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
@@ -7420,8 +7495,8 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -7522,12 +7597,17 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
                else {
                   rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
+
+
+
                if ((j == 1)&&(ii == 0)) {
-                  sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+                  sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
         }
                else {
-                  sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+                  sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
+
+
 
                LDA_A_new = LDA_A_new - nblk;
 
@@ -7558,7 +7638,7 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-  MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI);
+       MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
@@ -7648,12 +7728,17 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
             else {
                rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
+
+
+
             if ((j == 1)&&(ii == 0)) {
-               sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+               sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
      }
             else {
-               sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+               sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
      }
+
+
 
             LDA_A_new = LDA_A_new - nblk;
 
@@ -7669,8 +7754,20 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
 
-   pstran_(&na, &na, &done, Res, &one, &one, a_desc, &dzero, M, &one, &one, a_desc);
+
+
+
+   pstran_(&na, &na, &dOne, Res, &one, &one, a_desc, &dZero, M, &one, &one, a_desc);
+
+
+
+
+
+
+
    pslacpy_("U", &na, &na, M, &one, &one, a_desc, Res, &one, &one, a_desc);
+
+
 
 
    free(Buf_to_send_A);
@@ -7708,15 +7805,10 @@ void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_col
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-
-
-
-
-
-
+# 1133 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_f(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
-# 176 "../src/elpa_generalized/cannon.c" 2
+# 209 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_back_template.c" 1
 # 85 "../src/elpa_generalized/cannon_back_template.c"
 void cannons_triang_rectangular_f(float* U, float* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, float *Res, MPI_Comm row_comm, MPI_Comm col_comm)
@@ -8155,11 +8247,11 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 
   cannons_triang_rectangular_f(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
-# 177 "../src/elpa_generalized/cannon.c" 2
-# 196 "../src/elpa_generalized/cannon.c"
+# 210 "../src/elpa_generalized/cannon.c" 2
+# 229 "../src/elpa_generalized/cannon.c"
 void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_colsCast, int* a_desc,
                            float *Res, int ToStore, int row_comm, int col_comm);
-# 214 "../src/elpa_generalized/cannon.c"
+# 247 "../src/elpa_generalized/cannon.c"
 void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, float *Res, int row_comm, int col_comm);
 
@@ -8168,11 +8260,11 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 
 
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 222 "../src/elpa_generalized/cannon.c" 2
+# 255 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 86 "../src/elpa_generalized/cannon_forw_template.c"
+# 90 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 87 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -8192,7 +8284,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -8213,23 +8305,24 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 90 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, double _Complex *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 102 "../src/elpa_generalized/cannon_forw_template.c"
-   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, where_to_send_A, from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
-   double _Complex *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
+# 106 "../src/elpa_generalized/cannon_forw_template.c"
+   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
+
+   double _Complex *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
    int row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
-   double _Complex done = 1.0;
-   double _Complex dzero = 0.0;
+   double _Complex dOne = 1.0;
+   double _Complex dZero = 0.0;
    int one = 1;
    int zero = 0;
    int na_rows, na_cols;
@@ -8244,18 +8337,19 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 135 "../src/elpa_generalized/cannon_forw_template.c"
+# 140 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
 
       return;
    }
+
    if (np_cols < np_rows != 0)
    {
 
 
-      return;
+       return;
    }
 
    ratio = np_cols/np_rows;
@@ -8281,8 +8375,9 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
       else {
          Buf_cols = na_cols + nblk - na_cols%nblk;
       }
-  }
-  if (na%nblk == 0) {
+   }
+
+   if (na%nblk == 0) {
       if (my_prow <= last_proc_row) {
          Buf_rows = na_rows + 1;
       }
@@ -8301,6 +8396,7 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
+
    intNumber = ceil((double _Complex)na/(double _Complex)(np_cols*nblk));
    Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
 
@@ -8317,44 +8413,54 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
+   int useGPU = 0;
+# 230 "../src/elpa_generalized/cannon_forw_template.c"
+   if(ratio != 1) {
 
 
 
-   if(ratio != 1)
       zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+
+
+
+   }
    Size_receive_A = 0;
 
 
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-           MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)1275072546),(int) where_to_send_A, (int) zero, Buf_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
-           MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_A_nowMPI);
-           Size_receive_A_now = (int) Size_receive_A_nowMPI;
-           Size_receive_A_now = Size_receive_A_now/na_rows;
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A , (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
+            MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_A_nowMPI);
+            Size_receive_A_now = (int) Size_receive_A_nowMPI;
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
-  }
+       }
+
          Size_receive_A = Size_receive_A + Size_receive_A_now;
 
 
-         intNumber = from_where_to_receive_A/np_rows;
+         intNumber = pcol_from_where_to_receive_A/np_rows;
 
          CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
-         if (where_to_send_A != my_pcol) {
+         if (pcol_where_to_send_A != my_pcol) {
             CopyFrom = Buf_A;
-  }
+       }
          else {
             CopyFrom = A;
-  }
+       }
+
          intNumber = ceil((double _Complex)Size_receive_A_now/(double _Complex)nblk);
          for(j = 0; j < intNumber; j++)
          {
@@ -8366,14 +8472,17 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
             CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
+
       else {
          if(my_prow > 0)
          {
             zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)1275072546), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A , (int) (na_cols*na_rows) , ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-     Size_receive_A = Size_receive_A/na_rows;
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
@@ -8456,8 +8565,9 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    Curr_pos_in_U_stored = Size_U_skewed;
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
 
@@ -8474,8 +8584,8 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275072546), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)1275072546), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -8524,31 +8634,38 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
             rows_in_block_A = rows_in_block_A + nblk;
-  }
+       }
          if (rows_in_block_A > na_rows) {
             rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
             cols_in_block = nblk;
-  }
+       }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
-  }
+       }
 
          rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
             rows_in_block_U = rows_in_block_U + nblk;
-  }
+       }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
          }
+
          if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
             if (j == 1) {
-               zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
-     }
+               zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
+          }
             else {
-               zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
-     }
+               zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
+          }
+
+
+
          }
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
@@ -8638,12 +8755,18 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
          if (j == 1) {
-            zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+            zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
   }
          else {
-            zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
+            zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
+
+
+
       }
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
@@ -8653,13 +8776,10 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
 
 
 
-   pztranc_(&na, &na, &done, M, &one, &one, a_desc, &dzero, M_T, &one, &one, a_desc);
 
 
-
-
-
-
+   pztranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+# 603 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -8712,9 +8832,9 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      if(from_where_to_receive_A < proc_col_min)
-         proc_col_min = from_where_to_receive_A;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      if(pcol_from_where_to_receive_A < proc_col_min)
+         proc_col_min = pcol_from_where_to_receive_A;
    }
 
    Size_receive_A = 0;
@@ -8722,15 +8842,15 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
@@ -8740,18 +8860,18 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
             cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
 
 
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((double _Complex)(((double _Complex)from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk;
+               rows_in_buffer_A_now = na_rows - ceil((double _Complex)(((double _Complex)pcol_from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
                rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = from_where_to_receive_A/np_rows;
+            intNumber = pcol_from_where_to_receive_A/np_rows;
             if (proc_col_min <= my_prow) {
                CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
      }
@@ -8803,18 +8923,18 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
       {
          if(my_prow > 0)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((double _Complex)(((double _Complex)from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk;
+               rows_in_buffer_A = na_rows - ceil((double _Complex)(((double _Complex)pcol_from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk;
             }
          }
          else
@@ -8844,8 +8964,8 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
 
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
@@ -8866,8 +8986,8 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275072546), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -8968,12 +9088,17 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
                else {
                   rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
+
+
+
                if ((j == 1)&&(ii == 0)) {
-                  zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+                  zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
         }
                else {
-                  zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+                  zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
+
+
 
                LDA_A_new = LDA_A_new - nblk;
 
@@ -9004,7 +9129,7 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-  MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI);
+       MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
@@ -9094,12 +9219,17 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
             else {
                rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
+
+
+
             if ((j == 1)&&(ii == 0)) {
-               zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+               zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
      }
             else {
-               zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+               zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
      }
+
+
 
             LDA_A_new = LDA_A_new - nblk;
 
@@ -9115,8 +9245,20 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
 
-   pztranc_(&na, &na, &done, Res, &one, &one, a_desc, &dzero, M, &one, &one, a_desc);
+
+
+
+   pztranc_(&na, &na, &dOne, Res, &one, &one, a_desc, &dZero, M, &one, &one, a_desc);
+
+
+
+
+
+
+
    pzlacpy_("U", &na, &na, M, &one, &one, a_desc, Res, &one, &one, a_desc);
+
+
 
 
    free(Buf_to_send_A);
@@ -9154,15 +9296,10 @@ void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_ro
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-
-
-
-
-
-
+# 1133 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_dc(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
-# 223 "../src/elpa_generalized/cannon.c" 2
+# 256 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_back_template.c" 1
 # 85 "../src/elpa_generalized/cannon_back_template.c"
 void cannons_triang_rectangular_dc(double _Complex* U, double _Complex* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, double _Complex *Res, MPI_Comm row_comm, MPI_Comm col_comm)
@@ -9601,11 +9738,11 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 
   cannons_triang_rectangular_dc(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
-# 224 "../src/elpa_generalized/cannon.c" 2
-# 242 "../src/elpa_generalized/cannon.c"
+# 257 "../src/elpa_generalized/cannon.c" 2
+# 275 "../src/elpa_generalized/cannon.c"
 void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_rowsCast, int local_colsCasr, int* a_desc,
                             double _Complex *Res, int ToStore, int row_comm, int col_comm);
-# 260 "../src/elpa_generalized/cannon.c"
+# 293 "../src/elpa_generalized/cannon.c"
 void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, double _Complex *Res, int row_comm, int col_comm);
 
@@ -9613,11 +9750,11 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 
 
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 267 "../src/elpa_generalized/cannon.c" 2
+# 300 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 86 "../src/elpa_generalized/cannon_forw_template.c"
+# 90 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 87 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -9637,7 +9774,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -9658,23 +9795,24 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 90 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, float _Complex *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 102 "../src/elpa_generalized/cannon_forw_template.c"
-   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, where_to_send_A, from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
-   float _Complex *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
+# 106 "../src/elpa_generalized/cannon_forw_template.c"
+   int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
+
+   float _Complex *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
    int row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
-   float _Complex done = 1.0;
-   float _Complex dzero = 0.0;
+   float _Complex dOne = 1.0;
+   float _Complex dZero = 0.0;
    int one = 1;
    int zero = 0;
    int na_rows, na_cols;
@@ -9689,18 +9827,19 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 135 "../src/elpa_generalized/cannon_forw_template.c"
+# 140 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
 
       return;
    }
+
    if (np_cols < np_rows != 0)
    {
 
 
-      return;
+       return;
    }
 
    ratio = np_cols/np_rows;
@@ -9726,8 +9865,9 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
       else {
          Buf_cols = na_cols + nblk - na_cols%nblk;
       }
-  }
-  if (na%nblk == 0) {
+   }
+
+   if (na%nblk == 0) {
       if (my_prow <= last_proc_row) {
          Buf_rows = na_rows + 1;
       }
@@ -9746,6 +9886,7 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
+
    intNumber = ceil((float _Complex)na/(float _Complex)(np_cols*nblk));
    Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
 
@@ -9762,44 +9903,54 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
+   int useGPU = 0;
+# 230 "../src/elpa_generalized/cannon_forw_template.c"
+   if(ratio != 1) {
 
 
 
-   if(ratio != 1)
       clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+
+
+
+   }
    Size_receive_A = 0;
 
 
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-           MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)1275070494),(int) where_to_send_A, (int) zero, Buf_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
-           MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_A_nowMPI);
-           Size_receive_A_now = (int) Size_receive_A_nowMPI;
-           Size_receive_A_now = Size_receive_A_now/na_rows;
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A , (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
+            MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_A_nowMPI);
+            Size_receive_A_now = (int) Size_receive_A_nowMPI;
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
-  }
+       }
+
          Size_receive_A = Size_receive_A + Size_receive_A_now;
 
 
-         intNumber = from_where_to_receive_A/np_rows;
+         intNumber = pcol_from_where_to_receive_A/np_rows;
 
          CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
-         if (where_to_send_A != my_pcol) {
+         if (pcol_where_to_send_A != my_pcol) {
             CopyFrom = Buf_A;
-  }
+       }
          else {
             CopyFrom = A;
-  }
+       }
+
          intNumber = ceil((float _Complex)Size_receive_A_now/(float _Complex)nblk);
          for(j = 0; j < intNumber; j++)
          {
@@ -9811,14 +9962,17 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
             CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
+
       else {
          if(my_prow > 0)
          {
             clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows), ((MPI_Datatype)1275070494), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A , (int) (na_cols*na_rows) , ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero,
+                         row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-     Size_receive_A = Size_receive_A/na_rows;
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
@@ -9901,8 +10055,9 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    Curr_pos_in_U_stored = Size_U_skewed;
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
 
@@ -9919,8 +10074,8 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275070494), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)1275070494), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -9969,31 +10124,38 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
             rows_in_block_A = rows_in_block_A + nblk;
-  }
+       }
          if (rows_in_block_A > na_rows) {
             rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
             cols_in_block = nblk;
-  }
+       }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
-  }
+       }
 
          rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
             rows_in_block_U = rows_in_block_U + nblk;
-  }
+       }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
          }
+
          if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
             if (j == 1) {
-               cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
-     }
+               cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
+          }
             else {
-               cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
-     }
+               cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
+          }
+
+
+
          }
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
@@ -10083,12 +10245,18 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
+
+
+
          if (j == 1) {
-            cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+            cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
   }
          else {
-            cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &done, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &done, Res_ptr, &na_rows);
+            cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
+
+
+
       }
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
@@ -10098,13 +10266,10 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
 
 
 
-   pctranc_(&na, &na, &done, M, &one, &one, a_desc, &dzero, M_T, &one, &one, a_desc);
 
 
-
-
-
-
+   pctranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+# 603 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -10157,9 +10322,9 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      if(from_where_to_receive_A < proc_col_min)
-         proc_col_min = from_where_to_receive_A;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      if(pcol_from_where_to_receive_A < proc_col_min)
+         proc_col_min = pcol_from_where_to_receive_A;
    }
 
    Size_receive_A = 0;
@@ -10167,15 +10332,15 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
-      from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
+      pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
 
 
       if(ratio != 1)
       {
-         if(where_to_send_A != my_pcol)
+         if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
@@ -10185,18 +10350,18 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
             cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
 
 
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((float _Complex)(((float _Complex)from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk;
+               rows_in_buffer_A_now = na_rows - ceil((float _Complex)(((float _Complex)pcol_from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
                rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = from_where_to_receive_A/np_rows;
+            intNumber = pcol_from_where_to_receive_A/np_rows;
             if (proc_col_min <= my_prow) {
                CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
      }
@@ -10248,18 +10413,18 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
       {
          if(my_prow > 0)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) from_where_to_receive_A, (int) zero, row_comm, &status);
+            MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, Buf_to_receive_A, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(from_where_to_receive_A <= my_prow)
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((float _Complex)(((float _Complex)from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk;
+               rows_in_buffer_A = na_rows - ceil((float _Complex)(((float _Complex)pcol_from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk;
             }
          }
          else
@@ -10289,8 +10454,8 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
 
 
 
-   where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
-   from_where_to_receive_A = (my_pcol + 1)%np_cols;
+   pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
+   pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
@@ -10311,8 +10476,8 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
 
 
       Size_send_A = Size_receive_A;
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) where_to_send_A, (int) zero, row_comm, &request_A_Send);
-      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275070494), (int) from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
+      MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
 
 
       Size_send_U = Size_receive_U;
@@ -10413,12 +10578,17 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
                else {
                   rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
+
+
+
                if ((j == 1)&&(ii == 0)) {
-                  cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+                  cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
         }
                else {
-                  cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+                  cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
+
+
 
                LDA_A_new = LDA_A_new - nblk;
 
@@ -10449,7 +10619,7 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-  MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI);
+       MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
@@ -10539,12 +10709,17 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
             else {
                rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
+
+
+
             if ((j == 1)&&(ii == 0)) {
-               cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dzero, Res_ptr, &na_rows);
+               cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
      }
             else {
-               cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &done, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &done, Res_ptr, &na_rows);
+               cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
      }
+
+
 
             LDA_A_new = LDA_A_new - nblk;
 
@@ -10560,8 +10735,20 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
 
-   pctranc_(&na, &na, &done, Res, &one, &one, a_desc, &dzero, M, &one, &one, a_desc);
+
+
+
+   pctranc_(&na, &na, &dOne, Res, &one, &one, a_desc, &dZero, M, &one, &one, a_desc);
+
+
+
+
+
+
+
    pclacpy_("U", &na, &na, M, &one, &one, a_desc, Res, &one, &one, a_desc);
+
+
 
 
    free(Buf_to_send_A);
@@ -10599,15 +10786,10 @@ void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rows
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-
-
-
-
-
-
+# 1133 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_fc(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
-# 268 "../src/elpa_generalized/cannon.c" 2
+# 301 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_back_template.c" 1
 # 85 "../src/elpa_generalized/cannon_back_template.c"
 void cannons_triang_rectangular_fc(float _Complex* U, float _Complex* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, float _Complex *Res, MPI_Comm row_comm, MPI_Comm col_comm)
@@ -11046,10 +11228,10 @@ void cannons_triang_rectangular_c_fc(float _Complex* U, float _Complex* B, int l
 
   cannons_triang_rectangular_fc(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
-# 269 "../src/elpa_generalized/cannon.c" 2
-# 289 "../src/elpa_generalized/cannon.c"
+# 302 "../src/elpa_generalized/cannon.c" 2
+# 322 "../src/elpa_generalized/cannon.c"
 void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rowsCast, int local_colsCast, int* a_desc,
                          float _Complex *Res, int ToStore, int row_comm, int col_comm);
-# 307 "../src/elpa_generalized/cannon.c"
+# 340 "../src/elpa_generalized/cannon.c"
 void cannons_triang_rectangular_c_fc(float _Complex* U, float _Complex* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, float _Complex *Res, int row_comm, int col_comm);

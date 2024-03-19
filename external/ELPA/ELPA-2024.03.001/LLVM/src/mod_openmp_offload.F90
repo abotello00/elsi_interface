@@ -53,13 +53,13 @@
 !    the original distribution, the GNU Lesser General Public License.
 !
 ! Author: Andreas Marek, MPCDF
-! This file is the generated version. Do NOT edit
 
 
 
 module openmp_offload_functions
   use, intrinsic :: iso_c_binding
   use precision
+  use openmp_offload_solver_functions
   implicit none
 
   public
@@ -121,6 +121,42 @@ module openmp_offload_functions
   integer(kind=ik) :: mkl_openmp_offloadPointerModeDevice
   integer(kind=ik) :: mkl_openmp_offloadPointerModeHost
 
+
+!  interface
+!    function openmp_offload_device_get_attributes_c(value, attribute) result(istat) &
+!             bind(C, name="openmpOffloadDeviceGetAttributeFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!
+!      integer(kind=C_INT), value  :: attribute
+!      integer(kind=C_INT)         :: value
+!      integer(kind=C_INT)         :: istat
+!    end function
+!  end interface
+
+
+!  interface
+!    function mkl_openmp_offload_get_version_c(mkl_openmp_offloadHandle, version) result(istat) &
+!             bind(C, name="mkl_openmp_offloadGetVersionFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!
+!      integer(kind=C_intptr_T), value  :: mkl_openmp_offloadHandle
+!      integer(kind=C_INT)              :: version
+!      integer(kind=C_INT)              :: istat
+!    end function
+!  end interface
+
+
+!  interface
+!    function openmp_offload_get_last_error_c() result(istat) &
+!             bind(C, name="openmpOffloadGetLastErrorFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_int)              :: istat
+!    end function
+!  end interface
+
 !  ! streams
 !
 !  interface
@@ -132,7 +168,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)      :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_stream_destroy_c(openmp_offloadStream) result(istat) &
 !             bind(C, name="openmp_offloadStreamDestroyFromC")
@@ -142,7 +178,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)             :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_stream_synchronize_explicit_c(openmp_offloadStream) result(istat) &
 !             bind(C, name="openmpOffloadStreamSynchronizeExplicitFromC")
@@ -153,7 +189,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)              :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_stream_synchronize_implicit_c() result(istat) &
 !             bind(C, name="openmpOffloadStreamSynchronizeImplicitFromC")
@@ -163,7 +199,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)              :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function mkl_openmp_offload_set_stream_c(openmp_offloadHandle, openmp_offloadStream) result(istat) &
 !             bind(C, name="mklOpenmpOffloadSetStreamFromC")
@@ -176,19 +212,6 @@ module openmp_offload_functions
 !    end function
 !  end interface
 
-!  interface
-!    function openmp_offload_solver_set_stream_c(openmp_offload_solverHandle, openmp_offloadStream) result(istat) &
-!             bind(C, name="openmpOffloadsolverSetStreamFromC")
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!
-!      integer(kind=C_intptr_T), value  :: openmp_offload_solverHandle
-!      integer(kind=C_intptr_T), value  :: openmp_offloadStream
-!      integer(kind=C_INT)              :: istat
-!    end function
-!  end interface
-
-  ! functions to set and query the GPU devices
   interface
     function mkl_openmp_offload_create_c(openmp_offloadHandle) result(istat) &
              bind(C, name="mklOpenmpOffloadCreateFromC")
@@ -209,26 +232,7 @@ module openmp_offload_functions
     end function
   end interface
 
-  interface
-    function openmp_offload_solver_create_c(openmp_offload_solverHandle) result(istat) &
-             bind(C, name="openmpOffloadsolverCreateFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_T) :: openmp_offload_solverHandle
-      integer(kind=C_INT)      :: istat
-    end function
-  end interface
-
-  interface
-    function openmp_offload_solver_destroy_c(openmp_offload_solverHandle) result(istat) &
-             bind(C, name="openmpOffloadsolverDestroyFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_T) :: openmp_offload_solverHandle
-      integer(kind=C_INT)      :: istat
-    end function
-  end interface
-
+  ! functions to set and query the GPU devices
   interface
     function openmp_offload_setdevice_c(n) result(istat) &
              bind(C, name="openmpOffloadSetDeviceFromC")
@@ -245,8 +249,8 @@ module openmp_offload_functions
              bind(C, name="openmpOffloadGetDeviceCountFromC")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(kind=C_INT), intent(out) :: n
-      integer(kind=C_INT)              :: istat
+      integer(kind=C_INT), intent(out)         :: n
+      integer(kind=C_INT)                      :: istat
     end function
   end interface
 
@@ -296,7 +300,7 @@ module openmp_offload_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_hostRegisterPortable_c() result(flag) &
 !             bind(C, name="openmpOffloadHostRegisterPortableFromC")
@@ -305,7 +309,7 @@ module openmp_offload_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_hostRegisterMapped_c() result(flag) &
 !             bind(C, name="openmpOffloadHostRegisterMappedFromC")
@@ -314,7 +318,7 @@ module openmp_offload_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
   interface
     function openmp_offload_memcpy_intptr_c(dst, src, size, dir) result(istat) &
              bind(C, name="openmpOffloadMemcpyFromC")
@@ -380,7 +384,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_memcpy_async_cptr_c(dst, src, size, dir, openmp_offloadStream) result(istat) &
 !             bind(C, name="openmpOffloadMemcpyAsyncFromC")
@@ -394,7 +398,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_memcpy_async_mixed_to_device_c(dst, src, size, dir, openmp_offloadStream) result(istat) &
 !             bind(C, name="openmpOffloadMemcpyAsyncFromC")
@@ -408,7 +412,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_memcpy_async_mixed_to_host_c(dst, src, size, dir, openmp_offloadStream) result(istat) &
 !             bind(C, name="openmpOffloadMemcpyAsyncFromC")
@@ -422,7 +426,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_memcpy2d_intptr_c(dst, dpitch, src, spitch, width, height , dir) result(istat) &
 !             bind(C, name="openmpOffloadMemcpy2dFromC")
@@ -438,7 +442,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_memcpy2d_cptr_c(dst, dpitch, src, spitch, width, height , dir) result(istat) &
 !             bind(C, name="openmpOffloadMemcpy2dFromC")
@@ -454,7 +458,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_memcpy2d_async_intptr_c(dst, dpitch, src, spitch, width, height, dir, openmp_offloadStream) result(istat) &
 !             bind(C, name="openmpOffloadMemcpy2dAsyncFromC")
@@ -471,7 +475,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_memcpy2d_async_cptr_c(dst, dpitch, src, spitch, width, height, dir, openmp_offloadStream) result(istat) &
 !             bind(C, name="openmpOffloadMemcpy2dAsyncFromC")
@@ -488,7 +492,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                            :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_host_register_c(a, size, flag) result(istat) &
 !             bind(C, name="openmpOffloadHostRegisterFromC")
@@ -500,7 +504,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
 !  interface
 !    function openmp_offload_host_unregister_c(a) result(istat) &
 !             bind(C, name="openmpOffloadHostUnregisterFromC")
@@ -510,7 +514,7 @@ module openmp_offload_functions
 !      integer(kind=C_INT)                          :: istat
 !    end function
 !  end interface
-!
+
   interface openmp_offload_free
     module procedure openmp_offload_free_intptr
     module procedure openmp_offload_free_cptr
@@ -567,7 +571,6 @@ module openmp_offload_functions
     end function
   end interface
 
-
   interface
     function openmp_offload_malloc_cptr_c(a, width_height) result(istat) &
              bind(C, name="openmpOffloadMallocFromC")
@@ -580,8 +583,22 @@ module openmp_offload_functions
     end function
   end interface
 
+!  interface openmp_offload_free_host
+!    module procedure openmp_offload_free_host_intptr
+!    module procedure openmp_offload_free_host_cptr
+!  end interface
 !  interface
-!    function openmp_offload_free_host_c(a) result(istat) &
+!    function openmp_offload_free_host_intptr_c(a) result(istat) &
+!             bind(C, name="openmpOffloadFreeHostFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t), value  :: a
+!      integer(kind=C_INT)              :: istat
+!    end function
+!  end interface
+
+!  interface
+!    function openmp_offload_free_host_cptr_c(a) result(istat) &
 !             bind(C, name="openmpOffloadFreeHostFromC")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -589,14 +606,29 @@ module openmp_offload_functions
 !      integer(kind=C_INT)              :: istat
 !    end function
 !  end interface
-!
+
+!  interface openmp_offload_malloc_host
+!    module procedure openmp_offload_malloc_host_intptr
+!    module procedure openmp_offload_malloc_host_cptr
+!  end interface
 !  interface
-!    function openmp_offload_malloc_host_c(a, width_height) result(istat) &
+!    function openmp_offload_malloc_host_intptr_c(a, width_height) result(istat) &
+!             bind(C, name="openmpOffloadMallocHostFromC")
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t)                    :: a
+!      integer(kind=c_intptr_t), intent(in), value :: width_height
+!      integer(kind=C_INT)                         :: istat
+!    end function
+!  end interface
+
+!  interface
+!    function openmp_offload_malloc_host_cptr_c(a, width_height) result(istat) &
 !             bind(C, name="openmpOffloadMallocHostFromC")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      type(c_ptr)                    :: a
-!      integer(kind=c_intptr_t), intent(in), value   :: width_height
+!      integer(kind=c_intptr_t), intent(in), value :: width_height
 !      integer(kind=C_INT)                         :: istat
 !    end function
 !  end interface
@@ -625,32 +657,6 @@ module openmp_offload_functions
 !      integer(kind=c_intptr_t), value            :: openmp_offloadStream
 !    end function
 !  end interface
-
-  interface
-    subroutine openmp_offload_solver_Dtrtri_c(openmp_offload_solverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverDtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine openmp_offload_solver_Dpotrf_c(openmp_offload_solverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverDpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
-    end subroutine
-  end interface
 
   interface mkl_openmp_offload_Dgemm
     module procedure mkl_openmp_offload_Dgemm_intptr
@@ -702,6 +708,7 @@ module openmp_offload_functions
     end subroutine
   end interface
 
+
   interface mkl_openmp_offload_Dcopy
     module procedure mkl_openmp_offload_Dcopy_intptr
     module procedure mkl_openmp_offload_Dcopy_cptr
@@ -730,6 +737,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Dtrmm
     module procedure mkl_openmp_offload_Dtrmm_intptr
@@ -763,6 +771,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Dtrsm
     module procedure mkl_openmp_offload_Dtrsm_intptr
@@ -808,32 +817,6 @@ module openmp_offload_functions
       real(kind=C_DOUBLE) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine openmp_offload_solver_Strtri_c(openmp_offload_solverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverStrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine openmp_offload_solver_Spotrf_c(openmp_offload_solverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverSpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
     end subroutine
   end interface
 
@@ -887,6 +870,7 @@ module openmp_offload_functions
     end subroutine
   end interface
 
+
   interface mkl_openmp_offload_Scopy
     module procedure mkl_openmp_offload_Scopy_intptr
     module procedure mkl_openmp_offload_Scopy_cptr
@@ -915,6 +899,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Strmm
     module procedure mkl_openmp_offload_Strmm_intptr
@@ -948,6 +933,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Strsm
     module procedure mkl_openmp_offload_Strsm_intptr
@@ -993,32 +979,6 @@ module openmp_offload_functions
       real(kind=C_FLOAT) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine openmp_offload_solver_Ztrtri_c(openmp_offload_solverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverZtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine openmp_offload_solver_Zpotrf_c(openmp_offload_solverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverZpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
     end subroutine
   end interface
 
@@ -1072,6 +1032,7 @@ module openmp_offload_functions
     end subroutine
   end interface
 
+
   interface mkl_openmp_offload_Zcopy
     module procedure mkl_openmp_offload_Zcopy_intptr
     module procedure mkl_openmp_offload_Zcopy_cptr
@@ -1100,6 +1061,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Ztrmm
     module procedure mkl_openmp_offload_Ztrmm_intptr
@@ -1133,6 +1095,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Ztrsm
     module procedure mkl_openmp_offload_Ztrsm_intptr
@@ -1178,32 +1141,6 @@ module openmp_offload_functions
       complex(kind=C_DOUBLE_COMPLEX) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine openmp_offload_solver_Ctrtri_c(openmp_offload_solverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverCtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine openmp_offload_solver_Cpotrf_c(openmp_offload_solverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="openmpOffloadsolverCpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: openmp_offload_solverHandle
     end subroutine
   end interface
 
@@ -1257,6 +1194,7 @@ module openmp_offload_functions
     end subroutine
   end interface
 
+
   interface mkl_openmp_offload_Ccopy
     module procedure mkl_openmp_offload_Ccopy_intptr
     module procedure mkl_openmp_offload_Ccopy_cptr
@@ -1285,6 +1223,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Ctrmm
     module procedure mkl_openmp_offload_Ctrmm_intptr
@@ -1318,6 +1257,7 @@ module openmp_offload_functions
       integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
     end subroutine
   end interface
+
 
   interface mkl_openmp_offload_Ctrsm
     module procedure mkl_openmp_offload_Ctrsm_intptr
@@ -1374,7 +1314,7 @@ module openmp_offload_functions
 !      character(kind=C_CHAR,len=1) :: name(*)
 !    end subroutine
 !  end interface
-!
+
 !  interface nvtxRangePop
 !    subroutine nvtxRangePop() bind(C, name='nvtxRangePop')
 !    end subroutine
@@ -1389,7 +1329,7 @@ module openmp_offload_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    function mkl_openmp_offload_pointerModeHost_c() result(flag) &
 !               bind(C, name="mkl_openmp_offloadPointerModeHostFromC")
@@ -1398,7 +1338,7 @@ module openmp_offload_functions
 !      integer(kind=c_int) :: flag
 !    end function
 !  end interface
-!
+
 !  interface
 !    subroutine mkl_openmp_offload_getPointerMode_c(mkl_openmp_offloadHandle, mode) &
 !               bind(C, name="mkl_openmp_offloadGetPointerModeFromC")
@@ -1408,7 +1348,7 @@ module openmp_offload_functions
 !      integer(kind=c_int)               :: mode
 !    end subroutine
 !  end interface
-!
+
 !  interface
 !    subroutine mkl_openmp_offload_setPointerMode_c(mkl_openmp_offloadHandle, mode) &
 !               bind(C, name="mkl_openmp_offloadSetPointerModeFromC")
@@ -1419,32 +1359,34 @@ module openmp_offload_functions
 !    end subroutine
 !  end interface
 
+
   interface mkl_openmp_offload_Ddot
     module procedure mkl_openmp_offload_Ddot_intptr
     module procedure mkl_openmp_offload_Ddot_cptr
   end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Ddot_intptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Ddot_intptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadDdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Ddot_cptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Ddot_cptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadDdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Dscal
     module procedure mkl_openmp_offload_Dscal_intptr
@@ -1474,6 +1416,7 @@ module openmp_offload_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Daxpy
     module procedure mkl_openmp_offload_Daxpy_intptr
@@ -1510,26 +1453,27 @@ module openmp_offload_functions
   end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Sdot_intptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Sdot_intptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadSdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Sdot_cptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Sdot_cptr_c(mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadSdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Sscal
     module procedure mkl_openmp_offload_Sscal_intptr
@@ -1559,6 +1503,7 @@ module openmp_offload_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Saxpy
     module procedure mkl_openmp_offload_Saxpy_intptr
@@ -1595,28 +1540,29 @@ module openmp_offload_functions
   end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Zdot_intptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Zdot_intptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadZdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Zdot_cptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Zdot_cptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadZdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Zscal
     module procedure mkl_openmp_offload_Zscal_intptr
@@ -1646,6 +1592,7 @@ module openmp_offload_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Zaxpy
     module procedure mkl_openmp_offload_Zaxpy_intptr
@@ -1682,28 +1629,29 @@ module openmp_offload_functions
   end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Cdot_intptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Cdot_intptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadCdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      integer(kind=C_intptr_T), value         :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      integer(kind=C_intptr_T), value         :: x, y, result
 !    end subroutine
 !  end interface
 
 !  interface
-!    subroutine mkl_openmp_offload_Cdot_cptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z) &
+!    subroutine mkl_openmp_offload_Cdot_cptr_c(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result) &
 !               bind(C, name="mkl_openmp_offloadCdot_elpa_wrapper")
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      character(1,C_CHAR),value               :: conj
 !      integer(kind=C_intptr_T), value         :: mkl_openmp_offloadHandle
-!      integer(kind=C_INT),value               :: length, incx, incy
-!      type(c_ptr), value                      :: x, y, z
+!      integer(kind=C_INT), value              :: length, incx, incy
+!      type(c_ptr), value                      :: x, y, result
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Cscal
     module procedure mkl_openmp_offload_Cscal_intptr
@@ -1733,6 +1681,7 @@ module openmp_offload_functions
 !      type(c_ptr), value                      :: x
 !    end subroutine
 !  end interface
+
 
   interface mkl_openmp_offload_Caxpy
     module procedure mkl_openmp_offload_Caxpy_intptr
@@ -1765,6 +1714,42 @@ module openmp_offload_functions
 
   contains
 
+!    function openmp_offload_device_get_attributes(value, attribute) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=C_INT)                       :: value, attribute
+!      logical                                   :: success
+!#ifdef WITH_OPENMP_OFFLOAD_GPU_VERSION
+!      success = openmp_offload_device_get_attributes_c(value, attribute) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function mkl_openmp_offload_get_version(mkl_openmp_offloadHandle, version) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=C_intptr_t)                  :: mkl_openmp_offloadHandle
+!      integer(kind=C_INT)                       :: version
+!      logical                                   :: success
+!#ifdef WITH_OPENMP_OFFLOAD_GPU_VERSION
+!      success = mkl_openmp_offload_get_version_c(mkl_openmp_offloadHandle, version) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function openmp_offload_get_last_error() result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      logical                                   :: success
+!#ifdef WITH_OPENMP_OFFLOAD_GPU_VERSION
+!      success = openmp_offload_get_last_error_c() /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
 !    function openmp_offload_stream_create(openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1776,7 +1761,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_stream_destroy(openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1788,7 +1773,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function mkl_openmp_offload_set_stream(mkl_openmp_offloadHandle, openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1801,22 +1786,8 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
-!    function openmp_offload_solver_set_stream(openmp_offload_solverHandle, openmpOffloadStream) result(success)
-!      use, intrinsic :: iso_c_binding
-!      implicit none
-!      integer(kind=C_intptr_t)                  :: openmp_offload_solverHandle
-!      integer(kind=C_intptr_t)                  :: openmpOffloadStream
-!      logical                                   :: success
-!
-!#ifdef WITH_OPENMP_OFFLOAD_OPENMP_OFFLOAD_SOLVER
-!      success = openmp_offload_solver_set_stream_c(openmp_offload_solverHandle, openmpOffloadStream) /= 0
-!#else
-!      success = .true.
-!#endif
-!    end function
-!
-!
+
+
 !    function openmp_offload_stream_synchronize(openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -1836,7 +1807,7 @@ module openmp_offload_functions
 !#endif
 !      endif
 !    end function
-!
+
 !#ifdef WITH_NVTX
 !    ! this wrapper is needed for the string conversion
 !    subroutine nvtxRangePush(range_name)
@@ -1871,22 +1842,6 @@ module openmp_offload_functions
       success = .true.
     end function
 
-    function openmp_offload_solver_create(openmp_offload_solverHandle) result(success)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_t)                  :: openmp_offload_solverHandle
-      logical                                   :: success
-      success = .true.
-    end function
-
-    function openmp_offload_solver_destroy(openmp_offload_solverHandle) result(success)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_t)                  :: openmp_offload_solverHandle
-      logical                                   :: success
-      success = .true.
-    end function
-
     function openmp_offload_setdevice(n) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -1915,7 +1870,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
     function openmp_offload_malloc_intptr(a, width_height) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -1950,26 +1905,51 @@ module openmp_offload_functions
       success = .true.
     end function
 
-!    function openmp_offload_malloc_host(a, width_height) result(success)
+!    function openmp_offload_malloc_host_intptr(a, width_height) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t)                  :: a
+!      integer(kind=c_intptr_t), intent(in)      :: width_height
+!      logical                                   :: success
+!#ifdef WITH_OPENMP_OFFLOAD_GPU_VERSION
+!      success = openmp_offload_malloc_host_intptr_c(a, width_height) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function openmp_offload_malloc_host_cptr(a, width_height) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      type(c_ptr)                               :: a
 !      integer(kind=c_intptr_t), intent(in)      :: width_height
 !      logical                                   :: success
 !#ifdef WITH_OPENMP_OFFLOAD_GPU_VERSION
-!      success = openmp_offload_malloc_host_c(a, width_height) /= 0
+!      success = openmp_offload_malloc_host_cptr_c(a, width_height) /= 0
 !#else
 !      success = .true.
 !#endif
 !    end function
-!
-!    function openmp_offload_free_host(a) result(success)
+
+!    function openmp_offload_free_host_intptr(a) result(success)
+!      use, intrinsic :: iso_c_binding
+!      implicit none
+!      integer(kind=c_intptr_t) :: a
+!      logical                  :: success
+!#ifdef WITH_OPENMP_OFFLOAD_GPU_VERSION
+!      success = openmp_offload_free_host_intptr_c(a) /= 0
+!#else
+!      success = .true.
+!#endif
+!    end function
+
+!    function openmp_offload_free_host_cptr(a) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
 !      type(c_ptr)                   :: a
 !      logical                  :: success
 !#ifdef WITH_OPENMP_OFFLOAD_GPU_VERSION
-!      success = openmp_offload_free_host_c(a) /= 0
+!      success = openmp_offload_free_host_cptr_c(a) /= 0
 !#else
 !      success = .true.
 !#endif
@@ -1980,7 +1960,7 @@ module openmp_offload_functions
       implicit none
       integer(kind=c_intptr_t)                :: a
       integer(kind=ik)                        :: val
-      integer(kind=c_intptr_t), intent(in)      :: size
+      integer(kind=c_intptr_t), intent(in)    :: size
       integer(kind=C_INT)                     :: istat
       logical :: success
       success = .true.
@@ -2037,7 +2017,7 @@ module openmp_offload_functions
 !      flag = 0
 !#endif
 !    end function
-!
+
 !    function openmp_offload_hostRegisterPortable() result(flag)
 !      use, intrinsic :: iso_c_binding
 !      use precision
@@ -2049,7 +2029,7 @@ module openmp_offload_functions
 !      flag = 0
 !#endif
 !    end function
-!
+
 !    function openmp_offload_hostRegisterMapped() result(flag)
 !      use, intrinsic :: iso_c_binding
 !      use precision
@@ -2121,7 +2101,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_memcpy_async_cptr(dst, src, size, dir, openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2137,7 +2117,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_memcpy_async_mixed_to_device(dst, src, size, dir, openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2153,7 +2133,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_memcpy_async_mixed_to_host(dst, src, size, dir, openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2169,7 +2149,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_memcpy2d_intptr(dst, dpitch, src, spitch, width, height , dir) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2187,7 +2167,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_memcpy2d_cptr(dst, dpitch, src, spitch, width, height , dir) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2205,7 +2185,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_memcpy2d_async_intptr(dst, dpitch, src, spitch, width, height, dir, openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2224,7 +2204,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_memcpy2d_async_cptr(dst, dpitch, src, spitch, width, height, dir, openmpOffloadStream) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2243,7 +2223,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_host_register(a, size, flag) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2257,7 +2237,7 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-!
+
 !    function openmp_offload_host_unregister(a) result(success)
 !      use, intrinsic :: iso_c_binding
 !      implicit none
@@ -2269,26 +2249,6 @@ module openmp_offload_functions
 !      success = .true.
 !#endif
 !    end function
-
-    subroutine openmp_offload_solver_Dtrtri(uplo, diag, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
-    end subroutine
-
-    subroutine openmp_offload_solver_Dpotrf(uplo, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
-    end subroutine
 
     subroutine mkl_openmp_offload_Dgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, mkl_openmp_offloadHandle)
       use, intrinsic :: iso_c_binding
@@ -2396,26 +2356,6 @@ module openmp_offload_functions
       real(kind=C_DOUBLE) ,value               :: alpha,beta
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: mkl_openmp_offloadHandle
-    end subroutine
-
-    subroutine openmp_offload_solver_Strtri(uplo, diag, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
-    end subroutine
-
-    subroutine openmp_offload_solver_Spotrf(uplo, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
     end subroutine
 
     subroutine mkl_openmp_offload_Sgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, mkl_openmp_offloadHandle)
@@ -2526,26 +2466,6 @@ module openmp_offload_functions
       integer(kind=C_intptr_T)        :: mkl_openmp_offloadHandle
     end subroutine
 
-    subroutine openmp_offload_solver_Ztrtri(uplo, diag, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
-    end subroutine
-
-    subroutine openmp_offload_solver_Zpotrf(uplo, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
-    end subroutine
-
     subroutine mkl_openmp_offload_Zgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, mkl_openmp_offloadHandle)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -2652,26 +2572,6 @@ module openmp_offload_functions
       complex(kind=C_DOUBLE_COMPLEX) ,value               :: alpha,beta
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: mkl_openmp_offloadHandle
-    end subroutine
-
-    subroutine openmp_offload_solver_Ctrtri(uplo, diag, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
-    end subroutine
-
-    subroutine openmp_offload_solver_Cpotrf(uplo, n, a, lda, info, openmp_offload_solverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: openmp_offload_solverHandle
     end subroutine
 
     subroutine mkl_openmp_offload_Cgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, mkl_openmp_offloadHandle)
@@ -2814,22 +2714,21 @@ module openmp_offload_functions
 
     end subroutine
 
-
-    subroutine mkl_openmp_offload_Ddot_intptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Ddot_intptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine mkl_openmp_offload_Ddot_cptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Ddot_cptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2873,22 +2772,21 @@ module openmp_offload_functions
 
     end subroutine
 
-
-    subroutine mkl_openmp_offload_Sdot_intptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Sdot_intptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine mkl_openmp_offload_Sdot_cptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Sdot_cptr(mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2932,24 +2830,23 @@ module openmp_offload_functions
 
     end subroutine
 
-
-    subroutine mkl_openmp_offload_Zdot_intptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Zdot_intptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine mkl_openmp_offload_Zdot_cptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Zdot_cptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 
@@ -2993,24 +2890,23 @@ module openmp_offload_functions
 
     end subroutine
 
-
-    subroutine mkl_openmp_offload_Cdot_intptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Cdot_intptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      integer(kind=c_intptr_t) :: x, y, z
+      integer(kind=c_intptr_t) :: x, y, result
 
     end subroutine
 
-    subroutine mkl_openmp_offload_Cdot_cptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, z)
+    subroutine mkl_openmp_offload_Cdot_cptr(conj, mkl_openmp_offloadHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
        character(1,c_char), value   :: conj
       integer(kind=c_intptr_t) :: mkl_openmp_offloadHandle
       integer(kind=c_int)      :: length, incx, incy
-      type(c_ptr)              :: x, y, z
+      type(c_ptr)              :: x, y, result
 
     end subroutine
 

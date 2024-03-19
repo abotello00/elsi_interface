@@ -17,10 +17,10 @@
 /* #undef BUILD_SXAURORA */
 
 /* "Current ELPA API version" */
-#define CURRENT_API_VERSION 20231705
+#define CURRENT_API_VERSION 20241103
 
 /* "Current ELPA autotune version" */
-#define CURRENT_AUTOTUNE_VERSION 20232311
+#define CURRENT_AUTOTUNE_VERSION 20241103
 
 /* "disable use AMD GPU in C-headers" */
 #define CURRENT_WITH_AMD_GPU_VERSION 0
@@ -41,7 +41,7 @@
 #define EARLIEST_AUTOTUNE_VERSION 20171201
 
 /* "Time of build" */
-#define ELPA_BUILDTIME 1706027196
+#define ELPA_BUILDTIME 1710784969
 
 /* enable autotuning functionality */
 #define ENABLE_AUTOTUNING 1
@@ -179,6 +179,9 @@
 /* Redirect stdout and stderr of test programs per MPI tasks to a file */
 /* #undef HAVE_REDIRECT */
 
+/* use rocblas API v3 */
+/* #undef HAVE_ROCBLAS_API_V3 */
+
 /* Define to 1 to support Secure Hash Algorithm Extension */
 /* #undef HAVE_SHA */
 
@@ -285,7 +288,7 @@
 #define PACKAGE_NAME "elpa"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "elpa 2023.11.001"
+#define PACKAGE_STRING "elpa 2024.03.001.rc1"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "elpa"
@@ -294,7 +297,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2023.11.001"
+#define PACKAGE_VERSION "2024.03.001.rc1"
 
 /* In some kernels pack real to complex */
 #define PACK_REAL_TO_COMPLEX 1
@@ -327,7 +330,7 @@
 #define USE_FORTRAN2008 1
 
 /* Version number of package */
-#define VERSION "2023.11.001"
+#define VERSION "2024.03.001.rc1"
 
 /* build also single-precision for complex calculation */
 #define WANT_SINGLE_PRECISION_COMPLEX 1
@@ -340,6 +343,12 @@
 
 /* enable AMD GPU support */
 /* #undef WITH_AMD_GPU_VERSION */
+
+/* enable AMD hipsolver */
+/* #undef WITH_AMD_HIPSOLVER_API */
+
+/* enable usage of AMD RCCL */
+/* #undef WITH_AMD_RCCL */
 
 /* enable AMD rocsolver */
 /* #undef WITH_AMD_ROCSOLVER */

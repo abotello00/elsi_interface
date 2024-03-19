@@ -95,7 +95,7 @@ module elpa_api
 
   integer, private, parameter :: earliest_api_version = 20170403 !< Definition of the earliest API version supported
                                                                              !< with the current release
-  integer, private, parameter :: current_api_version  = 20231705  !< Definition of the current API version
+  integer, private, parameter :: current_api_version  = 20241103  !< Definition of the current API version
 
   integer, private, parameter :: earliest_autotune_version = 20171201 !< Definition of the earliest API version
                                                                                        !< which supports autotuning

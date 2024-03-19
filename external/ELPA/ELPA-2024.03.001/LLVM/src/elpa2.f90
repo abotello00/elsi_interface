@@ -430,23 +430,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -822,7 +831,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -921,7 +930,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -977,7 +986,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -1068,7 +1077,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -1311,17 +1320,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -1674,23 +1683,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -1799,7 +1817,7 @@ module elpa2_impl
 
    successGPU = gpu_memcpy(c_loc(aIntern(1,1)), aExtern, matrixRows*matrixCols*size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 579,  successGPU)
+   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 588,  successGPU)
 
 
      a       => aIntern(1:matrixRows,1:matrixCols)
@@ -2073,7 +2091,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -2172,7 +2190,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -2228,7 +2246,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -2319,7 +2337,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -2562,17 +2580,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -2584,10 +2602,10 @@ module elpa2_impl
    successGPU = gpu_memcpy(qExtern, c_loc(qIntern(1,1)), obj%local_nrows*obj%local_ncols*size_of_datatype, &
                              gpuMemcpyHostToDevice)
    endif
-   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1640,  successGPU)
+   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1649,  successGPU)
    successGPU = gpu_memcpy(evExtern, c_loc(ev(1)), obj%na*size_of_real_datatype, &
                              gpuMemcpyHostToDevice)
-   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1643,  successGPU)
+   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1652,  successGPU)
 
 
      deallocate(aIntern)
@@ -2955,23 +2973,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -3363,7 +3390,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -3462,7 +3489,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -3518,7 +3545,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -3609,7 +3636,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -3852,17 +3879,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -4217,23 +4244,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -4342,7 +4378,7 @@ module elpa2_impl
 
    successGPU = gpu_memcpy(c_loc(aIntern(1,1)), aExtern, matrixRows*matrixCols*size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 579,  successGPU)
+   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 588,  successGPU)
 
 
      a       => aIntern(1:matrixRows,1:matrixCols)
@@ -4632,7 +4668,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -4731,7 +4767,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -4787,7 +4823,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -4878,7 +4914,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -5121,17 +5157,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -5143,10 +5179,10 @@ module elpa2_impl
    successGPU = gpu_memcpy(qExtern, c_loc(qIntern(1,1)), obj%local_nrows*obj%local_ncols*size_of_datatype, &
                              gpuMemcpyHostToDevice)
    endif
-   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1640,  successGPU)
+   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1649,  successGPU)
    successGPU = gpu_memcpy(evExtern, c_loc(ev(1)), obj%na*size_of_real_datatype, &
                              gpuMemcpyHostToDevice)
-   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1643,  successGPU)
+   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1652,  successGPU)
 
 
      deallocate(aIntern)
@@ -5511,23 +5547,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -5869,7 +5914,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -5968,7 +6013,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -6023,7 +6068,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -6074,7 +6119,7 @@ module elpa2_impl
      l_cols_nev = local_index(nev, my_pcol, np_cols, nblk, -1) ! Local columns corresponding to nev
 
      allocate(q_real(l_rows,l_cols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_real", 1238,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_real", 1247,  istat,  errorMessage)
 
      ! Solve tridiagonal system
      if (do_solve_tridi) then
@@ -6120,7 +6165,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -6183,7 +6228,7 @@ module elpa2_impl
      ! make sure q_real is deallocated when using check_pd
      if (allocated(q_real)) then
        deallocate(q_real, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_real", 1338,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_real", 1347,  istat,  errorMessage)
      endif
 
        if (isSkewsymmetric) then
@@ -6371,17 +6416,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -6732,23 +6777,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -6857,7 +6911,7 @@ module elpa2_impl
 
    successGPU = gpu_memcpy(c_loc(aIntern(1,1)), aExtern, matrixRows*matrixCols*size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 579,  successGPU)
+   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 588,  successGPU)
 
 
      a       => aIntern(1:matrixRows,1:matrixCols)
@@ -7097,7 +7151,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -7196,7 +7250,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -7251,7 +7305,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -7302,7 +7356,7 @@ module elpa2_impl
      l_cols_nev = local_index(nev, my_pcol, np_cols, nblk, -1) ! Local columns corresponding to nev
 
      allocate(q_real(l_rows,l_cols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_real", 1238,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_real", 1247,  istat,  errorMessage)
 
      ! Solve tridiagonal system
      if (do_solve_tridi) then
@@ -7348,7 +7402,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -7411,7 +7465,7 @@ module elpa2_impl
      ! make sure q_real is deallocated when using check_pd
      if (allocated(q_real)) then
        deallocate(q_real, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_real", 1338,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_real", 1347,  istat,  errorMessage)
      endif
 
        if (isSkewsymmetric) then
@@ -7599,17 +7653,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -7621,10 +7675,10 @@ module elpa2_impl
    successGPU = gpu_memcpy(qExtern, c_loc(qIntern(1,1)), obj%local_nrows*obj%local_ncols*size_of_datatype, &
                              gpuMemcpyHostToDevice)
    endif
-   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1640,  successGPU)
+   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1649,  successGPU)
    successGPU = gpu_memcpy(evExtern, c_loc(ev(1)), obj%na*size_of_real_datatype, &
                              gpuMemcpyHostToDevice)
-   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1643,  successGPU)
+   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1652,  successGPU)
 
 
      deallocate(aIntern)
@@ -7989,23 +8043,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -8347,7 +8410,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -8446,7 +8509,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -8501,7 +8564,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -8552,7 +8615,7 @@ module elpa2_impl
      l_cols_nev = local_index(nev, my_pcol, np_cols, nblk, -1) ! Local columns corresponding to nev
 
      allocate(q_real(l_rows,l_cols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_real", 1238,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_real", 1247,  istat,  errorMessage)
 
      ! Solve tridiagonal system
      if (do_solve_tridi) then
@@ -8598,7 +8661,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -8661,7 +8724,7 @@ module elpa2_impl
      ! make sure q_real is deallocated when using check_pd
      if (allocated(q_real)) then
        deallocate(q_real, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_real", 1338,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_real", 1347,  istat,  errorMessage)
      endif
 
        if (isSkewsymmetric) then
@@ -8849,17 +8912,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -9210,23 +9273,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -9335,7 +9407,7 @@ module elpa2_impl
 
    successGPU = gpu_memcpy(c_loc(aIntern(1,1)), aExtern, matrixRows*matrixCols*size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 579,  successGPU)
+   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 588,  successGPU)
 
 
      a       => aIntern(1:matrixRows,1:matrixCols)
@@ -9575,7 +9647,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -9674,7 +9746,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -9729,7 +9801,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -9780,7 +9852,7 @@ module elpa2_impl
      l_cols_nev = local_index(nev, my_pcol, np_cols, nblk, -1) ! Local columns corresponding to nev
 
      allocate(q_real(l_rows,l_cols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_real", 1238,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_real", 1247,  istat,  errorMessage)
 
      ! Solve tridiagonal system
      if (do_solve_tridi) then
@@ -9826,7 +9898,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -9889,7 +9961,7 @@ module elpa2_impl
      ! make sure q_real is deallocated when using check_pd
      if (allocated(q_real)) then
        deallocate(q_real, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_real", 1338,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_real", 1347,  istat,  errorMessage)
      endif
 
        if (isSkewsymmetric) then
@@ -10077,17 +10149,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -10099,10 +10171,10 @@ module elpa2_impl
    successGPU = gpu_memcpy(qExtern, c_loc(qIntern(1,1)), obj%local_nrows*obj%local_ncols*size_of_datatype, &
                              gpuMemcpyHostToDevice)
    endif
-   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1640,  successGPU)
+   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1649,  successGPU)
    successGPU = gpu_memcpy(evExtern, c_loc(ev(1)), obj%na*size_of_real_datatype, &
                              gpuMemcpyHostToDevice)
-   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1643,  successGPU)
+   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1652,  successGPU)
 
 
      deallocate(aIntern)
@@ -10469,23 +10541,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -10883,7 +10964,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -10982,7 +11063,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -11038,7 +11119,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -11129,7 +11210,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -11372,17 +11453,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -11735,23 +11816,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -11860,7 +11950,7 @@ module elpa2_impl
 
    successGPU = gpu_memcpy(c_loc(aIntern(1,1)), aExtern, matrixRows*matrixCols*size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 579,  successGPU)
+   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 588,  successGPU)
 
 
      a       => aIntern(1:matrixRows,1:matrixCols)
@@ -12156,7 +12246,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -12255,7 +12345,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -12311,7 +12401,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -12402,7 +12492,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -12645,17 +12735,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -12667,10 +12757,10 @@ module elpa2_impl
    successGPU = gpu_memcpy(qExtern, c_loc(qIntern(1,1)), obj%local_nrows*obj%local_ncols*size_of_datatype, &
                              gpuMemcpyHostToDevice)
    endif
-   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1640,  successGPU)
+   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1649,  successGPU)
    successGPU = gpu_memcpy(evExtern, c_loc(ev(1)), obj%na*size_of_real_datatype, &
                              gpuMemcpyHostToDevice)
-   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1643,  successGPU)
+   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1652,  successGPU)
 
 
      deallocate(aIntern)
@@ -13038,23 +13128,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -13452,7 +13551,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -13551,7 +13650,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -13607,7 +13706,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -13698,7 +13797,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -13941,17 +14040,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -14306,23 +14405,32 @@ module elpa2_impl
 
     endif
 
-    call obj%timer%start("mpi_communication")
-    call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+    my_pe    = obj%mpi_setup%myRank_comm_parent
+    my_prow = obj%mpi_setup%myRank_comm_rows
+    my_pcol = obj%mpi_setup%myRank_comm_cols
 
-    call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
-    call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
-    call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+    np_rows = obj%mpi_setup%nRanks_comm_rows
+    np_cols = obj%mpi_setup%nRanks_comm_cols
+    n_pes   = obj%mpi_setup%nRanks_comm_parent
 
-    my_pe = int(my_peMPI, kind=c_int)
-    n_pes = int(n_pesMPI, kind=c_int)
-    my_prow = int(my_prowMPI, kind=c_int)
-    np_rows = int(np_rowsMPI, kind=c_int)
-    my_pcol = int(my_pcolMPI, kind=c_int)
-    np_cols = int(np_colsMPI, kind=c_int)
 
-    call obj%timer%stop("mpi_communication")
+    !call obj%timer%start("mpi_communication")
+    !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND) ,my_peMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND) ,n_pesMPI ,mpierr)
+
+    !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI ,mpierr)
+    !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI ,mpierr)
+    !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI ,mpierr)
+
+    !my_pe = int(my_peMPI, kind=c_int)
+    !n_pes = int(n_pesMPI, kind=c_int)
+    !my_prow = int(my_prowMPI, kind=c_int)
+    !np_rows = int(np_rowsMPI, kind=c_int)
+    !my_pcol = int(my_pcolMPI, kind=c_int)
+    !np_cols = int(np_colsMPI, kind=c_int)
+
+    !call obj%timer%stop("mpi_communication")
 
     na         = obj%na
     nev        = obj%nev
@@ -14431,7 +14539,7 @@ module elpa2_impl
 
    successGPU = gpu_memcpy(c_loc(aIntern(1,1)), aExtern, matrixRows*matrixCols*size_of_datatype, &
                              gpuMemcpyDeviceToHost)
-   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 579,  successGPU)
+   call check_memcpy_GPU_f("elpa2: aExtern -> aIntern", 588,  successGPU)
 
 
      a       => aIntern(1:matrixRows,1:matrixCols)
@@ -14727,7 +14835,7 @@ module elpa2_impl
       q_actual => q(1:matrixRows,1:matrixCols)
     else
      allocate(q_dummy(1:matrixRows,1:matrixCols), stat=istat, errmsg=errorMessage)
-     call check_allocate_f("elpa2_template: q_dummy", 1031,  istat,  errorMessage)
+     call check_allocate_f("elpa2_template: q_dummy", 1040,  istat,  errorMessage)
      q_actual => q_dummy(1:matrixRows,1:matrixCols)
     endif
 
@@ -14826,7 +14934,7 @@ module elpa2_impl
       ! tmat is needed only in full->band and band->full steps, so alocate here
       ! (not allocated for banded matrix on input)
       allocate(tmat(nbw,nbw,num_blocks), stat=istat, errmsg=errorMessage)
-      call check_allocate_f("elpa2_template: tmat", 1118,  istat,  errorMessage)
+      call check_allocate_f("elpa2_template: tmat", 1127,  istat,  errorMessage)
 
       do_bandred       = .true.
       do_solve_tridi   = .true.
@@ -14882,7 +14990,7 @@ module elpa2_impl
      ! Reduction band -> tridiagonal
      if (do_tridiag) then
        allocate(e(na), stat=istat, errmsg=errorMessage)
-       call check_allocate_f("elpa2_template: e", 1176,  istat,  errorMessage)
+       call check_allocate_f("elpa2_template: e", 1185,  istat,  errorMessage)
 
        call obj%autotune_timer%start("band_to_tridi")
        call obj%timer%start("band_to_tridi")
@@ -14973,7 +15081,7 @@ module elpa2_impl
      endif ! do_solve_tridi
 
      deallocate(e, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: e", 1290,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: e", 1299,  istat,  errorMessage)
 
      if (obj%eigenvalues_only) then
        do_trans_to_band = .false.
@@ -15216,17 +15324,17 @@ module elpa2_impl
 
      ! We can now deallocate the stored householder vectors
      deallocate(hh_trans, stat=istat, errmsg=errorMessage)
-     call check_deallocate_f("elpa2_template: hh_trans", 1570,  istat,  errorMessage)
+     call check_deallocate_f("elpa2_template: hh_trans", 1579,  istat,  errorMessage)
 
      ! make sure tmat is deallocated when using check_pd
      if (allocated(tmat)) then
        deallocate(tmat, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: tmat", 1575,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: tmat", 1584,  istat,  errorMessage)
      endif
 
      if (obj%eigenvalues_only) then
        deallocate(q_dummy, stat=istat, errmsg=errorMessage)
-       call check_deallocate_f("elpa2_template: q_dummy", 1580,  istat,  errorMessage)
+       call check_deallocate_f("elpa2_template: q_dummy", 1589,  istat,  errorMessage)
      endif
 
      ! restore original OpenMP settings
@@ -15238,10 +15346,10 @@ module elpa2_impl
    successGPU = gpu_memcpy(qExtern, c_loc(qIntern(1,1)), obj%local_nrows*obj%local_ncols*size_of_datatype, &
                              gpuMemcpyHostToDevice)
    endif
-   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1640,  successGPU)
+   call check_memcpy_GPU_f("elpa1: qIntern -> qExtern", 1649,  successGPU)
    successGPU = gpu_memcpy(evExtern, c_loc(ev(1)), obj%na*size_of_real_datatype, &
                              gpuMemcpyHostToDevice)
-   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1643,  successGPU)
+   call check_memcpy_GPU_f("elpa1: ev -> evExtern", 1652,  successGPU)
 
 
      deallocate(aIntern)

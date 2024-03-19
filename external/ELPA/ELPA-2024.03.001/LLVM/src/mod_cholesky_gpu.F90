@@ -64,6 +64,26 @@ module cholesky_gpu
   public
   contains
 
+    subroutine gpu_check_device_info(info_dev, my_stream)
+      use, intrinsic :: iso_c_binding
+
+      implicit none
+      integer(kind=C_intptr_T)        :: info_dev
+      integer(kind=C_intptr_T)        :: my_stream
+
+    end subroutine
+
+
+    subroutine gpu_accumulate_device_info(info_abs_dev, info_new_dev, my_stream)
+      use, intrinsic :: iso_c_binding
+
+      implicit none
+      integer(kind=C_intptr_T)        :: info_abs_dev, info_new_dev
+      integer(kind=C_intptr_T)        :: my_stream
+
+    end subroutine
+
+    
     subroutine gpu_copy_double_a_tmatc(a_dev, tmatc_dev, nblk, matrixRows, l_cols, l_colx, l_row1, my_stream)
       use, intrinsic :: iso_c_binding
 
@@ -72,8 +92,8 @@ module cholesky_gpu
       integer(kind=C_intptr_T)        :: a_dev, tmatc_dev
       integer(kind=C_intptr_T)        :: my_stream
 
-
     end subroutine
+
 
     subroutine gpu_copy_float_a_tmatc(a_dev, tmatc_dev, nblk, matrixRows, l_cols, l_colx, l_row1, my_stream)
       use, intrinsic :: iso_c_binding
@@ -83,8 +103,8 @@ module cholesky_gpu
       integer(kind=C_intptr_T)        :: a_dev, tmatc_dev
       integer(kind=C_intptr_T)        :: my_stream
 
-
     end subroutine
+
 
     subroutine gpu_copy_double_complex_a_tmatc(a_dev, tmatc_dev, nblk, matrixRows, l_cols, l_colx, l_row1, my_stream)
       use, intrinsic :: iso_c_binding
@@ -94,8 +114,8 @@ module cholesky_gpu
       integer(kind=C_intptr_T)        :: a_dev, tmatc_dev
       integer(kind=C_intptr_T)        :: my_stream
 
-
     end subroutine
+
 
     subroutine gpu_copy_float_complex_a_tmatc(a_dev, tmatc_dev, nblk, matrixRows, l_cols, l_colx, l_row1, my_stream)
       use, intrinsic :: iso_c_binding
@@ -104,7 +124,6 @@ module cholesky_gpu
       integer(kind=C_INT), intent(in) :: nblk, matrixRows, l_cols, l_colx, l_row1
       integer(kind=C_intptr_T)        :: a_dev, tmatc_dev
       integer(kind=C_intptr_T)        :: my_stream
-
 
     end subroutine
 

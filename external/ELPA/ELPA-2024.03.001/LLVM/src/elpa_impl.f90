@@ -457,10 +457,20 @@ module elpa_impl
       class(elpa_impl_t), intent(inout)   :: self
       integer(kind=ik)                    :: error
       integer(kind=c_int)                 :: myid
-
+      integer(kind=ik)                    :: attribute, value
+      integer(kind=ik)                    :: debug
+      logical                             :: wantDebugMessage
       error = ELPA_ERROR_SETUP
 
 
+      if (self%is_set("debug") == 1) then
+         call self%get("debug",debug, error)
+         print *,"debug ",debug
+         if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+         if (debug .eq. 1) then
+           wantDebugMessage = .true.
+         endif
+      endif
 
       error = ELPA_OK
       return
@@ -491,9 +501,10 @@ module elpa_impl
       class(elpa_impl_t), intent(inout)   :: self
       integer                             :: error, timings, performance, build_config
 
-      integer                             :: mpi_comm_parent, mpi_comm_rows, mpi_comm_cols, np_rows, np_cols, my_id, &
-                                             process_row, process_col, mpi_string_length, &
-                                             present_np_rows, present_np_cols, np_total, np_rows_tmp, np_cols_tmp
+      integer                             :: np_total, np_rows, np_cols, mpi_comm_parent, mpi_comm_cols, &
+                                             mpi_comm_rows, my_id, process_row, process_col
+      integer                             :: mpi_string_length, &
+                                             present_np_rows, present_np_cols, np_rows_tmp, np_cols_tmp
       integer(kind=MPI_KIND)              :: mpierr, mpierr2, my_idMPI, np_totalMPI, process_rowMPI, process_colMPI
       integer(kind=MPI_KIND)              :: mpi_comm_rowsMPI, mpi_comm_colsMPI, np_rowsMPI, np_colsMPI, &
                                              mpi_string_lengthMPI, my_pcolMPI, my_prowMPI, providedMPI
@@ -516,6 +527,32 @@ module elpa_impl
         endif
       endif
 
+      self%mpi_setup%useMPI = .false.
+      self%mpi_setup%useMPI = .true.
+      self%mpi_setup%mpi_comm_parent = -9999
+      self%mpi_setup%mpi_comm_cols   = -9999
+      self%mpi_setup%mpi_comm_rows   = -9999
+
+      self%mpi_setup%mpi_comm_parentExternal = -9999
+      self%mpi_setup%mpi_comm_colsExternal   = -9999
+      self%mpi_setup%mpi_comm_rowsExternal   = -9999
+
+      self%mpi_setup%nRanks_comm_parent = -9999
+      self%mpi_setup%nRanks_comm_rows   = -9999
+      self%mpi_setup%nRanks_comm_cols   = -9999
+
+      self%mpi_setup%nRanksExternal_comm_parent = -9999
+      self%mpi_setup%nRanksExternal_comm_rows   = -9999
+      self%mpi_setup%nRanksExternal_comm_cols   = -9999
+
+      self%mpi_setup%myRank_comm_parent = -9999
+      self%mpi_setup%myRank_comm_rows   = -9999
+      self%mpi_setup%myRank_comm_cols   = -9999
+
+      self%mpi_setup%myRankExternal_comm_parent = -9999
+      self%mpi_setup%myRankExternal_comm_rows   = -9999
+      self%mpi_setup%myRankExternal_comm_cols   = -9999
+
       self%gpu_setup%gpuAlreadySet=.false.
       self%gpu_setup%gpuIsAssigned=.false.
 
@@ -533,15 +570,19 @@ module elpa_impl
         call self%get("mpi_comm_parent", mpi_comm_parent, error)
         if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
 
+        self%mpi_setup%mpi_comm_parent = mpi_comm_parent
+
         call mpi_comm_rank(int(mpi_comm_parent,kind=MPI_KIND), my_idMPI, mpierr)
         my_id = int(my_idMPI, kind=c_int)
         call self%set("process_id", my_id, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%myRank_comm_parent = my_id
 
         call mpi_comm_size(int(mpi_comm_parent,kind=MPI_KIND), np_totalMPI, mpierr)
         np_total = int(np_totalMPI,kind=c_int)
         call self%set("num_processes", np_total, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%nRanks_comm_parent = np_total
       else ! mpi_comm_parent == 1
         if (self%from_legacy_api .ne. 1) then
           write(error_unit,*) MPI_CONSISTENCY_MSG
@@ -614,9 +655,12 @@ module elpa_impl
 
         call self%set("mpi_comm_rows", mpi_comm_rows, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%mpi_comm_rows = mpi_comm_rows
+
 
         call self%set("mpi_comm_cols", mpi_comm_cols, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%mpi_comm_cols = mpi_comm_cols
 
         ! remember that we created those communicators and we need to free them later
         self%communicators_owned = 1
@@ -632,9 +676,11 @@ module elpa_impl
 
         call self%get("mpi_comm_rows", mpi_comm_rows, error)
         if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%mpi_comm_rows = mpi_comm_rows
 
         call self%get("mpi_comm_cols", mpi_comm_cols, error)
         if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%mpi_comm_cols = mpi_comm_cols
 
 !        ! get the sizes and return maybe an error
 !#ifdef 1
@@ -658,11 +704,13 @@ module elpa_impl
         process_row = int(process_rowMPI,kind=c_int)
         call self%set("process_row", process_row, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%myRank_comm_rows = process_row
 
         call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), process_colMPI, mpierr)
         process_col = int(process_colMPI,kind=c_int)
         call self%set("process_col", process_col, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%myRank_comm_cols = process_col
 
 
         ! remember that we DID NOT created those communicators and we WILL NOT free them later
@@ -700,6 +748,7 @@ module elpa_impl
         call self%set("num_process_rows", np_rows, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
       endif ! self%is_set("num_process_rows") == 1
+      self%mpi_setup%nRanks_comm_rows = np_rows
 
       call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
       np_cols = int(np_colsMPI, kind=c_int)
@@ -723,6 +772,7 @@ module elpa_impl
         call self%set("num_process_cols", np_cols, error)
         if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
       endif
+      self%mpi_setup%nRanks_comm_cols = np_cols
 
       if (self%from_legacy_api .ne. 1) then
         if (np_total .ne. np_rows * np_cols) then
@@ -739,6 +789,8 @@ module elpa_impl
 
       my_prow = int(my_prowMPI, kind=c_int)
       my_pcol = int(my_pcolMPI, kind=c_int)
+      self%mpi_setup%myRank_comm_rows = my_prow
+      self%mpi_setup%myRank_comm_cols = my_pcol
 
       call self%get("na", na, error)
       if (check_elpa_set(error, ELPA_ERROR_SETUP)) return
@@ -773,6 +825,61 @@ module elpa_impl
 
 
       self%myGlobalId = my_id
+
+      ! Check whether all the mpi_setup variables have been set
+      if (self%mpi_setup%mpi_comm_parent .eq. -9999) then
+        call self%get("mpi_comm_parent", mpi_comm_parent, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+
+        self%mpi_setup%mpi_comm_parent = mpi_comm_parent
+      endif
+      if (self%mpi_setup%mpi_comm_rows .eq. -9999) then
+        call self%get("mpi_comm_rows", mpi_comm_rows, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+
+        self%mpi_setup%mpi_comm_rows = mpi_comm_rows
+      endif
+      if (self%mpi_setup%mpi_comm_cols .eq. -9999) then
+        call self%get("mpi_comm_rows", mpi_comm_cols, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+
+        self%mpi_setup%mpi_comm_rows = mpi_comm_cols
+      endif
+
+      if (self%mpi_setup%myRank_comm_parent .eq. -9999) then
+        call self%get("process_id", my_id, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%myRank_comm_parent = my_id
+      endif
+      if (self%mpi_setup%myRank_comm_rows .eq. -9999) then
+        call self%get("process_row", process_row, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%myRank_comm_rows = process_row
+      endif
+      if (self%mpi_setup%myRank_comm_cols .eq. -9999) then
+        call self%get("process_col", process_col, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        self%mpi_setup%myRank_comm_cols = process_col
+      endif
+      if (self%mpi_setup%nRanks_comm_parent .eq. -9999) then
+        call self%get("mpi_comm_parent", mpi_comm_parent, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        call mpi_comm_size(int(mpi_comm_parent,kind=MPI_KIND), np_totalMPI, mpierr)
+        self%mpi_setup%nRanks_comm_parent = int(np_totalMPI,kind=c_int)
+      endif
+      if (self%mpi_setup%nRanks_comm_rows .eq. -9999) then
+        call self%get("mpi_comm_rows", mpi_comm_rows, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+        self%mpi_setup%nRanks_comm_rows = int(np_rowsMPI,kind=c_int)
+      endif
+      if (self%mpi_setup%nRanks_comm_cols .eq. -9999) then
+        call self%get("mpi_comm_cols", mpi_comm_cols, error)
+        if (check_elpa_get(error, ELPA_ERROR_SETUP)) return
+        call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+        self%mpi_setup%nRanks_comm_cols = int(np_colsMPI,kind=c_int)
+      endif
+
 
     end function
 
@@ -7653,6 +7760,7 @@ module elpa_impl
      call self%get("cannon_for_generalized",use_cannon,error)
 
 
+
      if (mod(np_cols, np_rows) /= 0) then
        if ((my_p == 0) .and. firstCall) then
          write(*,*) "To use Cannons algorithm, np_cols must be a multiple of np_rows."
@@ -7666,11 +7774,12 @@ module elpa_impl
      if(error .NE. ELPA_OK) return
 
      if (.not. is_already_decomposed) then
-       ! B = U^T*U, B<-U
+       ! B = U^T*U, B <- U
        call self%elpa_cholesky_a_h_a_&
            &d&
            &(b, error)
        if(error .NE. ELPA_OK) return
+
        ! B <- inv(U)
        call self%elpa_invert_trm_a_h_a_&
            &d&
@@ -7717,6 +7826,7 @@ module elpa_impl
 
      !write(*, *) my_prow, my_pcol, "A(2,3)", a(2,3)
 
+
      call self%timer_stop("transform_generalized()")
     end subroutine
 
@@ -7724,7 +7834,7 @@ module elpa_impl
     subroutine elpa_transform_back_generalized_&
             &d&
             &(self, b, q, error)
-        implicit none
+     implicit none
 !    Copyright 2011, A. Marek
 !
 !    This file is part of ELPA.
@@ -7776,8 +7886,8 @@ module elpa_impl
   integer, parameter :: rck = C_DOUBLE
   real(kind=rck), parameter      :: ZERO=0.0_rk, ONE = 1.0_rk
 
-        class(elpa_impl_t)  :: self
-      real(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
+     class(elpa_impl_t)  :: self
+     real(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
      integer(kind=ik)       :: my_p, my_prow, my_pcol, np_rows, np_cols, mpi_comm_rows, mpi_comm_cols, mpi_comm_all
      integer(kind=MPI_KIND) :: mpierr, my_pMPI, my_prowMPI, my_pcolMPI, np_rowsMPI, np_colsMPI
      integer                :: error
@@ -7805,6 +7915,7 @@ module elpa_impl
 
      call self%timer_start("transform_back_generalized()")
      call self%get("cannon_for_generalized",use_cannon,error)
+
 
 
      if (mod(np_cols, np_rows) /= 0) then
@@ -7835,6 +7946,7 @@ module elpa_impl
                  q, 1_BLAS_KIND, 1_BLAS_KIND, int(sc_desc,kind=BLAS_KIND))
        call self%timer_stop("scalapack multiply inv(U) * Q")
      endif
+
      call self%timer_stop("transform_back_generalized()")
 
     end subroutine
@@ -8000,6 +8112,7 @@ module elpa_impl
      call self%get("cannon_for_generalized",use_cannon,error)
 
 
+
      if (mod(np_cols, np_rows) /= 0) then
        if ((my_p == 0) .and. firstCall) then
          write(*,*) "To use Cannons algorithm, np_cols must be a multiple of np_rows."
@@ -8013,11 +8126,12 @@ module elpa_impl
      if(error .NE. ELPA_OK) return
 
      if (.not. is_already_decomposed) then
-       ! B = U^T*U, B<-U
+       ! B = U^T*U, B <- U
        call self%elpa_cholesky_a_h_a_&
            &f&
            &(b, error)
        if(error .NE. ELPA_OK) return
+
        ! B <- inv(U)
        call self%elpa_invert_trm_a_h_a_&
            &f&
@@ -8064,6 +8178,7 @@ module elpa_impl
 
      !write(*, *) my_prow, my_pcol, "A(2,3)", a(2,3)
 
+
      call self%timer_stop("transform_generalized()")
     end subroutine
 
@@ -8071,7 +8186,7 @@ module elpa_impl
     subroutine elpa_transform_back_generalized_&
             &f&
             &(self, b, q, error)
-        implicit none
+     implicit none
 !    Copyright 2011, A. Marek
 !
 !    This file is part of ELPA.
@@ -8123,8 +8238,8 @@ module elpa_impl
   integer, parameter :: rck = C_FLOAT
   real(kind=rck), parameter      :: ZERO=0.0_rk, ONE = 1.0_rk
 
-        class(elpa_impl_t)  :: self
-      real(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
+     class(elpa_impl_t)  :: self
+     real(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
      integer(kind=ik)       :: my_p, my_prow, my_pcol, np_rows, np_cols, mpi_comm_rows, mpi_comm_cols, mpi_comm_all
      integer(kind=MPI_KIND) :: mpierr, my_pMPI, my_prowMPI, my_pcolMPI, np_rowsMPI, np_colsMPI
      integer                :: error
@@ -8152,6 +8267,7 @@ module elpa_impl
 
      call self%timer_start("transform_back_generalized()")
      call self%get("cannon_for_generalized",use_cannon,error)
+
 
 
      if (mod(np_cols, np_rows) /= 0) then
@@ -8182,6 +8298,7 @@ module elpa_impl
                  q, 1_BLAS_KIND, 1_BLAS_KIND, int(sc_desc,kind=BLAS_KIND))
        call self%timer_stop("scalapack multiply inv(U) * Q")
      endif
+
      call self%timer_stop("transform_back_generalized()")
 
     end subroutine
@@ -8349,6 +8466,7 @@ module elpa_impl
      call self%get("cannon_for_generalized",use_cannon,error)
 
 
+
      if (mod(np_cols, np_rows) /= 0) then
        if ((my_p == 0) .and. firstCall) then
          write(*,*) "To use Cannons algorithm, np_cols must be a multiple of np_rows."
@@ -8362,11 +8480,12 @@ module elpa_impl
      if(error .NE. ELPA_OK) return
 
      if (.not. is_already_decomposed) then
-       ! B = U^T*U, B<-U
+       ! B = U^T*U, B <- U
        call self%elpa_cholesky_a_h_a_&
            &dc&
            &(b, error)
        if(error .NE. ELPA_OK) return
+
        ! B <- inv(U)
        call self%elpa_invert_trm_a_h_a_&
            &dc&
@@ -8413,6 +8532,7 @@ module elpa_impl
 
      !write(*, *) my_prow, my_pcol, "A(2,3)", a(2,3)
 
+
      call self%timer_stop("transform_generalized()")
     end subroutine
 
@@ -8420,7 +8540,7 @@ module elpa_impl
     subroutine elpa_transform_back_generalized_&
             &dc&
             &(self, b, q, error)
-        implicit none
+     implicit none
 !    Copyright 2011, A. Marek
 !
 !    This file is part of ELPA.
@@ -8473,8 +8593,8 @@ module elpa_impl
   integer, parameter :: ck = C_DOUBLE_COMPLEX
   integer, parameter :: rck = C_DOUBLE_COMPLEX
   complex(kind=rck), parameter     :: ZERO = (0.0_rk,0.0_rk), ONE = (1.0_rk,0.0_rk)
-        class(elpa_impl_t)  :: self
-      complex(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
+     class(elpa_impl_t)  :: self
+     complex(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
      integer(kind=ik)       :: my_p, my_prow, my_pcol, np_rows, np_cols, mpi_comm_rows, mpi_comm_cols, mpi_comm_all
      integer(kind=MPI_KIND) :: mpierr, my_pMPI, my_prowMPI, my_pcolMPI, np_rowsMPI, np_colsMPI
      integer                :: error
@@ -8502,6 +8622,7 @@ module elpa_impl
 
      call self%timer_start("transform_back_generalized()")
      call self%get("cannon_for_generalized",use_cannon,error)
+
 
 
      if (mod(np_cols, np_rows) /= 0) then
@@ -8532,6 +8653,7 @@ module elpa_impl
                  q, 1_BLAS_KIND, 1_BLAS_KIND, int(sc_desc,kind=BLAS_KIND))
        call self%timer_stop("scalapack multiply inv(U) * Q")
      endif
+
      call self%timer_stop("transform_back_generalized()")
 
     end subroutine
@@ -8697,6 +8819,7 @@ module elpa_impl
      call self%get("cannon_for_generalized",use_cannon,error)
 
 
+
      if (mod(np_cols, np_rows) /= 0) then
        if ((my_p == 0) .and. firstCall) then
          write(*,*) "To use Cannons algorithm, np_cols must be a multiple of np_rows."
@@ -8710,11 +8833,12 @@ module elpa_impl
      if(error .NE. ELPA_OK) return
 
      if (.not. is_already_decomposed) then
-       ! B = U^T*U, B<-U
+       ! B = U^T*U, B <- U
        call self%elpa_cholesky_a_h_a_&
            &fc&
            &(b, error)
        if(error .NE. ELPA_OK) return
+
        ! B <- inv(U)
        call self%elpa_invert_trm_a_h_a_&
            &fc&
@@ -8761,6 +8885,7 @@ module elpa_impl
 
      !write(*, *) my_prow, my_pcol, "A(2,3)", a(2,3)
 
+
      call self%timer_stop("transform_generalized()")
     end subroutine
 
@@ -8768,7 +8893,7 @@ module elpa_impl
     subroutine elpa_transform_back_generalized_&
             &fc&
             &(self, b, q, error)
-        implicit none
+     implicit none
 !    Copyright 2011, A. Marek
 !
 !    This file is part of ELPA.
@@ -8821,8 +8946,8 @@ module elpa_impl
   integer, parameter :: ck = C_FLOAT_COMPLEX
   integer, parameter :: rck = C_FLOAT_COMPLEX
   complex(kind=rck), parameter     :: ZERO = (0.0_rk,0.0_rk), ONE = (1.0_rk,0.0_rk)
-        class(elpa_impl_t)  :: self
-      complex(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
+     class(elpa_impl_t)  :: self
+     complex(kind=rck) :: b(self%local_nrows, *), q(self%local_nrows, *)
      integer(kind=ik)       :: my_p, my_prow, my_pcol, np_rows, np_cols, mpi_comm_rows, mpi_comm_cols, mpi_comm_all
      integer(kind=MPI_KIND) :: mpierr, my_pMPI, my_prowMPI, my_pcolMPI, np_rowsMPI, np_colsMPI
      integer                :: error
@@ -8850,6 +8975,7 @@ module elpa_impl
 
      call self%timer_start("transform_back_generalized()")
      call self%get("cannon_for_generalized",use_cannon,error)
+
 
 
      if (mod(np_cols, np_rows) /= 0) then
@@ -8880,6 +9006,7 @@ module elpa_impl
                  q, 1_BLAS_KIND, 1_BLAS_KIND, int(sc_desc,kind=BLAS_KIND))
        call self%timer_stop("scalapack multiply inv(U) * Q")
      endif
+
      call self%timer_stop("transform_back_generalized()")
 
     end subroutine
@@ -9480,6 +9607,8 @@ module elpa_impl
               time_spent(1) = self%autotune_timer%get("accumulator","band_to_full")
             case (ELPA2_AUTOTUNE_HERMITIAN_MULTIPLY_BLOCKING)
               time_spent(1) = self%autotune_timer%get("accumulator","hermitian_multiply")
+            case (ELPA2_AUTOTUNE_CHOLESKY_BLOCKING)
+              time_spent(1) = self%autotune_timer%get("accumulator","cholesky")
             case (ELPA1_AUTOTUNE_MAX_STORED_ROWS)
               time_spent(1) = self%autotune_timer%get("accumulator","tridi_to_full")
             case (ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH)

@@ -170,28 +170,37 @@ subroutine redist_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_pe = int(my_peMPI,kind=c_int)
-  n_pes = int(n_pesMPI,kind=c_int)
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  n_pes  = obj%mpi_setup%nRanks_comm_parent
 
-  call obj%timer%stop("mpi_communication")
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+
+  !my_pe = int(my_peMPI,kind=c_int)
+  !n_pes = int(n_pesMPI,kind=c_int)
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
   
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: global_id", 144,  istat,  errorMessage)
+  call check_allocate_f("redist_band: global_id", 153,  istat,  errorMessage)
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
   if (useNonBlockingCollectivesAll) then
@@ -211,18 +220,18 @@ subroutine redist_band_&
   nblocks_total = (na-1)/nbw + 1
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: block_limits", 189,  istat,  errorMessage)
+  call check_allocate_f("redist_band: block_limits", 198,  istat,  errorMessage)
   call divide_band(obj, nblocks_total, n_pes, block_limits)
 
 
   allocate(ncnt_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_s", 194,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_s", 203,  istat,  errorMessage)
   allocate(nstart_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_s", 196,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_s", 205,  istat,  errorMessage)
   allocate(ncnt_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_r", 198,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_r", 207,  istat,  errorMessage)
   allocate(nstart_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_r", 200,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_r", 209,  istat,  errorMessage)
 
 
   nfact = nbw/nblk
@@ -245,7 +254,7 @@ subroutine redist_band_&
   ! Allocate send buffer
 
   allocate(sbuf(nblk,nblk,sum(ncnt_s)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: sbuf", 223,  istat,  errorMessage)
+  call check_allocate_f("redist_band: sbuf", 232,  istat,  errorMessage)
   sbuf(:,:,:) = 0.
 
   ! Determine start offsets in send buffer
@@ -293,7 +302,7 @@ subroutine redist_band_&
   ! Allocate receive buffer
 
   allocate(rbuf(nblk,nblk,sum(ncnt_r)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: rbuf", 271,  istat,  errorMessage)
+  call check_allocate_f("redist_band: rbuf", 280,  istat,  errorMessage)
 
   ! Set send counts/send offsets, receive counts/receive offsets
   ! now actually in variables, not in blocks
@@ -335,7 +344,7 @@ subroutine redist_band_&
   enddo
 
   allocate(buf((nfact+1)*nblk,nblk),stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: buf", 317,  istat,  errorMessage)
+  call check_allocate_f("redist_band: buf", 326,  istat,  errorMessage)
 
   ! n_off: Offset of ab within band
   n_off = block_limits(my_pe)*nbw
@@ -354,16 +363,16 @@ subroutine redist_band_&
   enddo
 
   deallocate(ncnt_s, nstart_s, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 341,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 350,  istat,  errorMessage)
   deallocate(ncnt_r, nstart_r, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 343,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 352,  istat,  errorMessage)
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: global_id", 345,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: global_id", 354,  istat,  errorMessage)
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: block_limits", 347,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: block_limits", 356,  istat,  errorMessage)
 
   deallocate(sbuf, rbuf, buf, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 350,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 359,  istat,  errorMessage)
 
   call obj%timer%stop("redist_band_&
   &real&
@@ -473,28 +482,37 @@ subroutine redist_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_pe = int(my_peMPI,kind=c_int)
-  n_pes = int(n_pesMPI,kind=c_int)
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  n_pes  = obj%mpi_setup%nRanks_comm_parent
 
-  call obj%timer%stop("mpi_communication")
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+
+  !my_pe = int(my_peMPI,kind=c_int)
+  !n_pes = int(n_pesMPI,kind=c_int)
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
   
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: global_id", 144,  istat,  errorMessage)
+  call check_allocate_f("redist_band: global_id", 153,  istat,  errorMessage)
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
   if (useNonBlockingCollectivesAll) then
@@ -514,18 +532,18 @@ subroutine redist_band_&
   nblocks_total = (na-1)/nbw + 1
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: block_limits", 189,  istat,  errorMessage)
+  call check_allocate_f("redist_band: block_limits", 198,  istat,  errorMessage)
   call divide_band(obj, nblocks_total, n_pes, block_limits)
 
 
   allocate(ncnt_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_s", 194,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_s", 203,  istat,  errorMessage)
   allocate(nstart_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_s", 196,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_s", 205,  istat,  errorMessage)
   allocate(ncnt_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_r", 198,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_r", 207,  istat,  errorMessage)
   allocate(nstart_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_r", 200,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_r", 209,  istat,  errorMessage)
 
 
   nfact = nbw/nblk
@@ -548,7 +566,7 @@ subroutine redist_band_&
   ! Allocate send buffer
 
   allocate(sbuf(nblk,nblk,sum(ncnt_s)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: sbuf", 223,  istat,  errorMessage)
+  call check_allocate_f("redist_band: sbuf", 232,  istat,  errorMessage)
   sbuf(:,:,:) = 0.
 
   ! Determine start offsets in send buffer
@@ -596,7 +614,7 @@ subroutine redist_band_&
   ! Allocate receive buffer
 
   allocate(rbuf(nblk,nblk,sum(ncnt_r)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: rbuf", 271,  istat,  errorMessage)
+  call check_allocate_f("redist_band: rbuf", 280,  istat,  errorMessage)
 
   ! Set send counts/send offsets, receive counts/receive offsets
   ! now actually in variables, not in blocks
@@ -638,7 +656,7 @@ subroutine redist_band_&
   enddo
 
   allocate(buf((nfact+1)*nblk,nblk),stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: buf", 317,  istat,  errorMessage)
+  call check_allocate_f("redist_band: buf", 326,  istat,  errorMessage)
 
   ! n_off: Offset of ab within band
   n_off = block_limits(my_pe)*nbw
@@ -657,16 +675,16 @@ subroutine redist_band_&
   enddo
 
   deallocate(ncnt_s, nstart_s, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 341,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 350,  istat,  errorMessage)
   deallocate(ncnt_r, nstart_r, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 343,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 352,  istat,  errorMessage)
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: global_id", 345,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: global_id", 354,  istat,  errorMessage)
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: block_limits", 347,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: block_limits", 356,  istat,  errorMessage)
 
   deallocate(sbuf, rbuf, buf, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 350,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 359,  istat,  errorMessage)
 
   call obj%timer%stop("redist_band_&
   &real&
@@ -776,28 +794,37 @@ subroutine redist_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_pe = int(my_peMPI,kind=c_int)
-  n_pes = int(n_pesMPI,kind=c_int)
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  n_pes  = obj%mpi_setup%nRanks_comm_parent
 
-  call obj%timer%stop("mpi_communication")
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+
+  !my_pe = int(my_peMPI,kind=c_int)
+  !n_pes = int(n_pesMPI,kind=c_int)
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
   
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: global_id", 144,  istat,  errorMessage)
+  call check_allocate_f("redist_band: global_id", 153,  istat,  errorMessage)
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
   if (useNonBlockingCollectivesAll) then
@@ -817,18 +844,18 @@ subroutine redist_band_&
   nblocks_total = (na-1)/nbw + 1
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: block_limits", 189,  istat,  errorMessage)
+  call check_allocate_f("redist_band: block_limits", 198,  istat,  errorMessage)
   call divide_band(obj, nblocks_total, n_pes, block_limits)
 
 
   allocate(ncnt_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_s", 194,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_s", 203,  istat,  errorMessage)
   allocate(nstart_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_s", 196,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_s", 205,  istat,  errorMessage)
   allocate(ncnt_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_r", 198,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_r", 207,  istat,  errorMessage)
   allocate(nstart_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_r", 200,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_r", 209,  istat,  errorMessage)
 
 
   nfact = nbw/nblk
@@ -851,7 +878,7 @@ subroutine redist_band_&
   ! Allocate send buffer
 
   allocate(sbuf(nblk,nblk,sum(ncnt_s)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: sbuf", 223,  istat,  errorMessage)
+  call check_allocate_f("redist_band: sbuf", 232,  istat,  errorMessage)
   sbuf(:,:,:) = 0.
 
   ! Determine start offsets in send buffer
@@ -899,7 +926,7 @@ subroutine redist_band_&
   ! Allocate receive buffer
 
   allocate(rbuf(nblk,nblk,sum(ncnt_r)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: rbuf", 271,  istat,  errorMessage)
+  call check_allocate_f("redist_band: rbuf", 280,  istat,  errorMessage)
 
   ! Set send counts/send offsets, receive counts/receive offsets
   ! now actually in variables, not in blocks
@@ -941,7 +968,7 @@ subroutine redist_band_&
   enddo
 
   allocate(buf((nfact+1)*nblk,nblk),stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: buf", 317,  istat,  errorMessage)
+  call check_allocate_f("redist_band: buf", 326,  istat,  errorMessage)
 
   ! n_off: Offset of ab within band
   n_off = block_limits(my_pe)*nbw
@@ -960,16 +987,16 @@ subroutine redist_band_&
   enddo
 
   deallocate(ncnt_s, nstart_s, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 341,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 350,  istat,  errorMessage)
   deallocate(ncnt_r, nstart_r, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 343,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 352,  istat,  errorMessage)
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: global_id", 345,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: global_id", 354,  istat,  errorMessage)
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: block_limits", 347,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: block_limits", 356,  istat,  errorMessage)
 
   deallocate(sbuf, rbuf, buf, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 350,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 359,  istat,  errorMessage)
 
   call obj%timer%stop("redist_band_&
   &complex&
@@ -1078,28 +1105,37 @@ subroutine redist_band_&
     useNonBlockingCollectivesAll = .false.
   endif
 
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+  my_pe   = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
 
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
 
-  my_pe = int(my_peMPI,kind=c_int)
-  n_pes = int(n_pesMPI,kind=c_int)
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
+  n_pes  = obj%mpi_setup%nRanks_comm_parent
 
-  call obj%timer%stop("mpi_communication")
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), my_peMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_all,kind=MPI_KIND), n_pesMPI, mpierr)
+
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND) ,my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND) ,np_colsMPI, mpierr)
+
+  !my_pe = int(my_peMPI,kind=c_int)
+  !n_pes = int(n_pesMPI,kind=c_int)
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+
+  !call obj%timer%stop("mpi_communication")
 
   ! Get global_id mapping 2D procssor coordinates to global id
   
   allocate(global_id(0:np_rows-1,0:np_cols-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: global_id", 144,  istat,  errorMessage)
+  call check_allocate_f("redist_band: global_id", 153,  istat,  errorMessage)
   global_id(:,:) = 0
   global_id(my_prow, my_pcol) = my_pe
   if (useNonBlockingCollectivesAll) then
@@ -1119,18 +1155,18 @@ subroutine redist_band_&
   nblocks_total = (na-1)/nbw + 1
 
   allocate(block_limits(0:n_pes), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: block_limits", 189,  istat,  errorMessage)
+  call check_allocate_f("redist_band: block_limits", 198,  istat,  errorMessage)
   call divide_band(obj, nblocks_total, n_pes, block_limits)
 
 
   allocate(ncnt_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_s", 194,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_s", 203,  istat,  errorMessage)
   allocate(nstart_s(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_s", 196,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_s", 205,  istat,  errorMessage)
   allocate(ncnt_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: ncnt_r", 198,  istat,  errorMessage)
+  call check_allocate_f("redist_band: ncnt_r", 207,  istat,  errorMessage)
   allocate(nstart_r(0:n_pes-1), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: nstart_r", 200,  istat,  errorMessage)
+  call check_allocate_f("redist_band: nstart_r", 209,  istat,  errorMessage)
 
 
   nfact = nbw/nblk
@@ -1153,7 +1189,7 @@ subroutine redist_band_&
   ! Allocate send buffer
 
   allocate(sbuf(nblk,nblk,sum(ncnt_s)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: sbuf", 223,  istat,  errorMessage)
+  call check_allocate_f("redist_band: sbuf", 232,  istat,  errorMessage)
   sbuf(:,:,:) = 0.
 
   ! Determine start offsets in send buffer
@@ -1201,7 +1237,7 @@ subroutine redist_band_&
   ! Allocate receive buffer
 
   allocate(rbuf(nblk,nblk,sum(ncnt_r)), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: rbuf", 271,  istat,  errorMessage)
+  call check_allocate_f("redist_band: rbuf", 280,  istat,  errorMessage)
 
   ! Set send counts/send offsets, receive counts/receive offsets
   ! now actually in variables, not in blocks
@@ -1243,7 +1279,7 @@ subroutine redist_band_&
   enddo
 
   allocate(buf((nfact+1)*nblk,nblk),stat=istat, errmsg=errorMessage)
-  call check_allocate_f("redist_band: buf", 317,  istat,  errorMessage)
+  call check_allocate_f("redist_band: buf", 326,  istat,  errorMessage)
 
   ! n_off: Offset of ab within band
   n_off = block_limits(my_pe)*nbw
@@ -1262,16 +1298,16 @@ subroutine redist_band_&
   enddo
 
   deallocate(ncnt_s, nstart_s, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 341,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_s, nstart_s", 350,  istat,  errorMessage)
   deallocate(ncnt_r, nstart_r, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 343,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: ncnt_r, nstart_r", 352,  istat,  errorMessage)
   deallocate(global_id, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: global_id", 345,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: global_id", 354,  istat,  errorMessage)
   deallocate(block_limits, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: block_limits", 347,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: block_limits", 356,  istat,  errorMessage)
 
   deallocate(sbuf, rbuf, buf, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 350,  istat,  errorMessage)
+  call check_deallocate_f("redist_band: sbuf, rbuf, buf", 359,  istat,  errorMessage)
 
   call obj%timer%stop("redist_band_&
   &complex&

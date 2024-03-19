@@ -182,9 +182,10 @@ module elpa_constants
  integer(kind=C_INT), parameter :: ELPA_AUTOTUNE_MEDIUM = 15 
  integer(kind=C_INT), parameter :: ELPA2_AUTOTUNE_BAND_TO_FULL_BLOCKING = 16 
  integer(kind=C_INT), parameter :: ELPA2_AUTOTUNE_HERMITIAN_MULTIPLY_BLOCKING = 17 
- integer(kind=C_INT), parameter :: ELPA1_AUTOTUNE_MAX_STORED_ROWS = 18 
- integer(kind=C_INT), parameter :: ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH = 19 
- integer(kind=C_INT), parameter :: ELPA_AUTOTUNE_EXTENSIVE = 20 
+ integer(kind=C_INT), parameter :: ELPA2_AUTOTUNE_CHOLESKY_BLOCKING = 18 
+ integer(kind=C_INT), parameter :: ELPA1_AUTOTUNE_MAX_STORED_ROWS = 19 
+ integer(kind=C_INT), parameter :: ELPA2_AUTOTUNE_TRIDI_TO_BAND_STRIPEWIDTH = 20 
+ integer(kind=C_INT), parameter :: ELPA_AUTOTUNE_EXTENSIVE = 21 
 
  integer(kind=C_INT), parameter :: ELPA_AUTOTUNE_DOMAIN_REAL = 1 
  integer(kind=C_INT), parameter :: ELPA_AUTOTUNE_DOMAIN_COMPLEX = 2 
@@ -197,7 +198,7 @@ module elpa_constants
  integer(kind=C_INT), parameter :: ELPA_AUTOTUNE_PART_ELPA2 = 4 
 
  integer(kind=C_INT), parameter :: ELPA_NUMBER_OF_AUTOTUNE_LEVELS = & 
- (0 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1) 
+ (0 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1 +1) 
 
 
   integer(kind=C_INT), parameter           :: ELPA_2STAGE_REAL_GPU    = ELPA_2STAGE_REAL_NVIDIA_GPU

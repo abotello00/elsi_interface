@@ -157,6 +157,9 @@ module elpa_invert_trm
 
 
 
+
+
+
 !cannot use "../src/invert_trm/./../general/error_checking.inc" because filename with path can be too long for gfortran (max line length)
 
 
@@ -325,21 +328,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -351,19 +354,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -387,49 +405,49 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 326,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 358,  successGPU)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -439,7 +457,7 @@ module elpa_invert_trm
   if (useGPU) then
     successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 405,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 437,  successGPU)
   endif
 
 
@@ -466,7 +484,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 457,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 489,  successGPU)
 
           call DTRTRI('U', 'N', int(nb,kind=BLAS_KIND), a(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -474,7 +492,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 475,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 507,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -518,7 +536,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -532,7 +550,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -606,7 +624,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -623,7 +641,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -633,7 +651,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -650,7 +668,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -694,34 +712,34 @@ module elpa_invert_trm
     num = matrixRows*matrixCols* size_of_datatype
     successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev,  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1056,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1088,  successGPU)
   endif ! useGPU
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1076,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1108,  successGPU)
 
 
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &real&
@@ -813,6 +831,9 @@ module elpa_invert_trm
 ! consortium. The copyright of any additional modifications shall rest
 ! with their original authors, but shall adhere to the licensing terms
 ! distributed along with the original code in the file "COPYING".
+
+
+
 
 
 
@@ -969,21 +990,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -995,19 +1016,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -1031,53 +1067,53 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     ! associate with a_dev
     a_dev = transfer(aDev, a_dev)
 
     ! allocate a_tmp
     allocate(a_tmp(obj%local_nrows,obj%local_ncols), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("elpa_invert_trm: a_tmp", 340,  istat,  errorMessage)
+    call check_allocate_f("elpa_invert_trm: a_tmp", 372,  istat,  errorMessage)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -1110,7 +1146,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a_tmp(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 494,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 526,  successGPU)
 
           call DTRTRI('U', 'N', int(nb,kind=BLAS_KIND), a_tmp(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -1118,7 +1154,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a_tmp(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 512,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 544,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -1159,7 +1195,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -1173,7 +1209,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -1227,7 +1263,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -1244,7 +1280,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -1254,7 +1290,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -1271,7 +1307,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -1298,29 +1334,29 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
 
 
     deallocate(a_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("elpa_invert_trm: a_tmp", 1092,  istat,  errorMessage)
+    call check_deallocate_f("elpa_invert_trm: a_tmp", 1124,  istat,  errorMessage)
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &real&
@@ -1421,6 +1457,9 @@ module elpa_invert_trm
 
 
 
+
+
+
 !cannot use "../src/invert_trm/./../general/error_checking.inc" because filename with path can be too long for gfortran (max line length)
 
 
@@ -1591,21 +1630,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -1617,19 +1656,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -1653,49 +1707,49 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 326,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 358,  successGPU)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -1705,7 +1759,7 @@ module elpa_invert_trm
   if (useGPU) then
     successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 405,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 437,  successGPU)
   endif
 
 
@@ -1732,7 +1786,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 457,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 489,  successGPU)
 
           call STRTRI('U', 'N', int(nb,kind=BLAS_KIND), a(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -1740,7 +1794,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 475,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 507,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -1784,7 +1838,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -1798,7 +1852,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -1872,7 +1926,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -1889,7 +1943,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -1899,7 +1953,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -1916,7 +1970,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -1960,34 +2014,34 @@ module elpa_invert_trm
     num = matrixRows*matrixCols* size_of_datatype
     successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev,  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1056,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1088,  successGPU)
   endif ! useGPU
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1076,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1108,  successGPU)
 
 
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &real&
@@ -2084,6 +2138,9 @@ module elpa_invert_trm
 ! consortium. The copyright of any additional modifications shall rest
 ! with their original authors, but shall adhere to the licensing terms
 ! distributed along with the original code in the file "COPYING".
+
+
+
 
 
 
@@ -2242,21 +2299,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -2268,19 +2325,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -2304,53 +2376,53 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     ! associate with a_dev
     a_dev = transfer(aDev, a_dev)
 
     ! allocate a_tmp
     allocate(a_tmp(obj%local_nrows,obj%local_ncols), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("elpa_invert_trm: a_tmp", 340,  istat,  errorMessage)
+    call check_allocate_f("elpa_invert_trm: a_tmp", 372,  istat,  errorMessage)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -2383,7 +2455,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a_tmp(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 494,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 526,  successGPU)
 
           call STRTRI('U', 'N', int(nb,kind=BLAS_KIND), a_tmp(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -2391,7 +2463,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a_tmp(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 512,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 544,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -2432,7 +2504,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -2446,7 +2518,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -2500,7 +2572,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -2517,7 +2589,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -2527,7 +2599,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -2544,7 +2616,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -2571,29 +2643,29 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
 
 
     deallocate(a_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("elpa_invert_trm: a_tmp", 1092,  istat,  errorMessage)
+    call check_deallocate_f("elpa_invert_trm: a_tmp", 1124,  istat,  errorMessage)
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &real&
@@ -2693,6 +2765,9 @@ module elpa_invert_trm
 
 
 
+
+
+
 !cannot use "../src/invert_trm/./../general/error_checking.inc" because filename with path can be too long for gfortran (max line length)
 
 
@@ -2864,21 +2939,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -2890,19 +2965,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -2926,49 +3016,49 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 326,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 358,  successGPU)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -2978,7 +3068,7 @@ module elpa_invert_trm
   if (useGPU) then
     successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 405,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 437,  successGPU)
   endif
 
 
@@ -3005,7 +3095,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 457,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 489,  successGPU)
 
           call ZTRTRI('U', 'N', int(nb,kind=BLAS_KIND), a(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -3013,7 +3103,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 475,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 507,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -3057,7 +3147,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -3071,7 +3161,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -3145,7 +3235,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -3162,7 +3252,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -3172,7 +3262,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -3189,7 +3279,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -3233,34 +3323,34 @@ module elpa_invert_trm
     num = matrixRows*matrixCols* size_of_datatype
     successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev,  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1056,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1088,  successGPU)
   endif ! useGPU
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1076,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1108,  successGPU)
 
 
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &complex&
@@ -3360,6 +3450,9 @@ module elpa_invert_trm
 
 
 
+
+
+
 !cannot use "../src/invert_trm/./../general/error_checking.inc" because filename with path can be too long for gfortran (max line length)
 
 
@@ -3515,21 +3608,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -3541,19 +3634,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -3577,53 +3685,53 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     ! associate with a_dev
     a_dev = transfer(aDev, a_dev)
 
     ! allocate a_tmp
     allocate(a_tmp(obj%local_nrows,obj%local_ncols), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("elpa_invert_trm: a_tmp", 340,  istat,  errorMessage)
+    call check_allocate_f("elpa_invert_trm: a_tmp", 372,  istat,  errorMessage)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -3656,7 +3764,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a_tmp(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 494,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 526,  successGPU)
 
           call ZTRTRI('U', 'N', int(nb,kind=BLAS_KIND), a_tmp(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -3664,7 +3772,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a_tmp(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 512,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 544,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -3705,7 +3813,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -3719,7 +3827,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -3773,7 +3881,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -3790,7 +3898,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -3800,7 +3908,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -3817,7 +3925,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -3844,29 +3952,29 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
 
 
     deallocate(a_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("elpa_invert_trm: a_tmp", 1092,  istat,  errorMessage)
+    call check_deallocate_f("elpa_invert_trm: a_tmp", 1124,  istat,  errorMessage)
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &complex&
@@ -3962,6 +4070,9 @@ module elpa_invert_trm
 ! consortium. The copyright of any additional modifications shall rest
 ! with their original authors, but shall adhere to the licensing terms
 ! distributed along with the original code in the file "COPYING".
+
+
+
 
 
 
@@ -4136,21 +4247,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -4162,19 +4273,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -4198,49 +4324,49 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     successGPU = gpu_malloc(a_dev, matrixRows*matrixCols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 326,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: a_dev", 358,  successGPU)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -4250,7 +4376,7 @@ module elpa_invert_trm
   if (useGPU) then
     successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 405,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> a_dev", 437,  successGPU)
   endif
 
 
@@ -4277,7 +4403,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 457,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 489,  successGPU)
 
           call CTRTRI('U', 'N', int(nb,kind=BLAS_KIND), a(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -4285,7 +4411,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 475,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 507,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -4329,7 +4455,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -4343,7 +4469,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -4417,7 +4543,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -4434,7 +4560,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -4444,7 +4570,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -4461,7 +4587,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -4505,34 +4631,34 @@ module elpa_invert_trm
     num = matrixRows*matrixCols* size_of_datatype
     successGPU = gpu_memcpy(int(loc(a(1,1)),kind=c_intptr_t), a_dev,  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1056,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memcpy a-> d_dev", 1088,  successGPU)
   endif ! useGPU
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
     successGPU = gpu_free(a_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1076,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: a_dev", 1108,  successGPU)
 
 
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &complex&
@@ -4626,6 +4752,9 @@ module elpa_invert_trm
 ! consortium. The copyright of any additional modifications shall rest
 ! with their original authors, but shall adhere to the licensing terms
 ! distributed along with the original code in the file "COPYING".
+
+
+
 
 
 
@@ -4784,21 +4913,21 @@ module elpa_invert_trm
   nblk       = obj%nblk
   matrixCols = obj%local_ncols
 
-  call obj%get("mpi_comm_parent", mpi_comm_all, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_rows", mpi_comm_rows, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
-    stop 1
-  endif
-  call obj%get("mpi_comm_cols", mpi_comm_cols, error)
-  if (error .ne. ELPA_OK) then
-    print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
-    stop 1
-  endif
+  !call obj%get("mpi_comm_parent", mpi_comm_all, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_all. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_rows", mpi_comm_rows, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_rows. Aborting..."
+  !  stop 1
+  !endif
+  !call obj%get("mpi_comm_cols", mpi_comm_cols, error)
+  !if (error .ne. ELPA_OK) then
+  !  print *,"ELPA_INVERT_TRM: Error getting option for mpi_comm_cols. Aborting..."
+  !  stop 1
+  !endif
 
   call obj%get("debug", debug, error)
   if (error .ne. ELPA_OK) then
@@ -4810,19 +4939,34 @@ module elpa_invert_trm
   else
     wantDebug = .true.
   endif
-  call obj%timer%start("mpi_communication")
-  call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
-  call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
-  call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
 
-  my_prow = int(my_prowMPI,kind=c_int)
-  np_rows = int(np_rowsMPI,kind=c_int)
-  my_pcol = int(my_pcolMPI,kind=c_int)
-  np_cols = int(np_colsMPI,kind=c_int)
-  myid    = int(myidMPI,kind=c_int)
-  call obj%timer%stop("mpi_communication")
+  mpi_comm_all    = obj%mpi_setup%mpi_comm_parent
+  mpi_comm_cols   = obj%mpi_setup%mpi_comm_cols
+  mpi_comm_rows   = obj%mpi_setup%mpi_comm_rows
+
+  myid    = obj%mpi_setup%myRank_comm_parent
+  my_prow = obj%mpi_setup%myRank_comm_rows
+  my_pcol = obj%mpi_setup%myRank_comm_cols
+
+  np_rows = obj%mpi_setup%nRanks_comm_rows
+  np_cols = obj%mpi_setup%nRanks_comm_cols
+
+
+
+
+  !call obj%timer%start("mpi_communication")
+  !call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND), my_prowMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND), np_rowsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_cols,kind=MPI_KIND), my_pcolMPI, mpierr)
+  !call mpi_comm_size(int(mpi_comm_cols,kind=MPI_KIND), np_colsMPI, mpierr)
+  !call mpi_comm_rank(int(mpi_comm_all,kind=MPI_KIND), myidMPI, mpierr)
+
+  !my_prow = int(my_prowMPI,kind=c_int)
+  !np_rows = int(np_rowsMPI,kind=c_int)
+  !my_pcol = int(my_pcolMPI,kind=c_int)
+  !np_cols = int(np_colsMPI,kind=c_int)
+  !myid    = int(myidMPI,kind=c_int)
+  !call obj%timer%stop("mpi_communication")
 
 
   success = .true.
@@ -4846,53 +4990,53 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_malloc(tmp1_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 253,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp1_dev", 285,  successGPU)
 
     successGPU = gpu_memset(tmp1_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 267,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp1_dev", 299,  successGPU)
 
     successGPU = gpu_malloc(tmp2_dev, nblk*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 271,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmp2_dev", 303,  successGPU)
 
     successGPU = gpu_memset(tmp2_dev, 0, nblk*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 285,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmp2_dev", 317,  successGPU)
 
     successGPU = gpu_malloc(tmat1_dev, l_rows*nblk*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 289,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat1_dev", 321,  successGPU)
 
     successGPU = gpu_memset(tmat1_dev, 0, l_rows*nblk*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 303,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat1_dev", 335,  successGPU)
 
     successGPU = gpu_malloc(tmat2_dev, nblk*l_cols*size_of_datatype)
-    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 307,  successGPU)
+    call check_alloc_GPU_f("elpa_invert_trm: tmat2_dev", 339,  successGPU)
 
     successGPU = gpu_memset(tmat2_dev, 0, nblk*l_cols*size_of_datatype)
-    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 321,  successGPU)
+    call check_memcpy_GPU_f("elpa_invert_trm: memset tmat2_dev", 353,  successGPU)
 
     ! associate with a_dev
     a_dev = transfer(aDev, a_dev)
 
     ! allocate a_tmp
     allocate(a_tmp(obj%local_nrows,obj%local_ncols), stat=istat, errmsg=errorMessage)
-    call check_allocate_f("elpa_invert_trm: a_tmp", 340,  istat,  errorMessage)
+    call check_allocate_f("elpa_invert_trm: a_tmp", 372,  istat,  errorMessage)
 
   endif ! useGPU
 
 
   allocate(tmp1(nblk*nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp1", 354,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp1", 386,  istat,  errorMessage)
 
   allocate(tmp2(nblk,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmp2", 357,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmp2", 389,  istat,  errorMessage)
 
   tmp1 = 0
   tmp2 = 0
 
   allocate(tmat1(l_rows,nblk), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat1", 363,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat1", 395,  istat,  errorMessage)
 
   allocate(tmat2(nblk,l_cols), stat=istat, errmsg=errorMessage)
-  call check_allocate_f("elpa_invert_trm: tmat2", 366,  istat,  errorMessage)
+  call check_allocate_f("elpa_invert_trm: tmat2", 398,  istat,  errorMessage)
 
   tmat1 = 0
   tmat2 = 0
@@ -4925,7 +5069,7 @@ module elpa_invert_trm
           call obj%timer%start("lapack")
           successGPU = gpu_memcpy(int(loc(a_tmp(1,1)),kind=c_intptr_t), a_dev, &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyDeviceToHost)
-          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 494,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a_dev -> a", 526,  successGPU)
 
           call CTRTRI('U', 'N', int(nb,kind=BLAS_KIND), a_tmp(l_row1,l_col1), int(matrixRows,kind=BLAS_KIND), &
                              infoBLAS)
@@ -4933,7 +5077,7 @@ module elpa_invert_trm
 
           successGPU = gpu_memcpy(a_dev, int(loc(a_tmp(1,1)),kind=c_intptr_t),  &
                        matrixRows*matrixCols* size_of_datatype, gpuMemcpyHostToDevice)
-          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 512,  successGPU)
+          call check_memcpy_GPU_f("invert_trm: memcpy a -> a_dev", 544,  successGPU)
           call obj%timer%stop("lapack")
 
         else ! useGPU
@@ -4974,7 +5118,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmp1),kind=c_intptr_t), tmp1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 582,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1_dev to tmp1", 614,  successGPU)
 
       endif ! useGPU
 
@@ -4988,7 +5132,7 @@ module elpa_invert_trm
         num = nblk*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmp1_dev, int(loc(tmp1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 675,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmp1 to tmp1_dev", 707,  successGPU)
       endif ! useGPU
       
       if (useGPU) then
@@ -5042,7 +5186,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat1),kind=c_intptr_t), tmat1_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 766,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1_dev to tmat1", 798,  successGPU)
       endif ! useGPU
 
       do i=1,nb
@@ -5059,7 +5203,7 @@ module elpa_invert_trm
         num = l_rows*nblk*size_of_datatype
         successGPU = gpu_memcpy(tmat1_dev, int(loc(tmat1),kind=c_intptr_t), num, &
                               gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 876,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat1 to tmat1_dev", 908,  successGPU)
       endif
     endif ! (l_row1>1)
 
@@ -5069,7 +5213,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(int(loc(tmat2),kind=c_intptr_t), tmat2_dev, num, &
                               gpuMemcpyDeviceToHost)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 899,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2_dev to tmat2", 931,  successGPU)
       endif
     endif ! useGPU
 
@@ -5086,7 +5230,7 @@ module elpa_invert_trm
         num = nblk*l_cols*size_of_datatype
         successGPU = gpu_memcpy(tmat2_dev, int(loc(tmat2),kind=c_intptr_t), num, &
                                 gpuMemcpyHostToDevice)
-        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 925,  successGPU)
+        call check_memcpy_GPU_f("elpa_invert_trm: tmat2 to tmat2_dev", 957,  successGPU)
       endif ! l_cols-l_col1+1 > 0
     endif ! useGPU
 
@@ -5113,29 +5257,29 @@ module elpa_invert_trm
 
   if (useGPU) then
     successGPU = gpu_free(tmp1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1063,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp1_dev", 1095,  successGPU)
 
     successGPU = gpu_free(tmp2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1066,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmp2_dev", 1098,  successGPU)
 
     successGPU = gpu_free(tmat1_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1069,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat1_dev", 1101,  successGPU)
 
     successGPU = gpu_free(tmat2_dev)
-    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1072,  successGPU)
+    call check_dealloc_GPU_f("elpa_invert_trm: tmat2_dev", 1104,  successGPU)
 
 
 
     deallocate(a_tmp, stat=istat, errmsg=errorMessage)
-    call check_deallocate_f("elpa_invert_trm: a_tmp", 1092,  istat,  errorMessage)
+    call check_deallocate_f("elpa_invert_trm: a_tmp", 1124,  istat,  errorMessage)
 
     !successGPU = gpu_host_unregister(int(loc(b),kind=c_intptr_t))
-    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1097,  successGPU)
+    !call check_host_unregister_GPU_f("elpa_multiply_a_b: b", 1129,  successGPU)
   endif ! useGPU
 
 
   deallocate(tmp1, tmp2, tmat1, tmat2, stat=istat, errmsg=errorMessage)
-  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1114,  istat,  errorMessage)
+  call check_deallocate_f("elpa_invert_trm: tmp1, tmp2, tmat1, tmat2", 1146,  istat,  errorMessage)
 
   call obj%timer%stop("elpa_invert_trm_&
   &complex&

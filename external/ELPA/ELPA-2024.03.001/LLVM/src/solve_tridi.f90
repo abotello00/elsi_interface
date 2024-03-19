@@ -563,12 +563,12 @@ subroutine solve_tridi_&
      liwork =  3 + 5*nlen
      allocate(work(lwork), iwork(liwork), stat=istat, errmsg=errorMessage)
      call check_allocate_f("solve_tridi_single: work, iwork", 656,  istat,  errorMessage)
-     call obj%timer%start("blas")
+     call obj%timer%start("lapack")
      call DSTEDC('I', int(nlen,kind=BLAS_KIND), d, e, q, int(ldq,kind=BLAS_KIND),    &
                           work, int(lwork,kind=BLAS_KIND), int(iwork,kind=BLAS_KIND), int(liwork,kind=BLAS_KIND), &
                           infoBLAS)
      info = int(infoBLAS,kind=ik)
-     call obj%timer%stop("blas")
+     call obj%timer%stop("lapack")
 
      if (info /= 0) then
 
@@ -578,10 +578,10 @@ subroutine solve_tridi_&
 
        d(:) = ds(:)
        e(:) = es(:)
-       call obj%timer%start("blas")
+       call obj%timer%start("lapack")
        call DSTEQR('I', int(nlen,kind=BLAS_KIND), d, e, q, int(ldq,kind=BLAS_KIND), work, infoBLAS )
        info = int(infoBLAS,kind=ik)
-       call obj%timer%stop("blas")
+       call obj%timer%stop("lapack")
 
        ! If DSTEQR fails also, we don't know what to do further ...
 
@@ -1182,12 +1182,12 @@ subroutine solve_tridi_&
      liwork =  3 + 5*nlen
      allocate(work(lwork), iwork(liwork), stat=istat, errmsg=errorMessage)
      call check_allocate_f("solve_tridi_single: work, iwork", 656,  istat,  errorMessage)
-     call obj%timer%start("blas")
+     call obj%timer%start("lapack")
      call SSTEDC('I', int(nlen,kind=BLAS_KIND), d, e, q, int(ldq,kind=BLAS_KIND),    &
                           work, int(lwork,kind=BLAS_KIND), int(iwork,kind=BLAS_KIND), int(liwork,kind=BLAS_KIND), &
                           infoBLAS)
      info = int(infoBLAS,kind=ik)
-     call obj%timer%stop("blas")
+     call obj%timer%stop("lapack")
 
      if (info /= 0) then
 
@@ -1197,10 +1197,10 @@ subroutine solve_tridi_&
 
        d(:) = ds(:)
        e(:) = es(:)
-       call obj%timer%start("blas")
+       call obj%timer%start("lapack")
        call SSTEQR('I', int(nlen,kind=BLAS_KIND), d, e, q, int(ldq,kind=BLAS_KIND), work, infoBLAS )
        info = int(infoBLAS,kind=ik)
-       call obj%timer%stop("blas")
+       call obj%timer%stop("lapack")
 
        ! If DSTEQR fails also, we don't know what to do further ...
 

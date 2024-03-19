@@ -88,6 +88,16 @@ module elpa_general_gpu
     module procedure gpu_free_cptr
   end interface
 
+  interface gpu_malloc_host
+    module procedure gpu_malloc_host_intptr
+    module procedure gpu_malloc_host_cptr
+  end interface
+
+  interface gpu_free_host
+    module procedure gpu_free_host_intptr
+    module procedure gpu_free_host_cptr
+  end interface
+
   interface gpu_vendor
     module procedure gpu_vendor_internal
     module procedure gpu_vendor_external_tests
@@ -139,6 +149,19 @@ module elpa_general_gpu
     end subroutine
 
 
+    function gpu_get_last_error() result(success)
+      use, intrinsic :: iso_c_binding
+
+      implicit none
+
+      logical                                         :: success
+
+      success = .true.
+
+
+    end function
+
+
     function gpu_stream_synchronize(stream) result(success)
       use, intrinsic :: iso_c_binding
 
@@ -161,7 +184,7 @@ module elpa_general_gpu
 
       implicit none
 
-      integer(kind=ik)              :: n
+      integer(kind=c_int)           :: n
       logical                       :: success
 
 
@@ -175,8 +198,8 @@ module elpa_general_gpu
 
       implicit none
 
-      integer(kind=ik), intent(in)  :: n
-      logical                       :: success
+      integer(kind=c_int), intent(in) :: n
+      logical                         :: success
 
     end function
 
@@ -189,7 +212,27 @@ module elpa_general_gpu
 
     end function
 
-    function gpu_malloc_host(array, elements) result(success)
+    function gpu_malloc_host_intptr(array, elements) result(success)
+      use, intrinsic :: iso_c_binding
+      use cuda_functions
+
+
+      implicit none
+      integer(kind=c_intptr_t)             :: array
+      integer(kind=c_intptr_t), intent(in) :: elements
+      logical                              :: success
+
+      success = .false.
+
+      if (use_gpu_vendor == nvidia_gpu) then
+        success = cuda_malloc_host_intptr(array, elements)
+      endif
+
+
+
+    end function
+
+    function gpu_malloc_host_cptr(array, elements) result(success)
       use, intrinsic :: iso_c_binding
       use cuda_functions
 
@@ -202,7 +245,7 @@ module elpa_general_gpu
       success = .false.
 
       if (use_gpu_vendor == nvidia_gpu) then
-        success = cuda_malloc_host(array, elements)
+        success = cuda_malloc_host_cptr(array, elements)
       endif
 
 
@@ -455,7 +498,7 @@ module elpa_general_gpu
 
       implicit none
       integer(kind=c_intptr_t)             :: a
-      integer(kind=ik)                     :: val
+      integer(kind=c_int)                  :: val
       integer(kind=c_intptr_t), intent(in) :: size
       integer(kind=C_INT)                  :: istat
 
@@ -478,7 +521,7 @@ module elpa_general_gpu
 
       implicit none
       integer(kind=c_intptr_t)             :: a
-      integer(kind=ik)                     :: val
+      integer(kind=c_int)                  :: val
       integer(kind=c_intptr_t), intent(in) :: size
       integer(kind=C_INT)                  :: istat
       integer(kind=c_intptr_t), intent(in) :: stream
@@ -536,7 +579,27 @@ module elpa_general_gpu
 
     end function
 
-    function gpu_free_host(a) result(success)
+    function gpu_free_host_intptr(a) result(success)
+      use, intrinsic :: iso_c_binding
+      use cuda_functions
+
+      implicit none
+      integer(kind=c_intptr_t), value          :: a
+
+      logical :: success
+
+      success = .false.
+
+      if (use_gpu_vendor == nvidia_gpu) then
+        success = cuda_free_host_intptr(a)
+      endif
+
+
+
+
+    end function
+
+    function gpu_free_host_cptr(a) result(success)
       use, intrinsic :: iso_c_binding
       use cuda_functions
 
@@ -548,7 +611,7 @@ module elpa_general_gpu
       success = .false.
 
       if (use_gpu_vendor == nvidia_gpu) then
-        success = cuda_free_host(a)
+        success = cuda_free_host_cptr(a)
       endif
 
 

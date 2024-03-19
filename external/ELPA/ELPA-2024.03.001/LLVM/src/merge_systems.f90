@@ -138,7 +138,7 @@ module merge_systems
       real(kind=rk8)                    :: d1u(na), zu(na), d1l(na), zl(na)
       real(kind=rk8), allocatable       :: qtmp1(:,:), qtmp2(:,:), ev(:,:)
 
-      integer(kind=ik)                            :: i, j, na1, na2, l_rows, l_cols, l_rqs, l_rqe, &
+      integer(kind=ik)                            :: i, j, k, na1, na2, l_rows, l_cols, l_rqs, l_rqe, &
                                                      l_rqm, ns, info
       integer(kind=BLAS_KIND)                     :: infoBLAS
       integer(kind=ik)                            :: l_rnm, nnzu, nnzl, ndef, ncnt, max_local_cols, &
@@ -168,6 +168,7 @@ module merge_systems
 
       call obj%timer%start("merge_systems" // "_double")
       success = .true.
+
       call obj%timer%start("mpi_communication")
       call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
       call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
@@ -180,6 +181,7 @@ module merge_systems
       np_cols = int(np_colsMPI,kind=c_int)
 
       call obj%timer%stop("mpi_communication")
+
 
       ! If my processor column isn't in the requested set, do nothing
 
@@ -279,11 +281,11 @@ module merge_systems
       z = z/sqrt(2.0_rk)
       rho = 2.0_rk*beta
       ! Calculate index for merging both systems by ascending eigenvalues
-      call obj%timer%start("blas")
+      call obj%timer%start("lapack")
       call DLAMRG( int(nm,kind=BLAS_KIND), int(na-nm,kind=BLAS_KIND), d, &
                             1_BLAS_KIND, 1_BLAS_KIND, idxBLAS )
       idx(:) = int(idxBLAS(:),kind=ik)
-      call obj%timer%stop("blas")
+      call obj%timer%stop("lapack")
 
       ! Calculate the allowable deflation tolerance
 
@@ -445,10 +447,10 @@ module merge_systems
         if (na1==1) then
           d(1) = d1(1) + rho*z1(1)**2 ! solve secular equation
         else ! na1==2
-          call obj%timer%start("blas")
+          call obj%timer%start("lapack")
           call DLAED5(1_BLAS_KIND, d1, z1, qtrans(1,1), rho, d(1))
           call DLAED5(2_BLAS_KIND, d1, z1, qtrans(1,2), rho, d(2))
-          call obj%timer%stop("blas")
+          call obj%timer%stop("lapack")
           call transform_columns_&
           &double&
           &(obj, idx1(1), idx1(2), na, tmp, l_rqs, l_rqe, q, &
@@ -461,11 +463,11 @@ module merge_systems
         d(na1+1:na) = d2(1:na2)
 
         ! Calculate arrangement of all eigenvalues  in output
-        call obj%timer%start("blas")
+        call obj%timer%start("lapack")
         call DLAMRG( int(na1,kind=BLAS_KIND), int(na-na1,kind=BLAS_KIND), d, &
                               1_BLAS_KIND, 1_BLAS_KIND, idxBLAS )
         idx(:) = int(idxBLAS(:),kind=ik)
-        call obj%timer%stop("blas")
+        call obj%timer%stop("lapack")
         ! Rearrange eigenvalues
 
         tmp = d
@@ -505,11 +507,11 @@ module merge_systems
 !!$OMP DO
 !#endif
         DO i = my_proc+1, na1, n_procs ! work distributed over all processors
-          call obj%timer%start("blas")
+          call obj%timer%start("lapack")
           call DLAED4(int(na1,kind=BLAS_KIND), int(i,kind=BLAS_KIND), d1, z1, delta, &
                                rho, s, infoBLAS) ! s is not used!
           info = int(infoBLAS,kind=ik)
-          call obj%timer%stop("blas")
+          call obj%timer%stop("lapack")
           if (info/=0) then
             ! If DLAED4 fails (may happen especially for LAPACK versions before 3.2)
             ! use the more stable bisection algorithm in solve_secular_equation
@@ -595,7 +597,7 @@ module merge_systems
 !         ev_scale_val = ev_scale(i)
           call add_tmp_&
           &double&
-          &(obj, d1, dbase, ddiff, z, ev_scale(i), na1,i)
+          &(obj, d1, dbase, ddiff, z, ev_scale(i), na1, i)
 !         ev_scale(i) = ev_scale_val
         enddo
 
@@ -609,12 +611,12 @@ module merge_systems
         ! Add the deflated eigenvalues
         d(na1+1:na) = d2(1:na2)
 
-        call obj%timer%start("blas")
+        call obj%timer%start("lapack")
         ! Calculate arrangement of all eigenvalues  in output
         call DLAMRG(int(na1,kind=BLAS_KIND), int(na-na1,kind=BLAS_KIND), d, &
                              1_BLAS_KIND, 1_BLAS_KIND, idxBLAS )
         idx(:) = int(idxBLAS(:),kind=ik)
-        call obj%timer%stop("blas")
+        call obj%timer%stop("lapack")
         ! Rearrange eigenvalues
         tmp = d
         do i=1,na
@@ -654,13 +656,13 @@ module merge_systems
         gemm_dim_m = MIN(max_strip,MAX(1,nqcols1))
 
         allocate(qtmp1(gemm_dim_k, gemm_dim_l), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("merge_systems: qtmp1", 653, istat,  errorMessage)
+        call check_allocate_f("merge_systems: qtmp1", 655, istat,  errorMessage)
 
         allocate(ev(gemm_dim_l,gemm_dim_m), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("merge_systems: ev", 656, istat,  errorMessage)
+        call check_allocate_f("merge_systems: ev", 658, istat,  errorMessage)
 
         allocate(qtmp2(gemm_dim_k, gemm_dim_m), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("merge_systems: qtmp2", 659, istat,  errorMessage)
+        call check_allocate_f("merge_systems: qtmp2", 661, istat,  errorMessage)
 
         qtmp1 = 0 ! May contain empty (unset) parts
         qtmp2 = 0 ! Not really needed
@@ -669,16 +671,16 @@ module merge_systems
           num = (gemm_dim_k * gemm_dim_l) * size_of_datatype
 
           successGPU = gpu_malloc(qtmp1_dev, num)
-          call check_alloc_GPU_f("merge_systems: qtmp1_dev", 675,  successGPU)
+          call check_alloc_GPU_f("merge_systems: qtmp1_dev", 677,  successGPU)
 
           num = (gemm_dim_l * gemm_dim_m) * size_of_datatype
           successGPU = gpu_malloc(ev_dev, num)
-          call check_alloc_GPU_f("merge_systems: ev_dev", 686,  successGPU)
+          call check_alloc_GPU_f("merge_systems: ev_dev", 688,  successGPU)
 
 
           num = (gemm_dim_k * gemm_dim_m) * size_of_datatype
           successGPU = gpu_malloc(qtmp2_dev, num)
-          call check_alloc_GPU_f("merge_systems: qtmp2_dev", 698,  successGPU)
+          call check_alloc_GPU_f("merge_systems: qtmp2_dev", 700,  successGPU)
         endif !useGPU
 
         ! Gather nonzero upper/lower components of old matrix Q
@@ -742,7 +744,7 @@ module merge_systems
             ! copy back after sendrecv
             successGPU = gpu_memcpy(qtmp1_dev, int(loc(qtmp1(1,1)),kind=c_intptr_t), &
                  gemm_dim_k * gemm_dim_l  * size_of_datatype, gpuMemcpyHostToDevice)
-            call check_memcpy_GPU_f("merge_systems: qtmp1_dev", 781,  successGPU)
+            call check_memcpy_GPU_f("merge_systems: qtmp1_dev", 783,  successGPU)
           endif
 
           ! Gather the parts in d1 and z which are fitting to qtmp1.
@@ -785,37 +787,46 @@ module merge_systems
             ncnt = MIN(max_strip,nqcols1-ns) ! number of columns in this strip
 
             ! Get partial result from (output) Q
-
+!$omp PARALLEL DO &
+!$omp default(none) &
+!$omp private(i, j, k) &
+!$omp SHARED(ns, q, l_rqs, l_rqe, l_col_out, idxq1, qtmp2, l_rows, ncnt)
             do i = 1, ncnt
-              qtmp2(1:l_rows,i) = q(l_rqs:l_rqe,l_col_out(idxq1(i+ns)))
+              j = idxq1(i+ns)
+              k = l_col_out(j)
+              qtmp2(1:l_rows,i) = q(l_rqs:l_rqe, k)
             enddo
-
+!$OMP END PARALLEL DO
             ! Compute eigenvectors of the rank-1 modified matrix.
             ! Parts for multiplying with upper half of Q:
-
+!$omp PARALLEL DO &
+!$omp default(none) &
+!$omp private(i, j, k, tmp) &
+!$omp shared(ncnt, nnzu, idx, idxq1, ns, d1u, dbase, ddiff, zu, ev_scale, ev)
             do i = 1, ncnt
+              do k = 1, nnzu
               j = idx(idxq1(i+ns))
               ! Calculate the j-th eigenvector of the deflated system
               ! See above why we are doing it this way!
-              tmp(1:nnzu) = d1u(1:nnzu)-dbase(j)
-              call v_add_s_&
-              &double&
-              &(obj,tmp,nnzu,ddiff(j))
-              ev(1:nnzu,i) = zu(1:nnzu) / tmp(1:nnzu) * ev_scale(j)
+                tmp(k) = d1u(k) - dbase(j)
+                tmp(k) = tmp(k) + ddiff(j)
+                ev(k,i) = zu(k) / tmp(k) * ev_scale(j)
             enddo
+            enddo
+!$OMP END PARALLEL DO
 
             if (useGPU) then
               !TODO: it should be enough to copy l_rows x ncnt
               ! copy to device
               successGPU = gpu_memcpy(qtmp2_dev, int(loc(qtmp2(1,1)),kind=c_intptr_t), &
                                  gemm_dim_k * gemm_dim_m * size_of_datatype, gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 869,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 880,  successGPU)
 
               !TODO the previous loop could be possible to do on device and thus
               !copy less
               successGPU = gpu_memcpy(ev_dev, int(loc(ev(1,1)),kind=c_intptr_t), &
                                  gemm_dim_l * gemm_dim_m * size_of_datatype, gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("merge_systems: ev_dev", 875,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: ev_dev", 886,  successGPU)
             endif
 
             ! Multiply old Q with eigenvectors (upper half)
@@ -845,23 +856,26 @@ module merge_systems
             ! Compute eigenvectors of the rank-1 modified matrix.
             ! Parts for multiplying with lower half of Q:
 
+!$omp PARALLEL DO &
+!$omp private(i, j, k, tmp)
             do i = 1, ncnt
+              do k = 1, nnzl
               j = idx(idxq1(i+ns))
               ! Calculate the j-th eigenvector of the deflated system
               ! See above why we are doing it this way!
-              tmp(1:nnzl) = d1l(1:nnzl)-dbase(j)
-              call v_add_s_&
-              &double&
-              &(obj,tmp,nnzl,ddiff(j))
-              ev(1:nnzl,i) = zl(1:nnzl) / tmp(1:nnzl) * ev_scale(j)
+                tmp(k) = d1l(k) - dbase(j)
+                tmp(k) = tmp(k) + ddiff(j)
+                ev(k,i) = zl(k) / tmp(k) * ev_scale(j)
             enddo
+            enddo
+!$OMP END PARALLEL DO
 
             if (useGPU) then
               !TODO the previous loop could be possible to do on device and thus
               !copy less
               successGPU = gpu_memcpy(ev_dev, int(loc(ev(1,1)),kind=c_intptr_t), &
                                  gemm_dim_l * gemm_dim_m * size_of_datatype, gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("merge_systems: ev_dev", 937,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: ev_dev", 951,  successGPU)
             endif
 
             ! Multiply old Q with eigenvectors (lower half)
@@ -895,15 +909,20 @@ module merge_systems
               ! COPY BACK
               successGPU = gpu_memcpy(int(loc(qtmp2(1,1)),kind=c_intptr_t), qtmp2_dev, &
                                  gemm_dim_k * gemm_dim_m * size_of_datatype, gpuMemcpyDeviceToHost)
-              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 986,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 1000,  successGPU)
             endif
 
 
              ! Put partial result into (output) Q
 
+!$omp PARALLEL DO &
+!$omp default(none) &
+!$omp private(i) &
+!$omp SHARED(q, ns, l_rqs, l_rqe, l_col_out, idxq1, qtmp2, l_rows, ncnt)
             do i = 1, ncnt
               q(l_rqs:l_rqe,l_col_out(idxq1(i+ns))) = qtmp2(1:l_rows,i)
             enddo
+!$OMP END PARALLEL DO
 
           enddo   !ns = 0, nqcols1-1, max_strip ! strimining loop
         enddo    !do np = 1, npc_n
@@ -911,17 +930,17 @@ module merge_systems
         if (useGPU) then
 
           successGPU = gpu_free(qtmp1_dev)
-          call check_dealloc_GPU_f("merge_systems: qtmp1_dev", 1009,  successGPU)
+          call check_dealloc_GPU_f("merge_systems: qtmp1_dev", 1028,  successGPU)
           
           successGPU = gpu_free(qtmp2_dev)
-          call check_dealloc_GPU_f("merge_systems: qtmp2_dev", 1018,  successGPU)
+          call check_dealloc_GPU_f("merge_systems: qtmp2_dev", 1037,  successGPU)
 
           successGPU = gpu_free(ev_dev)
-          call check_dealloc_GPU_f("merge_systems: ev_dev", 1027,  successGPU)
+          call check_dealloc_GPU_f("merge_systems: ev_dev", 1046,  successGPU)
         endif ! useGPU
 
         deallocate(ev, qtmp1, qtmp2, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("merge_systems: ev, qtmp1, qtmp2", 1031, istat,  errorMessage)
+        call check_deallocate_f("merge_systems: ev, qtmp1, qtmp2", 1050, istat,  errorMessage)
       endif !very outer test (na1==1 .or. na1==2)
 
       call obj%timer%stop("merge_systems" // "_double")
@@ -1050,7 +1069,7 @@ module merge_systems
       real(kind=rk4)                    :: d1u(na), zu(na), d1l(na), zl(na)
       real(kind=rk4), allocatable       :: qtmp1(:,:), qtmp2(:,:), ev(:,:)
 
-      integer(kind=ik)                            :: i, j, na1, na2, l_rows, l_cols, l_rqs, l_rqe, &
+      integer(kind=ik)                            :: i, j, k, na1, na2, l_rows, l_cols, l_rqs, l_rqe, &
                                                      l_rqm, ns, info
       integer(kind=BLAS_KIND)                     :: infoBLAS
       integer(kind=ik)                            :: l_rnm, nnzu, nnzl, ndef, ncnt, max_local_cols, &
@@ -1080,6 +1099,7 @@ module merge_systems
 
       call obj%timer%start("merge_systems" // "_single")
       success = .true.
+
       call obj%timer%start("mpi_communication")
       call mpi_comm_rank(int(mpi_comm_rows,kind=MPI_KIND) ,my_prowMPI, mpierr)
       call mpi_comm_size(int(mpi_comm_rows,kind=MPI_KIND) ,np_rowsMPI, mpierr)
@@ -1092,6 +1112,7 @@ module merge_systems
       np_cols = int(np_colsMPI,kind=c_int)
 
       call obj%timer%stop("mpi_communication")
+
 
       ! If my processor column isn't in the requested set, do nothing
 
@@ -1191,11 +1212,11 @@ module merge_systems
       z = z/sqrt(2.0_rk)
       rho = 2.0_rk*beta
       ! Calculate index for merging both systems by ascending eigenvalues
-      call obj%timer%start("blas")
+      call obj%timer%start("lapack")
       call SLAMRG( int(nm,kind=BLAS_KIND), int(na-nm,kind=BLAS_KIND), d, &
                             1_BLAS_KIND, 1_BLAS_KIND, idxBLAS )
       idx(:) = int(idxBLAS(:),kind=ik)
-      call obj%timer%stop("blas")
+      call obj%timer%stop("lapack")
 
       ! Calculate the allowable deflation tolerance
 
@@ -1357,10 +1378,10 @@ module merge_systems
         if (na1==1) then
           d(1) = d1(1) + rho*z1(1)**2 ! solve secular equation
         else ! na1==2
-          call obj%timer%start("blas")
+          call obj%timer%start("lapack")
           call SLAED5(1_BLAS_KIND, d1, z1, qtrans(1,1), rho, d(1))
           call SLAED5(2_BLAS_KIND, d1, z1, qtrans(1,2), rho, d(2))
-          call obj%timer%stop("blas")
+          call obj%timer%stop("lapack")
           call transform_columns_&
           &single&
           &(obj, idx1(1), idx1(2), na, tmp, l_rqs, l_rqe, q, &
@@ -1373,11 +1394,11 @@ module merge_systems
         d(na1+1:na) = d2(1:na2)
 
         ! Calculate arrangement of all eigenvalues  in output
-        call obj%timer%start("blas")
+        call obj%timer%start("lapack")
         call SLAMRG( int(na1,kind=BLAS_KIND), int(na-na1,kind=BLAS_KIND), d, &
                               1_BLAS_KIND, 1_BLAS_KIND, idxBLAS )
         idx(:) = int(idxBLAS(:),kind=ik)
-        call obj%timer%stop("blas")
+        call obj%timer%stop("lapack")
         ! Rearrange eigenvalues
 
         tmp = d
@@ -1417,11 +1438,11 @@ module merge_systems
 !!$OMP DO
 !#endif
         DO i = my_proc+1, na1, n_procs ! work distributed over all processors
-          call obj%timer%start("blas")
+          call obj%timer%start("lapack")
           call SLAED4(int(na1,kind=BLAS_KIND), int(i,kind=BLAS_KIND), d1, z1, delta, &
                                rho, s, infoBLAS) ! s is not used!
           info = int(infoBLAS,kind=ik)
-          call obj%timer%stop("blas")
+          call obj%timer%stop("lapack")
           if (info/=0) then
             ! If DLAED4 fails (may happen especially for LAPACK versions before 3.2)
             ! use the more stable bisection algorithm in solve_secular_equation
@@ -1507,7 +1528,7 @@ module merge_systems
 !         ev_scale_val = ev_scale(i)
           call add_tmp_&
           &single&
-          &(obj, d1, dbase, ddiff, z, ev_scale(i), na1,i)
+          &(obj, d1, dbase, ddiff, z, ev_scale(i), na1, i)
 !         ev_scale(i) = ev_scale_val
         enddo
 
@@ -1521,12 +1542,12 @@ module merge_systems
         ! Add the deflated eigenvalues
         d(na1+1:na) = d2(1:na2)
 
-        call obj%timer%start("blas")
+        call obj%timer%start("lapack")
         ! Calculate arrangement of all eigenvalues  in output
         call SLAMRG(int(na1,kind=BLAS_KIND), int(na-na1,kind=BLAS_KIND), d, &
                              1_BLAS_KIND, 1_BLAS_KIND, idxBLAS )
         idx(:) = int(idxBLAS(:),kind=ik)
-        call obj%timer%stop("blas")
+        call obj%timer%stop("lapack")
         ! Rearrange eigenvalues
         tmp = d
         do i=1,na
@@ -1566,13 +1587,13 @@ module merge_systems
         gemm_dim_m = MIN(max_strip,MAX(1,nqcols1))
 
         allocate(qtmp1(gemm_dim_k, gemm_dim_l), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("merge_systems: qtmp1", 653, istat,  errorMessage)
+        call check_allocate_f("merge_systems: qtmp1", 655, istat,  errorMessage)
 
         allocate(ev(gemm_dim_l,gemm_dim_m), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("merge_systems: ev", 656, istat,  errorMessage)
+        call check_allocate_f("merge_systems: ev", 658, istat,  errorMessage)
 
         allocate(qtmp2(gemm_dim_k, gemm_dim_m), stat=istat, errmsg=errorMessage)
-        call check_allocate_f("merge_systems: qtmp2", 659, istat,  errorMessage)
+        call check_allocate_f("merge_systems: qtmp2", 661, istat,  errorMessage)
 
         qtmp1 = 0 ! May contain empty (unset) parts
         qtmp2 = 0 ! Not really needed
@@ -1581,16 +1602,16 @@ module merge_systems
           num = (gemm_dim_k * gemm_dim_l) * size_of_datatype
 
           successGPU = gpu_malloc(qtmp1_dev, num)
-          call check_alloc_GPU_f("merge_systems: qtmp1_dev", 675,  successGPU)
+          call check_alloc_GPU_f("merge_systems: qtmp1_dev", 677,  successGPU)
 
           num = (gemm_dim_l * gemm_dim_m) * size_of_datatype
           successGPU = gpu_malloc(ev_dev, num)
-          call check_alloc_GPU_f("merge_systems: ev_dev", 686,  successGPU)
+          call check_alloc_GPU_f("merge_systems: ev_dev", 688,  successGPU)
 
 
           num = (gemm_dim_k * gemm_dim_m) * size_of_datatype
           successGPU = gpu_malloc(qtmp2_dev, num)
-          call check_alloc_GPU_f("merge_systems: qtmp2_dev", 698,  successGPU)
+          call check_alloc_GPU_f("merge_systems: qtmp2_dev", 700,  successGPU)
         endif !useGPU
 
         ! Gather nonzero upper/lower components of old matrix Q
@@ -1654,7 +1675,7 @@ module merge_systems
             ! copy back after sendrecv
             successGPU = gpu_memcpy(qtmp1_dev, int(loc(qtmp1(1,1)),kind=c_intptr_t), &
                  gemm_dim_k * gemm_dim_l  * size_of_datatype, gpuMemcpyHostToDevice)
-            call check_memcpy_GPU_f("merge_systems: qtmp1_dev", 781,  successGPU)
+            call check_memcpy_GPU_f("merge_systems: qtmp1_dev", 783,  successGPU)
           endif
 
           ! Gather the parts in d1 and z which are fitting to qtmp1.
@@ -1697,37 +1718,46 @@ module merge_systems
             ncnt = MIN(max_strip,nqcols1-ns) ! number of columns in this strip
 
             ! Get partial result from (output) Q
-
+!$omp PARALLEL DO &
+!$omp default(none) &
+!$omp private(i, j, k) &
+!$omp SHARED(ns, q, l_rqs, l_rqe, l_col_out, idxq1, qtmp2, l_rows, ncnt)
             do i = 1, ncnt
-              qtmp2(1:l_rows,i) = q(l_rqs:l_rqe,l_col_out(idxq1(i+ns)))
+              j = idxq1(i+ns)
+              k = l_col_out(j)
+              qtmp2(1:l_rows,i) = q(l_rqs:l_rqe, k)
             enddo
-
+!$OMP END PARALLEL DO
             ! Compute eigenvectors of the rank-1 modified matrix.
             ! Parts for multiplying with upper half of Q:
-
+!$omp PARALLEL DO &
+!$omp default(none) &
+!$omp private(i, j, k, tmp) &
+!$omp shared(ncnt, nnzu, idx, idxq1, ns, d1u, dbase, ddiff, zu, ev_scale, ev)
             do i = 1, ncnt
+              do k = 1, nnzu
               j = idx(idxq1(i+ns))
               ! Calculate the j-th eigenvector of the deflated system
               ! See above why we are doing it this way!
-              tmp(1:nnzu) = d1u(1:nnzu)-dbase(j)
-              call v_add_s_&
-              &single&
-              &(obj,tmp,nnzu,ddiff(j))
-              ev(1:nnzu,i) = zu(1:nnzu) / tmp(1:nnzu) * ev_scale(j)
+                tmp(k) = d1u(k) - dbase(j)
+                tmp(k) = tmp(k) + ddiff(j)
+                ev(k,i) = zu(k) / tmp(k) * ev_scale(j)
             enddo
+            enddo
+!$OMP END PARALLEL DO
 
             if (useGPU) then
               !TODO: it should be enough to copy l_rows x ncnt
               ! copy to device
               successGPU = gpu_memcpy(qtmp2_dev, int(loc(qtmp2(1,1)),kind=c_intptr_t), &
                                  gemm_dim_k * gemm_dim_m * size_of_datatype, gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 869,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 880,  successGPU)
 
               !TODO the previous loop could be possible to do on device and thus
               !copy less
               successGPU = gpu_memcpy(ev_dev, int(loc(ev(1,1)),kind=c_intptr_t), &
                                  gemm_dim_l * gemm_dim_m * size_of_datatype, gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("merge_systems: ev_dev", 875,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: ev_dev", 886,  successGPU)
             endif
 
             ! Multiply old Q with eigenvectors (upper half)
@@ -1757,23 +1787,26 @@ module merge_systems
             ! Compute eigenvectors of the rank-1 modified matrix.
             ! Parts for multiplying with lower half of Q:
 
+!$omp PARALLEL DO &
+!$omp private(i, j, k, tmp)
             do i = 1, ncnt
+              do k = 1, nnzl
               j = idx(idxq1(i+ns))
               ! Calculate the j-th eigenvector of the deflated system
               ! See above why we are doing it this way!
-              tmp(1:nnzl) = d1l(1:nnzl)-dbase(j)
-              call v_add_s_&
-              &single&
-              &(obj,tmp,nnzl,ddiff(j))
-              ev(1:nnzl,i) = zl(1:nnzl) / tmp(1:nnzl) * ev_scale(j)
+                tmp(k) = d1l(k) - dbase(j)
+                tmp(k) = tmp(k) + ddiff(j)
+                ev(k,i) = zl(k) / tmp(k) * ev_scale(j)
             enddo
+            enddo
+!$OMP END PARALLEL DO
 
             if (useGPU) then
               !TODO the previous loop could be possible to do on device and thus
               !copy less
               successGPU = gpu_memcpy(ev_dev, int(loc(ev(1,1)),kind=c_intptr_t), &
                                  gemm_dim_l * gemm_dim_m * size_of_datatype, gpuMemcpyHostToDevice)
-              call check_memcpy_GPU_f("merge_systems: ev_dev", 937,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: ev_dev", 951,  successGPU)
             endif
 
             ! Multiply old Q with eigenvectors (lower half)
@@ -1807,15 +1840,20 @@ module merge_systems
               ! COPY BACK
               successGPU = gpu_memcpy(int(loc(qtmp2(1,1)),kind=c_intptr_t), qtmp2_dev, &
                                  gemm_dim_k * gemm_dim_m * size_of_datatype, gpuMemcpyDeviceToHost)
-              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 986,  successGPU)
+              call check_memcpy_GPU_f("merge_systems: qtmp2_dev", 1000,  successGPU)
             endif
 
 
              ! Put partial result into (output) Q
 
+!$omp PARALLEL DO &
+!$omp default(none) &
+!$omp private(i) &
+!$omp SHARED(q, ns, l_rqs, l_rqe, l_col_out, idxq1, qtmp2, l_rows, ncnt)
             do i = 1, ncnt
               q(l_rqs:l_rqe,l_col_out(idxq1(i+ns))) = qtmp2(1:l_rows,i)
             enddo
+!$OMP END PARALLEL DO
 
           enddo   !ns = 0, nqcols1-1, max_strip ! strimining loop
         enddo    !do np = 1, npc_n
@@ -1823,17 +1861,17 @@ module merge_systems
         if (useGPU) then
 
           successGPU = gpu_free(qtmp1_dev)
-          call check_dealloc_GPU_f("merge_systems: qtmp1_dev", 1009,  successGPU)
+          call check_dealloc_GPU_f("merge_systems: qtmp1_dev", 1028,  successGPU)
           
           successGPU = gpu_free(qtmp2_dev)
-          call check_dealloc_GPU_f("merge_systems: qtmp2_dev", 1018,  successGPU)
+          call check_dealloc_GPU_f("merge_systems: qtmp2_dev", 1037,  successGPU)
 
           successGPU = gpu_free(ev_dev)
-          call check_dealloc_GPU_f("merge_systems: ev_dev", 1027,  successGPU)
+          call check_dealloc_GPU_f("merge_systems: ev_dev", 1046,  successGPU)
         endif ! useGPU
 
         deallocate(ev, qtmp1, qtmp2, stat=istat, errmsg=errorMessage)
-        call check_deallocate_f("merge_systems: ev, qtmp1, qtmp2", 1031, istat,  errorMessage)
+        call check_deallocate_f("merge_systems: ev, qtmp1, qtmp2", 1050, istat,  errorMessage)
       endif !very outer test (na1==1 .or. na1==2)
 
       call obj%timer%stop("merge_systems" // "_single")

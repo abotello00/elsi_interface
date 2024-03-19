@@ -16,6 +16,7 @@ module elpa_blas_gpu
   use elpa_general_gpu, only : use_gpu_vendor, nvidia_gpu, amd_gpu, intel_gpu, openmp_offload_gpu, sycl_gpu, no_gpu, &
                                gpu_vendor
 
+  public
 
 
   interface gpublas_Dcopy
@@ -164,6 +165,19 @@ module elpa_blas_gpu
 
 
   contains
+
+
+      function gpublas_get_version(handle, version) result(success)
+      use, intrinsic :: iso_c_binding
+
+      implicit none
+
+      integer(kind=c_intptr_t), intent(in)  :: handle
+      integer(kind=c_int),      intent(out) :: version
+      logical                               :: success
+
+      success = .true.
+    end function
 
     function gpublas_set_stream(handle, stream) result(success)
       use, intrinsic :: iso_c_binding
@@ -1047,28 +1061,28 @@ module elpa_blas_gpu
 
     end subroutine
 
-    subroutine gpublas_Ddot_intptr(gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Ddot_intptr(gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
       implicit none
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      integer(kind=c_intptr_t)          :: x, y, result
-      
+      integer(kind=c_intptr_t)          :: x, y, z
+
 
 
 
     end subroutine
 
-    subroutine gpublas_Ddot_cptr(gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Ddot_cptr(gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
       implicit none
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      type(c_ptr)                       :: x, y, result
+      type(c_ptr)                       :: x, y, z
 
 
 
@@ -1135,28 +1149,28 @@ module elpa_blas_gpu
 
 
     end subroutine
-    subroutine gpublas_Sdot_intptr(gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Sdot_intptr(gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
       implicit none
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      integer(kind=c_intptr_t)          :: x, y, result
+      integer(kind=c_intptr_t)          :: x, y, z
 
 
 
 
     end subroutine
 
-    subroutine gpublas_Sdot_cptr(gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Sdot_cptr(gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
       implicit none
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      type(c_ptr)                       :: x, y, result
+      type(c_ptr)                       :: x, y, z
 
 
 
@@ -1223,8 +1237,7 @@ module elpa_blas_gpu
 
 
     end subroutine
-
-    subroutine gpublas_Zdot_intptr(conj, gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Zdot_intptr(conj, gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
@@ -1232,14 +1245,14 @@ module elpa_blas_gpu
       character(1,C_CHAR),value         :: conj
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      integer(kind=c_intptr_t)          :: x, y, result
+      integer(kind=c_intptr_t)          :: x, y, z
 
 
 
 
     end subroutine
 
-    subroutine gpublas_Zdot_cptr(conj, gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Zdot_cptr(conj, gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
@@ -1247,7 +1260,7 @@ module elpa_blas_gpu
       character(1,C_CHAR),value         :: conj
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      type(c_ptr)                       :: x, y, result
+      type(c_ptr)                       :: x, y, z
 
 
 
@@ -1314,9 +1327,7 @@ module elpa_blas_gpu
 
 
     end subroutine
-
-    
-    subroutine gpublas_Cdot_intptr(conj, gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Cdot_intptr(conj, gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
@@ -1324,14 +1335,14 @@ module elpa_blas_gpu
       character(1,C_CHAR),value         :: conj
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      integer(kind=c_intptr_t)          :: x, y, result
+      integer(kind=c_intptr_t)          :: x, y, z
 
 
 
 
     end subroutine
 
-    subroutine gpublas_Cdot_cptr(conj, gpublasHandle, length, x, incx, y, incy, result)
+    subroutine gpublas_Cdot_cptr(conj, gpublasHandle, length, x, incx, y, incy, z)
 
       use, intrinsic :: iso_c_binding
 
@@ -1339,7 +1350,7 @@ module elpa_blas_gpu
       character(1,C_CHAR),value         :: conj
       integer(kind=c_intptr_t)          :: gpublasHandle
       integer(kind=c_int)               :: length, incx, incy
-      type(c_ptr)                       :: x, y, result
+      type(c_ptr)                       :: x, y, z
 
 
 

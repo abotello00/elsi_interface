@@ -773,6 +773,7 @@ function elpa_solve_evp_&
 
    nullify(q_actual)
 
+
    call obj%timer%stop("elpa_solve_evp_&
    &real&
    &_1stage_&
@@ -1398,6 +1399,7 @@ function elpa_solve_evp_&
    nullify(q)
 
    nullify(q_actual)
+
 
    call obj%timer%stop("elpa_solve_evp_&
    &real&
@@ -2029,6 +2031,7 @@ function elpa_solve_evp_&
 
    nullify(q_actual)
 
+
    call obj%timer%stop("elpa_solve_evp_&
    &real&
    &_1stage_&
@@ -2655,6 +2658,7 @@ function elpa_solve_evp_&
    nullify(q)
 
    nullify(q_actual)
+
 
    call obj%timer%stop("elpa_solve_evp_&
    &real&
@@ -3297,6 +3301,7 @@ function elpa_solve_evp_&
 
    nullify(q_actual)
 
+
    call obj%timer%stop("elpa_solve_evp_&
    &complex&
    &_1stage_&
@@ -3934,6 +3939,7 @@ function elpa_solve_evp_&
    nullify(q)
 
    nullify(q_actual)
+
 
    call obj%timer%stop("elpa_solve_evp_&
    &complex&
@@ -4577,6 +4583,7 @@ function elpa_solve_evp_&
 
    nullify(q_actual)
 
+
    call obj%timer%stop("elpa_solve_evp_&
    &complex&
    &_1stage_&
@@ -5215,6 +5222,7 @@ function elpa_solve_evp_&
 
    nullify(q_actual)
 
+
    call obj%timer%stop("elpa_solve_evp_&
    &complex&
    &_1stage_&
@@ -5849,6 +5857,7 @@ function elpa_solve_skew_evp_&
 
    nullify(q_actual)
 
+
    call obj%timer%stop("elpa_solve_skew_evp_&
    &real&
    &_1stage_&
@@ -6479,6 +6488,7 @@ function elpa_solve_skew_evp_&
    nullify(q)
 
    nullify(q_actual)
+
 
    call obj%timer%stop("elpa_solve_skew_evp_&
    &real&
@@ -7115,6 +7125,7 @@ function elpa_solve_skew_evp_&
 
    nullify(q_actual)
 
+
    call obj%timer%stop("elpa_solve_skew_evp_&
    &real&
    &_1stage_&
@@ -7747,6 +7758,7 @@ function elpa_solve_skew_evp_&
    nullify(q)
 
    nullify(q_actual)
+
 
    call obj%timer%stop("elpa_solve_skew_evp_&
    &real&

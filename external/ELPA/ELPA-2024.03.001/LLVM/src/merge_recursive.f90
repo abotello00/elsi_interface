@@ -83,6 +83,7 @@ recursive subroutine merge_recursive_&
    my_pcol = int(my_pcolMPI,kind=c_int)
    call obj%timer%stop("mpi_communication")
 
+
    if (nprocs<=1) then
      ! Safety check only
      if (wantDebug) write(error_unit,*) "ELPA1_merge_recursive: INTERNAL error merge_recursive: nprocs=",nprocs
@@ -251,6 +252,7 @@ recursive subroutine merge_recursive_&
 
    my_pcol = int(my_pcolMPI,kind=c_int)
    call obj%timer%stop("mpi_communication")
+
 
    if (nprocs<=1) then
      ! Safety check only

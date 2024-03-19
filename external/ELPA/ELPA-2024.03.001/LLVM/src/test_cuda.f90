@@ -119,6 +119,42 @@ module test_cuda_functions
   integer(kind=ik) :: cublasPointerModeDevice
   integer(kind=ik) :: cublasPointerModeHost
 
+
+  interface
+    function cuda_device_get_attributes_c(value, attribute) result(istat) &
+             bind(C, name="cudaDeviceGetAttributeFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(kind=C_INT), value  :: attribute
+      integer(kind=C_INT)         :: value
+      integer(kind=C_INT)         :: istat
+    end function
+  end interface
+
+
+  interface
+    function cublas_get_version_c(cublasHandle, version) result(istat) &
+             bind(C, name="cublasGetVersionFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+
+      integer(kind=C_intptr_T), value  :: cublasHandle
+      integer(kind=C_INT)              :: version
+      integer(kind=C_INT)              :: istat
+    end function
+  end interface
+
+
+  interface
+    function cuda_get_last_error_c() result(istat) &
+             bind(C, name="cudaGetLastErrorFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_int)              :: istat
+    end function
+  end interface
+
   ! streams
 
   interface
@@ -175,19 +211,6 @@ module test_cuda_functions
   end interface
 
   interface
-    function cusolver_set_stream_c(cusolverHandle, cudaStream) result(istat) &
-             bind(C, name="cusolverSetStreamFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-
-      integer(kind=C_intptr_T), value  :: cusolverHandle
-      integer(kind=C_intptr_T), value  :: cudaStream
-      integer(kind=C_INT)              :: istat
-    end function
-  end interface
-
-  ! functions to set and query the GPU devices
-  interface
     function cublas_create_c(cudaHandle) result(istat) &
              bind(C, name="cublasCreateFromC")
       use, intrinsic :: iso_c_binding
@@ -207,26 +230,7 @@ module test_cuda_functions
     end function
   end interface
 
-  interface
-    function cusolver_create_c(cusolverHandle) result(istat) &
-             bind(C, name="cusolverCreateFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_T) :: cusolverHandle
-      integer(kind=C_INT)      :: istat
-    end function
-  end interface
-
-  interface
-    function cusolver_destroy_c(cusolverHandle) result(istat) &
-             bind(C, name="cusolverDestroyFromC")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_T), value :: cusolverHandle
-      integer(kind=C_INT)      :: istat
-    end function
-  end interface
-
+  ! functions to set and query the GPU devices
   interface
     function cuda_setdevice_c(n) result(istat) &
              bind(C, name="cudaSetDeviceFromC")
@@ -243,8 +247,8 @@ module test_cuda_functions
              bind(C, name="cudaGetDeviceCountFromC")
       use, intrinsic :: iso_c_binding
       implicit none
-      integer(kind=C_INT), intent(out) :: n
-      integer(kind=C_INT)              :: istat
+      integer(kind=C_INT), intent(out)         :: n
+      integer(kind=C_INT)                      :: istat
     end function
   end interface
 
@@ -565,7 +569,6 @@ module test_cuda_functions
     end function
   end interface
 
-
   interface
     function cuda_malloc_cptr_c(a, width_height) result(istat) &
              bind(C, name="cudaMallocFromC")
@@ -578,8 +581,22 @@ module test_cuda_functions
     end function
   end interface
 
+  interface cuda_free_host
+    module procedure cuda_free_host_intptr
+    module procedure cuda_free_host_cptr
+  end interface
   interface
-    function cuda_free_host_c(a) result(istat) &
+    function cuda_free_host_intptr_c(a) result(istat) &
+             bind(C, name="cudaFreeHostFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t), value  :: a
+      integer(kind=C_INT)              :: istat
+    end function
+  end interface
+
+  interface
+    function cuda_free_host_cptr_c(a) result(istat) &
              bind(C, name="cudaFreeHostFromC")
       use, intrinsic :: iso_c_binding
       implicit none
@@ -588,13 +605,28 @@ module test_cuda_functions
     end function
   end interface
 
+  interface cuda_malloc_host
+    module procedure cuda_malloc_host_intptr
+    module procedure cuda_malloc_host_cptr
+  end interface
   interface
-    function cuda_malloc_host_c(a, width_height) result(istat) &
+    function cuda_malloc_host_intptr_c(a, width_height) result(istat) &
+             bind(C, name="cudaMallocHostFromC")
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t)                    :: a
+      integer(kind=c_intptr_t), intent(in), value :: width_height
+      integer(kind=C_INT)                         :: istat
+    end function
+  end interface
+
+  interface
+    function cuda_malloc_host_cptr_c(a, width_height) result(istat) &
              bind(C, name="cudaMallocHostFromC")
       use, intrinsic :: iso_c_binding
       implicit none
       type(c_ptr)                    :: a
-      integer(kind=c_intptr_t), intent(in), value   :: width_height
+      integer(kind=c_intptr_t), intent(in), value :: width_height
       integer(kind=C_INT)                         :: istat
     end function
   end interface
@@ -622,32 +654,6 @@ module test_cuda_functions
       integer(kind=C_INT)                        :: istat
       integer(kind=c_intptr_t), value            :: cudaStream
     end function
-  end interface
-
-  interface
-    subroutine cusolver_Dtrtri_c(cusolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="cusolverDtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine cusolver_Dpotrf_c(cusolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="cusolverDpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
-    end subroutine
   end interface
 
   interface cublas_Dgemm
@@ -700,6 +706,7 @@ module test_cuda_functions
     end subroutine
   end interface
 
+
   interface cublas_Dcopy
     module procedure cublas_Dcopy_intptr
     module procedure cublas_Dcopy_cptr
@@ -728,6 +735,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Dtrmm
     module procedure cublas_Dtrmm_intptr
@@ -761,6 +769,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Dtrsm
     module procedure cublas_Dtrsm_intptr
@@ -806,32 +815,6 @@ module test_cuda_functions
       real(kind=C_DOUBLE) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: cublasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine cusolver_Strtri_c(cusolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="cusolverStrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine cusolver_Spotrf_c(cusolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="cusolverSpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
     end subroutine
   end interface
 
@@ -885,6 +868,7 @@ module test_cuda_functions
     end subroutine
   end interface
 
+
   interface cublas_Scopy
     module procedure cublas_Scopy_intptr
     module procedure cublas_Scopy_cptr
@@ -913,6 +897,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Strmm
     module procedure cublas_Strmm_intptr
@@ -946,6 +931,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Strsm
     module procedure cublas_Strsm_intptr
@@ -991,32 +977,6 @@ module test_cuda_functions
       real(kind=C_FLOAT) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: cublasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine cusolver_Ztrtri_c(cusolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="cusolverZtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine cusolver_Zpotrf_c(cusolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="cusolverZpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
     end subroutine
   end interface
 
@@ -1070,6 +1030,7 @@ module test_cuda_functions
     end subroutine
   end interface
 
+
   interface cublas_Zcopy
     module procedure cublas_Zcopy_intptr
     module procedure cublas_Zcopy_cptr
@@ -1098,6 +1059,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Ztrmm
     module procedure cublas_Ztrmm_intptr
@@ -1131,6 +1093,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Ztrsm
     module procedure cublas_Ztrsm_intptr
@@ -1176,32 +1139,6 @@ module test_cuda_functions
       complex(kind=C_DOUBLE_COMPLEX) , value              :: alpha, beta
       integer(kind=C_intptr_T), value         :: a, x, y
       integer(kind=C_intptr_T), value         :: cublasHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine cusolver_Ctrtri_c(cusolverHandle, uplo, diag, n, a, lda, info) &
-                              bind(C,name="cusolverCtrtri_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo, diag
-      integer(kind=C_INT64_T), intent(in),value :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
-    end subroutine
-  end interface
-
-  interface
-    subroutine cusolver_Cpotrf_c(cusolverHandle, uplo, n, a, lda, info) &
-                              bind(C,name="cusolverCpotrf_elpa_wrapper")
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value                 :: uplo
-      integer(kind=C_INT), intent(in),value     :: n, lda
-      integer(kind=C_intptr_T), value           :: a
-      integer(kind=C_INT)                       :: info
-      integer(kind=C_intptr_T), value           :: cusolverHandle
     end subroutine
   end interface
 
@@ -1255,6 +1192,7 @@ module test_cuda_functions
     end subroutine
   end interface
 
+
   interface cublas_Ccopy
     module procedure cublas_Ccopy_intptr
     module procedure cublas_Ccopy_cptr
@@ -1283,6 +1221,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Ctrmm
     module procedure cublas_Ctrmm_intptr
@@ -1316,6 +1255,7 @@ module test_cuda_functions
       integer(kind=C_intptr_T), value         :: cublasHandle
     end subroutine
   end interface
+
 
   interface cublas_Ctrsm
     module procedure cublas_Ctrsm_intptr
@@ -1403,6 +1343,7 @@ module test_cuda_functions
     end subroutine
   end interface
 
+
   interface cublas_Ddot
     module procedure cublas_Ddot_intptr
     module procedure cublas_Ddot_cptr
@@ -1425,10 +1366,11 @@ module test_cuda_functions
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: cublasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
+      integer(kind=C_INT), value              :: length, incx, incy
       type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface cublas_Dscal
     module procedure cublas_Dscal_intptr
@@ -1458,6 +1400,7 @@ module test_cuda_functions
       type(c_ptr), value                      :: x
     end subroutine
   end interface
+
 
   interface cublas_Daxpy
     module procedure cublas_Daxpy_intptr
@@ -1499,7 +1442,7 @@ module test_cuda_functions
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: cublasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
+      integer(kind=C_INT), value              :: length, incx, incy
       integer(kind=C_intptr_T), value         :: x, y, result
     end subroutine
   end interface
@@ -1510,10 +1453,11 @@ module test_cuda_functions
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=C_intptr_T), value         :: cublasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
+      integer(kind=C_INT), value              :: length, incx, incy
       type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface cublas_Sscal
     module procedure cublas_Sscal_intptr
@@ -1543,6 +1487,7 @@ module test_cuda_functions
       type(c_ptr), value                      :: x
     end subroutine
   end interface
+
 
   interface cublas_Saxpy
     module procedure cublas_Saxpy_intptr
@@ -1585,7 +1530,7 @@ module test_cuda_functions
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: cublasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
+      integer(kind=C_INT), value              :: length, incx, incy
       integer(kind=C_intptr_T), value         :: x, y, result
     end subroutine
   end interface
@@ -1597,10 +1542,11 @@ module test_cuda_functions
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: cublasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
+      integer(kind=C_INT), value              :: length, incx, incy
       type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface cublas_Zscal
     module procedure cublas_Zscal_intptr
@@ -1630,6 +1576,7 @@ module test_cuda_functions
       type(c_ptr), value                      :: x
     end subroutine
   end interface
+
 
   interface cublas_Zaxpy
     module procedure cublas_Zaxpy_intptr
@@ -1672,7 +1619,7 @@ module test_cuda_functions
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: cublasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
+      integer(kind=C_INT), value              :: length, incx, incy
       integer(kind=C_intptr_T), value         :: x, y, result
     end subroutine
   end interface
@@ -1684,10 +1631,11 @@ module test_cuda_functions
       implicit none
       character(1,C_CHAR),value               :: conj
       integer(kind=C_intptr_T), value         :: cublasHandle
-      integer(kind=C_INT),value               :: length, incx, incy
+      integer(kind=C_INT), value              :: length, incx, incy
       type(c_ptr), value                      :: x, y, result
     end subroutine
   end interface
+
 
   interface cublas_Cscal
     module procedure cublas_Cscal_intptr
@@ -1717,6 +1665,7 @@ module test_cuda_functions
       type(c_ptr), value                      :: x
     end subroutine
   end interface
+
 
   interface cublas_Caxpy
     module procedure cublas_Caxpy_intptr
@@ -1749,6 +1698,30 @@ module test_cuda_functions
 
   contains
 
+    function cuda_device_get_attributes(value, attribute) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=C_INT)                       :: value, attribute
+      logical                                   :: success
+      success = cuda_device_get_attributes_c(value, attribute) /= 0
+    end function
+
+    function cublas_get_version(cublasHandle, version) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=C_intptr_t)                  :: cublasHandle
+      integer(kind=C_INT)                       :: version
+      logical                                   :: success
+      success = cublas_get_version_c(cublasHandle, version) /= 0
+    end function
+
+    function cuda_get_last_error() result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      logical                                   :: success
+      success = cuda_get_last_error_c() /= 0
+    end function
+
     function cuda_stream_create(cudaStream) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -1772,16 +1745,6 @@ module test_cuda_functions
       integer(kind=C_intptr_t)                  :: cudaStream
       logical                                   :: success
       success = cublas_set_stream_c(cublasHandle, cudaStream) /= 0
-    end function
-
-    function cusolver_set_stream(cusolverHandle, cudaStream) result(success)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_t)                  :: cusolverHandle
-      integer(kind=C_intptr_t)                  :: cudaStream
-      logical                                   :: success
-
-      success = .true.
     end function
 
 
@@ -1812,22 +1775,6 @@ module test_cuda_functions
       integer(kind=C_intptr_t)   :: cublasHandle
       logical                    :: success
       success = cublas_destroy_c(cublasHandle) /= 0
-    end function
-
-    function cusolver_create(cusolverHandle) result(success)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_t)                  :: cusolverHandle
-      logical                                   :: success
-      success = .true.
-    end function
-
-    function cusolver_destroy(cusolverHandle) result(success)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      integer(kind=C_intptr_t)                  :: cusolverHandle
-      logical                                   :: success
-      success = .true.
     end function
 
     function cuda_setdevice(n) result(success)
@@ -1889,21 +1836,38 @@ module test_cuda_functions
       success = cuda_free_cptr_c(a) /= 0
     end function
 
-    function cuda_malloc_host(a, width_height) result(success)
+    function cuda_malloc_host_intptr(a, width_height) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t)                  :: a
+      integer(kind=c_intptr_t), intent(in)      :: width_height
+      logical                                   :: success
+      success = cuda_malloc_host_intptr_c(a, width_height) /= 0
+    end function
+
+    function cuda_malloc_host_cptr(a, width_height) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
       type(c_ptr)                               :: a
       integer(kind=c_intptr_t), intent(in)      :: width_height
       logical                                   :: success
-      success = cuda_malloc_host_c(a, width_height) /= 0
+      success = cuda_malloc_host_cptr_c(a, width_height) /= 0
     end function
 
-    function cuda_free_host(a) result(success)
+    function cuda_free_host_intptr(a) result(success)
+      use, intrinsic :: iso_c_binding
+      implicit none
+      integer(kind=c_intptr_t) :: a
+      logical                  :: success
+      success = cuda_free_host_intptr_c(a) /= 0
+    end function
+
+    function cuda_free_host_cptr(a) result(success)
       use, intrinsic :: iso_c_binding
       implicit none
       type(c_ptr)                   :: a
       logical                  :: success
-      success = cuda_free_host_c(a) /= 0
+      success = cuda_free_host_cptr_c(a) /= 0
     end function
 
     function cuda_memset(a, val, size) result(success)
@@ -1911,7 +1875,7 @@ module test_cuda_functions
       implicit none
       integer(kind=c_intptr_t)                :: a
       integer(kind=ik)                        :: val
-      integer(kind=c_intptr_t), intent(in)      :: size
+      integer(kind=c_intptr_t), intent(in)    :: size
       integer(kind=C_INT)                     :: istat
       logical :: success
       success= cuda_memset_c(a, int(val,kind=c_int), int(size,kind=c_intptr_t)) /=0
@@ -2145,26 +2109,6 @@ module test_cuda_functions
       success = cuda_host_unregister_c(a) /= 0
     end function
 
-    subroutine cusolver_Dtrtri(uplo, diag, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
-    end subroutine
-
-    subroutine cusolver_Dpotrf(uplo, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
-    end subroutine
-
     subroutine cublas_Dgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, cublasHandle)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -2282,26 +2226,6 @@ module test_cuda_functions
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: cublasHandle
       call cublas_Dgemv_c(cublasHandle, cta, m, n, alpha, a, lda, x, incx, beta, y, incy)
-    end subroutine
-
-    subroutine cusolver_Strtri(uplo, diag, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
-    end subroutine
-
-    subroutine cusolver_Spotrf(uplo, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
     end subroutine
 
     subroutine cublas_Sgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, cublasHandle)
@@ -2423,26 +2347,6 @@ module test_cuda_functions
       call cublas_Sgemv_c(cublasHandle, cta, m, n, alpha, a, lda, x, incx, beta, y, incy)
     end subroutine
 
-    subroutine cusolver_Ztrtri(uplo, diag, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
-    end subroutine
-
-    subroutine cusolver_Zpotrf(uplo, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
-    end subroutine
-
     subroutine cublas_Zgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, cublasHandle)
       use, intrinsic :: iso_c_binding
       implicit none
@@ -2560,26 +2464,6 @@ module test_cuda_functions
       integer(kind=C_intptr_T)        :: a, x, y
       integer(kind=C_intptr_T)        :: cublasHandle
       call cublas_Zgemv_c(cublasHandle, cta, m, n, alpha, a, lda, x, incx, beta, y, incy)
-    end subroutine
-
-    subroutine cusolver_Ctrtri(uplo, diag, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo, diag
-      integer(kind=C_INT64_T)         :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
-    end subroutine
-
-    subroutine cusolver_Cpotrf(uplo, n, a, lda, info, cusolverHandle)
-      use, intrinsic :: iso_c_binding
-      implicit none
-      character(1,C_CHAR),value       :: uplo
-      integer(kind=C_INT)             :: n, lda
-      integer(kind=c_intptr_t)        :: a
-      integer(kind=c_int)             :: info
-      integer(kind=C_intptr_T)        :: cusolverHandle
     end subroutine
 
     subroutine cublas_Cgemm_intptr(cta, ctb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc, cublasHandle)
@@ -2735,14 +2619,13 @@ module test_cuda_functions
       call cublas_setPointerMode_c(cublasHandle, mode)
     end subroutine
 
-
     subroutine cublas_Ddot_intptr(cublasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
       implicit none
       integer(kind=c_intptr_t) :: cublasHandle
       integer(kind=c_int)      :: length, incx, incy
       integer(kind=c_intptr_t) :: x, y, result
-      
+
       call cublas_Ddot_intptr_c(cublasHandle, length, x, incx, y, incy, result)
     end subroutine
 
@@ -2799,7 +2682,6 @@ module test_cuda_functions
 
       call cublas_Daxpy_cptr_c(cublasHandle, length, alpha, x, incx, y, incy)
     end subroutine
-
 
     subroutine cublas_Sdot_intptr(cublasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
@@ -2864,7 +2746,6 @@ module test_cuda_functions
 
       call cublas_Saxpy_cptr_c(cublasHandle, length, alpha, x, incx, y, incy)
     end subroutine
-
 
     subroutine cublas_Zdot_intptr(conj, cublasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
@@ -2931,7 +2812,6 @@ module test_cuda_functions
 
       call cublas_Zaxpy_cptr_c(cublasHandle, length, alpha, x, incx, y, incy)
     end subroutine
-
 
     subroutine cublas_Cdot_intptr(conj, cublasHandle, length, x, incx, y, incy, result)
       use, intrinsic :: iso_c_binding
