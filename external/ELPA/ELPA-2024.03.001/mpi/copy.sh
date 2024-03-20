@@ -248,4 +248,5 @@ cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_real.cu  .
 cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_complex.cu  .
 cp $elpa_dir_cuda/../src/invert_trm/GPU/CUDA/elpa_invert_trm_cuda.cu  .
 cp $elpa_dir_cuda/../src/cholesky/GPU/CUDA/elpa_cholesky_cuda.cu  .
+cp $elpa_dir_cuda/../src/elpa1/GPU/CUDA/tridiag_cuda.cu .
 
