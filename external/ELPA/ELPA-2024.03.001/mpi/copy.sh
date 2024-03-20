@@ -26,6 +26,7 @@ for file in \
   elpa_abstract_impl.f90                \
   mod_openmp_offload_solver.f90         \
   mod_openmp_offload.F90                \
+  mod_syclsolver.F90                    \
   mod_sycl.F90                          \
   elpa_api.f90                          \
   elpa_autotune_impl.f90                \
