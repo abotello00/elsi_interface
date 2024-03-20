@@ -109,6 +109,7 @@ cp $elpa_dir/elpa_index.c .
 elpa_dir=$ELPA_ROOT/build_cuda
 for file in \
   mod_cuda.f90 \
+  mod_tridiag_gpu.F90 \
   interface_c_cuda_kernel.f90 \
   interface_c_gpu_kernel.f90 \
   test_gpu_vendor_agnostic_layer.f90 \
