@@ -23,6 +23,7 @@ for file in \
   elpa2_determine_workload.f90          \
   elpa2.f90                             \
   mod_gpu_setup.F90                     \
+  mod_mpi_setup.F90                     \
   elpa_abstract_impl.f90                \
   mod_openmp_offload_solver.f90         \
   mod_openmp_offload.F90                \
