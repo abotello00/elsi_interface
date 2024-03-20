@@ -242,6 +242,7 @@ cp $elpa_dir_avx512/{complex_avx512_1hv_double_precision.c,complex_avx512_1hv_si
 cp $elpa_dir_cuda/../src/GPU/CUDA/elpa_index_nvidia_gpu.cu  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cudaFunctions.cu  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cudaFunctions_template.h  .
+cp $elpa_dir_cuda/../src/GPU/CUDA/cusolverFunctions_template.h .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils.cu  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils_template.cu  .
 cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_real.cu  .
