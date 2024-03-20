@@ -6,6 +6,7 @@ LIST(APPEND elpa_src
   src/mod_elpa_multiply_a_b.F90
   src/elpa1_auxiliary.f90
   src/mod_vendor_agnostic_utilities_layer.F90
+  src/mod_tridiag_cuda.F90
   src/mod_tridiag_gpu.F90
   src/elpa1_compute_private.f90
   src/elpa1.f90
