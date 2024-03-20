@@ -13,6 +13,7 @@ LIST(APPEND elpa_src
   src/elpa2.f90
   src/mod_gpu_setup.F90
   src/elpa_abstract_impl.f90
+  src/mod_openmp_offload_solver.f90
   src/mod_openmp_offload.F90
   src/mod_sycl.F90
   src/elpa_api.f90

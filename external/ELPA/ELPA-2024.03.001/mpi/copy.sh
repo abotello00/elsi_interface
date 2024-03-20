@@ -24,6 +24,7 @@ for file in \
   elpa2.f90                             \
   mod_gpu_setup.F90                     \
   elpa_abstract_impl.f90                \
+  mod_openmp_offload_solver.f90         \
   mod_openmp_offload.F90                \
   mod_sycl.F90                          \
   elpa_api.f90                          \
