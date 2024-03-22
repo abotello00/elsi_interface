@@ -368,12 +368,12 @@ inline void ParaWriteDistSparseMatrix ( const char* filename, DistSparseMatrix<R
 
   /* create memory type */
   Int np1 = pspmat.size+1;
-  MPI_Address( (void *)&np1,  &disps[0]);
-  MPI_Address(colptrChunk.Data(), &disps[1]);
-  MPI_Address( (void *)&pspmat.nnz,  &disps[2]);
-  MPI_Address((void *)pspmat.rowindLocal.Data(),  &disps[3]);
-  MPI_Address( (void *)&pspmat.nnz,  &disps[4]);
-  MPI_Address((void *)pspmat.nzvalLocal.Data(),   &disps[5]);
+  MPI_Get_address( (void *)&np1,  &disps[0]);
+  MPI_Get_address(colptrChunk.Data(), &disps[1]);
+  MPI_Get_address( (void *)&pspmat.nnz,  &disps[2]);
+  MPI_Get_address((void *)pspmat.rowindLocal.Data(),  &disps[3]);
+  MPI_Get_address( (void *)&pspmat.nnz,  &disps[4]);
+  MPI_Get_address((void *)pspmat.nzvalLocal.Data(),   &disps[5]);
 
   MPI_Type_create_struct(6, blklens, disps, types, &memtype);
   MPI_Type_commit(&memtype);
@@ -441,11 +441,11 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Re
   /* define a struct that describes all our data */
   lens[0] = 1;
   lens[1] = 1;
-  MPI_Address(&pspmat.size, &disps[0]);
-  MPI_Address(&pspmat.nnz, &disps[1]);
+  MPI_Get_address(&pspmat.size, &disps[0]);
+  MPI_Get_address(&pspmat.nnz, &disps[1]);
   types[0] = MPI_INT;
   types[1] = MPI_INT;
-  MPI_Type_struct(2, lens, disps, types, &type);
+  MPI_Type_create_struct(2, lens, disps, types, &type);
   MPI_Type_commit(&type);
 
 
@@ -471,10 +471,10 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Re
   lens[0] = (mpirank==0)?1:0;
   lens[1] = numColLocal + 1;
 
-  MPI_Address(&np1, &disps[0]);
-  MPI_Address(pspmat.colptrLocal.Data(), &disps[1]);
+  MPI_Get_address(&np1, &disps[0]);
+  MPI_Get_address(pspmat.colptrLocal.Data(), &disps[1]);
 
-  MPI_Type_hindexed(2, lens, disps, MPI_INT, &type);
+  MPI_Type_create_hindexed(2, lens, disps, MPI_INT, &type);
   MPI_Type_commit(&type);
 
   err= MPI_File_read_at_all(fin, myColPtrOffset, MPI_BOTTOM, 1, type, &status);
@@ -497,10 +497,10 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Re
   lens[0] = (mpirank==0)?1:0;
   lens[1] = pspmat.nnzLocal;
 
-  MPI_Address(&np1, &disps[0]);
-  MPI_Address(pspmat.rowindLocal.Data(), &disps[1]);
+  MPI_Get_address(&np1, &disps[0]);
+  MPI_Get_address(pspmat.rowindLocal.Data(), &disps[1]);
 
-  MPI_Type_hindexed(2, lens, disps, MPI_INT, &type);
+  MPI_Type_create_hindexed(2, lens, disps, MPI_INT, &type);
   MPI_Type_commit(&type);
 
   err= MPI_File_read_at_all(fin, myRowIdxOffset, MPI_BOTTOM, 1, type,&status);
@@ -517,8 +517,8 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Re
 //  lens[0] = (mpirank==0)?1:0;
 //  lens[1] = pspmat.nnzLocal;
 //
-//  MPI_Address(&np1, &disps[0]);
-//  MPI_Address(pspmat.nzvalLocal.Data(), &disps[1]);
+//  MPI_Get_address(&np1, &disps[0]);
+//  MPI_Get_address(pspmat.nzvalLocal.Data(), &disps[1]);
 //
 //  types[0] = MPI_INT;
 //  types[1] = MPI_DOUBLE;
@@ -749,11 +749,11 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Co
   /* define a struct that describes all our data */
   lens[0] = 1;
   lens[1] = 1;
-  MPI_Address(&pspmat.size, &disps[0]);
-  MPI_Address(&pspmat.nnz, &disps[1]);
+  MPI_Get_address(&pspmat.size, &disps[0]);
+  MPI_Get_address(&pspmat.nnz, &disps[1]);
   types[0] = MPI_INT;
   types[1] = MPI_INT;
-  MPI_Type_struct(2, lens, disps, types, &type);
+  MPI_Type_create_struct(2, lens, disps, types, &type);
   MPI_Type_commit(&type);
 
 
@@ -779,10 +779,10 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Co
   lens[0] = (mpirank==0)?1:0;
   lens[1] = numColLocal + 1;
 
-  MPI_Address(&np1, &disps[0]);
-  MPI_Address(pspmat.colptrLocal.Data(), &disps[1]);
+  MPI_Get_address(&np1, &disps[0]);
+  MPI_Get_address(pspmat.colptrLocal.Data(), &disps[1]);
 
-  MPI_Type_hindexed(2, lens, disps, MPI_INT, &type);
+  MPI_Type_create_hindexed(2, lens, disps, MPI_INT, &type);
   MPI_Type_commit(&type);
 
   err= MPI_File_read_at_all(fin, myColPtrOffset, MPI_BOTTOM, 1, type, &status);
@@ -805,11 +805,11 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Co
   lens[0] = (mpirank==0)?1:0;
   lens[1] = pspmat.nnzLocal;
 
-  MPI_Address(&np1, &disps[0]);
-  MPI_Address(pspmat.rowindLocal.Data(), &disps[1]);
+  MPI_Get_address(&np1, &disps[0]);
+  MPI_Get_address(pspmat.rowindLocal.Data(), &disps[1]);
 
-//  MPI_Type_hindexed(2, lens, disps, MPI_INT, &type);
-  MPI_Type_hindexed(2, lens, disps, MPI_INT, &type);
+//  MPI_Type_create_hindexed(2, lens, disps, MPI_INT, &type);
+  MPI_Type_create_hindexed(2, lens, disps, MPI_INT, &type);
   MPI_Type_commit(&type);
 
   err= MPI_File_read_at_all(fin, myRowIdxOffset, MPI_BOTTOM, 1, type,&status);
@@ -826,8 +826,8 @@ inline void ParaReadDistSparseMatrix ( const char* filename, DistSparseMatrix<Co
 //  lens[0] = ((mpirank==0)?1:0)*sizeof(Int);
 //  lens[1] = pspmat.nnzLocal*sizeof(Complex);
 //
-//  MPI_Address(&np1, &disps[0]);
-//  MPI_Address(pspmat.nzvalLocal.Data(), &disps[1]);
+//  MPI_Get_address(&np1, &disps[0]);
+//  MPI_Get_address(pspmat.nzvalLocal.Data(), &disps[1]);
 //
 //  types[0] = MPI_INT;
 //  types[1] = MPI_DOUBLE_COMPLEX;
@@ -964,12 +964,12 @@ inline void ParaWriteDistSparseMatrix ( const char* filename, DistSparseMatrix<C
 
   /* create memory type */
   Int np1 = pspmat.size+1;
-  MPI_Address( (void *)&np1,  &disps[0]);
-  MPI_Address(colptrChunk.Data(), &disps[1]);
-  MPI_Address( (void *)&pspmat.nnz,  &disps[2]);
-  MPI_Address((void *)pspmat.rowindLocal.Data(),  &disps[3]);
-  MPI_Address( (void *)&pspmat.nnz,  &disps[4]);
-  MPI_Address((void *)pspmat.nzvalLocal.Data(),   &disps[5]);
+  MPI_Get_address( (void *)&np1,  &disps[0]);
+  MPI_Get_address(colptrChunk.Data(), &disps[1]);
+  MPI_Get_address( (void *)&pspmat.nnz,  &disps[2]);
+  MPI_Get_address((void *)pspmat.rowindLocal.Data(),  &disps[3]);
+  MPI_Get_address( (void *)&pspmat.nnz,  &disps[4]);
+  MPI_Get_address((void *)pspmat.nzvalLocal.Data(),   &disps[5]);
 
   MPI_Type_create_struct(6, blklens, disps, types, &memtype);
   MPI_Type_commit(&memtype);
