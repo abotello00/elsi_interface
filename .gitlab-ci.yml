@@ -137,11 +137,11 @@ build.intel-latest:
     - cd external/SCOTCH/src/libscotch
     - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
     - cd ../../../../
-    - cat ./toolchains/intel.cmake
+    - cat ./toolchains/intel-latest.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
     - cd $CI_JOB_NAME
-    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel.cmake ..
+    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel-latest.cmake ..
     - make -j4
   artifacts:
     paths:
