@@ -48,7 +48,7 @@ build.gnu-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu20-intel2022-mpich3.3.2-gnu10.5:latest
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.2:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
@@ -128,7 +128,7 @@ build.intel-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu20-intel2022-mpich3.3.2-gnu10.5:latest
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.2:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
@@ -298,7 +298,7 @@ test.gnu-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu20-intel2022-mpich3.3.2-gnu10.5:latest
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.2:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
@@ -351,7 +351,7 @@ test.intel:
     expire_in: 1 days
 
 ### LATEST Intel compilers + MPI + MKL ###
-test.intel:
+test.intel-latest:
   stage: test
   dependencies:
     - build.intel-latest
@@ -360,7 +360,7 @@ test.intel:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu20-intel2022-mpich3.3.2-gnu10.5:latest
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.2:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
