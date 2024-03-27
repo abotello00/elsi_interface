@@ -48,7 +48,7 @@ build.gnu-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
@@ -128,7 +128,7 @@ build.intel-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
@@ -298,7 +298,7 @@ test.gnu-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
@@ -360,7 +360,7 @@ test.intel-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1
+    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
