@@ -13,6 +13,7 @@ SET(USE_GPU_CUDA ON CACHE BOOL "Use CUDA-based GPU acceleration in ELPA")
 SET(ENABLE_PEXSI ON CACHE BOOL "Enable PEXSI")
 SET(ENABLE_TESTS ON CACHE BOOL "Enable Fortran tests")
 SET(ENABLE_C_TESTS ON CACHE BOOL "Enable C tests")
+SET(USE_ELPA_2024 ON CACHE BOOL "ENABLE ELPA 2024")
 
 SET(LIB_PATHS "$ENV{MKLROOT}/lib/intel64 $ENV{CUDA_HOME}/lib64" CACHE STRING "External library paths")
-SET(LIBS "mkl_scalapack_lp64 mkl_blacs_intelmpi_lp64 mkl_intel_lp64 mkl_sequential mkl_core cublas cudart" CACHE STRING "External libraries")
+SET(LIBS "mkl_scalapack_lp64 mkl_blacs_intelmpi_lp64 mkl_intel_lp64 mkl_sequential mkl_core cusolver cublas cublasLt cudart" CACHE STRING "External libraries")
