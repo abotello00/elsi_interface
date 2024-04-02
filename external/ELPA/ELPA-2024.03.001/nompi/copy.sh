@@ -7,6 +7,8 @@ ELPA_ROOT=/scratch/ukh0001/elpa-2024.03.001.rc1
 # March, 2024
 # mod_vendor_agnostic_layer_utilities.F90 -> mod_vendor_agnostic_utilities_layer.F90
 # remove mod_elpa1_gpu.F90
+# add mod_tridiag_gpu.f90, mod_cusolver.f90, mod_rocsolver.f90, mod_openmp_offload_solver.f90, mod_syclsolver.f90,
+# mod_mpi_setup.f90
 
 # Do not modify
 elpa_dir=$ELPA_ROOT/build_generic
