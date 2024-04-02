@@ -6,6 +6,7 @@ LIST(APPEND elpa_src
   src/mod_elpa_multiply_a_b.F90
   src/elpa1_auxiliary.f90
   src/mod_vendor_agnostic_utilities_layer.F90
+  src/mod_tridiag_gpu.f90
   src/elpa1_compute_private.f90
   src/elpa1.f90
   src/elpa2_compute.f90
@@ -70,7 +71,12 @@ LIST(APPEND elpa_src
   src/elpa_qrkernels.f90
   src/tests_variable_definitions.f90
   src/cannon.c
-  src/check_thread_affinity.c)
+  src/check_thread_affinity.c
+  src/mod_cusolver.f90
+  src/mod_rocsolver.f90
+  src/mod_openmp_offload_solver.f90
+  src/mod_syclsolver.f90
+  src/mod_mpi_setup.f90)
 
 IF(USE_MPI_MODULE)
   LIST(APPEND elpa_src src/mod_mpi.f90)
