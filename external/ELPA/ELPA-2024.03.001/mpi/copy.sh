@@ -1,5 +1,5 @@
 # Modify ELPA root path only
-ELPA_ROOT=/scratch/ukh0001/elpa-2024.03.001.rc1/
+ELPA_ROOT=/scratch/ukh0001/elpa-2024.03.001.rc1
 
 # Added in 2023.11.001
 # mod_multiply_a_b_gpu.F90, mod_elpa1_gpu.F90, mod_query_gpu_settings.F90
@@ -23,11 +23,8 @@ for file in \
   elpa2_determine_workload.f90          \
   elpa2.f90                             \
   mod_gpu_setup.F90                     \
-  mod_mpi_setup.F90                     \
   elpa_abstract_impl.f90                \
-  mod_openmp_offload_solver.f90         \
   mod_openmp_offload.F90                \
-  mod_syclsolver.F90                    \
   mod_sycl.F90                          \
   elpa_api.f90                          \
   elpa_autotune_impl.f90                \
@@ -73,7 +70,14 @@ for file in \
   elpa_pdlarfb.f90                      \
   qr_utils.f90                          \
   elpa_qrkernels.f90                    \
-  tests_variable_definitions.f90
+  tests_variable_definitions.f90        \
+  mod_cusolver.f90                      \
+  mod_rocsolver.f90                     \
+  mod_openmp_offload_solver.f90         \
+  mod_syclsolver.f90                    \
+  mod_mpi_setup.f90                     \
+  mod_tridiag_gpu.f90
+
 do
 prefix=${file%.*}
 echo $prefix
@@ -109,16 +113,12 @@ cp $elpa_dir/elpa_index.c .
 elpa_dir=$ELPA_ROOT/build_cuda
 for file in \
   mod_cuda.f90 \
-  mod_tridiag_cuda.F90 \
-  mod_tridiag_gpu.F90 \
   interface_c_cuda_kernel.f90 \
   interface_c_gpu_kernel.f90 \
   test_gpu_vendor_agnostic_layer.f90 \
   cholesky_cuda.f90 \
   invert_trm_cuda.f90 \
-  test_cuda.f90 \
-  mod_cusolver.f90 \
-  mod_rocsolver.f90
+  test_cuda.f90
 do
 prefix=${file%.*}
 echo $prefix
@@ -241,13 +241,11 @@ cp $elpa_dir_avx512/{complex_avx512_1hv_double_precision.c,complex_avx512_1hv_si
 
 cp $elpa_dir_cuda/../src/GPU/CUDA/elpa_index_nvidia_gpu.cu  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cudaFunctions.cu  .
+cp $elpa_dir_cuda/../src/GPU/CUDA/cusolverFunctions_template.h  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cudaFunctions_template.h  .
-cp $elpa_dir_cuda/../src/GPU/CUDA/cusolverFunctions_template.h .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils.cu  .
 cp $elpa_dir_cuda/../src/GPU/CUDA/cuUtils_template.cu  .
 cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_real.cu  .
 cp $elpa_dir_cuda/../src/elpa2/GPU/CUDA/ev_tridi_band_nvidia_gpu_complex.cu  .
 cp $elpa_dir_cuda/../src/invert_trm/GPU/CUDA/elpa_invert_trm_cuda.cu  .
 cp $elpa_dir_cuda/../src/cholesky/GPU/CUDA/elpa_cholesky_cuda.cu  .
-cp $elpa_dir_cuda/../src/elpa1/GPU/CUDA/tridiag_cuda.cu .
-

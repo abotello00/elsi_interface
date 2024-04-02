@@ -291,7 +291,7 @@ module cusolver_functions
       integer(kind=C_intptr_t)                  :: cudaStream
       logical                                   :: success
 
-      success = cusolver_set_stream_c(cusolverHandle, cudaStream) /= 0
+      success = .true.
     end function
 
     function cusolver_create(cusolverHandle) result(success)
@@ -299,7 +299,7 @@ module cusolver_functions
       implicit none
       integer(kind=C_intptr_t)                  :: cusolverHandle
       logical                                   :: success
-      success = cusolver_create_c(cusolverHandle) /= 0
+      success = .true.
     end function
 
     function cusolver_destroy(cusolverHandle) result(success)
@@ -307,7 +307,7 @@ module cusolver_functions
       implicit none
       integer(kind=C_intptr_t)                  :: cusolverHandle
       logical                                   :: success
-      success = cusolver_destroy_c(cusolverHandle) /= 0
+      success = .true.
     end function
 
     ! cusolver_?trtri
@@ -320,7 +320,6 @@ module cusolver_functions
       integer(kind=c_intptr_t)        :: a
       integer(kind=c_int)             :: info
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Dtrtri_c(cusolverHandle, uplo, diag, n, a, lda, info)
     end subroutine
 
     subroutine cusolver_Strtri(uplo, diag, n, a, lda, info, cusolverHandle)
@@ -331,7 +330,6 @@ module cusolver_functions
       integer(kind=c_intptr_t)        :: a
       integer(kind=c_int)             :: info
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Strtri_c(cusolverHandle, uplo, diag, n, a, lda, info)
     end subroutine
 
     subroutine cusolver_Ztrtri(uplo, diag, n, a, lda, info, cusolverHandle)
@@ -342,7 +340,6 @@ module cusolver_functions
       integer(kind=c_intptr_t)        :: a
       integer(kind=c_int)             :: info
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Ztrtri_c(cusolverHandle, uplo, diag, n, a, lda, info)
     end subroutine
 
     subroutine cusolver_Ctrtri(uplo, diag, n, a, lda, info, cusolverHandle)
@@ -353,7 +350,6 @@ module cusolver_functions
       integer(kind=c_intptr_t)        :: a
       integer(kind=c_int)             :: info
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Ctrtri_c(cusolverHandle, uplo, diag, n, a, lda, info)
     end subroutine
 
     ! cusolver_?potrf
@@ -365,7 +361,6 @@ module cusolver_functions
       integer(kind=C_INT)             :: n, lda
       integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Dpotrf_c(cusolverHandle, uplo, n, a_dev, lda, info_dev)
     end subroutine
 
     subroutine cusolver_Spotrf(uplo, n, a_dev, lda, info_dev, cusolverHandle)
@@ -375,7 +370,6 @@ module cusolver_functions
       integer(kind=C_INT)             :: n, lda
       integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Spotrf_c(cusolverHandle, uplo, n, a_dev, lda, info_dev)
     end subroutine
 
     subroutine cusolver_Zpotrf(uplo, n, a_dev, lda, info_dev, cusolverHandle)
@@ -385,7 +379,6 @@ module cusolver_functions
       integer(kind=C_INT)             :: n, lda
       integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Zpotrf_c(cusolverHandle, uplo, n, a_dev, lda, info_dev)
     end subroutine
 
     subroutine cusolver_Cpotrf(uplo, n, a_dev, lda, info_dev, cusolverHandle)
@@ -395,7 +388,6 @@ module cusolver_functions
       integer(kind=C_INT)             :: n, lda
       integer(kind=c_intptr_t)        :: a_dev, info_dev
       integer(kind=C_intptr_T)        :: cusolverHandle
-      call cusolver_Cpotrf_c(cusolverHandle, uplo, n, a_dev, lda, info_dev)
     end subroutine
 
     ! cusolver_Xpotrf_bufferSize
@@ -410,8 +402,6 @@ module cusolver_functions
       integer(kind=c_intptr_t)        :: a_dev
       integer(kind=c_size_t)          :: workspaceInBytesOnDevice, workspaceInBytesOnHost
 
-      call cusolver_Xpotrf_bufferSize_c(cusolverHandle, uplo, n, dataType, a_dev, lda, &
-                                        workspaceInBytesOnDevice, workspaceInBytesOnHost)
     end subroutine
 
     ! cusolver_Xpotrf
@@ -428,9 +418,6 @@ module cusolver_functions
       integer(kind=c_intptr_t)        :: buffer_host
       integer(kind=c_size_t)          :: workspaceInBytesOnDevice, workspaceInBytesOnHost
 
-      call cusolver_Xpotrf_c(cusolverHandle, uplo, n, dataType, a_dev, lda, &
-                             buffer_dev , workspaceInBytesOnDevice, &
-                             buffer_host, workspaceInBytesOnHost, info_dev)
     end subroutine
 
 

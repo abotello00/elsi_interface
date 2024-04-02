@@ -6,20 +6,15 @@ LIST(APPEND elpa_src
   src/mod_elpa_multiply_a_b.F90
   src/elpa1_auxiliary.f90
   src/mod_vendor_agnostic_utilities_layer.F90
-  src/tridiag_cuda.cu
-  src/mod_tridiag_cuda.F90
-  src/mod_tridiag_gpu.F90
+  src/mod_tridiag_gpu.f90
   src/elpa1_compute_private.f90
   src/elpa1.f90
   src/elpa2_compute.f90
   src/elpa2_determine_workload.f90
   src/elpa2.f90
   src/mod_gpu_setup.F90
-  src/mod_mpi_setup.F90
   src/elpa_abstract_impl.f90
-  src/mod_openmp_offload_solver.f90
   src/mod_openmp_offload.F90
-  src/mod_syclsolver.F90
   src/mod_sycl.F90
   src/elpa_api.f90
   src/elpa_autotune_impl.f90
@@ -78,7 +73,10 @@ LIST(APPEND elpa_src
   src/cannon.c
   src/check_thread_affinity.c
   src/mod_cusolver.f90
-  src/mod_rocsolver.f90)
+  src/mod_rocsolver.f90
+  src/mod_openmp_offload_solver.f90
+  src/mod_syclsolver.f90
+  src/mod_mpi_setup.f90)
 
 IF(USE_MPI_MODULE)
   LIST(APPEND elpa_src src/mod_mpi.f90)
