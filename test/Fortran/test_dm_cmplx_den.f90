@@ -151,7 +151,7 @@ subroutine test_dm_cmplx_den(comm,solver,h_file,s_file)
    call elsi_set_illcond_check(eh,0)
    call elsi_set_mu_broaden_scheme(eh,0)
    call elsi_set_mu_broaden_width(eh,1.0e-6_r8)
-   call elsi_set_omm_n_elpa(eh,1)
+   call elsi_set_omm_n_elpa(eh,2)
    call elsi_set_pexsi_delta_e(eh,80.0_r8)
    call elsi_set_pexsi_np_per_pole(eh,2)
 
