@@ -5280,9 +5280,9 @@ int PMPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
 # 161 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 90 "../src/elpa_generalized/cannon_forw_template.c"
+# 85 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 86 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -5302,7 +5302,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 88 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -5323,12 +5323,12 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, double *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 106 "../src/elpa_generalized/cannon_forw_template.c"
+# 101 "../src/elpa_generalized/cannon_forw_template.c"
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
@@ -5355,7 +5355,7 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 140 "../src/elpa_generalized/cannon_forw_template.c"
+# 135 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
@@ -5431,8 +5431,9 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
-   int useGPU = 0;
-# 230 "../src/elpa_generalized/cannon_forw_template.c"
+
+
+
    if(ratio != 1) {
 
 
@@ -5797,7 +5798,7 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
 
 
    pdtran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
-# 603 "../src/elpa_generalized/cannon_forw_template.c"
+# 586 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -6314,7 +6315,7 @@ void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_c
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-# 1133 "../src/elpa_generalized/cannon_forw_template.c"
+# 1116 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_d(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 # 162 "../src/elpa_generalized/cannon.c" 2
@@ -6771,9 +6772,9 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
 # 208 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 90 "../src/elpa_generalized/cannon_forw_template.c"
+# 85 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 86 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -6793,7 +6794,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 88 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -6814,12 +6815,12 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, float *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 106 "../src/elpa_generalized/cannon_forw_template.c"
+# 101 "../src/elpa_generalized/cannon_forw_template.c"
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
@@ -6846,7 +6847,7 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 140 "../src/elpa_generalized/cannon_forw_template.c"
+# 135 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
@@ -6922,8 +6923,9 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
-   int useGPU = 0;
-# 230 "../src/elpa_generalized/cannon_forw_template.c"
+
+
+
    if(ratio != 1) {
 
 
@@ -7288,7 +7290,7 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
 
 
    pstran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
-# 603 "../src/elpa_generalized/cannon_forw_template.c"
+# 586 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -7805,7 +7807,7 @@ void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_col
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-# 1133 "../src/elpa_generalized/cannon_forw_template.c"
+# 1116 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_f(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 # 209 "../src/elpa_generalized/cannon.c" 2
@@ -8262,9 +8264,9 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
 # 255 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 90 "../src/elpa_generalized/cannon_forw_template.c"
+# 85 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 86 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -8284,7 +8286,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 88 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -8305,12 +8307,12 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, double _Complex *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 106 "../src/elpa_generalized/cannon_forw_template.c"
+# 101 "../src/elpa_generalized/cannon_forw_template.c"
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
@@ -8337,7 +8339,7 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 140 "../src/elpa_generalized/cannon_forw_template.c"
+# 135 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
@@ -8413,8 +8415,9 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
-   int useGPU = 0;
-# 230 "../src/elpa_generalized/cannon_forw_template.c"
+
+
+
    if(ratio != 1) {
 
 
@@ -8779,7 +8782,7 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
 
 
    pztranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
-# 603 "../src/elpa_generalized/cannon_forw_template.c"
+# 586 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -9296,7 +9299,7 @@ void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_ro
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-# 1133 "../src/elpa_generalized/cannon_forw_template.c"
+# 1116 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_dc(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 # 256 "../src/elpa_generalized/cannon.c" 2
@@ -9752,9 +9755,9 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 # 1 "../src/elpa_generalized/../general/precision_macros.h" 1
 # 300 "../src/elpa_generalized/cannon.c" 2
 # 1 "../src/elpa_generalized/cannon_forw_template.c" 1
-# 90 "../src/elpa_generalized/cannon_forw_template.c"
+# 85 "../src/elpa_generalized/cannon_forw_template.c"
 # 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 86 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 # 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
@@ -9774,7 +9777,7 @@ void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
 void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 88 "../src/elpa_generalized/cannon_forw_template.c" 2
 # 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
 # 59 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 int numroc_(int*, int*, int*, int*, int*);
@@ -9795,12 +9798,12 @@ void pztranc_(int*, int*, double _Complex*, double _Complex*, int*, int*, int*, 
 
 void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Complex*, int*, int*, int*);
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
+# 89 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, float _Complex *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-# 106 "../src/elpa_generalized/cannon_forw_template.c"
+# 101 "../src/elpa_generalized/cannon_forw_template.c"
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
    int Size_receive_A_nowMPI, Size_receive_AMPI, Size_receive_UMPI;
@@ -9827,7 +9830,7 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
-# 140 "../src/elpa_generalized/cannon_forw_template.c"
+# 135 "../src/elpa_generalized/cannon_forw_template.c"
    if (np_cols%np_rows != 0)
    {
 
@@ -9903,8 +9906,9 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    for(i = 0; i < na_rows*na_cols; i++)
       M[i] = 0;
 
-   int useGPU = 0;
-# 230 "../src/elpa_generalized/cannon_forw_template.c"
+
+
+
    if(ratio != 1) {
 
 
@@ -10269,7 +10273,7 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
 
 
    pctranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
-# 603 "../src/elpa_generalized/cannon_forw_template.c"
+# 586 "../src/elpa_generalized/cannon_forw_template.c"
    if ((ratio != 1)||(my_prow != 0)) {
       Buf_pos = Buf_to_send_A;
    }
@@ -10786,7 +10790,7 @@ void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rows
   my_pcol = (int) my_pcolMPI;
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
-# 1133 "../src/elpa_generalized/cannon_forw_template.c"
+# 1116 "../src/elpa_generalized/cannon_forw_template.c"
   cannons_reduction_fc(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 # 301 "../src/elpa_generalized/cannon.c" 2
