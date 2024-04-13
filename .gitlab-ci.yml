@@ -41,27 +41,27 @@ build.gnu:
     expire_in: 1 days
 
 ### NVIDIA HPC SDK (20.7) ###
-build.nvhpc:
-  stage: build
-  rules:
-    - when: on_success
-  tags:
-    - docker
-  image:
-    name: uthpalaherath/centos-nvhpc:latest
-  script:
-    - cat ./toolchains/nvhpc.cmake
-    - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
-    - rm -rf $CI_JOB_NAME
-    - mkdir $CI_JOB_NAME
-    - cd $CI_JOB_NAME
-    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/nvhpc.cmake ..
-    - make -j4
-  artifacts:
-    paths:
-      - $CI_JOB_NAME/
-    when: always
-    expire_in: 1 days
+# build.nvhpc:
+#   stage: build
+#   rules:
+#     - when: on_success
+#   tags:
+#     - docker
+#   image:
+#     name: uthpalaherath/centos-nvhpc:latest
+#   script:
+#     - cat ./toolchains/nvhpc.cmake
+#     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
+#     - rm -rf $CI_JOB_NAME
+#     - mkdir $CI_JOB_NAME
+#     - cd $CI_JOB_NAME
+#     - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/nvhpc.cmake ..
+#     - make -j4
+#   artifacts:
+#     paths:
+#       - $CI_JOB_NAME/
+#     when: always
+#     expire_in: 1 days
 
 ### Intel compilers + MPI + MKL ###
 build.intel:
@@ -232,23 +232,23 @@ test.gnu:
     expire_in: 1 days
 
 ### NVIDIA HPC SDK (20.7) ###
-test.nvhpc:
-  stage: test
-  dependencies:
-    - build.nvhpc
-  rules:
-    - when: on_success
-  tags:
-    - docker
-  image:
-    name: uthpalaherath/centos-nvhpc:latest
-  script:
-    - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
-    - cd build.nvhpc
-    - ctest --output-on-failure
-  artifacts:
-    when: always
-    expire_in: 1 days
+# test.nvhpc:
+#   stage: test
+#   dependencies:
+#     - build.nvhpc
+#   rules:
+#     - when: on_success
+#   tags:
+#     - docker
+#   image:
+#     name: uthpalaherath/centos-nvhpc:latest
+#   script:
+#     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
+#     - cd build.nvhpc
+#     - ctest --output-on-failure
+#   artifacts:
+#     when: always
+#     expire_in: 1 days
 
 ### Intel compilers + MPI + MKL ###
 test.intel:
