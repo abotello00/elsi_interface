@@ -41,7 +41,7 @@
 #define EARLIEST_AUTOTUNE_VERSION 20171201
 
 /* "Time of build" */
-#define ELPA_BUILDTIME 1710790694
+#define ELPA_BUILDTIME 1712961475
 
 /* enable autotuning functionality */
 #define ENABLE_AUTOTUNING 1
@@ -288,7 +288,7 @@
 #define PACKAGE_NAME "elpa"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "elpa 2024.03.001.rc1"
+#define PACKAGE_STRING "elpa 2024.03.001"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "elpa"
@@ -297,7 +297,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2024.03.001.rc1"
+#define PACKAGE_VERSION "2024.03.001"
 
 /* In some kernels pack real to complex */
 #define PACK_REAL_TO_COMPLEX 1
@@ -330,7 +330,7 @@
 #define USE_FORTRAN2008 1
 
 /* Version number of package */
-#define VERSION "2024.03.001.rc1"
+#define VERSION "2024.03.001"
 
 /* build also single-precision for complex calculation */
 #define WANT_SINGLE_PRECISION_COMPLEX 1

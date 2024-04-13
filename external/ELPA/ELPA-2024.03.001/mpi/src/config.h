@@ -41,7 +41,7 @@
 #define EARLIEST_AUTOTUNE_VERSION 20171201
 
 /* "Time of build" */
-#define ELPA_BUILDTIME 1710785585
+#define ELPA_BUILDTIME 1712947584
 
 /* enable autotuning functionality */
 #define ENABLE_AUTOTUNING 1
@@ -102,13 +102,13 @@
 #define HAVE_AVX512_F 1
 
 /* Define to 1 to support AVX-512 Integer Fused Multiply Add Instructions */
-/* #undef HAVE_AVX512_IFMA */
+#define HAVE_AVX512_IFMA 1
 
 /* Define to 1 to support AVX-512 Conflict Prefetch Instructions */
 /* #undef HAVE_AVX512_PF */
 
 /* Define to 1 to support AVX-512 Vector Byte Manipulation Instructions */
-/* #undef HAVE_AVX512_VBMI */
+#define HAVE_AVX512_VBMI 1
 
 /* Define to 1 to support AVX-512 Vector Length Extensions */
 #define HAVE_AVX512_VL 1
@@ -165,7 +165,7 @@
 /* #undef HAVE_MPI_MODULE */
 
 /* Define to 1 to support Memory Protection Extensions */
-#define HAVE_MPX 1
+/* #undef HAVE_MPX */
 
 /* NEON_ARCH64 intrinsics are supported on this CPU */
 /* #undef HAVE_NEON_ARCH64_SSE */
@@ -183,7 +183,7 @@
 /* #undef HAVE_ROCBLAS_API_V3 */
 
 /* Define to 1 to support Secure Hash Algorithm Extension */
-/* #undef HAVE_SHA */
+#define HAVE_SHA 1
 
 /* build for skewsyemmtric case */
 #define HAVE_SKEWSYMMETRIC 1
@@ -288,7 +288,7 @@
 #define PACKAGE_NAME "elpa"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "elpa 2024.03.001.rc1"
+#define PACKAGE_STRING "elpa 2024.03.001"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "elpa"
@@ -297,7 +297,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2024.03.001.rc1"
+#define PACKAGE_VERSION "2024.03.001"
 
 /* In some kernels pack real to complex */
 #define PACK_REAL_TO_COMPLEX 1
@@ -330,7 +330,7 @@
 #define USE_FORTRAN2008 1
 
 /* Version number of package */
-#define VERSION "2024.03.001.rc1"
+#define VERSION "2024.03.001"
 
 /* build also single-precision for complex calculation */
 #define WANT_SINGLE_PRECISION_COMPLEX 1
