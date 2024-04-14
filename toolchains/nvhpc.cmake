@@ -5,8 +5,8 @@ SET(CMAKE_C_COMPILER "mpicc" CACHE STRING "MPI C compiler")
 SET(CMAKE_CXX_COMPILER "mpic++" CACHE STRING "MPI C++ compiler")
 
 SET(CMAKE_Fortran_FLAGS "-O2 -Mvect=nosimd" CACHE STRING "Fortran flags")
-SET(CMAKE_C_FLAGS "-O1 -std=c99 -D_Float128=__float128" CACHE STRING "C flags") # SCOTCH segfaults with "O2"
-SET(CMAKE_CXX_FLAGS "-O2 -std=c++11 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -D_Float128=__float128" CACHE STRING "C++ flags")
+SET(CMAKE_C_FLAGS "-O1 -c99 -D_Float128=__float128" CACHE STRING "C flags") # SCOTCH segfaults with "O2"
+SET(CMAKE_CXX_FLAGS "-O2 --c++11 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -D_Float128=__float128" CACHE STRING "C++ flags")
 
 SET(ENABLE_PEXSI ON CACHE BOOL "Enable PEXSI")
 SET(ENABLE_CHASE ON CACHE BOOL "Enable ChASE eigensolver")
