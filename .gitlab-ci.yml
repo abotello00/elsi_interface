@@ -20,7 +20,7 @@ build.gnu:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-openmpi4.1.6-gnu13:latest
+    name: uthpalaherath/ubuntu20-intel2022-mpich3.3.2-gnu11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
@@ -50,7 +50,7 @@ build.nvhpc:
   image:
     name: uthpalaherath/centos-nvhpc:latest
   script:
-    - source scl_source enable devtoolset-11
+    - source /opt/rh/devtoolset-11/enable
     - cat ./toolchains/nvhpc.cmake
     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
     - rm -rf $CI_JOB_NAME
@@ -221,7 +221,7 @@ test.gnu:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-openmpi4.1.6-gnu13:latest
+    name: uthpalaherath/ubuntu20-intel2022-mpich3.3.2-gnu11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
@@ -244,7 +244,7 @@ test.nvhpc:
   image:
     name: uthpalaherath/centos-nvhpc:latest
   script:
-    - source scl_source enable devtoolset-11
+    - source /opt/rh/devtoolset-11/enable
     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
     - cd build.nvhpc
     - ctest --output-on-failure
