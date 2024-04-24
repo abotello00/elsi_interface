@@ -128,7 +128,7 @@ build.intel-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1:latest
+    name: uthpalaherath/ubuntu22-intel2024-openmpi4.1.6-gnu13:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
@@ -137,11 +137,11 @@ build.intel-latest:
     - cd external/SCOTCH/src/libscotch
     - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
     - cd ../../../../
-    - cat ./toolchains/intel-latest.cmake
+    - cat ./toolchains/intel_latest.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
     - cd $CI_JOB_NAME
-    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel-latest.cmake ..
+    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel_latest.cmake ..
     - make -j4
   artifacts:
     paths:
@@ -360,7 +360,7 @@ test.intel-latest:
   tags:
     - docker
   image:
-    name: uthpalaherath/ubuntu22-intel2024-mpich4.2.0-gnu13.1:latest
+    name: uthpalaherath/ubuntu22-intel2024-openmpi4.1.6-gnu13:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - ulimit -s unlimited
