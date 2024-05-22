@@ -184,52 +184,52 @@ module tridiag_gpu
 
   !________________________________________________________________
   
-  subroutine gpu_dot_product_and_assign_double(v_row_dev, l_rows, isOurProcessRowInt, aux1_dev, wantDebug, my_stream)
+  subroutine gpu_dot_product_and_assign_double(v_row_dev, l_rows, isOurProcessRow, aux1_dev, wantDebug, my_stream)
     use, intrinsic :: iso_c_binding
     use precision
     implicit none
 
-    integer(kind=c_int), intent(in)     :: l_rows, isOurProcessRowInt
-    logical, intent(in)                 :: wantDebug
+    integer(kind=c_int), intent(in)     :: l_rows
+    logical, intent(in)                 :: isOurProcessRow, wantDebug
     integer(kind=c_intptr_t)            :: v_row_dev, aux1_dev
     integer(kind=c_intptr_t)            :: my_stream
 
   end subroutine
 
 
-  subroutine gpu_dot_product_and_assign_float(v_row_dev, l_rows, isOurProcessRowInt, aux1_dev, wantDebug, my_stream)
+  subroutine gpu_dot_product_and_assign_float(v_row_dev, l_rows, isOurProcessRow, aux1_dev, wantDebug, my_stream)
     use, intrinsic :: iso_c_binding
     use precision
     implicit none
 
-    integer(kind=c_int), intent(in)     :: l_rows, isOurProcessRowInt
-    logical, intent(in)                 :: wantDebug
+    integer(kind=c_int), intent(in)     :: l_rows
+    logical, intent(in)                 :: isOurProcessRow, wantDebug
     integer(kind=c_intptr_t)            :: v_row_dev, aux1_dev
     integer(kind=c_intptr_t)            :: my_stream
 
   end subroutine
 
 
-  subroutine gpu_dot_product_and_assign_double_complex(v_row_dev, l_rows, isOurProcessRowInt, aux1_dev, wantDebug, my_stream)
+  subroutine gpu_dot_product_and_assign_double_complex(v_row_dev, l_rows, isOurProcessRow, aux1_dev, wantDebug, my_stream)
     use, intrinsic :: iso_c_binding
     use precision
     implicit none
 
-    integer(kind=c_int), intent(in)     :: l_rows, isOurProcessRowInt
-    logical, intent(in)                 :: wantDebug
+    integer(kind=c_int), intent(in)     :: l_rows
+    logical, intent(in)                 :: isOurProcessRow, wantDebug
     integer(kind=c_intptr_t)            :: v_row_dev, aux1_dev
     integer(kind=c_intptr_t)            :: my_stream
 
   end subroutine
 
 
-  subroutine gpu_dot_product_and_assign_float_complex(v_row_dev, l_rows, isOurProcessRowInt, aux1_dev, wantDebug, my_stream)
+  subroutine gpu_dot_product_and_assign_float_complex(v_row_dev, l_rows, isOurProcessRow, aux1_dev, wantDebug, my_stream)
     use, intrinsic :: iso_c_binding
     use precision
     implicit none
 
-    integer(kind=c_int), intent(in)     :: l_rows, isOurProcessRowInt
-    logical, intent(in)                 :: wantDebug
+    integer(kind=c_int), intent(in)     :: l_rows
+    logical, intent(in)                 :: isOurProcessRow, wantDebug
     integer(kind=c_intptr_t)            :: v_row_dev, aux1_dev
     integer(kind=c_intptr_t)            :: my_stream
 
@@ -244,8 +244,7 @@ module tridiag_gpu
     use precision
     implicit none
 
-    logical, intent(in)                 :: isOurProcessRow, useCCL
-    logical, intent(in)                 :: wantDebug
+    logical, intent(in)                 :: isOurProcessRow, useCCL, wantDebug
     integer(kind=c_int), intent(in)     :: l_rows, l_cols, matrixRows, istep
     integer(kind=c_intptr_t)            :: e_vec_dev, vrl_dev, a_dev, v_row_dev, tau_dev, xf_host_or_dev
     integer(kind=c_intptr_t)            :: my_stream
@@ -260,8 +259,7 @@ module tridiag_gpu
     use precision
     implicit none
 
-    logical, intent(in)                 :: isOurProcessRow, useCCL
-    logical, intent(in)                 :: wantDebug
+    logical, intent(in)                 :: isOurProcessRow, useCCL, wantDebug
     integer(kind=c_int), intent(in)     :: l_rows, l_cols, matrixRows, istep
     integer(kind=c_intptr_t)            :: e_vec_dev, vrl_dev, a_dev, v_row_dev, tau_dev, xf_host_or_dev
     integer(kind=c_intptr_t)            :: my_stream
@@ -276,8 +274,7 @@ module tridiag_gpu
     use precision
     implicit none
 
-    logical, intent(in)                 :: isOurProcessRow, useCCL
-    logical, intent(in)                 :: wantDebug
+    logical, intent(in)                 :: isOurProcessRow, useCCL, wantDebug
     integer(kind=c_int), intent(in)     :: l_rows, l_cols, matrixRows, istep
     integer(kind=c_intptr_t)            :: e_vec_dev, vrl_dev, a_dev, v_row_dev, tau_dev, xf_host_or_dev
     integer(kind=c_intptr_t)            :: my_stream
@@ -292,8 +289,7 @@ module tridiag_gpu
     use precision
     implicit none
 
-    logical, intent(in)                 :: isOurProcessRow, useCCL
-    logical, intent(in)                 :: wantDebug
+    logical, intent(in)                 :: isOurProcessRow, useCCL, wantDebug
     integer(kind=c_int), intent(in)     :: l_rows, l_cols, matrixRows, istep
     integer(kind=c_intptr_t)            :: e_vec_dev, vrl_dev, a_dev, v_row_dev, tau_dev, xf_host_or_dev
     integer(kind=c_intptr_t)            :: my_stream

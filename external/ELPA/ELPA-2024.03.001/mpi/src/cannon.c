@@ -1,6 +1,58 @@
-# 1 "../src/elpa_generalized/cannon.c"
-# 1 "/usr/include/stdc-predef.h" 1 3
+//    This file is part of ELPA.
+//
+//    The ELPA library was originally created by the ELPA consortium,
+//    consisting of the following organizations:
+//
+//    - Max Planck Computing and Data Facility (MPCDF), formerly known as
+//      Rechenzentrum Garching der Max-Planck-Gesellschaft (RZG),
+//    - Bergische Universität Wuppertal, Lehrstuhl für angewandte
+//      Informatik,
+//    - Technische Universität München, Lehrstuhl für Informatik mit
+//      Schwerpunkt Wissenschaftliches Rechnen ,
+//    - Fritz-Haber-Institut, Berlin, Abt. Theorie,
+//    - Max-Plack-Institut für Mathematik in den Naturwissenschaften,
+//      Leipzig, Abt. Komplexe Strukutren in Biologie und Kognition,
+//      and
+//    - IBM Deutschland GmbH
+//
+//    This particular source code file has been developed within the ELPA-AEO //
+//    project, which has been a joint effort of
+//
+//    - Max Planck Computing and Data Facility (MPCDF), formerly known as
+//      Rechenzentrum Garching der Max-Planck-Gesellschaft (RZG),
+//    - Bergische Universität Wuppertal, Lehrstuhl für angewandte
+//      Informatik,
+//    - Technische Universität München, Lehrstuhl für Informatik mit
+//      Schwerpunkt Wissenschaftliches Rechnen ,
+//    - Technische Universität München, Lehrstuhl für Theoretische Chemie,
+//    - Fritz-Haber-Institut, Berlin, Abt. Theorie,
 
+//    More information can be found here:
+//    http://elpa.mpcdf.mpg.de/ and
+//    http://elpa-aeo.mpcdf.mpg.de
+//
+//    ELPA is free software: you can redistribute it and/or modify
+//    it under the terms of the version 3 of the license of the
+//    GNU Lesser General Public License as published by the Free
+//    Software Foundation.
+//
+//    ELPA is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public License
+//    along with ELPA.  If not, see <http://www.gnu.org/licenses/>
+//
+//    ELPA reflects a substantial effort on the part of the original
+//    ELPA consortium, and we ask you to respect the spirit of the
+//    license that we chose: i.e., please contribute any changes you
+//    may have back to the original ELPA library distribution, and keep
+//    any derivatives of ELPA under the same license that we chose for
+//    the original distribution, the GNU Lesser General Public License.
+//
+// Author: Valeriy Manin (Bergische Universität Wuppertal)
+// integreated into the ELPA library Pavel Kus, Andeas Marek (MPCDF)
 
 
 
@@ -15,7 +67,6 @@
 
 
 
- 
 
 
 
@@ -26,20 +77,15 @@
 
 
 
- 
 
- 
 
 
 
 
- 
 
 
- 
 
 
-# 1 "../src/elpa_generalized/cannon.c" 2
 
 
 
@@ -96,9 +142,6 @@
 
 
 
-# 1 "./config-f90.h" 1
-# 58 "../src/elpa_generalized/cannon.c" 2
-# 1 "/usr/include/stdio.h" 1 3
 
 
 
@@ -115,15 +158,12 @@
 
 
 
- 
 
 
 
- 
 
 
 
-# 1 "/usr/include/features.h" 1 3
 
 
 
@@ -139,7 +179,6 @@
 
 
 
- 
 
 
 
@@ -217,19 +256,14 @@
 
 
 
- 
 
 
- 
-# 125 "/usr/include/features.h" 3
 
 
- 
 
 
 
 
- 
 
 
 
@@ -238,37 +272,27 @@
 
 
 
- 
-# 148 "/usr/include/features.h" 3
 
 
- 
 
 
 
 
 
 
- 
-# 182 "/usr/include/features.h" 3
 
 
- 
-# 191 "/usr/include/features.h" 3
 
- 
 
 
 
 
 
- 
 
 
 
 
 
- 
 
 
 
@@ -277,15 +301,12 @@
 
 
 
- 
 
 
 
 
 
 
- 
-# 235 "/usr/include/features.h" 3
 
 
 
@@ -303,7 +324,6 @@
 
 
 
-# 259 "/usr/include/features.h" 3
 
 
 
@@ -311,7 +331,6 @@
 
 
 
-# 291 "/usr/include/features.h" 3
 
 
 
@@ -349,10 +368,8 @@
 
 
 
-# 342 "/usr/include/features.h" 3
 
 
- 
 
 
 
@@ -360,23 +377,17 @@
 
 
 
- 
 
 
 
 
- 
 
 
 
 
 
 
- 
-# 371 "/usr/include/features.h" 3
 
- 
-# 1 "/usr/include/sys/cdefs.h" 1 3
 
 
 
@@ -393,75 +404,56 @@
 
 
 
- 
 
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
 
- 
 
 
 
 
 
 
- 
-# 49 "/usr/include/sys/cdefs.h" 3
 
 
 
 
 
- 
-# 70 "/usr/include/sys/cdefs.h" 3
 
-# 80 "/usr/include/sys/cdefs.h" 3
 
 
- 
 
 
 
 
- 
 
 
 
 
- 
 
 
 
 
- 
-# 105 "/usr/include/sys/cdefs.h" 3
 
 
 
 
 
 
- 
-# 120 "/usr/include/sys/cdefs.h" 3
 
 
- 
-# 130 "/usr/include/sys/cdefs.h" 3
 
 
- 
 
 
 
@@ -469,16 +461,11 @@
 
 
 
- 
 
 
 
-# 155 "/usr/include/sys/cdefs.h" 3
 
- 
 
- 
-# 172 "/usr/include/sys/cdefs.h" 3
 
 
 
@@ -489,30 +476,25 @@
 
 
 
- 
 
 
 
-# 200 "/usr/include/sys/cdefs.h" 3
 
 
 
 
 
 
- 
 
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
@@ -521,14 +503,12 @@
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
@@ -537,10 +517,7 @@
 
 
 
- 
-# 251 "/usr/include/sys/cdefs.h" 3
 
- 
 
 
 
@@ -552,7 +529,6 @@
 
 
 
- 
 
 
 
@@ -562,11 +538,8 @@
 
 
 
- 
-# 281 "/usr/include/sys/cdefs.h" 3
 
 
- 
 
 
 
@@ -574,10 +547,7 @@
 
 
 
- 
-# 304 "/usr/include/sys/cdefs.h" 3
 
- 
 
 
 
@@ -585,7 +555,6 @@
 
 
 
- 
 
 
 
@@ -600,15 +569,12 @@
 
 
 
- 
-# 341 "/usr/include/sys/cdefs.h" 3
 
 
 
 
 
 
- 
 
 
 
@@ -617,25 +583,18 @@
 
 
 
- 
 
 
 
 
- 
 
 
 
 
 
 
- 
-# 383 "/usr/include/sys/cdefs.h" 3
 
-# 391 "/usr/include/sys/cdefs.h" 3
 
-# 1 "/usr/include/bits/wordsize.h" 1 3
- 
 
 
 
@@ -645,16 +604,11 @@
 
 
 
- 
-# 393 "/usr/include/sys/cdefs.h" 2 3
 
-# 425 "/usr/include/sys/cdefs.h" 3
 
-# 376 "/usr/include/features.h" 2 3
 
 
 
- 
 
 
 
@@ -662,7 +616,6 @@
 
 
 
- 
 
 
 
@@ -673,32 +626,23 @@
 
 
 
- 
-# 1 "/usr/include/gnu/stubs.h" 1 3
 
 
- 
 
 
-# 1 "/usr/include/gnu/stubs-64.h" 1 3
 
 
 
- 
 
 
 
 
 
-# 11 "/usr/include/gnu/stubs.h" 2 3
-# 400 "/usr/include/features.h" 2 3
 
 
-# 28 "/usr/include/stdio.h" 2 3
 
 
 
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 1 3
 
 
 
@@ -730,19 +674,381 @@
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 typedef long ptrdiff_t;
 
 
-# 47 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 typedef unsigned long size_t;
 
 
 
 
- 
 
 
 
@@ -750,7 +1056,8 @@ typedef unsigned long size_t;
 
 
 
- 
+
+
 
 
 
@@ -760,9 +1067,7 @@ typedef int wchar_t;
 
 
 
-# 80 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
-# 87 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
 
 
@@ -773,16 +1078,6 @@ typedef struct {
   long double __clang_max_align_nonce2
       __attribute__((__aligned__(__alignof__(long double))));
 } max_align_t;
-# 103 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-
-
-
-
- 
-# 34 "/usr/include/stdio.h" 2 3
-
-# 1 "/usr/include/bits/types.h" 1 3
 
 
 
@@ -799,17 +1094,6 @@ typedef struct {
 
 
 
- 
-
-
-
- 
-
-
-
-
-# 1 "/usr/include/bits/wordsize.h" 1 3
- 
 
 
 
@@ -819,16 +1103,116 @@ typedef struct {
 
 
 
- 
-# 28 "/usr/include/bits/types.h" 2 3
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef __builtin_va_list va_list;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef __builtin_va_list __gnuc_va_list;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 typedef unsigned char __u_char;
 typedef unsigned short int __u_short;
 typedef unsigned int __u_int;
 typedef unsigned long int __u_long;
 
- 
+
 typedef signed char __int8_t;
 typedef unsigned char __uint8_t;
 typedef signed short int __int16_t;
@@ -843,11 +1227,20 @@ typedef unsigned long int __uint64_t;
 
 
 
- 
+
+typedef __int8_t __int_least8_t;
+typedef __uint8_t __uint_least8_t;
+typedef __int16_t __int_least16_t;
+typedef __uint16_t __uint_least16_t;
+typedef __int32_t __int_least32_t;
+typedef __uint32_t __uint_least32_t;
+typedef __int64_t __int_least64_t;
+typedef __uint64_t __uint_least64_t;
+
+
 
 typedef long int __quad_t;
 typedef unsigned long int __u_quad_t;
-# 67 "/usr/include/bits/types.h" 3
 
 
 
@@ -855,6 +1248,8 @@ typedef unsigned long int __u_quad_t;
 
 
 
+typedef long int __intmax_t;
+typedef unsigned long int __uintmax_t;
 
 
 
@@ -877,11 +1272,7 @@ typedef unsigned long int __u_quad_t;
 
 
 
- 
 
-# 125 "/usr/include/bits/types.h" 3
- 
-# 1 "/usr/include/bits/typesizes.h" 1 3
 
 
 
@@ -898,7 +1289,6 @@ typedef unsigned long int __u_quad_t;
 
 
 
- 
 
 
 
@@ -908,101 +1298,154 @@ typedef unsigned long int __u_quad_t;
 
 
 
- 
 
- 
-# 37 "/usr/include/bits/typesizes.h" 3
 
-# 74 "/usr/include/bits/typesizes.h" 3
 
 
 
 
- 
 
 
- 
 
 
 
- 
 
 
 
-# 131 "/usr/include/bits/types.h" 2 3
 
 
-typedef unsigned long int __dev_t;	 
-typedef unsigned int __uid_t;	 
-typedef unsigned int __gid_t;	 
-typedef unsigned long int __ino_t;	 
-typedef unsigned long int __ino64_t;	 
-typedef unsigned int __mode_t;	 
-typedef unsigned long int __nlink_t;	 
-typedef long int __off_t;	 
-typedef long int __off64_t;	 
-typedef int __pid_t;	 
-typedef struct { int __val[2]; } __fsid_t;	 
-typedef long int __clock_t;	 
-typedef unsigned long int __rlim_t;	 
-typedef unsigned long int __rlim64_t;	 
-typedef unsigned int __id_t;		 
-typedef long int __time_t;	 
-typedef unsigned int __useconds_t;  
-typedef long int __suseconds_t;  
 
-typedef int __daddr_t;	 
-typedef int __key_t;	 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef unsigned long int __dev_t;
+typedef unsigned int __uid_t;
+typedef unsigned int __gid_t;
+typedef unsigned long int __ino_t;
+typedef unsigned long int __ino64_t;
+typedef unsigned int __mode_t;
+typedef unsigned long int __nlink_t;
+typedef long int __off_t;
+typedef long int __off64_t;
+typedef int __pid_t;
+typedef struct { int __val[2]; } __fsid_t;
+typedef long int __clock_t;
+typedef unsigned long int __rlim_t;
+typedef unsigned long int __rlim64_t;
+typedef unsigned int __id_t;
+typedef long int __time_t;
+typedef unsigned int __useconds_t;
+typedef long int __suseconds_t;
+typedef long int __suseconds64_t;
+
+typedef int __daddr_t;
+typedef int __key_t;
+
+
 typedef int __clockid_t;
 
- 
+
 typedef void * __timer_t;
 
- 
+
 typedef long int __blksize_t;
 
- 
 
- 
+
+
 typedef long int __blkcnt_t;
 typedef long int __blkcnt64_t;
 
- 
+
 typedef unsigned long int __fsblkcnt_t;
 typedef unsigned long int __fsblkcnt64_t;
 
- 
+
 typedef unsigned long int __fsfilcnt_t;
 typedef unsigned long int __fsfilcnt64_t;
 
- 
+
 typedef long int __fsword_t;
 
-typedef long int __ssize_t;  
+typedef long int __ssize_t;
 
- 
+
 typedef long int __syscall_slong_t;
- 
+
 typedef unsigned long int __syscall_ulong_t;
 
 
- 
-typedef __off64_t __loff_t;	 
-typedef __quad_t *__qaddr_t;
+
+typedef __off64_t __loff_t;
 typedef char *__caddr_t;
 
- 
+
 typedef long int __intptr_t;
 
- 
+
 typedef unsigned int __socklen_t;
 
 
 
 
-# 36 "/usr/include/stdio.h" 2 3
+typedef int __sig_atomic_t;
 
 
 
@@ -1010,11 +1453,73 @@ typedef unsigned int __socklen_t;
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef struct
+{
+  int __count;
+  union
+  {
+    unsigned int __wch;
+    char __wchb[4];
+  } __value;
+} __mbstate_t;
+
+
+
+
+
+typedef struct _G_fpos_t
+{
+  __off_t __pos;
+  __mbstate_t __state;
+} __fpos_t;
+
+
+
+
+
+
+
+
+
+
+typedef struct _G_fpos64_t
+{
+  __off64_t __pos;
+  __mbstate_t __state;
+} __fpos64_t;
+
+
+
+
+struct _IO_FILE;
+typedef struct _IO_FILE __FILE;
+
+
+
+
 struct _IO_FILE;
 
 
- 
 typedef struct _IO_FILE FILE;
 
 
@@ -1030,8 +1535,6 @@ typedef struct _IO_FILE FILE;
 
 
 
- 
-typedef struct _IO_FILE __FILE;
 
 
 
@@ -1041,7 +1544,6 @@ typedef struct _IO_FILE __FILE;
 
 
 
-# 1 "/usr/include/libio.h" 1 3
 
 
 
@@ -1054,486 +1556,99 @@ typedef struct _IO_FILE __FILE;
 
 
 
+struct _IO_FILE;
+struct _IO_marker;
+struct _IO_codecvt;
+struct _IO_wide_data;
 
 
 
 
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-# 1 "/usr/include/_G_config.h" 1 3
-
- 
-
-
-
-
- 
-
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-# 50 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-
- 
-
-
-
-
-
-
-
- 
-# 69 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-# 80 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-# 87 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-# 103 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-
-
-
-
- 
-# 16 "/usr/include/_G_config.h" 2 3
-# 1 "/usr/include/wchar.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-# 78 "/usr/include/wchar.h" 3
-
-
-
- 
-typedef struct
-{
-  int __count;
-  union
-  {
-
-    unsigned int __wch;
-
-
-
-    char __wchb[4];
-  } __value;		 
-} __mbstate_t;
-
-
-
-
-
- 
-# 894 "/usr/include/wchar.h" 3
-
-
-
-
- 
-# 21 "/usr/include/_G_config.h" 2 3
-typedef struct
-{
-  __off_t __pos;
-  __mbstate_t __state;
-} _G_fpos_t;
-typedef struct
-{
-  __off64_t __pos;
-  __mbstate_t __state;
-} _G_fpos64_t;
-# 43 "/usr/include/_G_config.h" 3
-
-
- 
-
-
-
-
-
-
-
- 
-
-
-
-
-# 33 "/usr/include/libio.h" 2 3
- 
-# 47 "/usr/include/libio.h" 3
-
- 
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdarg.h" 1 3
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-# 132 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdarg.h" 3
-
-
-typedef __builtin_va_list va_list;
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
- 
-
-typedef __builtin_va_list __gnuc_va_list;
-
-# 51 "/usr/include/libio.h" 2 3
-
-
-
-
-
-
-
-
-
-
-
-# 77 "/usr/include/libio.h" 3
-
-# 86 "/usr/include/libio.h" 3
-
-
-
-
-
- 
-
-# 112 "/usr/include/libio.h" 3
-
-# 124 "/usr/include/libio.h" 3
-
- 
-# 143 "/usr/include/libio.h" 3
-
-
-struct _IO_jump_t;  struct _IO_FILE;
-
- 
-# 155 "/usr/include/libio.h" 3
 typedef void _IO_lock_t;
 
 
 
- 
 
-struct _IO_marker {
-  struct _IO_marker *_next;
-  struct _IO_FILE *_sbuf;
-  
- 
-   
-  int _pos;
-# 178 "/usr/include/libio.h" 3
-};
 
- 
-enum __codecvt_result
+struct _IO_FILE
 {
-  __codecvt_ok,
-  __codecvt_partial,
-  __codecvt_error,
-  __codecvt_noconv
-};
-
-# 245 "/usr/include/libio.h" 3
-
-struct _IO_FILE {
-  int _flags;		 
+  int _flags;
 
 
-   
-   
-  char* _IO_read_ptr;	 
-  char* _IO_read_end;	 
-  char* _IO_read_base;	 
-  char* _IO_write_base;	 
-  char* _IO_write_ptr;	 
-  char* _IO_write_end;	 
-  char* _IO_buf_base;	 
-  char* _IO_buf_end;	 
-   
-  char *_IO_save_base;  
-  char *_IO_backup_base;   
-  char *_IO_save_end;  
+  char *_IO_read_ptr;
+  char *_IO_read_end;
+  char *_IO_read_base;
+  char *_IO_write_base;
+  char *_IO_write_ptr;
+  char *_IO_write_end;
+  char *_IO_buf_base;
+  char *_IO_buf_end;
+
+
+  char *_IO_save_base;
+  char *_IO_backup_base;
+  char *_IO_save_end;
 
   struct _IO_marker *_markers;
 
   struct _IO_FILE *_chain;
 
   int _fileno;
-
-
-
   int _flags2;
+  __off_t _old_offset;
 
-  __off_t _old_offset;  
 
-
-   
   unsigned short _cur_column;
   signed char _vtable_offset;
   char _shortbuf[1];
 
-   
-
   _IO_lock_t *_lock;
-# 294 "/usr/include/libio.h" 3
   __off64_t _offset;
-# 303 "/usr/include/libio.h" 3
-  void *__pad1;
-  void *__pad2;
-  void *__pad3;
-  void *__pad4;
+
+  struct _IO_codecvt *_codecvt;
+  struct _IO_wide_data *_wide_data;
+  struct _IO_FILE *_freeres_list;
+  void *_freeres_buf;
   size_t __pad5;
-
   int _mode;
-   
-  char _unused2[15 * sizeof (int) - 4 * sizeof (void *) - sizeof (size_t)];
 
+  char _unused2[15 * sizeof (int) - 4 * sizeof (void *) - sizeof (size_t)];
 };
 
 
-typedef struct _IO_FILE _IO_FILE;
 
 
-struct _IO_FILE_plus;
 
-extern struct _IO_FILE_plus _IO_2_1_stdin_;
-extern struct _IO_FILE_plus _IO_2_1_stdout_;
-extern struct _IO_FILE_plus _IO_2_1_stderr_;
-# 333 "/usr/include/libio.h" 3
 
 
- 
 
 
- 
-typedef __ssize_t __io_read_fn (void *__cookie, char *__buf, size_t __nbytes);
 
 
 
 
 
 
- 
-typedef __ssize_t __io_write_fn (void *__cookie, const char *__buf,
-				 size_t __n);
 
 
 
 
 
 
- 
-typedef int __io_seek_fn (void *__cookie, __off64_t *__pos, int __w);
 
- 
-typedef int __io_close_fn (void *__cookie);
 
 
-# 385 "/usr/include/libio.h" 3
-
-
-
-
-
-
-extern int __underflow (_IO_FILE *);
-extern int __uflow (_IO_FILE *);
-extern int __overflow (_IO_FILE *, int);
-
-
-
-
-
-
-
-
-
-
-
-
-# 417 "/usr/include/libio.h" 3
-
-# 431 "/usr/include/libio.h" 3
-
-
-
-
-extern int _IO_getc (_IO_FILE *__fp);
-extern int _IO_putc (int __c, _IO_FILE *__fp);
-extern int _IO_feof (_IO_FILE *__fp) __attribute__ ((__nothrow__ , __leaf__));
-extern int _IO_ferror (_IO_FILE *__fp) __attribute__ ((__nothrow__ , __leaf__));
-
-extern int _IO_peekc_locked (_IO_FILE *__fp);
-
- 
-
-
-
-extern void _IO_flockfile (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
-extern void _IO_funlockfile (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
-extern int _IO_ftrylockfile (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
-
-# 464 "/usr/include/libio.h" 3
-
-extern int _IO_vfscanf (_IO_FILE * __restrict, const char * __restrict,
-			__gnuc_va_list, int *__restrict);
-extern int _IO_vfprintf (_IO_FILE *__restrict, const char *__restrict,
-			 __gnuc_va_list);
-extern __ssize_t _IO_padn (_IO_FILE *, int, __ssize_t);
-extern size_t _IO_sgetn (_IO_FILE *, void *, size_t);
-
-extern __off64_t _IO_seekoff (_IO_FILE *, __off64_t, int, int);
-extern __off64_t _IO_seekpos (_IO_FILE *, __off64_t, int);
-
-extern void _IO_free_backup_area (_IO_FILE *) __attribute__ ((__nothrow__ , __leaf__));
-
-# 521 "/usr/include/libio.h" 3
-
-
-
-
-
-
-
-
-
-# 75 "/usr/include/stdio.h" 2 3
 
 
 
 
 typedef __gnuc_va_list va_list;
-# 86 "/usr/include/stdio.h" 3
 
 
 
 
 typedef __off_t off_t;
-# 100 "/usr/include/stdio.h" 3
+
 
 
 typedef __ssize_t ssize_t;
@@ -1541,10 +1656,9 @@ typedef __ssize_t ssize_t;
 
 
 
- 
 
 
-typedef _G_fpos_t fpos_t;
+typedef __fpos_t fpos_t;
 
 
 
@@ -1553,32 +1667,26 @@ typedef _G_fpos_t fpos_t;
 
 
 
- 
 
 
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
 
 
 
- 
-# 147 "/usr/include/stdio.h" 3
 
 
 
- 
 
 
 
@@ -1591,8 +1699,6 @@ typedef _G_fpos_t fpos_t;
 
 
 
- 
-# 1 "/usr/include/bits/stdio_lim.h" 1 3
 
 
 
@@ -1608,7 +1714,6 @@ typedef _G_fpos_t fpos_t;
 
 
 
- 
 
 
 
@@ -1619,34 +1724,32 @@ typedef _G_fpos_t fpos_t;
 
 
 
-# 34 "/usr/include/bits/stdio_lim.h" 3
 
 
 
 
 
 
-# 165 "/usr/include/stdio.h" 2 3
 
 
- 
-extern struct _IO_FILE *stdin;		 
-extern struct _IO_FILE *stdout;		 
-extern struct _IO_FILE *stderr;		 
- 
 
 
 
+extern FILE *stdin;
+extern FILE *stdout;
+extern FILE *stderr;
 
 
- 
+
+
+
+
 extern int remove (const char *__filename) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern int rename (const char *__old, const char *__new) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
 extern int renameat (int __oldfd, const char *__old, int __newfd,
 		     const char *__new) __attribute__ ((__nothrow__ , __leaf__));
 
@@ -1655,49 +1758,51 @@ extern int renameat (int __oldfd, const char *__old, int __newfd,
 
 
 
- 
 
-extern FILE *tmpfile (void) ;
-# 203 "/usr/include/stdio.h" 3
-
-
-
-
-
- 
-extern char *tmpnam (char *__s) __attribute__ ((__nothrow__ , __leaf__)) ;
-
-
-
-
- 
-extern char *tmpnam_r (char *__s) __attribute__ ((__nothrow__ , __leaf__)) ;
-
-
-
-
-
-
-
-
-
-
- 
-extern char *tempnam (const char *__dir, const char *__pfx)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
-
-
-
-
-
-
-
- 
 extern int fclose (FILE *__stream);
 
 
 
- 
+
+
+
+
+
+
+extern FILE *tmpfile (void)
+  __attribute__ ((__malloc__)) __attribute__ ((__malloc__ (fclose, 1))) ;
+
+
+
+
+
+
+
+extern char *tmpnam (char[20]) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+extern char *tmpnam_r (char __s[20]) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+
+
+
+
+
+
+
+
+
+
+extern char *tempnam (const char *__dir, const char *__pfx)
+   __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__))  __attribute__ ((__malloc__ (__builtin_free, 1)));
+
+
+
+
+
+
 extern int fflush (FILE *__stream);
 
 
@@ -1707,11 +1812,9 @@ extern int fflush (FILE *__stream);
 
 
 
- 
 extern int fflush_unlocked (FILE *__stream);
 
 
-# 264 "/usr/include/stdio.h" 3
 
 
 
@@ -1719,57 +1822,52 @@ extern int fflush_unlocked (FILE *__stream);
 
 
 
- 
 extern FILE *fopen (const char *__restrict __filename,
-		    const char *__restrict __modes) ;
+		    const char *__restrict __modes)
+  __attribute__ ((__malloc__)) __attribute__ ((__malloc__ (fclose, 1))) ;
 
 
 
- 
+
 extern FILE *freopen (const char *__restrict __filename,
 		      const char *__restrict __modes,
 		      FILE *__restrict __stream) ;
-# 295 "/usr/include/stdio.h" 3
-
-# 303 "/usr/include/stdio.h" 3
 
 
- 
-extern FILE *fdopen (int __fd, const char *__modes) __attribute__ ((__nothrow__ , __leaf__)) ;
+
+extern FILE *fdopen (int __fd, const char *__modes) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__malloc__)) __attribute__ ((__malloc__ (fclose, 1))) ;
 
 
-# 316 "/usr/include/stdio.h" 3
 
 
- 
+
 extern FILE *fmemopen (void *__s, size_t __len, const char *__modes)
-  __attribute__ ((__nothrow__ , __leaf__)) ;
-
-
-
- 
-extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__ , __leaf__)) ;
+  __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) __attribute__ ((__malloc__ (fclose, 1))) ;
 
 
 
 
+extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__malloc__)) __attribute__ ((__malloc__ (fclose, 1))) ;
 
- 
+
+
+
 extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern int setvbuf (FILE *__restrict __stream, char *__restrict __buf,
 		    int __modes, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 extern void setbuffer (FILE *__restrict __stream, char *__restrict __buf,
 		       size_t __size) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern void setlinebuf (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -1778,37 +1876,34 @@ extern void setlinebuf (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__))
 
 
 
- 
 extern int fprintf (FILE *__restrict __stream,
 		    const char *__restrict __format, ...);
 
 
 
- 
+
 extern int printf (const char *__restrict __format, ...);
- 
+
 extern int sprintf (char *__restrict __s,
 		    const char *__restrict __format, ...) __attribute__ ((__nothrow__));
 
 
 
 
- 
+
 extern int vfprintf (FILE *__restrict __s, const char *__restrict __format,
 		     __gnuc_va_list __arg);
 
 
 
- 
+
 extern int vprintf (const char *__restrict __format, __gnuc_va_list __arg);
- 
+
 extern int vsprintf (char *__restrict __s, const char *__restrict __format,
 		     __gnuc_va_list __arg) __attribute__ ((__nothrow__));
 
 
 
-
- 
 extern int snprintf (char *__restrict __s, size_t __maxlen,
 		     const char *__restrict __format, ...)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 3, 4)));
@@ -1819,10 +1914,8 @@ extern int vsnprintf (char *__restrict __s, size_t __maxlen,
 
 
 
-# 409 "/usr/include/stdio.h" 3
 
 
- 
 extern int vdprintf (int __fd, const char *__restrict __fmt,
 		     __gnuc_va_list __arg)
      __attribute__ ((__format__ (__printf__, 2, 0)));
@@ -1835,15 +1928,14 @@ extern int dprintf (int __fd, const char *__restrict __fmt, ...)
 
 
 
- 
 extern int fscanf (FILE *__restrict __stream,
 		   const char *__restrict __format, ...) ;
 
 
 
- 
+
 extern int scanf (const char *__restrict __format, ...) ;
- 
+
 extern int sscanf (const char *__restrict __s,
 		   const char *__restrict __format, ...) __attribute__ ((__nothrow__ , __leaf__));
 
@@ -1853,23 +1945,264 @@ extern int sscanf (const char *__restrict __s,
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern int fscanf (FILE *__restrict __stream, const char *__restrict __format, ...) __asm__ ("" "__isoc99_fscanf") ;
 
 
 extern int scanf (const char *__restrict __format, ...) __asm__ ("" "__isoc99_scanf") ;
 
 extern int sscanf (const char *__restrict __s, const char *__restrict __format, ...) __asm__ ("" "__isoc99_sscanf") __attribute__ ((__nothrow__ , __leaf__));
-# 462 "/usr/include/stdio.h" 3
 
 
 
 
 
 
-
-
- 
 extern int vfscanf (FILE *__restrict __s, const char *__restrict __format,
 		    __gnuc_va_list __arg)
      __attribute__ ((__format__ (__scanf__, 2, 0))) ;
@@ -1877,11 +2210,11 @@ extern int vfscanf (FILE *__restrict __s, const char *__restrict __format,
 
 
 
- 
+
 extern int vscanf (const char *__restrict __format, __gnuc_va_list __arg)
      __attribute__ ((__format__ (__scanf__, 1, 0))) ;
 
- 
+
 extern int vsscanf (const char *__restrict __s,
 		    const char *__restrict __format, __gnuc_va_list __arg)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__format__ (__scanf__, 2, 0)));
@@ -1890,9 +2223,6 @@ extern int vsscanf (const char *__restrict __s,
 
 
 
-
-
- 
 extern int vfscanf (FILE *__restrict __s, const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vfscanf")
 
 
@@ -1906,36 +2236,26 @@ extern int vsscanf (const char *__restrict __s, const char *__restrict __format,
 
 
      __attribute__ ((__format__ (__scanf__, 2, 0)));
-# 521 "/usr/include/stdio.h" 3
 
 
 
 
 
 
-
-
-
- 
 extern int fgetc (FILE *__stream);
 extern int getc (FILE *__stream);
 
 
 
 
- 
+
 extern int getchar (void);
 
 
 
- 
 
 
 
-
-
-
- 
 extern int getc_unlocked (FILE *__stream);
 extern int getchar_unlocked (void);
 
@@ -1946,7 +2266,7 @@ extern int getchar_unlocked (void);
 
 
 
- 
+
 extern int fgetc_unlocked (FILE *__stream);
 
 
@@ -1958,28 +2278,22 @@ extern int fgetc_unlocked (FILE *__stream);
 
 
 
- 
 extern int fputc (int __c, FILE *__stream);
 extern int putc (int __c, FILE *__stream);
 
 
 
 
- 
+
 extern int putchar (int __c);
 
 
 
- 
 
 
 
 
 
-
-
-
- 
 extern int fputc_unlocked (int __c, FILE *__stream);
 
 
@@ -1987,7 +2301,7 @@ extern int fputc_unlocked (int __c, FILE *__stream);
 
 
 
- 
+
 extern int putc_unlocked (int __c, FILE *__stream);
 extern int putchar_unlocked (int __c);
 
@@ -1995,10 +2309,10 @@ extern int putchar_unlocked (int __c);
 
 
 
- 
+
 extern int getw (FILE *__stream);
 
- 
+
 extern int putw (int __w, FILE *__stream);
 
 
@@ -2007,14 +2321,8 @@ extern int putw (int __w, FILE *__stream);
 
 
 
- 
 extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
-     ;
-
-# 640 "/usr/include/stdio.h" 3
-
-
-# 652 "/usr/include/stdio.h" 3
+      __attribute__ ((__access__ (__write_only__, 1, 2)));
 
 
 
@@ -2027,23 +2335,25 @@ extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
 
 
 
- 
+
+
+
 extern __ssize_t __getdelim (char **__restrict __lineptr,
-			       size_t *__restrict __n, int __delimiter,
-			       FILE *__restrict __stream) ;
+                             size_t *__restrict __n, int __delimiter,
+                             FILE *__restrict __stream) ;
 extern __ssize_t getdelim (char **__restrict __lineptr,
-			     size_t *__restrict __n, int __delimiter,
-			     FILE *__restrict __stream) ;
+                           size_t *__restrict __n, int __delimiter,
+                           FILE *__restrict __stream) ;
 
 
 
 
 
 
- 
+
 extern __ssize_t getline (char **__restrict __lineptr,
-			    size_t *__restrict __n,
-			    FILE *__restrict __stream) ;
+                          size_t *__restrict __n,
+                          FILE *__restrict __stream) ;
 
 
 
@@ -2051,38 +2361,36 @@ extern __ssize_t getline (char **__restrict __lineptr,
 
 
 
- 
 extern int fputs (const char *__restrict __s, FILE *__restrict __stream);
 
 
 
 
- 
+
 extern int puts (const char *__s);
 
 
 
 
 
- 
+
 extern int ungetc (int __c, FILE *__stream);
 
 
 
 
 
- 
+
 extern size_t fread (void *__restrict __ptr, size_t __size,
 		     size_t __n, FILE *__restrict __stream) ;
 
 
 
- 
+
 extern size_t fwrite (const void *__restrict __ptr, size_t __size,
 		      size_t __n, FILE *__restrict __s);
 
 
-# 729 "/usr/include/stdio.h" 3
 
 
 
@@ -2090,7 +2398,6 @@ extern size_t fwrite (const void *__restrict __ptr, size_t __size,
 
 
 
- 
 extern size_t fread_unlocked (void *__restrict __ptr, size_t __size,
 			      size_t __n, FILE *__restrict __stream) ;
 extern size_t fwrite_unlocked (const void *__restrict __ptr, size_t __size,
@@ -2102,67 +2409,58 @@ extern size_t fwrite_unlocked (const void *__restrict __ptr, size_t __size,
 
 
 
- 
 extern int fseek (FILE *__stream, long int __off, int __whence);
 
 
 
- 
+
 extern long int ftell (FILE *__stream) ;
 
 
 
- 
+
 extern void rewind (FILE *__stream);
 
 
 
 
 
- 
 
 
 
 
 
 
- 
+
 extern int fseeko (FILE *__stream, __off_t __off, int __whence);
 
 
 
- 
+
 extern __off_t ftello (FILE *__stream) ;
-# 791 "/usr/include/stdio.h" 3
 
 
 
 
 
 
- 
 extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos);
 
 
 
- 
+
 extern int fsetpos (FILE *__stream, const fpos_t *__pos);
-# 815 "/usr/include/stdio.h" 3
 
 
-# 823 "/usr/include/stdio.h" 3
 
-
- 
 extern void clearerr (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern int feof (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
- 
+
 extern int ferror (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
- 
 extern void clearerr_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
 extern int feof_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 extern int ferror_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
@@ -2173,52 +2471,16 @@ extern int ferror_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf
 
 
 
- 
 extern void perror (const char *__s);
 
 
 
 
-
- 
-# 1 "/usr/include/bits/sys_errlist.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-
-extern int sys_nerr;
-extern const char *const sys_errlist[];
-# 854 "/usr/include/stdio.h" 2 3
-
-
-
- 
 extern int fileno (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
- 
+
 extern int fileno_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
@@ -2228,20 +2490,22 @@ extern int fileno_unlocked (FILE *__stream) __attribute__ ((__nothrow__ , __leaf
 
 
 
- 
-extern FILE *popen (const char *__command, const char *__modes) ;
-
-
-
-
- 
 extern int pclose (FILE *__stream);
 
 
 
 
- 
-extern char *ctermid (char *__s) __attribute__ ((__nothrow__ , __leaf__));
+
+extern FILE *popen (const char *__command, const char *__modes)
+  __attribute__ ((__malloc__)) __attribute__ ((__malloc__ (pclose, 1))) ;
+
+
+
+
+
+
+extern char *ctermid (char *__s) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__access__ (__write_only__, 1)));
 
 
 
@@ -2251,28 +2515,23 @@ extern char *ctermid (char *__s) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-# 907 "/usr/include/stdio.h" 3
 
 
 
- 
 
- 
+
+
+
 extern void flockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)) ;
 
- 
+
 extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__));
 
 
-# 930 "/usr/include/stdio.h" 3
-
-
- 
-# 1 "/usr/include/bits/stdio.h" 1 3
 
 
 
@@ -2281,15 +2540,8 @@ extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)
 
 
 
-
-
-
-
-
-
-
-
- 
+extern int __uflow (FILE *);
+extern int __overflow (FILE *, int);
 
 
 
@@ -2304,9 +2556,32 @@ extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__ , __leaf__)
 
 
 
- 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 vprintf (const char *__restrict __fmt, __gnuc_va_list __arg)
 {
@@ -2314,16 +2589,16 @@ vprintf (const char *__restrict __fmt, __gnuc_va_list __arg)
 }
 
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 getchar (void)
 {
-  return _IO_getc (stdin);
+  return getc (stdin);
 }
 
 
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 fgetc_unlocked (FILE *__fp)
 {
@@ -2333,14 +2608,14 @@ fgetc_unlocked (FILE *__fp)
 
 
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 getc_unlocked (FILE *__fp)
 {
   return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
 }
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 getchar_unlocked (void)
 {
@@ -2349,16 +2624,16 @@ getchar_unlocked (void)
 
 
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 putchar (int __c)
 {
-  return _IO_putc (__c, stdout);
+  return putc (__c, stdout);
 }
 
 
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 fputc_unlocked (int __c, FILE *__stream)
 {
@@ -2368,14 +2643,14 @@ fputc_unlocked (int __c, FILE *__stream)
 
 
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 putc_unlocked (int __c, FILE *__stream)
 {
   return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
 }
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 putchar_unlocked (int __c)
 {
@@ -2384,22 +2659,21 @@ putchar_unlocked (int __c)
 
 
 
-# 120 "/usr/include/bits/stdio.h" 3
 
 
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 __attribute__ ((__nothrow__ , __leaf__)) feof_unlocked (FILE *__stream)
 {
-  return (((__stream)->_flags & 0x10) != 0);
+  return (((__stream)->_flags & 0x0010) != 0);
 }
 
- 
+
 extern __inline __attribute__ ((__gnu_inline__)) int
 __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 {
-  return (((__stream)->_flags & 0x20) != 0);
+  return (((__stream)->_flags & 0x0020) != 0);
 }
 
 
@@ -2408,21 +2682,13 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
-# 167 "/usr/include/bits/stdio.h" 3
 
-# 188 "/usr/include/bits/stdio.h" 3
 
- 
-# 935 "/usr/include/stdio.h" 2 3
-# 942 "/usr/include/stdio.h" 3
 
 
 
 
 
-# 59 "../src/elpa_generalized/cannon.c" 2
-# 1 "/usr/include/stdlib.h" 1 3
 
 
 
@@ -2438,18 +2704,14 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
 
 
 
- 
 
 
 
 
 
- 
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 1 3
 
 
 
@@ -2481,16 +2743,13 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
 
 
 
 
 
-# 50 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
 
- 
 
 
 
@@ -2498,21 +2757,14 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
-# 69 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
-# 80 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
-# 87 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
-# 103 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
 
 
 
 
- 
-# 33 "/usr/include/stdlib.h" 2 3
 
 
 
@@ -2520,8 +2772,6 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
-# 1 "/usr/include/bits/waitflags.h" 1 3
 
 
 
@@ -2538,25 +2788,20 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
- 
 
 
 
 
 
-# 42 "/usr/include/stdlib.h" 2 3
-# 1 "/usr/include/bits/waitstatus.h" 1 3
 
 
 
@@ -2573,45 +2818,34 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
 
 
 
 
 
 
- 
 
 
- 
 
 
- 
 
 
- 
 
 
- 
 
 
- 
 
 
 
- 
 
 
 
- 
 
 
 
 
- 
 
 
- 
 
 
 
@@ -2620,7 +2854,6 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
-# 1 "/usr/include/endian.h" 1 3
 
 
 
@@ -2636,7 +2869,6 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
 
 
 
@@ -2649,29 +2881,22 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
 
 
 
 
 
- 
-# 1 "/usr/include/bits/endian.h" 1 3
- 
 
 
 
 
 
-# 37 "/usr/include/endian.h" 2 3
 
 
- 
 
 
 
 
-# 50 "/usr/include/endian.h" 3
 
 
 
@@ -2681,8 +2906,6 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
-# 1 "/usr/include/bits/byteswap.h" 1 3
 
 
 
@@ -2699,7 +2922,6 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
 
 
 
@@ -2708,8 +2930,6 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
-# 1 "/usr/include/bits/wordsize.h" 1 3
- 
 
 
 
@@ -2719,222 +2939,80 @@ __attribute__ ((__nothrow__ , __leaf__)) ferror_unlocked (FILE *__stream)
 
 
 
- 
-# 29 "/usr/include/bits/byteswap.h" 2 3
 
- 
 
 
 
- 
-# 1 "/usr/include/bits/byteswap-16.h" 1 3
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-# 36 "/usr/include/bits/byteswap.h" 2 3
-
- 
-
-
-
-
-
-
-static __inline unsigned int
-__bswap_32 (unsigned int __bsx)
-{
-  return __builtin_bswap32 (__bsx);
-}
-# 93 "/usr/include/bits/byteswap.h" 3
-
-
-
- 
-# 106 "/usr/include/bits/byteswap.h" 3
-
-
-static __inline __uint64_t
-__bswap_64 (__uint64_t __bsx)
-{
-  return __builtin_bswap64 (__bsx);
-}
-# 154 "/usr/include/bits/byteswap.h" 3
-
-# 61 "/usr/include/endian.h" 2 3
-
-
-
-
-
-
-
-
-
-
-
-
-# 79 "/usr/include/endian.h" 3
-
-# 99 "/usr/include/endian.h" 3
-
-# 65 "/usr/include/bits/waitstatus.h" 2 3
-
-union wait
-  {
-    int w_status;
-    struct
-      {
-
-	unsigned int __w_termsig:7;  
-	unsigned int __w_coredump:1;  
-	unsigned int __w_retcode:8;  
-	unsigned int:16;
-# 83 "/usr/include/bits/waitstatus.h" 3
-      } __wait_terminated;
-    struct
-      {
-
-	unsigned int __w_stopval:8;  
-	unsigned int __w_stopsig:8;  
-	unsigned int:16;
-# 96 "/usr/include/bits/waitstatus.h" 3
-      } __wait_stopped;
-  };
-
-
-
-
-
-
-
-# 43 "/usr/include/stdlib.h" 2 3
-
-
-
-
- 
-
-# 56 "/usr/include/stdlib.h" 3
-
-
-
-
- 
-
-
-
-
-
- 
-typedef union
-  {
-    union wait *__uptr;
-    int *__iptr;
-  } __WAIT_STATUS __attribute__ ((__transparent_union__));
-
-
-
-# 82 "/usr/include/stdlib.h" 3
-
- 
-# 94 "/usr/include/stdlib.h" 3
-
-
- 
 typedef struct
   {
-    int quot;			 
-    int rem;			 
+    int quot;
+    int rem;
   } div_t;
 
- 
+
 
 typedef struct
   {
-    long int quot;		 
-    long int rem;		 
+    long int quot;
+    long int rem;
   } ldiv_t;
 
 
 
 
 
-
- 
 __extension__ typedef struct
   {
-    long long int quot;		 
-    long long int rem;		 
+    long long int quot;
+    long long int rem;
   } lldiv_t;
 
 
 
 
 
- 
 
 
 
 
- 
 
 
 
 
- 
+
+
 
 extern size_t __ctype_get_mb_cur_max (void) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
- 
 extern double atof (const char *__nptr)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
- 
+
 extern int atoi (const char *__nptr)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
- 
+
 extern long int atol (const char *__nptr)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
-
- 
 __extension__ extern long long int atoll (const char *__nptr)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
-
- 
 extern double strtod (const char *__restrict __nptr,
 		      char **__restrict __endptr)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
-
- 
 extern float strtof (const char *__restrict __nptr,
 		     char **__restrict __endptr) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
@@ -2945,23 +3023,64 @@ extern long double strtold (const char *__restrict __nptr,
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern long int strtol (const char *__restrict __nptr,
 			char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
- 
+
 extern unsigned long int strtoul (const char *__restrict __nptr,
 				  char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
- 
 __extension__
 extern long long int strtoq (const char *__restrict __nptr,
 			     char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
- 
+
 __extension__
 extern unsigned long long int strtouq (const char *__restrict __nptr,
 				       char **__restrict __endptr, int __base)
@@ -2970,12 +3089,11 @@ extern unsigned long long int strtouq (const char *__restrict __nptr,
 
 
 
- 
 __extension__
 extern long long int strtoll (const char *__restrict __nptr,
 			      char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
- 
+
 __extension__
 extern unsigned long long int strtoull (const char *__restrict __nptr,
 					char **__restrict __endptr, int __base)
@@ -2984,7 +3102,48 @@ extern unsigned long long int strtoull (const char *__restrict __nptr,
 
 
 
-# 273 "/usr/include/stdlib.h" 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3001,8 +3160,6 @@ __attribute__ ((__nothrow__ , __leaf__)) atol (const char *__nptr)
 }
 
 
-
-
 __extension__ extern __inline __attribute__ ((__gnu_inline__)) long long int
 __attribute__ ((__nothrow__ , __leaf__)) atoll (const char *__nptr)
 {
@@ -3016,16 +3173,14 @@ __attribute__ ((__nothrow__ , __leaf__)) atoll (const char *__nptr)
 
 
 
- 
 extern char *l64a (long int __n) __attribute__ ((__nothrow__ , __leaf__)) ;
 
- 
+
 extern long int a64l (const char *__s)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
-# 1 "/usr/include/sys/types.h" 1 3
 
 
 
@@ -3041,11 +3196,11 @@ extern long int a64l (const char *__s)
 
 
 
- 
 
 
 
- 
+
+
 
 
 
@@ -3067,14 +3222,12 @@ typedef __u_quad_t u_quad_t;
 typedef __fsid_t fsid_t;
 
 
-
-
 typedef __loff_t loff_t;
 
 
 
+
 typedef __ino_t ino_t;
-# 58 "/usr/include/sys/types.h" 3
 
 
 typedef __dev_t dev_t;
@@ -3101,7 +3254,6 @@ typedef __uid_t uid_t;
 
 
 
-# 96 "/usr/include/sys/types.h" 3
 
 
 typedef __pid_t pid_t;
@@ -3132,41 +3284,12 @@ typedef __key_t key_t;
 
 
 
-# 1 "/usr/include/time.h" 1 3
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
- 
-
-
-
- 
-
-
-
-# 32 "/usr/include/time.h" 3
-
-# 51 "/usr/include/time.h" 3
-
-
-
-
-
-
-
- 
 typedef __clock_t clock_t;
 
 
@@ -3175,30 +3298,6 @@ typedef __clock_t clock_t;
 
 
 
-
-
-
-
-
-
-
- 
-typedef __time_t time_t;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
 typedef __clockid_t clockid_t;
 
 
@@ -3210,23 +3309,21 @@ typedef __clockid_t clockid_t;
 
 
 
- 
+typedef __time_t time_t;
+
+
+
+
+
+
+
+
 typedef __timer_t timer_t;
 
 
 
 
 
-# 128 "/usr/include/time.h" 3
-
-
-# 433 "/usr/include/time.h" 3
-
-# 133 "/usr/include/sys/types.h" 2 3
-
-# 144 "/usr/include/sys/types.h" 3
-
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 1 3
 
 
 
@@ -3258,16 +3355,6 @@ typedef __timer_t timer_t;
 
 
 
- 
-
-
-
-
-
-# 50 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-
- 
 
 
 
@@ -3275,34 +3362,31 @@ typedef __timer_t timer_t;
 
 
 
- 
-# 69 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-# 80 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-# 87 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
-
-# 103 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
 
 
 
 
- 
-# 147 "/usr/include/sys/types.h" 2 3
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
 typedef unsigned long int ulong;
 typedef unsigned short int ushort;
 typedef unsigned int uint;
 
 
- 
-
-# 185 "/usr/include/sys/types.h" 3
-
- 
 
 
 
@@ -3310,32 +3394,48 @@ typedef unsigned int uint;
 
 
 
-typedef int int8_t __attribute__ ((__mode__ (__QI__)));
-typedef int int16_t __attribute__ ((__mode__ (__HI__)));
-typedef int int32_t __attribute__ ((__mode__ (__SI__)));
-typedef int int64_t __attribute__ ((__mode__ (__DI__)));
 
 
-typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
-typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
-typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
-typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef __int8_t int8_t;
+typedef __int16_t int16_t;
+typedef __int32_t int32_t;
+typedef __int64_t int64_t;
+
+
+
+typedef __uint8_t u_int8_t;
+typedef __uint16_t u_int16_t;
+typedef __uint32_t u_int32_t;
+typedef __uint64_t u_int64_t;
+
 
 typedef int register_t __attribute__ ((__mode__ (__word__)));
 
 
 
- 
 
 
 
 
 
- 
 
 
- 
-# 1 "/usr/include/sys/select.h" 1 3
 
 
 
@@ -3352,20 +3452,15 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
 
 
 
- 
 
- 
 
 
 
 
 
 
- 
 
 
- 
-# 1 "/usr/include/bits/select.h" 1 3
 
 
 
@@ -3381,14 +3476,11 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
 
 
 
- 
 
 
 
 
 
-# 1 "/usr/include/bits/wordsize.h" 1 3
- 
 
 
 
@@ -3398,8 +3490,6 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
 
 
 
- 
-# 23 "/usr/include/bits/select.h" 2 3
 
 
 
@@ -3410,14 +3500,9 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
 
 
 
-# 43 "/usr/include/bits/select.h" 3
 
-# 57 "/usr/include/bits/select.h" 3
 
-# 31 "/usr/include/sys/select.h" 2 3
 
- 
-# 1 "/usr/include/bits/sigset.h" 1 3
 
 
 
@@ -3435,39 +3520,217 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
 
 
 
- 
 
 
 
 
-typedef int __sig_atomic_t;
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static __inline __uint16_t
+__bswap_16 (__uint16_t __bsx)
+{
+
+  return __builtin_bswap16 (__bsx);
+
+
+
+}
+
+
+
+
+
+
+static __inline __uint32_t
+__bswap_32 (__uint32_t __bsx)
+{
+
+  return __builtin_bswap32 (__bsx);
+
+
+
+}
+
+
+
+__extension__ static __inline __uint64_t
+__bswap_64 (__uint64_t __bsx)
+{
+
+  return __builtin_bswap64 (__bsx);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static __inline __uint16_t
+__uint16_identity (__uint16_t __x)
+{
+  return __x;
+}
+
+static __inline __uint32_t
+__uint32_identity (__uint32_t __x)
+{
+  return __x;
+}
+
+static __inline __uint64_t
+__uint64_identity (__uint64_t __x)
+{
+  return __x;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 typedef struct
-  {
-    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
-  } __sigset_t;
-
-
-
-
-
-
-
-
- 
-
-# 34 "/usr/include/sys/select.h" 2 3
+{
+  unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
+} __sigset_t;
 
 
 
 typedef __sigset_t sigset_t;
 
 
- 
-# 1 "/usr/include/time.h" 1 3
 
 
 
@@ -3476,94 +3739,40 @@ typedef __sigset_t sigset_t;
 
 
 
-
-
-
-
-
-
-
- 
-
-
-
- 
-
-
-
-# 32 "/usr/include/time.h" 3
-
-# 51 "/usr/include/time.h" 3
-
-# 67 "/usr/include/time.h" 3
-
-# 83 "/usr/include/time.h" 3
-
-# 95 "/usr/include/time.h" 3
-
-# 107 "/usr/include/time.h" 3
-
-
-# 115 "/usr/include/time.h" 3
-
-
-
-
- 
-struct timespec
-  {
-    __time_t tv_sec;		 
-    __syscall_slong_t tv_nsec;	 
-  };
-
-
-
-
-
-# 433 "/usr/include/time.h" 3
-
-# 44 "/usr/include/sys/select.h" 2 3
-# 1 "/usr/include/bits/time.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
- 
-
-
-
-
-
-
-
- 
 struct timeval
-  {
-    __time_t tv_sec;		 
-    __suseconds_t tv_usec;	 
-  };
+{
 
 
 
-# 100 "/usr/include/bits/time.h" 3
 
-# 46 "/usr/include/sys/select.h" 2 3
+  __time_t tv_sec;
+  __suseconds_t tv_usec;
+
+};
+
+
+
+
+
+
+
+
+
+
+struct timespec
+{
+
+
+
+  __time_t tv_sec;
+
+
+
+
+  __syscall_slong_t tv_nsec;
+};
+
+
 
 
 typedef __suseconds_t suseconds_t;
@@ -3571,21 +3780,21 @@ typedef __suseconds_t suseconds_t;
 
 
 
- 
+
 typedef long int __fd_mask;
 
- 
-
- 
 
 
 
 
- 
+
+
+
+
 typedef struct
   {
-    
- 
+
+
 
 
 
@@ -3595,19 +3804,13 @@ typedef struct
 
   } fd_set;
 
- 
 
 
 
- 
+
+
 typedef __fd_mask fd_mask;
 
- 
-
-
-
-
- 
 
 
 
@@ -3623,7 +3826,14 @@ typedef __fd_mask fd_mask;
 
 
 
- 
+
+
+
+
+
+
+
+
 extern int select (int __nfds, fd_set *__restrict __readfds,
 		   fd_set *__restrict __writefds,
 		   fd_set *__restrict __exceptfds,
@@ -3635,7 +3845,8 @@ extern int select (int __nfds, fd_set *__restrict __readfds,
 
 
 
- 
+
+
 extern int pselect (int __nfds, fd_set *__restrict __readfds,
 		    fd_set *__restrict __writefds,
 		    fd_set *__restrict __exceptfds,
@@ -3644,88 +3855,12 @@ extern int pselect (int __nfds, fd_set *__restrict __readfds,
 
 
 
- 
 
 
 
 
 
 
-# 220 "/usr/include/sys/types.h" 2 3
-
- 
-# 1 "/usr/include/sys/sysmacros.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
- 
-
-
-
-__extension__
-extern unsigned int gnu_dev_major (unsigned long long int __dev)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-__extension__
-extern unsigned int gnu_dev_minor (unsigned long long int __dev)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-__extension__
-extern unsigned long long int gnu_dev_makedev (unsigned int __major,
-					       unsigned int __minor)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-
-
-__extension__ extern __inline __attribute__ ((__gnu_inline__)) __attribute__ ((__const__)) unsigned int
-__attribute__ ((__nothrow__ , __leaf__)) gnu_dev_major (unsigned long long int __dev)
-{
-  return ((__dev >> 8) & 0xfff) | ((unsigned int) (__dev >> 32) & ~0xfff);
-}
-
-__extension__ extern __inline __attribute__ ((__gnu_inline__)) __attribute__ ((__const__)) unsigned int
-__attribute__ ((__nothrow__ , __leaf__)) gnu_dev_minor (unsigned long long int __dev)
-{
-  return (__dev & 0xff) | ((unsigned int) (__dev >> 12) & ~0xff);
-}
-
-__extension__ extern __inline __attribute__ ((__gnu_inline__)) __attribute__ ((__const__)) unsigned long long int
-__attribute__ ((__nothrow__ , __leaf__)) gnu_dev_makedev (unsigned int __major, unsigned int __minor)
-{
-  return ((__minor & 0xff) | ((__major & 0xfff) << 8)
-	  | (((unsigned long long int) (__minor & ~0xff)) << 12)
-	  | (((unsigned long long int) (__major & ~0xfff)) << 32));
-}
-
-
-
- 
-
-
-
-
-
-# 223 "/usr/include/sys/types.h" 2 3
 
 
 
@@ -3735,29 +3870,18 @@ typedef __blksize_t blksize_t;
 
 
 
- 
-
-
-typedef __blkcnt_t blkcnt_t;	  
 
 
 
-typedef __fsblkcnt_t fsblkcnt_t;  
+typedef __blkcnt_t blkcnt_t;
 
 
 
-typedef __fsfilcnt_t fsfilcnt_t;  
-# 260 "/usr/include/sys/types.h" 3
+typedef __fsblkcnt_t fsblkcnt_t;
 
 
 
-
-
-
-
-
- 
-# 1 "/usr/include/bits/pthreadtypes.h" 1 3
+typedef __fsfilcnt_t fsfilcnt_t;
 
 
 
@@ -3773,13 +3897,6 @@ typedef __fsfilcnt_t fsfilcnt_t;
 
 
 
- 
-
-
-
-
-# 1 "/usr/include/bits/wordsize.h" 1 3
- 
 
 
 
@@ -3789,15 +3906,310 @@ typedef __fsfilcnt_t fsfilcnt_t;
 
 
 
- 
-# 22 "/usr/include/bits/pthreadtypes.h" 2 3
-
-# 56 "/usr/include/bits/pthreadtypes.h" 3
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef union
+{
+  __extension__ unsigned long long int __value64;
+  struct
+  {
+    unsigned int __low;
+    unsigned int __high;
+  } __value32;
+} __atomic_wide_counter;
+
+
+
+
+
+typedef struct __pthread_internal_list
+{
+  struct __pthread_internal_list *__prev;
+  struct __pthread_internal_list *__next;
+} __pthread_list_t;
+
+typedef struct __pthread_internal_slist
+{
+  struct __pthread_internal_slist *__next;
+} __pthread_slist_t;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct __pthread_mutex_s
+{
+  int __lock;
+  unsigned int __count;
+  int __owner;
+
+  unsigned int __nusers;
+
+
+
+  int __kind;
+
+  short __spins;
+  short __elision;
+  __pthread_list_t __list;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct __pthread_rwlock_arch_t
+{
+  unsigned int __readers;
+  unsigned int __writers;
+  unsigned int __wrphase_futex;
+  unsigned int __writers_futex;
+  unsigned int __pad3;
+  unsigned int __pad4;
+
+  int __cur_writer;
+  int __shared;
+  signed char __rwelision;
+
+
+
+
+  unsigned char __pad1[7];
+
+
+  unsigned long int __pad2;
+
+
+  unsigned int __flags;
+};
+
+
+
+
+
+
+struct __pthread_cond_s
+{
+  __atomic_wide_counter __wseq;
+  __atomic_wide_counter __g1_start;
+  unsigned int __g_refs[2] ;
+  unsigned int __g_size[2];
+  unsigned int __g1_orig_size;
+  unsigned int __wrefs;
+  unsigned int __g_signals[2];
+};
+
+typedef unsigned int __tss_t;
+typedef unsigned long int __thrd_t;
+
+typedef struct
+{
+  int __data ;
+} __once_flag;
+
+
+
+
+
+
 typedef unsigned long int pthread_t;
+
+
+
+
+typedef union
+{
+  char __size[4];
+  int __align;
+} pthread_mutexattr_t;
+
+
+
+
+typedef union
+{
+  char __size[4];
+  int __align;
+} pthread_condattr_t;
+
+
+
+typedef unsigned int pthread_key_t;
+
+
+
+typedef int  pthread_once_t;
 
 
 union pthread_attr_t
@@ -3811,107 +4223,28 @@ typedef union pthread_attr_t pthread_attr_t;
 
 
 
-
-typedef struct __pthread_internal_list
-{
-  struct __pthread_internal_list *__prev;
-  struct __pthread_internal_list *__next;
-} __pthread_list_t;
-# 86 "/usr/include/bits/pthreadtypes.h" 3
-
-
-
- 
 typedef union
 {
-  struct __pthread_mutex_s
-  {
-    int __lock;
-    unsigned int __count;
-    int __owner;
-
-    unsigned int __nusers;
-
-    
- 
-    int __kind;
-
-    short __spins;
-    short __elision;
-    __pthread_list_t __list;
-
- 
-# 125 "/usr/include/bits/pthreadtypes.h" 3
-  } __data;
+  struct __pthread_mutex_s __data;
   char __size[40];
   long int __align;
 } pthread_mutex_t;
 
+
 typedef union
 {
-  char __size[4];
-  int __align;
-} pthread_mutexattr_t;
-
-
-
- 
-typedef union
-{
-  struct
-  {
-    int __lock;
-    unsigned int __futex;
-    __extension__ unsigned long long int __total_seq;
-    __extension__ unsigned long long int __wakeup_seq;
-    __extension__ unsigned long long int __woken_seq;
-    void *__mutex;
-    unsigned int __nwaiters;
-    unsigned int __broadcast_seq;
-  } __data;
+  struct __pthread_cond_s __data;
   char __size[48];
   __extension__ long long int __align;
 } pthread_cond_t;
 
+
+
+
+
 typedef union
 {
-  char __size[4];
-  int __align;
-} pthread_condattr_t;
-
-
- 
-typedef unsigned int pthread_key_t;
-
-
- 
-typedef int pthread_once_t;
-
-
-
-
- 
-typedef union
-{
-
-  struct
-  {
-    int __lock;
-    unsigned int __nr_readers;
-    unsigned int __readers_wakeup;
-    unsigned int __writer_wakeup;
-    unsigned int __nr_readers_queued;
-    unsigned int __nr_writers_queued;
-    int __writer;
-    int __shared;
-    unsigned long int __pad1;
-    unsigned long int __pad2;
-    
- 
-    unsigned int __flags;
-
-  } __data;
-# 212 "/usr/include/bits/pthreadtypes.h" 3
+  struct __pthread_rwlock_arch_t __data;
   char __size[56];
   long int __align;
 } pthread_rwlock_t;
@@ -3925,12 +4258,12 @@ typedef union
 
 
 
- 
+
 typedef volatile int pthread_spinlock_t;
 
 
 
- 
+
 typedef union
 {
   char __size[32];
@@ -3950,49 +4283,41 @@ typedef union
 
 
 
-# 271 "/usr/include/sys/types.h" 2 3
 
 
 
 
-# 315 "/usr/include/stdlib.h" 2 3
-
-
-
-
- 
- 
 extern long int random (void) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern void srandom (unsigned int __seed) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
+
 extern char *initstate (unsigned int __seed, char *__statebuf,
 			size_t __statelen) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
- 
+
 extern char *setstate (char *__statebuf) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
- 
+
 
 struct random_data
   {
-    int32_t *fptr;		 
-    int32_t *rptr;		 
-    int32_t *state;		 
-    int rand_type;		 
-    int rand_deg;		 
-    int rand_sep;		 
-    int32_t *end_ptr;		 
+    int32_t *fptr;
+    int32_t *rptr;
+    int32_t *state;
+    int rand_type;
+    int rand_deg;
+    int rand_sep;
+    int32_t *end_ptr;
   };
 
 extern int random_r (struct random_data *__restrict __buf,
@@ -4014,36 +4339,34 @@ extern int setstate_r (char *__restrict __statebuf,
 
 
 
- 
 extern int rand (void) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern void srand (unsigned int __seed) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
 extern int rand_r (unsigned int *__seed) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 
- 
+
+
 extern double drand48 (void) __attribute__ ((__nothrow__ , __leaf__));
 extern double erand48 (unsigned short int __xsubi[3]) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
- 
+
 extern long int lrand48 (void) __attribute__ ((__nothrow__ , __leaf__));
 extern long int nrand48 (unsigned short int __xsubi[3])
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
- 
+
 extern long int mrand48 (void) __attribute__ ((__nothrow__ , __leaf__));
 extern long int jrand48 (unsigned short int __xsubi[3])
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
- 
+
 extern void srand48 (long int __seedval) __attribute__ ((__nothrow__ , __leaf__));
 extern unsigned short int *seed48 (unsigned short int __seed16v[3])
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
@@ -4052,24 +4375,25 @@ extern void lcong48 (unsigned short int __param[7]) __attribute__ ((__nothrow__ 
 
 
 
- 
+
 struct drand48_data
   {
-    unsigned short int __x[3];	 
-    unsigned short int __old_x[3];  
-    unsigned short int __c;	 
-    unsigned short int __init;	 
-    unsigned long long int __a;	 
+    unsigned short int __x[3];
+    unsigned short int __old_x[3];
+    unsigned short int __c;
+    unsigned short int __init;
+    __extension__ unsigned long long int __a;
+
   };
 
- 
+
 extern int drand48_r (struct drand48_data *__restrict __buffer,
 		      double *__restrict __result) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 extern int erand48_r (unsigned short int __xsubi[3],
 		      struct drand48_data *__restrict __buffer,
 		      double *__restrict __result) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
- 
+
 extern int lrand48_r (struct drand48_data *__restrict __buffer,
 		      long int *__restrict __result)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
@@ -4078,7 +4402,7 @@ extern int nrand48_r (unsigned short int __xsubi[3],
 		      long int *__restrict __result)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
- 
+
 extern int mrand48_r (struct drand48_data *__restrict __buffer,
 		      long int *__restrict __result)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
@@ -4087,7 +4411,7 @@ extern int jrand48_r (unsigned short int __xsubi[3],
 		      long int *__restrict __result)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
 
- 
+
 extern int srand48_r (long int __seedval, struct drand48_data *__buffer)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
@@ -4101,41 +4425,37 @@ extern int lcong48_r (unsigned short int __param[7],
 
 
 
+extern void *malloc (size_t __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__))
+     __attribute__ ((__alloc_size__ (1))) ;
 
-
-
-
- 
-extern void *malloc (size_t __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
- 
 extern void *calloc (size_t __nmemb, size_t __size)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) __attribute__ ((__alloc_size__ (1, 2))) ;
 
 
 
 
 
 
- 
-
-
- 
 extern void *realloc (void *__ptr, size_t __size)
-     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__warn_unused_result__));
- 
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__warn_unused_result__)) __attribute__ ((__alloc_size__ (2)));
+
+
 extern void free (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
-extern void cfree (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
-# 1 "/usr/include/alloca.h" 1 3
 
 
+extern void *reallocarray (void *__ptr, size_t __nmemb, size_t __size)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__warn_unused_result__))
+     __attribute__ ((__alloc_size__ (2, 3)))
+    __attribute__ ((__malloc__ (__builtin_free, 1)));
 
 
+extern void *reallocarray (void *__ptr, size_t __nmemb, size_t __size)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__ (reallocarray, 1)));
 
 
 
@@ -4147,14 +4467,12 @@ extern void cfree (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
 
 
 
 
 
 
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 1 3
 
 
 
@@ -4186,16 +4504,13 @@ extern void cfree (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
 
 
 
 
 
-# 50 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
 
- 
 
 
 
@@ -4203,28 +4518,32 @@ extern void cfree (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
-# 69 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
-# 80 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
-# 87 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
-# 103 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stddef.h" 3
 
 
 
 
 
- 
-# 25 "/usr/include/alloca.h" 2 3
 
 
 
- 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern void *alloca (size_t __size) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -4233,37 +4552,37 @@ extern void *alloca (size_t __size) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-# 492 "/usr/include/stdlib.h" 2 3
 
 
 
 
- 
-extern void *valloc (size_t __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+
+extern void *valloc (size_t __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__))
+     __attribute__ ((__alloc_size__ (1))) ;
 
 
 
- 
+
 extern int posix_memalign (void **__memptr, size_t __alignment, size_t __size)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
- 
+
 extern void *aligned_alloc (size_t __alignment, size_t __size)
-     __attribute__ ((__nothrow__ , __leaf__))  __attribute__ ((__malloc__, __alloc_size__ (2)));
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) __attribute__ ((__alloc_align__ (1)))
+     __attribute__ ((__alloc_size__ (2))) ;
 
 
 
- 
 extern void abort (void) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
- 
+
 extern int atexit (void (*__func) (void)) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
- 
+
 
 
 
@@ -4275,7 +4594,6 @@ extern int at_quick_exit (void (*__func) (void)) __attribute__ ((__nothrow__ , _
 
 
 
- 
 extern int on_exit (void (*__func) (int __status, void *__arg), void *__arg)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
@@ -4283,54 +4601,47 @@ extern int on_exit (void (*__func) (int __status, void *__arg), void *__arg)
 
 
 
- 
 extern void exit (int __status) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 
 
- 
+
 extern void quick_exit (int __status) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 
 
 
-
- 
 extern void _Exit (int __status) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
 
 
 
 
-
- 
 extern char *getenv (const char *__name) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 
 
-# 572 "/usr/include/stdlib.h" 3
 
 
- 
 
- 
+
 extern int putenv (char *__string) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
- 
+
 extern int setenv (const char *__name, const char *__value, int __replace)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
- 
+
 extern int unsetenv (const char *__name) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
- 
+
 extern int clearenv (void) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -4341,7 +4652,7 @@ extern int clearenv (void) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
+
 extern char *mktemp (char *__template) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
@@ -4354,10 +4665,8 @@ extern char *mktemp (char *__template) __attribute__ ((__nothrow__ , __leaf__)) 
 
 
 
- 
 
 extern int mkstemp (char *__template) __attribute__ ((__nonnull__ (1))) ;
-# 632 "/usr/include/stdlib.h" 3
 
 
 
@@ -4365,61 +4674,105 @@ extern int mkstemp (char *__template) __attribute__ ((__nonnull__ (1))) ;
 
 
 
- 
+
 
 extern int mkstemps (char *__template, int __suffixlen) __attribute__ ((__nonnull__ (1))) ;
-# 655 "/usr/include/stdlib.h" 3
 
 
 
 
 
 
- 
+
 extern char *mkdtemp (char *__template) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 
 
-# 709 "/usr/include/stdlib.h" 3
 
 
 
 
 
 
- 
 extern int system (const char *__command) ;
 
 
 
-# 726 "/usr/include/stdlib.h" 3
 
 
 
 
 
 
- 
 extern char *realpath (const char *__restrict __name,
 		       char *__restrict __resolved) __attribute__ ((__nothrow__ , __leaf__)) ;
 
 
 
- 
+
 
 
 typedef int (*__compar_fn_t) (const void *, const void *);
 
-# 750 "/usr/include/stdlib.h" 3
 
 
 
- 
 extern void *bsearch (const void *__key, const void *__base,
 		      size_t __nmemb, size_t __size, __compar_fn_t __compar)
      __attribute__ ((__nonnull__ (1, 2, 5))) ;
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) void *
+bsearch (const void *__key, const void *__base, size_t __nmemb, size_t __size,
+	 __compar_fn_t __compar)
+{
+  size_t __l, __u, __idx;
+  const void *__p;
+  int __comparison;
+
+  __l = 0;
+  __u = __nmemb;
+  while (__l < __u)
+    {
+      __idx = (__l + __u) / 2;
+      __p = (const void *) (((const char *) __base) + (__idx * __size));
+      __comparison = (*__compar) (__key, __p);
+      if (__comparison < 0)
+	__u = __idx;
+      else if (__comparison > 0)
+	__l = __idx + 1;
+      else
+	{
+
+
+	  return (void *) __p;
+
+
+	}
+    }
+
+  return ((void*)0);
+}
+
+
+
+
 extern void qsort (void *__base, size_t __nmemb, size_t __size,
 		   __compar_fn_t __compar) __attribute__ ((__nonnull__ (1, 4)));
 
@@ -4429,10 +4782,9 @@ extern void qsort (void *__base, size_t __nmemb, size_t __size,
 
 
 
- 
+
 extern int abs (int __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
 extern long int labs (long int __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
-
 
 
 __extension__ extern long long int llabs (long long int __x)
@@ -4442,14 +4794,11 @@ __extension__ extern long long int llabs (long long int __x)
 
 
 
- 
- 
+
 extern div_t div (int __numer, int __denom)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
 extern ldiv_t ldiv (long int __numer, long int __denom)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)) ;
-
-
 
 
 __extension__ extern lldiv_t lldiv (long long int __numer,
@@ -4462,29 +4811,28 @@ __extension__ extern lldiv_t lldiv (long long int __numer,
 
 
 
- 
 
 
 
- 
+
 extern char *ecvt (double __value, int __ndigit, int *__restrict __decpt,
 		   int *__restrict __sign) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4))) ;
 
 
 
- 
+
 extern char *fcvt (double __value, int __ndigit, int *__restrict __decpt,
 		   int *__restrict __sign) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4))) ;
 
 
 
- 
+
 extern char *gcvt (double __value, int __ndigit, char *__buf)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3))) ;
 
 
 
- 
+
 extern char *qecvt (long double __value, int __ndigit,
 		    int *__restrict __decpt, int *__restrict __sign)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4))) ;
@@ -4496,7 +4844,7 @@ extern char *qgcvt (long double __value, int __ndigit, char *__buf)
 
 
 
- 
+
 extern int ecvt_r (double __value, int __ndigit, int *__restrict __decpt,
 		   int *__restrict __sign, char *__restrict __buf,
 		   size_t __len) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (3, 4, 5)));
@@ -4517,33 +4865,32 @@ extern int qfcvt_r (long double __value, int __ndigit,
 
 
 
+extern int mblen (const char *__s, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern int mblen (const char *__s, size_t __n) __attribute__ ((__nothrow__ , __leaf__)) ;
 
- 
 extern int mbtowc (wchar_t *__restrict __pwc,
-		   const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ , __leaf__)) ;
-
- 
-extern int wctomb (char *__s, wchar_t __wchar) __attribute__ ((__nothrow__ , __leaf__)) ;
+		   const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+extern int wctomb (char *__s, wchar_t __wchar) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
 extern size_t mbstowcs (wchar_t *__restrict  __pwcs,
-			const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ , __leaf__));
- 
+			const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__ , __leaf__))
+    __attribute__ ((__access__ (__read_only__, 2)));
+
 extern size_t wcstombs (char *__restrict __s,
 			const wchar_t *__restrict __pwcs, size_t __n)
-     __attribute__ ((__nothrow__ , __leaf__));
+     __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__access__ (__write_only__, 1, 3)))
+  __attribute__ ((__access__ (__read_only__, 2)));
 
 
 
 
 
 
-
- 
 extern int rpmatch (const char *__response) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) ;
 
 
@@ -4554,7 +4901,7 @@ extern int rpmatch (const char *__response) __attribute__ ((__nothrow__ , __leaf
 
 
 
- 
+
 extern int getsubopt (char **__restrict __optionp,
 		      char *const *__restrict __tokens,
 		      char **__restrict __valuep)
@@ -4568,26 +4915,17 @@ extern int getsubopt (char **__restrict __optionp,
 
 
 
- 
 
 
 
 
 
 
-# 931 "/usr/include/stdlib.h" 3
 
-# 942 "/usr/include/stdlib.h" 3
-
-
-
-
- 
 extern int getloadavg (double __loadavg[], int __nelem)
      __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
 
-# 1 "/usr/include/bits/stdlib-float.h" 1 3
 
 
 
@@ -4604,7 +4942,12 @@ extern int getloadavg (double __loadavg[], int __nelem)
 
 
 
- 
+
+
+
+
+
+
 
 
 
@@ -4618,18 +4961,13 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
   return strtod (__nptr, (char **) ((void*)0));
 }
 
-# 952 "/usr/include/stdlib.h" 2 3
 
- 
-# 960 "/usr/include/stdlib.h" 3
 
 
 
 
 
 
-# 60 "../src/elpa_generalized/cannon.c" 2
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 1 3
 
 
 
@@ -4642,7 +4980,6 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
@@ -4653,13 +4990,9 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
-# 69 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-     
 
 
-         
-# 1 "/usr/include/math.h" 1 3
 
 
 
@@ -4677,11 +5010,9 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
- 
 
 
 
@@ -4691,8 +5022,6 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
-# 1 "/usr/include/bits/huge_val.h" 1 3
 
 
 
@@ -4711,16 +5040,12 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
 
 
- 
 
-# 34 "/usr/include/math.h" 2 3
-# 1 "/usr/include/bits/huge_valf.h" 1 3
 
 
 
@@ -4739,16 +5064,12 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
 
 
- 
 
-# 36 "/usr/include/math.h" 2 3
-# 1 "/usr/include/bits/huge_vall.h" 1 3
 
 
 
@@ -4767,16 +5088,12 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
 
 
-# 37 "/usr/include/math.h" 2 3
 
- 
-# 1 "/usr/include/bits/inf.h" 1 3
 
 
 
@@ -4793,18 +5110,13 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
 
 
- 
 
-# 40 "/usr/include/math.h" 2 3
 
- 
-# 1 "/usr/include/bits/nan.h" 1 3
 
 
 
@@ -4821,24 +5133,19 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
 
 
-# 43 "/usr/include/math.h" 2 3
 
 
- 
-# 1 "/usr/include/bits/mathdef.h" 1 3
 
 
 
@@ -4854,7 +5161,6 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
 
 
 
@@ -4865,18 +5171,11 @@ __attribute__ ((__nothrow__ , __leaf__)) atof (const char *__nptr)
 
 
 
- 
-typedef float float_t;		 
-typedef double double_t;	
- 
-# 40 "/usr/include/bits/mathdef.h" 3
 
- 
 
 
 
 
- 
 
 
 
@@ -4889,16 +5188,12 @@ typedef double double_t;
 
 
 
-# 47 "/usr/include/math.h" 2 3
 
 
 
 
- 
 
-# 65 "/usr/include/math.h" 3
 
-# 1 "/usr/include/bits/mathcalls.h" 1 3
 
 
 
@@ -4915,7 +5210,6 @@ typedef double double_t;
 
 
 
- 
 
 
 
@@ -4941,40 +5235,19 @@ typedef double double_t;
 
 
 
- 
 
 
 
 
 
 
- 
+typedef long double float_t;
+typedef long double double_t;
 
 
- 
-extern double acos (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __acos (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double asin (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __asin (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double atan (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __atan (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double atan2 (double __y, double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __atan2 (double __y, double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern double cos (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __cos (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double sin (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __sin (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double tan (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __tan (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
 
- 
-extern double cosh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __cosh (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double sinh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __sinh (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double tanh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __tanh (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -4985,152 +5258,364 @@ extern double tanh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern
 
 
 
- 
-extern double acosh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __acosh (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double asinh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __asinh (double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern double atanh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __atanh (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
 
 
- 
-extern double exp (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __exp (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern int __fpclassify (double __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
+
+
+extern int __signbit (double __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
+
+
+
+extern int __isinf (double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+extern int __finite (double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+extern int __isnan (double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+extern int __iseqsig (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int __issignaling (double __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ extern double acos (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __acos (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double asin (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __asin (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double atan (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __atan (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double atan2 (double __y, double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __atan2 (double __y, double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+ extern double cos (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __cos (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double sin (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __sin (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double tan (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __tan (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+ extern double cosh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __cosh (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double sinh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __sinh (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double tanh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __tanh (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
+
+ extern double acosh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __acosh (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double asinh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __asinh (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern double atanh (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __atanh (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+ extern double exp (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __exp (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
 extern double frexp (double __x, int *__exponent) __attribute__ ((__nothrow__ , __leaf__)); extern double __frexp (double __x, int *__exponent) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double ldexp (double __x, int __exponent) __attribute__ ((__nothrow__ , __leaf__)); extern double __ldexp (double __x, int __exponent) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern double log (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern double log10 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log10 (double __x) __attribute__ ((__nothrow__ , __leaf__));
-
- 
-extern double modf (double __x, double *__iptr) __attribute__ ((__nothrow__ , __leaf__)); extern double __modf (double __x, double *__iptr) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__nonnull__ (2)));
+ extern double log (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
-# 125 "/usr/include/bits/mathcalls.h" 3
+ extern double log10 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log10 (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern double modf (double __x, double *__iptr) __attribute__ ((__nothrow__ , __leaf__)); extern double __modf (double __x, double *__iptr) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
 
- 
-extern double expm1 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __expm1 (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern double log1p (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log1p (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
+
+ extern double expm1 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __expm1 (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+ extern double log1p (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log1p (double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
 extern double logb (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __logb (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
+ extern double exp2 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __exp2 (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern double exp2 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __exp2 (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern double log2 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log2 (double __x) __attribute__ ((__nothrow__ , __leaf__));
+ extern double log2 (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __log2 (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 
 
- 
-extern double pow (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __pow (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
+ extern double pow (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __pow (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double sqrt (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __sqrt (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-
- 
-extern double hypot (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __hypot (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
+ extern double hypot (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __hypot (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
-
- 
-extern double cbrt (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __cbrt (double __x) __attribute__ ((__nothrow__ , __leaf__));
+ extern double cbrt (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __cbrt (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 
 
- 
 extern double ceil (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __ceil (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern double fabs (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __fabs (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern double floor (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __floor (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern double fmod (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __fmod (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
-extern int __isinf (double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-
- 
-extern int __finite (double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
- 
-extern int isinf (double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
-extern int finite (double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern int isinf (double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
- 
+
+
+
+extern int finite (double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
 extern double drem (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __drem (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern double significand (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __significand (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
+
+
 extern double copysign (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __copysign (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
-
- 
-extern double nan (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __nan (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern double nan (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)); extern double __nan (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
-extern int __isnan (double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
-extern int isnan (double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
+
+extern int isnan (double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+
+
+
 extern double j0 (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __j0 (double) __attribute__ ((__nothrow__ , __leaf__));
 extern double j1 (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __j1 (double) __attribute__ ((__nothrow__ , __leaf__));
 extern double jn (int, double) __attribute__ ((__nothrow__ , __leaf__)); extern double __jn (int, double) __attribute__ ((__nothrow__ , __leaf__));
@@ -5142,29 +5627,27 @@ extern double yn (int, double) __attribute__ ((__nothrow__ , __leaf__)); extern 
 
 
 
- 
-extern double erf (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __erf (double) __attribute__ ((__nothrow__ , __leaf__));
-extern double erfc (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __erfc (double) __attribute__ ((__nothrow__ , __leaf__));
+ extern double erf (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __erf (double) __attribute__ ((__nothrow__ , __leaf__));
+ extern double erfc (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __erfc (double) __attribute__ ((__nothrow__ , __leaf__));
 extern double lgamma (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __lgamma (double) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
-
- 
 extern double tgamma (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __tgamma (double) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
+
 extern double gamma (double) __attribute__ ((__nothrow__ , __leaf__)); extern double __gamma (double) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
- 
+
+
 extern double lgamma_r (double, int *__signgamp) __attribute__ ((__nothrow__ , __leaf__)); extern double __lgamma_r (double, int *__signgamp) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -5172,82 +5655,81 @@ extern double lgamma_r (double, int *__signgamp) __attribute__ ((__nothrow__ , _
 
 
 
- 
 extern double rint (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __rint (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern double nextafter (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __nextafter (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
-extern double nexttoward (double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __nexttoward (double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern double nextafter (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __nextafter (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
+
+extern double nexttoward (double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __nexttoward (double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
+
 extern double remainder (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __remainder (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern double scalbn (double __x, int __n) __attribute__ ((__nothrow__ , __leaf__)); extern double __scalbn (double __x, int __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern int ilogb (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern int __ilogb (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
+
+
+
+
+
+
 extern double scalbln (double __x, long int __n) __attribute__ ((__nothrow__ , __leaf__)); extern double __scalbln (double __x, long int __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern double nearbyint (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern double __nearbyint (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern double round (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __round (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
+
 extern double trunc (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __trunc (double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
- 
+
 extern double remquo (double __x, double __y, int *__quo) __attribute__ ((__nothrow__ , __leaf__)); extern double __remquo (double __x, double __y, int *__quo) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
 
- 
+
+
 extern long int lrint (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long int __lrint (double __x) __attribute__ ((__nothrow__ , __leaf__));
+__extension__
 extern long long int llrint (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long long int __llrint (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long int lround (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long int __lround (double __x) __attribute__ ((__nothrow__ , __leaf__));
+__extension__
 extern long long int llround (double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long long int __llround (double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern double fdim (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)); extern double __fdim (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
 extern double fmax (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __fmax (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern double fmin (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern double __fmin (double __x, double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
-extern int __fpclassify (double __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
 
- 
-extern int __signbit (double __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
-
-
- 
 extern double fma (double __x, double __y, double __z) __attribute__ ((__nothrow__ , __leaf__)); extern double __fma (double __x, double __y, double __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -5256,9 +5738,11 @@ extern double fma (double __x, double __y, double __z) __attribute__ ((__nothrow
 
 
 
- 
+
+
+
+
 extern double scalb (double __x, double __n) __attribute__ ((__nothrow__ , __leaf__)); extern double __scalb (double __x, double __n) __attribute__ ((__nothrow__ , __leaf__));
-# 71 "/usr/include/math.h" 2 3
 
 
 
@@ -5268,9 +5752,7 @@ extern double scalb (double __x, double __n) __attribute__ ((__nothrow__ , __lea
 
 
 
- 
 
-# 1 "/usr/include/bits/mathcalls.h" 1 3
 
 
 
@@ -5287,24 +5769,36 @@ extern double scalb (double __x, double __n) __attribute__ ((__nothrow__ , __lea
 
 
 
- 
 
 
 
 
+extern int __fpclassifyf (float __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
 
 
+extern int __signbitf (float __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
 
 
 
+extern int __isinff (float __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
 
+extern int __finitef (float __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
 
+extern int __isnanf (float __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
 
+extern int __iseqsigf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
+extern int __issignalingf (float __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
 
 
 
@@ -5313,40 +5807,17 @@ extern double scalb (double __x, double __n) __attribute__ ((__nothrow__ , __lea
 
 
 
- 
 
 
 
 
 
 
- 
 
 
- 
-extern float acosf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __acosf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float asinf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __asinf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float atanf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __atanf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float atan2f (float __y, float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __atan2f (float __y, float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern float cosf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __cosf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float sinf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __sinf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float tanf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __tanf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
 
- 
-extern float coshf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __coshf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float sinhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __sinhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float tanhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __tanhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -5357,152 +5828,196 @@ extern float tanhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern 
 
 
 
- 
-extern float acoshf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __acoshf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float asinhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __asinhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern float atanhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __atanhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
 
 
- 
-extern float expf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __expf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ extern float acosf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __acosf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float asinf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __asinf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float atanf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __atanf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float atan2f (float __y, float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __atan2f (float __y, float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+ extern float cosf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __cosf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float sinf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __sinf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float tanf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __tanf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+ extern float coshf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __coshf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float sinhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __sinhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float tanhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __tanhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
+
+ extern float acoshf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __acoshf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float asinhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __asinhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern float atanhf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __atanhf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+ extern float expf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __expf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
 extern float frexpf (float __x, int *__exponent) __attribute__ ((__nothrow__ , __leaf__)); extern float __frexpf (float __x, int *__exponent) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float ldexpf (float __x, int __exponent) __attribute__ ((__nothrow__ , __leaf__)); extern float __ldexpf (float __x, int __exponent) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern float logf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __logf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern float log10f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __log10f (float __x) __attribute__ ((__nothrow__ , __leaf__));
-
- 
-extern float modff (float __x, float *__iptr) __attribute__ ((__nothrow__ , __leaf__)); extern float __modff (float __x, float *__iptr) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__nonnull__ (2)));
+ extern float logf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __logf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
-# 125 "/usr/include/bits/mathcalls.h" 3
+ extern float log10f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __log10f (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern float modff (float __x, float *__iptr) __attribute__ ((__nothrow__ , __leaf__)); extern float __modff (float __x, float *__iptr) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
 
- 
-extern float expm1f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __expm1f (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern float log1pf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __log1pf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
+
+ extern float expm1f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __expm1f (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+ extern float log1pf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __log1pf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
 extern float logbf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __logbf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
+ extern float exp2f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __exp2f (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern float exp2f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __exp2f (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern float log2f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __log2f (float __x) __attribute__ ((__nothrow__ , __leaf__));
+ extern float log2f (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __log2f (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 
 
- 
-extern float powf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __powf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
+ extern float powf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __powf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float sqrtf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __sqrtf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-
- 
-extern float hypotf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __hypotf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
+ extern float hypotf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __hypotf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
-
- 
-extern float cbrtf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __cbrtf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+ extern float cbrtf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __cbrtf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 
 
- 
 extern float ceilf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __ceilf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern float fabsf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __fabsf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern float floorf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __floorf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern float fmodf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __fmodf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
-extern int __isinff (float __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-
- 
-extern int __finitef (float __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
- 
-extern int isinff (float __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
-extern int finitef (float __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern int isinff (float __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
- 
+
+
+
+extern int finitef (float __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
 extern float dremf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __dremf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern float significandf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __significandf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
+
+
 extern float copysignf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __copysignf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
-
- 
-extern float nanf (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __nanf (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern float nanf (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)); extern float __nanf (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
-extern int __isnanf (float __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
-extern int isnanf (float __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
+
+extern int isnanf (float __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+
+
+
 extern float j0f (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __j0f (float) __attribute__ ((__nothrow__ , __leaf__));
 extern float j1f (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __j1f (float) __attribute__ ((__nothrow__ , __leaf__));
 extern float jnf (int, float) __attribute__ ((__nothrow__ , __leaf__)); extern float __jnf (int, float) __attribute__ ((__nothrow__ , __leaf__));
@@ -5514,29 +6029,27 @@ extern float ynf (int, float) __attribute__ ((__nothrow__ , __leaf__)); extern f
 
 
 
- 
-extern float erff (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __erff (float) __attribute__ ((__nothrow__ , __leaf__));
-extern float erfcf (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __erfcf (float) __attribute__ ((__nothrow__ , __leaf__));
+ extern float erff (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __erff (float) __attribute__ ((__nothrow__ , __leaf__));
+ extern float erfcf (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __erfcf (float) __attribute__ ((__nothrow__ , __leaf__));
 extern float lgammaf (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __lgammaf (float) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
-
- 
 extern float tgammaf (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __tgammaf (float) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
+
 extern float gammaf (float) __attribute__ ((__nothrow__ , __leaf__)); extern float __gammaf (float) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
- 
+
+
 extern float lgammaf_r (float, int *__signgamp) __attribute__ ((__nothrow__ , __leaf__)); extern float __lgammaf_r (float, int *__signgamp) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -5544,82 +6057,81 @@ extern float lgammaf_r (float, int *__signgamp) __attribute__ ((__nothrow__ , __
 
 
 
- 
 extern float rintf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __rintf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern float nextafterf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __nextafterf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
-extern float nexttowardf (float __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __nexttowardf (float __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern float nextafterf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __nextafterf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
+
+extern float nexttowardf (float __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __nexttowardf (float __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
+
 extern float remainderf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __remainderf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern float scalbnf (float __x, int __n) __attribute__ ((__nothrow__ , __leaf__)); extern float __scalbnf (float __x, int __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern int ilogbf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern int __ilogbf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
+
+
+
+
+
+
 extern float scalblnf (float __x, long int __n) __attribute__ ((__nothrow__ , __leaf__)); extern float __scalblnf (float __x, long int __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern float nearbyintf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern float __nearbyintf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern float roundf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __roundf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
+
 extern float truncf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __truncf (float __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
- 
+
 extern float remquof (float __x, float __y, int *__quo) __attribute__ ((__nothrow__ , __leaf__)); extern float __remquof (float __x, float __y, int *__quo) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
 
- 
+
+
 extern long int lrintf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern long int __lrintf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+__extension__
 extern long long int llrintf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern long long int __llrintf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long int lroundf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern long int __lroundf (float __x) __attribute__ ((__nothrow__ , __leaf__));
+__extension__
 extern long long int llroundf (float __x) __attribute__ ((__nothrow__ , __leaf__)); extern long long int __llroundf (float __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern float fdimf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)); extern float __fdimf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
 extern float fmaxf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __fmaxf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern float fminf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern float __fminf (float __x, float __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
-extern int __fpclassifyf (float __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
 
- 
-extern int __signbitf (float __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
-
-
- 
 extern float fmaf (float __x, float __y, float __z) __attribute__ ((__nothrow__ , __leaf__)); extern float __fmaf (float __x, float __y, float __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -5628,20 +6140,19 @@ extern float fmaf (float __x, float __y, float __z) __attribute__ ((__nothrow__ 
 
 
 
- 
+
+
+
+
 extern float scalbf (float __x, float __n) __attribute__ ((__nothrow__ , __leaf__)); extern float __scalbf (float __x, float __n) __attribute__ ((__nothrow__ , __leaf__));
-# 90 "/usr/include/math.h" 2 3
 
 
 
 
 
-# 121 "/usr/include/math.h" 3
 
 
- 
 
-# 1 "/usr/include/bits/mathcalls.h" 1 3
 
 
 
@@ -5658,24 +6169,36 @@ extern float scalbf (float __x, float __n) __attribute__ ((__nothrow__ , __leaf_
 
 
 
- 
 
 
 
 
+extern int __fpclassifyl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
 
 
+extern int __signbitl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
 
 
 
+extern int __isinfl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
 
+extern int __finitel (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
 
+extern int __isnanl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
 
+extern int __iseqsigl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
+extern int __issignalingl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
 
 
 
@@ -5684,40 +6207,17 @@ extern float scalbf (float __x, float __n) __attribute__ ((__nothrow__ , __leaf_
 
 
 
- 
 
 
 
 
 
 
- 
 
 
- 
-extern long double acosl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __acosl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double asinl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __asinl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double atanl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __atanl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double atan2l (long double __y, long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __atan2l (long double __y, long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern long double cosl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __cosl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double sinl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __sinl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double tanl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __tanl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
 
- 
-extern long double coshl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __coshl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double sinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __sinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double tanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __tanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
@@ -5728,152 +6228,196 @@ extern long double tanhl (long double __x) __attribute__ ((__nothrow__ , __leaf_
 
 
 
- 
-extern long double acoshl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __acoshl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double asinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __asinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
- 
-extern long double atanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __atanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
 
 
- 
-extern long double expl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __expl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ extern long double acosl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __acosl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double asinl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __asinl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double atanl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __atanl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double atan2l (long double __y, long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __atan2l (long double __y, long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+ extern long double cosl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __cosl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double sinl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __sinl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double tanl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __tanl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+ extern long double coshl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __coshl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double sinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __sinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double tanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __tanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+
+
+
+
+ extern long double acoshl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __acoshl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double asinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __asinhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+ extern long double atanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __atanhl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+
+
+
+ extern long double expl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __expl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
 extern long double frexpl (long double __x, int *__exponent) __attribute__ ((__nothrow__ , __leaf__)); extern long double __frexpl (long double __x, int *__exponent) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double ldexpl (long double __x, int __exponent) __attribute__ ((__nothrow__ , __leaf__)); extern long double __ldexpl (long double __x, int __exponent) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern long double logl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __logl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern long double log10l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __log10l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
-
- 
-extern long double modfl (long double __x, long double *__iptr) __attribute__ ((__nothrow__ , __leaf__)); extern long double __modfl (long double __x, long double *__iptr) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__nonnull__ (2)));
+ extern long double logl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __logl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
-# 125 "/usr/include/bits/mathcalls.h" 3
+ extern long double log10l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __log10l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern long double modfl (long double __x, long double *__iptr) __attribute__ ((__nothrow__ , __leaf__)); extern long double __modfl (long double __x, long double *__iptr) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (2)));
 
 
 
- 
-extern long double expm1l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __expm1l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern long double log1pl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __log1pl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
+
+ extern long double expm1l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __expm1l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
+ extern long double log1pl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __log1pl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+
+
 extern long double logbl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __logbl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
+ extern long double exp2l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __exp2l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern long double exp2l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __exp2l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern long double log2l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __log2l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+ extern long double log2l (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __log2l (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 
 
- 
-extern long double powl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __powl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
+ extern long double powl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __powl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double sqrtl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __sqrtl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
-
- 
-extern long double hypotl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __hypotl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
+ extern long double hypotl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __hypotl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
-
- 
-extern long double cbrtl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __cbrtl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+ extern long double cbrtl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __cbrtl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
 
 
- 
 extern long double ceill (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __ceill (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern long double fabsl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __fabsl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern long double floorl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __floorl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern long double fmodl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __fmodl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
-extern int __isinfl (long double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
-
- 
-extern int __finitel (long double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
- 
-extern int isinfl (long double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
-extern int finitel (long double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern int isinfl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
 
- 
+
+
+
+extern int finitel (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
 extern long double dreml (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __dreml (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long double significandl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __significandl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
+
+
 extern long double copysignl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __copysignl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
 
-
- 
-extern long double nanl (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __nanl (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern long double nanl (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__)); extern long double __nanl (const char *__tagb) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
-extern int __isnanl (long double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
-extern int isnanl (long double __value) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
+
+extern int isnanl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+
+
+
 extern long double j0l (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __j0l (long double) __attribute__ ((__nothrow__ , __leaf__));
 extern long double j1l (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __j1l (long double) __attribute__ ((__nothrow__ , __leaf__));
 extern long double jnl (int, long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __jnl (int, long double) __attribute__ ((__nothrow__ , __leaf__));
@@ -5885,29 +6429,27 @@ extern long double ynl (int, long double) __attribute__ ((__nothrow__ , __leaf__
 
 
 
- 
-extern long double erfl (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __erfl (long double) __attribute__ ((__nothrow__ , __leaf__));
-extern long double erfcl (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __erfcl (long double) __attribute__ ((__nothrow__ , __leaf__));
+ extern long double erfl (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __erfl (long double) __attribute__ ((__nothrow__ , __leaf__));
+ extern long double erfcl (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __erfcl (long double) __attribute__ ((__nothrow__ , __leaf__));
 extern long double lgammal (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __lgammal (long double) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
-
- 
 extern long double tgammal (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __tgammal (long double) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
+
 extern long double gammal (long double) __attribute__ ((__nothrow__ , __leaf__)); extern long double __gammal (long double) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
 
- 
+
+
 extern long double lgammal_r (long double, int *__signgamp) __attribute__ ((__nothrow__ , __leaf__)); extern long double __lgammal_r (long double, int *__signgamp) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -5915,82 +6457,81 @@ extern long double lgammal_r (long double, int *__signgamp) __attribute__ ((__no
 
 
 
- 
 extern long double rintl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __rintl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
- 
-extern long double nextafterl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __nextafterl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
-extern long double nexttowardl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __nexttowardl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
+extern long double nextafterl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __nextafterl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
+
+extern long double nexttowardl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __nexttowardl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
+
 extern long double remainderl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __remainderl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long double scalbnl (long double __x, int __n) __attribute__ ((__nothrow__ , __leaf__)); extern long double __scalbnl (long double __x, int __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern int ilogbl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern int __ilogbl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
- 
+
+
+
+
+
+
 extern long double scalblnl (long double __x, long int __n) __attribute__ ((__nothrow__ , __leaf__)); extern long double __scalblnl (long double __x, long int __n) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long double nearbyintl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long double __nearbyintl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long double roundl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __roundl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
+
 extern long double truncl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __truncl (long double __x) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
 
- 
+
 extern long double remquol (long double __x, long double __y, int *__quo) __attribute__ ((__nothrow__ , __leaf__)); extern long double __remquol (long double __x, long double __y, int *__quo) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
 
- 
+
+
 extern long int lrintl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long int __lrintl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+__extension__
 extern long long int llrintl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long long int __llrintl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long int lroundl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long int __lroundl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
+__extension__
 extern long long int llroundl (long double __x) __attribute__ ((__nothrow__ , __leaf__)); extern long long int __llroundl (long double __x) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
+
 extern long double fdiml (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double __fdiml (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
+
 extern long double fmaxl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __fmaxl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
- 
+
 extern long double fminl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__)); extern long double __fminl (long double __x, long double __y) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__const__));
 
 
- 
-extern int __fpclassifyl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
 
- 
-extern int __signbitl (long double __value) __attribute__ ((__nothrow__ , __leaf__))
-     __attribute__ ((__const__));
-
-
- 
 extern long double fmal (long double __x, long double __y, long double __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double __fmal (long double __x, long double __y, long double __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -5999,9 +6540,11 @@ extern long double fmal (long double __x, long double __y, long double __z) __at
 
 
 
- 
+
+
+
+
 extern long double scalbl (long double __x, long double __n) __attribute__ ((__nothrow__ , __leaf__)); extern long double __scalbl (long double __x, long double __n) __attribute__ ((__nothrow__ , __leaf__));
-# 134 "/usr/include/math.h" 2 3
 
 
 
@@ -6016,12 +6559,73 @@ extern long double scalbl (long double __x, long double __n) __attribute__ ((__n
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern int __fpclassifyf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
+
+
+extern int __signbitf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
+
+
+
+extern int __isinff128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+extern int __finitef128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+extern int __isnanf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
+  __attribute__ ((__const__));
+
+
+extern int __iseqsigf128 (_Float128 __x, _Float128 __y) __attribute__ ((__nothrow__ , __leaf__));
+
+
+extern int __issignalingf128 (_Float128 __value) __attribute__ ((__nothrow__ , __leaf__))
+     __attribute__ ((__const__));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern int signgam;
 
 
 
- 
 
 
 
@@ -6036,28 +6640,6 @@ extern int signgam;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
- 
 enum
   {
     FP_NAN =
@@ -6077,32 +6659,19 @@ enum
       4
   };
 
- 
-# 220 "/usr/include/math.h" 3
 
- 
-# 232 "/usr/include/math.h" 3
 
- 
-# 244 "/usr/include/math.h" 3
 
- 
 
 
 
- 
-# 260 "/usr/include/math.h" 3
 
- 
-# 272 "/usr/include/math.h" 3
 
- 
 
 
 
 
 
- 
 
 
 
@@ -6110,20 +6679,9 @@ enum
 
 
 
- 
-typedef enum
-{
-  _IEEE_ = -1,	 
-  _SVID_,	 
-  _XOPEN_,	 
-  _POSIX_,
-  _ISOC_	 
-} _LIB_VERSION_TYPE;
 
 
 
- 
-extern _LIB_VERSION_TYPE _LIB_VERSION;
 
 
 
@@ -6132,49 +6690,30 @@ extern _LIB_VERSION_TYPE _LIB_VERSION;
 
 
 
- 
 
 
 
-struct exception
 
-  {
-    int type;
-    char *name;
-    double arg1;
-    double arg2;
-    double retval;
-  };
 
 
 
 
-extern int matherr (struct exception *__exc);
 
 
 
 
- 
-# 338 "/usr/include/math.h" 3
 
- 
 
 
-# 350 "/usr/include/math.h" 3
 
 
- 
-# 368 "/usr/include/math.h" 3
 
 
 
- 
-# 387 "/usr/include/math.h" 3
 
 
 
 
- 
 
 
 
@@ -6185,11 +6724,7 @@ extern int matherr (struct exception *__exc);
 
 
 
- 
-# 410 "/usr/include/math.h" 3
 
- 
-# 1 "/usr/include/bits/mathinline.h" 1 3
 
 
 
@@ -6206,7 +6741,6 @@ extern int matherr (struct exception *__exc);
 
 
 
- 
 
 
 
@@ -6220,45 +6754,21 @@ extern int matherr (struct exception *__exc);
 
 
 
- 
-# 119 "/usr/include/bits/mathinline.h" 3
 
 
- 
 
 
 
- 
-extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__)) int
-__attribute__ ((__nothrow__ , __leaf__)) __signbitf (float __x)
-{
 
-  int __m;
-  __asm ("pmovmskb %1, %0" : "=r" (__m) : "x" (__x));
-  return (__m & 0x8) != 0;
 
 
 
 
-}
-extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__)) int
-__attribute__ ((__nothrow__ , __leaf__)) __signbit (double __x)
-{
 
-  int __m;
-  __asm ("pmovmskb %1, %0" : "=r" (__m) : "x" (__x));
-  return (__m & 0x80) != 0;
 
 
 
 
-}
-extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__)) int
-__attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
-{
-  __extension__ union { long double __l; int __i[3]; } __u = { __l: __x };
-  return (__u.__i[2] & 0x8000) != 0;
-}
 
 
 
@@ -6266,109 +6776,23 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
-# 384 "/usr/include/bits/mathinline.h" 3
 
-# 414 "/usr/include/math.h" 2 3
 
 
 
- 
 
 
 
 
 
- 
 
- 
-# 432 "/usr/include/math.h" 3
 
- 
-# 440 "/usr/include/math.h" 3
 
- 
-# 448 "/usr/include/math.h" 3
 
- 
-# 456 "/usr/include/math.h" 3
 
- 
-# 464 "/usr/include/math.h" 3
 
- 
-# 472 "/usr/include/math.h" 3
 
 
-
-
-
-
-# 192 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 2 3
-
-
-
-     
-# 244 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-
-
-
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-# 34 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 3
-
-# 42 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 3
-
-
-
-
-
-
-
-# 62 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 3
-
-# 249 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 2 3
-
-# 267 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-
-
-
-
-
-
-
-
-         
-# 292 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-# 307 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-# 342 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-         
-
-# 379 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
 
@@ -6478,16 +6902,13 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
         extern int __signbitd     ( double             __x ) ;
         extern int __signbitl     ( long double        __x ) ;
 
-# 498 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
 
 
-# 523 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-# 548 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-         
+
 
         extern int isgreaterf( float __xf, float __yf );
 
@@ -6543,24 +6964,16 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
         extern int __isunordered( double __xd, double __yd );
         extern int __isunorderedl( long double __xl, long double __yl );
 
-# 611 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
-# 621 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
 
-         
 
-         
 
-# 637 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-# 647 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-         
 
-# 658 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
 
@@ -6574,7 +6987,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-         
 
 
 
@@ -6584,15 +6996,12 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-# 687 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-        
 
 
 
 
 
- 
 
 
 
@@ -6628,7 +7037,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-         
 
 
 
@@ -6645,7 +7053,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-# 755 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
 
@@ -6655,7 +7062,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-         
 
 
 
@@ -6668,17 +7074,23 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-# 784 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-         
 
-# 795 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
-         
+
+
+
+
+
+
+
+
+
+
         extern double    gamma( double __x );
         extern float     gammaf( float __x );
-         
+
         extern double    lgamma_r(double __x, int *__signgam);
         extern float     lgammaf_r( float __x, int *__signgam );
 
@@ -6691,7 +7103,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-         
 
 
 
@@ -6713,9 +7124,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-# 849 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-         
 
 
 
@@ -6735,32 +7143,29 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-         
-
-# 878 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-# 888 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-         
-
-# 902 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-# 969 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
-
-# 1013 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
 
 
 
 
-# 1039 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
 
 
-         
 
-         
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6779,7 +7184,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
             double     retval;
         } ___exception;
 
-# 1075 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
         typedef struct ____exceptionf {
             int        type;
@@ -6803,7 +7207,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
         extern int  matherrf( struct ____exceptionf *__e );
         extern int  matherrl( struct ____exceptionl *__e );
 
-        
 
 
 
@@ -6819,7 +7222,8 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
+
+
 
         typedef int (  *___pmatherr )( struct ____exception  *__e );
         typedef int (  *___pmatherrf )( struct ____exceptionf *__e );
@@ -6829,7 +7233,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
         extern ___pmatherrf  __libm_setusermatherrf( ___pmatherrf __user_matherrf );
         extern ___pmatherrl  __libm_setusermatherrl( ___pmatherrl __user_matherrl );
 
-         
 
 
 
@@ -6837,17 +7240,21 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-# 1139 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-# 1151 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 3
 
-        extern _LIB_VERSION_TYPE  _LIB_VERSIONIMF;
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_undefine.h" 1 3
 
+            typedef enum ___LIB_VERSIONIMF_TYPE {
+                 _IEEE_ = -1
+                ,_SVID_
+                ,_XOPEN_
+                ,_POSIX_LIBIMF_
+                ,_ISOC_
+            } _LIB_VERSIONIMF_TYPE;
 
 
 
 
+        extern _LIB_VERSIONIMF_TYPE  _LIB_VERSIONIMF;
 
 
 
@@ -6855,7 +7262,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
 
 
@@ -6866,10 +7272,7 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
-# 1154 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math.h" 2 3
 
-# 61 "../src/elpa_generalized/cannon.c" 2
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 1 3
 
 
 
@@ -6882,18 +7285,15 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
 
 
 
 
- 
 
 
 
 
-# 1 "/usr/include/complex.h" 1 3
 
 
 
@@ -6909,19 +7309,15 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
 
 
- 
 
 
 
 
 
 
- 
-# 1 "/usr/include/bits/mathdef.h" 1 3
 
 
 
@@ -6937,19 +7333,16 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
 
 
 
 
-# 29 "/usr/include/complex.h" 2 3
 
 
 
 
 
- 
 
 
 
@@ -6958,26 +7351,19 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
 
 
- 
 
 
 
 
- 
-# 59 "/usr/include/complex.h" 3
 
 
 
 
- 
 
-# 72 "/usr/include/complex.h" 3
 
-# 1 "/usr/include/bits/cmathcalls.h" 1 3
 
 
 
@@ -6995,7 +7381,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
 
 
@@ -7018,7 +7403,6 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
 
 
@@ -7027,46 +7411,165 @@ __attribute__ ((__nothrow__ , __leaf__)) __signbitl (long double __x)
 
 
 
- 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern double _Complex cacos (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __cacos (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex casin (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __casin (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex catan (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __catan (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double _Complex ccos (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __ccos (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex csin (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __csin (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex ctan (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __ctan (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern double _Complex cacosh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __cacosh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex casinh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __casinh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex catanh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __catanh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double _Complex ccosh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __ccosh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex csinh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __csinh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern double _Complex ctanh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __ctanh (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern double _Complex cexp (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __cexp (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double _Complex clog (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __clog (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -7075,66 +7578,41 @@ extern double _Complex clog (double _Complex __z) __attribute__ ((__nothrow__ , 
 
 
 
- 
 
- 
+
+
 extern double _Complex cpow (double _Complex __x, double _Complex __y) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __cpow (double _Complex __x, double _Complex __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double _Complex csqrt (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __csqrt (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern double cabs (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double __cabs (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double carg (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double __carg (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double _Complex conj (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __conj (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double _Complex cproj (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double _Complex __cproj (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern double cimag (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double __cimag (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern double creal (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern double __creal (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
-# 76 "/usr/include/complex.h" 2 3
-
-
-
- 
-# 1 "/usr/include/bits/cmathcalls.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
 
 
 
@@ -7157,7 +7635,6 @@ extern double creal (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__
 
 
 
- 
 
 
 
@@ -7166,46 +7643,67 @@ extern double creal (double _Complex __z) __attribute__ ((__nothrow__ , __leaf__
 
 
 
- 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern float _Complex cacosf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __cacosf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex casinf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __casinf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex catanf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __catanf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float _Complex ccosf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __ccosf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex csinf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __csinf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex ctanf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __ctanf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern float _Complex cacoshf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __cacoshf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex casinhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __casinhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex catanhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __catanhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float _Complex ccoshf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __ccoshf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex csinhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __csinhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern float _Complex ctanhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __ctanhf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern float _Complex cexpf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __cexpf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float _Complex clogf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __clogf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -7214,69 +7712,41 @@ extern float _Complex clogf (float _Complex __z) __attribute__ ((__nothrow__ , _
 
 
 
- 
 
- 
+
+
 extern float _Complex cpowf (float _Complex __x, float _Complex __y) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __cpowf (float _Complex __x, float _Complex __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float _Complex csqrtf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __csqrtf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern float cabsf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float __cabsf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float cargf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float __cargf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float _Complex conjf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __conjf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float _Complex cprojf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float _Complex __cprojf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern float cimagf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float __cimagf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern float crealf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern float __crealf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
-# 86 "/usr/include/complex.h" 2 3
-
-
-
-
- 
-# 98 "/usr/include/complex.h" 3
-
-# 1 "/usr/include/bits/cmathcalls.h" 1 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
 
 
 
@@ -7299,7 +7769,6 @@ extern float crealf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)
 
 
 
- 
 
 
 
@@ -7308,46 +7777,69 @@ extern float crealf (float _Complex __z) __attribute__ ((__nothrow__ , __leaf__)
 
 
 
- 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern long double _Complex cacosl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __cacosl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex casinl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __casinl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex catanl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __catanl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double _Complex ccosl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __ccosl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex csinl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __csinl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex ctanl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __ctanl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern long double _Complex cacoshl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __cacoshl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex casinhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __casinhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex catanhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __catanhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double _Complex ccoshl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __ccoshl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex csinhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __csinhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
- 
+
 extern long double _Complex ctanhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __ctanhl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern long double _Complex cexpl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __cexpl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double _Complex clogl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __clogl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
@@ -7356,54 +7848,49 @@ extern long double _Complex clogl (long double _Complex __z) __attribute__ ((__n
 
 
 
- 
 
- 
+
+
 extern long double _Complex cpowl (long double _Complex __x, long double _Complex __y) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __cpowl (long double _Complex __x, long double _Complex __y) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double _Complex csqrtl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __csqrtl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern long double cabsl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double __cabsl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double cargl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double __cargl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double _Complex conjl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __conjl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double _Complex cprojl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double _Complex __cprojl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
- 
 
- 
+
+
 extern long double cimagl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double __cimagl (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
- 
+
 extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__)); extern long double __creall (long double _Complex __z) __attribute__ ((__nothrow__ , __leaf__));
 
 
 
 
- 
-# 105 "/usr/include/complex.h" 2 3
-# 111 "/usr/include/complex.h" 3
 
 
 
-# 26 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 2 3
 
 
 
 
 
-         
 
 
 
@@ -7412,7 +7899,6 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 1 3
 
 
 
@@ -7425,7 +7911,6 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
- 
 
 
 
@@ -7433,9 +7918,7 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
-# 34 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 3
 
-# 42 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 3
 
 
 
@@ -7443,12 +7926,9 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
-# 62 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_define.h" 3
 
-# 41 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 2 3
 
 
-                 
 
 
 
@@ -7462,15 +7942,24 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
-             
 
 
 
-# 74 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 3
 
-                 
 
-# 93 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 3
+
+
+
+
+
+
+
+
+
+
+
+
+
                 extern double _Complex  cis( double __x );
                 extern float _Complex   cisf( float __x );
                 extern long double _Complex  cisl( long double __x );
@@ -7478,7 +7967,7 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
                 extern float _Complex   cisdf( float __x );
                 extern long double _Complex  cisdl( long double __x );
 
-                 
+
 
 
 
@@ -7490,9 +7979,8 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
                 extern double _Complex  cexp10( double _Complex __z );
                 extern float _Complex   cexp10f( float _Complex __z );
                 extern long double _Complex  cexp10l( long double _Complex __z );
-# 126 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 3
 
-                 
+
 
 
 
@@ -7505,21 +7993,14 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
                 extern float _Complex   clog10f( float _Complex __z );
                 extern long double _Complex  clog10l( long double _Complex __z );
 
-                 
 
-# 150 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 3
 
-                 
 
-# 163 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 3
 
-# 188 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 3
 
-# 219 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 3
 
 
 
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/math_common_undefine.h" 1 3
 
 
 
@@ -7532,7 +8013,6 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
- 
 
 
 
@@ -7543,10 +8023,7 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
-# 223 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/complex.h" 2 3
 
-# 62 "../src/elpa_generalized/cannon.c" 2
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdbool.h" 1 3
 
 
 
@@ -7578,21 +8055,19 @@ extern long double creall (long double _Complex __z) __attribute__ ((__nothrow__
 
 
 
- 
 
 
 
 
- 
-# 51 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdbool.h" 3
 
 
 
-# 63 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
-# 58 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
+
+
+
+
+
 
 int numroc_(int*, int*, int*, int*, int*);
 
@@ -7614,21 +8089,17 @@ void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Compl
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
 
 
-# 64 "../src/elpa_generalized/cannon.c" 2
 
 
 
 
 
-# 95 "../src/elpa_generalized/cannon.c"
 
 
-# 115 "../src/elpa_generalized/cannon.c"
 
 
 
 
-# 1 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h" 1
 
 
 
@@ -7641,8 +8112,6 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
- 
 
 
 
@@ -7685,12 +8154,9 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
- 
 
 
 
- 
 
 
 
@@ -7698,22 +8164,15 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
 
 
 
 
-# 90 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
-# 97 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
- 
-# 106 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
- 
-# 1 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdint.h" 1 3
 
 
 
@@ -7744,7 +8203,6 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
 
 
 
@@ -7754,7 +8212,6 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
 
 
 
@@ -7777,10 +8234,7 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
-# 74 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdint.h" 3
 
-# 1 "/gpfs20/shared/software/lang/gcc/12.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/12.2.0/include/stdint.h" 1 3
-# 1 "/usr/include/stdint.h" 1 3
 
 
 
@@ -7796,16 +8250,13 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
 
 
 
- 
 
 
 
 
-# 1 "/usr/include/bits/wchar.h" 1 3
 
 
 
@@ -7822,13 +8273,10 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
 
 
 
 
-# 1 "/usr/include/bits/wordsize.h" 1 3
- 
 
 
 
@@ -7838,14 +8286,8 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
-# 23 "/usr/include/bits/wchar.h" 2 3
 
-# 31 "/usr/include/bits/wchar.h" 3
 
-# 27 "/usr/include/stdint.h" 2 3
-# 1 "/usr/include/bits/wordsize.h" 1 3
- 
 
 
 
@@ -7855,205 +8297,256 @@ void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, fl
 
 
 
- 
-# 28 "/usr/include/stdint.h" 2 3
 
- 
 
- 
 
- 
-# 46 "/usr/include/stdint.h" 3
 
- 
-typedef unsigned char		uint8_t;
-typedef unsigned short int	uint16_t;
 
-typedef unsigned int		uint32_t;
 
 
 
-typedef unsigned long int	uint64_t;
 
 
 
 
 
 
- 
 
- 
-typedef signed char		int_least8_t;
-typedef short int		int_least16_t;
-typedef int			int_least32_t;
 
-typedef long int		int_least64_t;
 
 
 
 
 
- 
-typedef unsigned char		uint_least8_t;
-typedef unsigned short int	uint_least16_t;
-typedef unsigned int		uint_least32_t;
 
-typedef unsigned long int	uint_least64_t;
 
 
 
 
 
 
- 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef __uint8_t uint8_t;
+typedef __uint16_t uint16_t;
+typedef __uint32_t uint32_t;
+typedef __uint64_t uint64_t;
+
+
+
+
+
+
+typedef __int_least8_t int_least8_t;
+typedef __int_least16_t int_least16_t;
+typedef __int_least32_t int_least32_t;
+typedef __int_least64_t int_least64_t;
+
+
+typedef __uint_least8_t uint_least8_t;
+typedef __uint_least16_t uint_least16_t;
+typedef __uint_least32_t uint_least32_t;
+typedef __uint_least64_t uint_least64_t;
+
+
+
+
+
 typedef signed char		int_fast8_t;
 
 typedef long int		int_fast16_t;
 typedef long int		int_fast32_t;
 typedef long int		int_fast64_t;
-# 101 "/usr/include/stdint.h" 3
 
- 
+
 typedef unsigned char		uint_fast8_t;
 
 typedef unsigned long int	uint_fast16_t;
 typedef unsigned long int	uint_fast32_t;
 typedef unsigned long int	uint_fast64_t;
-# 114 "/usr/include/stdint.h" 3
 
 
- 
+
 
 
 typedef long int		intptr_t;
 
 
 typedef unsigned long int	uintptr_t;
-# 130 "/usr/include/stdint.h" 3
 
 
- 
 
-typedef long int		intmax_t;
-typedef unsigned long int	uintmax_t;
-# 142 "/usr/include/stdint.h" 3
+typedef __intmax_t		intmax_t;
+typedef __uintmax_t		uintmax_t;
 
 
-# 151 "/usr/include/stdint.h" 3
 
- 
 
- 
 
 
 
 
- 
 
 
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
 
- 
 
 
 
 
 
- 
 
 
 
 
 
 
- 
-# 200 "/usr/include/stdint.h" 3
- 
-# 210 "/usr/include/stdint.h" 3
 
- 
-# 221 "/usr/include/stdint.h" 3
 
 
- 
-# 233 "/usr/include/stdint.h" 3
 
 
- 
 
- 
 
 
- 
 
 
 
- 
 
- 
-# 254 "/usr/include/stdint.h" 3
 
- 
 
 
 
- 
-# 269 "/usr/include/stdint.h" 3
 
- 
 
- 
 
 
 
 
- 
 
 
 
 
- 
-# 291 "/usr/include/stdint.h" 3
 
- 
-# 301 "/usr/include/stdint.h" 3
 
- 
-# 310 "/usr/include/stdint.h" 3
 
-# 10 "/gpfs20/shared/software/lang/gcc/12.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/12.2.0/include/stdint.h" 2 3
-# 76 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdint.h" 2 3
 
-# 85 "/gpfs20/shared/software/intel/toolkit/compiler/2021.4.0/linux/bin/intel64/../../compiler/include/icc/stdint.h" 3
 
-# 112 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h" 2
 
 
 
 
 
- 
 
 
 
 
 
-# 132 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
 
@@ -8062,19 +8555,40 @@ typedef unsigned long int	uintmax_t;
 
 
 
- 
-# 149 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 typedef int MPI_Datatype;
-# 174 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-# 195 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
 
@@ -8087,84 +8601,67 @@ typedef int MPI_Datatype;
 
 
 
- 
-# 214 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-# 248 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
-# 257 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
 
 
 
 
- 
-# 271 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
-# 284 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
-# 294 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-# 305 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
 
 
 
 
 
- 
-
-
-# 323 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
-
-
-
-
- 
 
 
 
 
 
- 
 
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 typedef int MPI_Comm;
 
 
 
- 
+
 typedef int MPI_Group;
 
 
- 
+
 typedef int MPI_Win;
 
 
- 
- 
 
 
- 
+
+
+
 typedef struct ADIOI_FileD *MPI_File;
 
 
- 
+
 typedef int MPI_Op;
 
-# 378 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
 
 
 
@@ -8176,11 +8673,6 @@ typedef int MPI_Op;
 
 
 
- 
-# 399 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-
- 
 
 
 
@@ -8191,18 +8683,24 @@ typedef int MPI_Op;
 
 
 
- 
 
 
 
 
 
 
- 
 
 
 
- 
+
+
+
+
+
+
+
+
+
 typedef enum MPIR_Win_flavor {
     MPI_WIN_FLAVOR_CREATE      = 1,
     MPI_WIN_FLAVOR_ALLOCATE    = 2,
@@ -8210,16 +8708,16 @@ typedef enum MPIR_Win_flavor {
     MPI_WIN_FLAVOR_SHARED      = 4
 } MPIR_Win_flavor_t;
 
- 
+
 typedef enum MPIR_Win_model {
     MPI_WIN_SEPARATE   = 1,
     MPI_WIN_UNIFIED    = 2
 } MPIR_Win_model_t;
 
- 
 
 
- 
+
+
 typedef enum MPIR_Topo_type { MPI_GRAPH=1, MPI_CART=2, MPI_DIST_GRAPH=3 } MPIR_Topo_type;
 
 
@@ -8235,57 +8733,56 @@ extern  int * const MPI_WEIGHTS_EMPTY ;
 
 
 
- 
+
 typedef void (MPI_Handler_function) ( MPI_Comm *, int *, ... );
-typedef int (MPI_Comm_copy_attr_function)(MPI_Comm, int, void *, void *, 
+typedef int (MPI_Comm_copy_attr_function)(MPI_Comm, int, void *, void *,
 					  void *, int *);
 typedef int (MPI_Comm_delete_attr_function)(MPI_Comm, int, void *, void *);
-typedef int (MPI_Type_copy_attr_function)(MPI_Datatype, int, void *, void *, 
+typedef int (MPI_Type_copy_attr_function)(MPI_Datatype, int, void *, void *,
 					  void *, int *);
 typedef int (MPI_Type_delete_attr_function)(MPI_Datatype, int, void *, void *);
 typedef int (MPI_Win_copy_attr_function)(MPI_Win, int, void *, void *, void *,
 					 int *);
 typedef int (MPI_Win_delete_attr_function)(MPI_Win, int, void *, void *);
- 
+
 typedef void (MPI_Comm_errhandler_function)(MPI_Comm *, int *, ...);
 typedef void (MPI_File_errhandler_function)(MPI_File *, int *, ...);
 typedef void (MPI_Win_errhandler_function)(MPI_Win *, int *, ...);
- 
+
 typedef MPI_Comm_errhandler_function MPI_Comm_errhandler_fn;
 typedef MPI_File_errhandler_function MPI_File_errhandler_fn;
 typedef MPI_Win_errhandler_function MPI_Win_errhandler_fn;
 
 
- 
 
 
 
 
 
- 
+
+
 
 typedef int MPI_Errhandler;
 
 
 
- 
- 
 
 
 
- 
-# 504 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
- 
+
+
+
+
 typedef int MPI_Request;
 
- 
+
 typedef int MPI_Message;
 
- 
-typedef void (MPI_User_function) ( void *, void *, int *, MPI_Datatype * ); 
 
- 
+typedef void (MPI_User_function) ( void *, void *, int *, MPI_Datatype * );
+
+
 typedef int (MPI_Copy_function) ( MPI_Comm, int, void *, void *, void *, int * );
 typedef int (MPI_Delete_function) ( MPI_Comm, int, void *, void * );
 
@@ -8318,7 +8815,6 @@ typedef int (MPI_Delete_function) ( MPI_Comm, int, void *, void * );
 
 
 
- 
 
 
 
@@ -8353,22 +8849,23 @@ typedef int (MPI_Delete_function) ( MPI_Comm, int, void *, void * );
 
 
 
- 
 
 
 
- 
+
+
+
 enum MPIR_Combiner_enum {
     MPI_COMBINER_NAMED            = 1,
     MPI_COMBINER_DUP              = 2,
-    MPI_COMBINER_CONTIGUOUS       = 3, 
+    MPI_COMBINER_CONTIGUOUS       = 3,
     MPI_COMBINER_VECTOR           = 4,
     MPI_COMBINER_HVECTOR_INTEGER  = 5,
     MPI_COMBINER_HVECTOR          = 6,
     MPI_COMBINER_INDEXED          = 7,
-    MPI_COMBINER_HINDEXED_INTEGER = 8, 
-    MPI_COMBINER_HINDEXED         = 9, 
-    MPI_COMBINER_INDEXED_BLOCK    = 10, 
+    MPI_COMBINER_HINDEXED_INTEGER = 8,
+    MPI_COMBINER_HINDEXED         = 9,
+    MPI_COMBINER_INDEXED_BLOCK    = 10,
     MPI_COMBINER_STRUCT_INTEGER   = 11,
     MPI_COMBINER_STRUCT           = 12,
     MPI_COMBINER_SUBARRAY         = 13,
@@ -8380,32 +8877,31 @@ enum MPIR_Combiner_enum {
     MPI_COMBINER_HINDEXED_BLOCK   = 19
 };
 
- 
+
 typedef int MPI_Info;
 
 
 
 
 
- 
-# 623 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-
-
- 
 
 
 
 
 
 
- 
 
 
- 
 
 
- 
+
+
+
+
+
+
+
+
 typedef long MPI_Aint;
 typedef int MPI_Fint;
 typedef long long MPI_Count;
@@ -8416,15 +8912,15 @@ typedef long long MPI_Count;
 
 
 
- 
 
 
 
- 
 
 
 
- 
+
+
+
 typedef long long MPI_Offset;
 
 
@@ -8432,7 +8928,7 @@ typedef long long MPI_Offset;
 
 
 
- 
+
 typedef struct MPI_Status {
     int count_lo;
     int count_hi_and_cancelled;
@@ -8441,7 +8937,7 @@ typedef struct MPI_Status {
     int MPI_ERROR;
 } MPI_Status;
 
- 
+
 struct MPIR_T_enum_s;
 struct MPIR_T_cvar_handle_s;
 struct MPIR_T_pvar_handle_s;
@@ -8452,7 +8948,7 @@ typedef struct MPIR_T_cvar_handle_s * MPI_T_cvar_handle;
 typedef struct MPIR_T_pvar_handle_s * MPI_T_pvar_handle;
 typedef struct MPIR_T_pvar_session_s * MPI_T_pvar_session;
 
- 
+
 extern  struct MPIR_T_pvar_handle_s * const MPI_T_PVAR_ALL_HANDLES ;
 
 
@@ -8461,13 +8957,13 @@ extern  struct MPIR_T_pvar_handle_s * const MPI_T_PVAR_ALL_HANDLES ;
 
 
 
- 
+
 typedef enum MPIR_T_verbosity_t {
-    
- 
+
+
     MPIX_T_VERBOSITY_INVALID = 0,
 
-     
+
     MPI_T_VERBOSITY_USER_BASIC = 221,
     MPI_T_VERBOSITY_USER_DETAIL,
     MPI_T_VERBOSITY_USER_ALL,
@@ -8482,11 +8978,11 @@ typedef enum MPIR_T_verbosity_t {
 } MPIR_T_verbosity_t;
 
 typedef enum MPIR_T_bind_t {
-    
- 
+
+
     MPIX_T_BIND_INVALID = 0,
 
-     
+
     MPI_T_BIND_NO_OBJECT = 9700,
     MPI_T_BIND_MPI_COMM,
     MPI_T_BIND_MPI_DATATYPE,
@@ -8501,11 +8997,11 @@ typedef enum MPIR_T_bind_t {
 } MPIR_T_bind_t;
 
 typedef enum MPIR_T_scope_t {
-    
- 
+
+
     MPIX_T_SCOPE_INVALID = 0,
 
-     
+
     MPI_T_SCOPE_CONSTANT = 60438,
     MPI_T_SCOPE_READONLY,
     MPI_T_SCOPE_LOCAL,
@@ -8516,11 +9012,11 @@ typedef enum MPIR_T_scope_t {
 } MPIR_T_scope_t;
 
 typedef enum MPIR_T_pvar_class_t {
-    
- 
+
+
     MPIX_T_PVAR_CLASS_INVALID = 0,
 
-     
+
     MPIR_T_PVAR_CLASS_FIRST = 240,
     MPI_T_PVAR_CLASS_STATE = MPIR_T_PVAR_CLASS_FIRST,
     MPI_T_PVAR_CLASS_LEVEL,
@@ -8536,34 +9032,32 @@ typedef enum MPIR_T_pvar_class_t {
     MPIR_T_PVAR_CLASS_NUMBER = MPIR_T_PVAR_CLASS_LAST - MPIR_T_PVAR_CLASS_FIRST
 } MPIR_T_pvar_class_t;
 
- 
-
- 
-# 791 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
-# 811 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
 
 
 
- 
+
+
+
+
+
+
 extern  MPI_Fint * MPI_F_STATUS_IGNORE ;
 extern  MPI_Fint * MPI_F_STATUSES_IGNORE ;
 
 
 
- 
-
-
- 
 
 
 
 
 
- 
+
+
+
+
+
 typedef struct {
     MPI_Fint count_lo;
     MPI_Fint count_hi_and_cancelled;
@@ -8577,71 +9071,23 @@ extern  MPI_F08_status MPIR_F08_MPI_STATUSES_IGNORE_OBJ[1] ;
 extern  int MPIR_F08_MPI_IN_PLACE ;
 extern  int MPIR_F08_MPI_BOTTOM ;
 
- 
+
 extern  MPI_F08_status *MPI_F08_STATUS_IGNORE ;
 extern  MPI_F08_status *MPI_F08_STATUSES_IGNORE ;
 
- 
 
 
 
 
 
- 
-typedef int (MPI_Grequest_cancel_function)(void *, int); 
-typedef int (MPI_Grequest_free_function)(void *); 
-typedef int (MPI_Grequest_query_function)(void *, MPI_Status *); 
+
+
+typedef int (MPI_Grequest_cancel_function)(void *, int);
+typedef int (MPI_Grequest_free_function)(void *);
+typedef int (MPI_Grequest_query_function)(void *, MPI_Status *);
 typedef int (MPIX_Grequest_poll_function)(void *, MPI_Status *);
 typedef int (MPIX_Grequest_wait_function)(int, void **, double, MPI_Status *);
 
- 
-
- 
-# 873 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
- 
-
-
-
-
- 
-
-
-
- 
-
-
- 
-
-
-
-
-
- 
-
-
-
- 
-# 910 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-
- 
-
-
-
-
-
-# 927 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-# 936 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
-
-
-
-
-
-
- 
-# 962 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
 
@@ -8654,15 +9100,57 @@ typedef int (MPIX_Grequest_wait_function)(int, void **, double, MPI_Status *);
 
 
 
-# 980 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
 
 
- 
 
- 
-typedef int (MPI_Datarep_conversion_function)(void *, MPI_Datatype, int, 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef int (MPI_Datarep_conversion_function)(void *, MPI_Datatype, int,
              void *, MPI_Offset, void *);
 typedef int (MPI_Datarep_extent_function)(MPI_Datatype datatype, MPI_Aint *,
                       void *);
@@ -8672,16 +9160,16 @@ typedef int (MPI_Datarep_extent_function)(MPI_Datatype datatype, MPI_Aint *,
 
 
 
- 
- 
 
 
 
 
- 
 
- 
- 
+
+
+
+
+
 int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag,
              MPI_Comm comm)  ;
 int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
@@ -8887,12 +9375,12 @@ int MPI_Initialized(int *flag) ;
 int MPI_Abort(MPI_Comm comm, int errorcode) ;
 
 
- 
+
 int MPI_Pcontrol(const int level, ...) ;
 int MPIR_Dup_fn(MPI_Comm oldcomm, int keyval, void *extra_state, void *attribute_val_in,
                void *attribute_val_out, int *flag) ;
 
- 
+
 int MPI_Close_port(const char *port_name) ;
 int MPI_Comm_accept(const char *port_name, MPI_Info info, int root, MPI_Comm comm,
                     MPI_Comm *newcomm) ;
@@ -8913,7 +9401,7 @@ int MPI_Unpublish_name(const char *service_name, MPI_Info info, const char *port
 int MPI_Comm_set_info(MPI_Comm comm, MPI_Info info) ;
 int MPI_Comm_get_info(MPI_Comm comm, MPI_Info *info) ;
 
- 
+
 int MPI_Accumulate(const void *origin_addr, int origin_count, MPI_Datatype origin_datatype,
                    int target_rank, MPI_Aint target_disp, int target_count,
                    MPI_Datatype target_datatype, MPI_Op op, MPI_Win win)
@@ -8937,7 +9425,7 @@ int MPI_Win_test(MPI_Win win, int *flag) ;
 int MPI_Win_unlock(int rank, MPI_Win win) ;
 int MPI_Win_wait(MPI_Win win) ;
 
- 
+
 int MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void *baseptr,
                      MPI_Win *win) ;
 int MPI_Win_allocate_shared(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm,
@@ -8952,7 +9440,7 @@ int MPI_Get_accumulate(const void *origin_addr, int origin_count,
                         MPI_Datatype origin_datatype, void *result_addr, int result_count,
                         MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp,
                         int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win)
-                        
+
                          ;
 int MPI_Fetch_and_op(const void *origin_addr, void *result_addr,
                       MPI_Datatype datatype, int target_rank, MPI_Aint target_disp,
@@ -8961,8 +9449,8 @@ int MPI_Fetch_and_op(const void *origin_addr, void *result_addr,
 int MPI_Compare_and_swap(const void *origin_addr, const void *compare_addr,
                           void *result_addr, MPI_Datatype datatype, int target_rank,
                           MPI_Aint target_disp, MPI_Win win)
-                          
-                          
+
+
                            ;
 int MPI_Rput(const void *origin_addr, int origin_count,
               MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp,
@@ -8984,7 +9472,7 @@ int MPI_Rget_accumulate(const void *origin_addr, int origin_count,
                          MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp,
                          int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win,
                          MPI_Request *request)
-                         
+
                           ;
 int MPI_Win_lock_all(int assert, MPI_Win win) ;
 int MPI_Win_unlock_all(MPI_Win win) ;
@@ -8993,8 +9481,8 @@ int MPI_Win_flush_all(MPI_Win win) ;
 int MPI_Win_flush_local(int rank, MPI_Win win) ;
 int MPI_Win_flush_local_all(MPI_Win win) ;
 int MPI_Win_sync(MPI_Win win) ;
- 
- 
+
+
 int MPI_Add_error_class(int *errorclass) ;
 int MPI_Add_error_code(int errorclass, int *errorcode) ;
 int MPI_Add_error_string(int errorcode, const char *string) ;
@@ -9108,7 +9596,7 @@ int MPI_Win_set_errhandler(MPI_Win win, MPI_Errhandler errhandler) ;
 
 
 
- 
+
 int MPI_Type_create_f90_integer(int range, MPI_Datatype *newtype) ;
 int MPI_Type_create_f90_real(int precision, int range, MPI_Datatype *newtype) ;
 int MPI_Type_create_f90_complex(int precision, int range, MPI_Datatype *newtype) ;
@@ -9119,7 +9607,7 @@ int MPI_Reduce_local(const void *inbuf, void *inoutbuf, int count, MPI_Datatype 
 int MPI_Op_commutative(MPI_Op op, int *commute) ;
 int MPI_Reduce_scatter_block(const void *sendbuf, void *recvbuf, int recvcount,
                              MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
-                             
+
                               ;
 int MPI_Dist_graph_create_adjacent(MPI_Comm comm_old, int indegree, const int sources[],
                                    const int sourceweights[], int outdegree,
@@ -9132,7 +9620,7 @@ int MPI_Dist_graph_neighbors_count(MPI_Comm comm, int *indegree, int *outdegree,
 int MPI_Dist_graph_neighbors(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[],
                              int maxoutdegree, int destinations[], int destweights[]) ;
 
- 
+
 int MPI_Improbe(int source, int tag, MPI_Comm comm, int *flag, MPI_Message *message,
                 MPI_Status *status) ;
 int MPI_Imrecv(void *buf, int count, MPI_Datatype datatype, MPI_Message *message,
@@ -9141,7 +9629,7 @@ int MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message *message, MPI_Sta
 int MPI_Mrecv(void *buf, int count, MPI_Datatype datatype, MPI_Message *message,
               MPI_Status *status)  ;
 
- 
+
 int MPI_Comm_idup(MPI_Comm comm, MPI_Comm *newcomm, MPI_Request *request) ;
 int MPI_Ibarrier(MPI_Comm comm, MPI_Request *request) ;
 int MPI_Ibcast(void *buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm,
@@ -9193,7 +9681,7 @@ int MPI_Ireduce_scatter(const void *sendbuf, void *recvbuf, const int recvcounts
 int MPI_Ireduce_scatter_block(const void *sendbuf, void *recvbuf, int recvcount,
                               MPI_Datatype datatype, MPI_Op op, MPI_Comm comm,
                               MPI_Request *request)
-                              
+
                                ;
 int MPI_Iscan(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op,
               MPI_Comm comm, MPI_Request *request)
@@ -9202,27 +9690,27 @@ int MPI_Iexscan(const void *sendbuf, void *recvbuf, int count, MPI_Datatype data
                 MPI_Op op, MPI_Comm comm, MPI_Request *request)
                   ;
 
- 
+
 int MPI_Ineighbor_allgather(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                             void *recvbuf, int recvcount, MPI_Datatype recvtype,
                             MPI_Comm comm, MPI_Request *request)
-                            
+
                              ;
 int MPI_Ineighbor_allgatherv(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                              void *recvbuf, const int recvcounts[], const int displs[],
                              MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
-                             
+
                               ;
 int MPI_Ineighbor_alltoall(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                            void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm,
                            MPI_Request *request)
-                           
+
                             ;
 int MPI_Ineighbor_alltoallv(const void *sendbuf, const int sendcounts[], const int sdispls[],
                             MPI_Datatype sendtype, void *recvbuf, const int recvcounts[],
                             const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
                             MPI_Request *request)
-                            
+
                              ;
 int MPI_Ineighbor_alltoallw(const void *sendbuf, const int sendcounts[],
                             const MPI_Aint sdispls[], const MPI_Datatype sendtypes[],
@@ -9230,47 +9718,47 @@ int MPI_Ineighbor_alltoallw(const void *sendbuf, const int sendcounts[],
                             const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request *request) ;
 int MPI_Neighbor_allgather(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                            void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm)
-                           
+
                             ;
 int MPI_Neighbor_allgatherv(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                             void *recvbuf, const int recvcounts[], const int displs[],
                             MPI_Datatype recvtype, MPI_Comm comm)
-                            
+
                              ;
 int MPI_Neighbor_alltoall(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                           void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm)
-                          
+
                            ;
 int MPI_Neighbor_alltoallv(const void *sendbuf, const int sendcounts[], const int sdispls[],
                            MPI_Datatype sendtype, void *recvbuf, const int recvcounts[],
                            const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm)
-                           
+
                             ;
 int MPI_Neighbor_alltoallw(const void *sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
                            const MPI_Datatype sendtypes[], void *recvbuf, const int recvcounts[],
                            const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm) ;
 
- 
+
 int MPI_Comm_split_type(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm *newcomm) ;
 
- 
+
 int MPI_Get_elements_x(const MPI_Status *status, MPI_Datatype datatype, MPI_Count *count) ;
 int MPI_Status_set_elements_x(MPI_Status *status, MPI_Datatype datatype, MPI_Count count) ;
 int MPI_Type_get_extent_x(MPI_Datatype datatype, MPI_Count *lb, MPI_Count *extent) ;
 int MPI_Type_get_true_extent_x(MPI_Datatype datatype, MPI_Count *lb, MPI_Count *extent) ;
 int MPI_Type_size_x(MPI_Datatype datatype, MPI_Count *size) ;
 
- 
+
 int MPI_Comm_create_group(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm *newcomm) ;
 
- 
+
 MPI_Aint MPI_Aint_add(MPI_Aint base, MPI_Aint disp) ;
 MPI_Aint MPI_Aint_diff(MPI_Aint addr1, MPI_Aint addr2) ;
 
- 
 
- 
- 
+
+
+
 int MPI_T_init_thread(int required, int *provided) ;
 int MPI_T_finalize(void) ;
 int MPI_T_enum_get_info(MPI_T_enum enumtype, int *num, char *name, int *name_len) ;
@@ -9309,11 +9797,11 @@ int MPI_T_category_changed(int *stamp) ;
 int MPI_T_cvar_get_index(const char *name, int *cvar_index) ;
 int MPI_T_pvar_get_index(const char *name, int var_class, int *pvar_index) ;
 int MPI_T_category_get_index(const char *name, int *cat_index) ;
- 
 
 
- 
- 
+
+
+
 int MPIX_Comm_failure_ack(MPI_Comm comm) ;
 int MPIX_Comm_failure_get_acked(MPI_Comm comm, MPI_Group *failedgrp) ;
 int MPIX_Comm_revoke(MPI_Comm comm) ;
@@ -9321,11 +9809,11 @@ int MPIX_Comm_shrink(MPI_Comm comm, MPI_Comm *newcomm) ;
 int MPIX_Comm_agree(MPI_Comm comm, int *flag) ;
 
 
- 
 
 
 
- 
+
+
 
 int PMPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag,
               MPI_Comm comm)  ;
@@ -9382,7 +9870,7 @@ int PMPI_Startall(int count, MPI_Request array_of_requests[]) ;
 int PMPI_Sendrecv(const void *sendbuf, int sendcount, MPI_Datatype sendtype, int dest,
                   int sendtag, void *recvbuf, int recvcount, MPI_Datatype recvtype,
                   int source, int recvtag, MPI_Comm comm, MPI_Status *status)
-                  
+
                    ;
 int PMPI_Sendrecv_replace(void *buf, int count, MPI_Datatype datatype, int dest,
                           int sendtag, int source, int recvtag, MPI_Comm comm,
@@ -9533,10 +10021,10 @@ int PMPI_Initialized(int *flag) ;
 int PMPI_Abort(MPI_Comm comm, int errorcode) ;
 
 
- 
+
 int PMPI_Pcontrol(const int level, ...) ;
 
- 
+
 int PMPI_Close_port(const char *port_name) ;
 int PMPI_Comm_accept(const char *port_name, MPI_Info info, int root, MPI_Comm comm,
                      MPI_Comm *newcomm) ;
@@ -9557,7 +10045,7 @@ int PMPI_Unpublish_name(const char *service_name, MPI_Info info, const char *por
 int PMPI_Comm_set_info(MPI_Comm comm, MPI_Info info) ;
 int PMPI_Comm_get_info(MPI_Comm comm, MPI_Info *info) ;
 
- 
+
 int PMPI_Accumulate(const void *origin_addr, int origin_count, MPI_Datatype origin_datatype,
                     int target_rank, MPI_Aint target_disp, int target_count,
                     MPI_Datatype target_datatype, MPI_Op op, MPI_Win win)
@@ -9581,7 +10069,7 @@ int PMPI_Win_test(MPI_Win win, int *flag) ;
 int PMPI_Win_unlock(int rank, MPI_Win win) ;
 int PMPI_Win_wait(MPI_Win win) ;
 
- 
+
 int PMPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void *baseptr,
                       MPI_Win *win) ;
 int PMPI_Win_allocate_shared(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm,
@@ -9596,7 +10084,7 @@ int PMPI_Get_accumulate(const void *origin_addr, int origin_count,
                          MPI_Datatype origin_datatype, void *result_addr, int result_count,
                          MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp,
                          int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win)
-                         
+
                           ;
 int PMPI_Fetch_and_op(const void *origin_addr, void *result_addr,
                        MPI_Datatype datatype, int target_rank, MPI_Aint target_disp,
@@ -9605,8 +10093,8 @@ int PMPI_Fetch_and_op(const void *origin_addr, void *result_addr,
 int PMPI_Compare_and_swap(const void *origin_addr, const void *compare_addr,
                            void *result_addr, MPI_Datatype datatype, int target_rank,
                            MPI_Aint target_disp, MPI_Win win)
-                           
-                           
+
+
                             ;
 int PMPI_Rput(const void *origin_addr, int origin_count,
                MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp,
@@ -9628,7 +10116,7 @@ int PMPI_Rget_accumulate(const void *origin_addr, int origin_count,
                           MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp,
                           int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win,
                           MPI_Request *request)
-                          
+
                            ;
 int PMPI_Win_lock_all(int assert, MPI_Win win) ;
 int PMPI_Win_unlock_all(MPI_Win win) ;
@@ -9637,8 +10125,8 @@ int PMPI_Win_flush_all(MPI_Win win) ;
 int PMPI_Win_flush_local(int rank, MPI_Win win) ;
 int PMPI_Win_flush_local_all(MPI_Win win) ;
 int PMPI_Win_sync(MPI_Win win) ;
- 
- 
+
+
 int PMPI_Add_error_class(int *errorclass) ;
 int PMPI_Add_error_code(int errorclass, int *errorcode) ;
 int PMPI_Add_error_string(int errorcode, const char *string) ;
@@ -9752,7 +10240,7 @@ int PMPI_Win_set_errhandler(MPI_Win win, MPI_Errhandler errhandler) ;
 
 
 
- 
+
 int PMPI_Type_create_f90_integer(int r, MPI_Datatype *newtype) ;
 int PMPI_Type_create_f90_real(int p, int r, MPI_Datatype *newtype) ;
 int PMPI_Type_create_f90_complex(int p, int r, MPI_Datatype *newtype) ;
@@ -9763,7 +10251,7 @@ int PMPI_Reduce_local(const void *inbuf, void *inoutbuf, int count, MPI_Datatype
 int PMPI_Op_commutative(MPI_Op op, int *commute) ;
 int PMPI_Reduce_scatter_block(const void *sendbuf, void *recvbuf, int recvcount,
                               MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
-                              
+
                                ;
 int PMPI_Dist_graph_create_adjacent(MPI_Comm comm_old, int indegree, const int sources[],
                                     const int sourceweights[], int outdegree,
@@ -9776,7 +10264,7 @@ int PMPI_Dist_graph_neighbors_count(MPI_Comm comm, int *indegree, int *outdegree
 int PMPI_Dist_graph_neighbors(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[],
                               int maxoutdegree, int destinations[], int destweights[]) ;
 
- 
+
 int PMPI_Improbe(int source, int tag, MPI_Comm comm, int *flag, MPI_Message *message,
                  MPI_Status *status) ;
 int PMPI_Imrecv(void *buf, int count, MPI_Datatype datatype, MPI_Message *message,
@@ -9785,7 +10273,7 @@ int PMPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message *message, MPI_St
 int PMPI_Mrecv(void *buf, int count, MPI_Datatype datatype, MPI_Message *message,
                MPI_Status *status)  ;
 
- 
+
 int PMPI_Comm_idup(MPI_Comm comm, MPI_Comm *newcomm, MPI_Request *request) ;
 int PMPI_Ibarrier(MPI_Comm comm, MPI_Request *request) ;
 int PMPI_Ibcast(void *buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm,
@@ -9833,12 +10321,12 @@ int PMPI_Iallreduce(const void *sendbuf, void *recvbuf, int count, MPI_Datatype 
                       ;
 int PMPI_Ireduce_scatter(const void *sendbuf, void *recvbuf, const int recvcounts[],
                          MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request *request)
-                         
+
                           ;
 int PMPI_Ireduce_scatter_block(const void *sendbuf, void *recvbuf, int recvcount,
                                MPI_Datatype datatype, MPI_Op op, MPI_Comm comm,
                                MPI_Request *request)
-                               
+
                                 ;
 int PMPI_Iscan(const void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op,
                MPI_Comm comm, MPI_Request *request)
@@ -9847,27 +10335,27 @@ int PMPI_Iexscan(const void *sendbuf, void *recvbuf, int count, MPI_Datatype dat
                  MPI_Op op, MPI_Comm comm, MPI_Request *request)
                    ;
 
- 
+
 int PMPI_Ineighbor_allgather(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                              void *recvbuf, int recvcount, MPI_Datatype recvtype,
                              MPI_Comm comm, MPI_Request *request)
-                             
+
                               ;
 int PMPI_Ineighbor_allgatherv(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                               void *recvbuf, const int recvcounts[], const int displs[],
                               MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
-                              
+
                                ;
 int PMPI_Ineighbor_alltoall(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                             void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm,
                             MPI_Request *request)
-                            
+
                              ;
 int PMPI_Ineighbor_alltoallv(const void *sendbuf, const int sendcounts[], const int sdispls[],
                              MPI_Datatype sendtype, void *recvbuf, const int recvcounts[],
                              const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
                              MPI_Request *request)
-                             
+
                               ;
 int PMPI_Ineighbor_alltoallw(const void *sendbuf, const int sendcounts[],
                              const MPI_Aint sdispls[], const MPI_Datatype sendtypes[],
@@ -9875,48 +10363,48 @@ int PMPI_Ineighbor_alltoallw(const void *sendbuf, const int sendcounts[],
                              const MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request *request) ;
 int PMPI_Neighbor_allgather(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                             void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm)
-                            
+
                              ;
 int PMPI_Neighbor_allgatherv(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                              void *recvbuf, const int recvcounts[], const int displs[],
                              MPI_Datatype recvtype, MPI_Comm comm)
-                             
+
                               ;
 int PMPI_Neighbor_alltoall(const void *sendbuf, int sendcount, MPI_Datatype sendtype,
                            void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm)
-                           
+
                             ;
 int PMPI_Neighbor_alltoallv(const void *sendbuf, const int sendcounts[], const int sdispls[],
                             MPI_Datatype sendtype, void *recvbuf, const int recvcounts[],
                             const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm)
-                            
+
                              ;
 int PMPI_Neighbor_alltoallw(const void *sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
                             const MPI_Datatype sendtypes[], void *recvbuf, const int recvcounts[],
                             const MPI_Aint rdispls[], const MPI_Datatype recvtypes[],
                             MPI_Comm comm) ;
 
- 
+
 int PMPI_Comm_split_type(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm *newcomm) ;
 
- 
+
 int PMPI_Comm_create_group(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm *newcomm) ;
 
- 
+
 int PMPI_Get_elements_x(const MPI_Status *status, MPI_Datatype datatype, MPI_Count *count) ;
 int PMPI_Status_set_elements_x(MPI_Status *status, MPI_Datatype datatype, MPI_Count count) ;
 int PMPI_Type_get_extent_x(MPI_Datatype datatype, MPI_Count *lb, MPI_Count *extent) ;
 int PMPI_Type_get_true_extent_x(MPI_Datatype datatype, MPI_Count *lb, MPI_Count *extent) ;
 int PMPI_Type_size_x(MPI_Datatype datatype, MPI_Count *size) ;
 
- 
+
 MPI_Aint PMPI_Aint_add(MPI_Aint base, MPI_Aint disp) ;
 MPI_Aint PMPI_Aint_diff(MPI_Aint addr1, MPI_Aint addr2) ;
 
- 
 
- 
- 
+
+
+
 int PMPI_T_init_thread(int required, int *provided) ;
 int PMPI_T_finalize(void) ;
 int PMPI_T_enum_get_info(MPI_T_enum enumtype, int *num, char *name, int *name_len) ;
@@ -9955,11 +10443,11 @@ int PMPI_T_category_changed(int *stamp) ;
 int PMPI_T_cvar_get_index(const char *name, int *cvar_index) ;
 int PMPI_T_pvar_get_index(const char *name, int var_class, int *pvar_index) ;
 int PMPI_T_category_get_index(const char *name, int *cat_index) ;
- 
 
 
- 
- 
+
+
+
 int PMPIX_Comm_failure_ack(MPI_Comm comm) ;
 int PMPIX_Comm_failure_get_acked(MPI_Comm comm, MPI_Group *failedgrp) ;
 int PMPIX_Comm_revoke(MPI_Comm comm) ;
@@ -9967,12 +10455,8 @@ int PMPIX_Comm_shrink(MPI_Comm comm, MPI_Comm *newcomm) ;
 int PMPIX_Comm_agree(MPI_Comm comm, int *flag) ;
 
 
- 
 
- 
-# 2305 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
-# 1 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h" 1
 
 
 
@@ -9985,8 +10469,6 @@ int PMPIX_Comm_agree(MPI_Comm comm, int *flag) ;
 
 
 
- 
- 
 
 
 
@@ -10030,14 +10512,11 @@ int PMPIX_Comm_agree(MPI_Comm comm, int *flag) ;
 
 
 
- 
 
- 
 
 
 
 
-# 1 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h" 1
 
 
 
@@ -10050,8 +10529,6 @@ int PMPIX_Comm_agree(MPI_Comm comm, int *flag) ;
 
 
 
- 
- 
 
 
 
@@ -10094,9 +10571,6 @@ int PMPIX_Comm_agree(MPI_Comm comm, int *flag) ;
 
 
 
- 
- 
-# 66 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h" 2
 
 
 
@@ -10110,72 +10584,104 @@ int PMPIX_Comm_agree(MPI_Comm comm, int *flag) ;
 
 
 
- 
 
 
 
 
 
- 
 
- 
 
 
 
 
 
- 
-# 100 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
-# 115 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
 
- 
 
- 
 
 
 
 
 
 
- 
 
- 
-# 136 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
-# 146 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
 
 
-# 156 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
 
 
 
 
 
- 
 
 
 
 
 
- 
 
- 
-# 180 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
 
- 
 
 
- 
 
 
 
- 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int MPI_File_open(MPI_Comm comm, const char *filename, int amode, MPI_Info info, MPI_File *fh) ;
 int MPI_File_close(MPI_File *fh) ;
 int MPI_File_delete(const char *filename, MPI_Info info) ;
@@ -10187,13 +10693,13 @@ int MPI_File_get_amode(MPI_File fh, int *amode) ;
 int MPI_File_set_info(MPI_File fh, MPI_Info info) ;
 int MPI_File_get_info(MPI_File fh, MPI_Info *info_used) ;
 
- 
+
 int MPI_File_set_view(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype,
                       const char *datarep, MPI_Info info) ;
 int MPI_File_get_view(MPI_File fh, MPI_Offset *disp, MPI_Datatype *etype, MPI_Datatype *filetype,
                       char *datarep) ;
 
- 
+
 int MPI_File_read_at(MPI_File fh, MPI_Offset offset, void *buf, int count, MPI_Datatype datatype,
                      MPI_Status *status)  ;
 int MPI_File_read_at_all(MPI_File fh, MPI_Offset offset, void * buf, int count,
@@ -10208,14 +10714,14 @@ int MPI_File_write_at_all(MPI_File fh, MPI_Offset offset, const void *buf, int c
 
 
 
-  
+
 int MPI_File_iread_at(MPI_File fh, MPI_Offset offset, void *buf, int count, MPI_Datatype datatype,
                       MPI_Request *request)  ;
 int MPI_File_iwrite_at(MPI_File fh, MPI_Offset offset, const void *buf, int count,
                        MPI_Datatype datatype, MPI_Request *request)
      ;
 
- 
+
 int MPI_File_read(MPI_File fh, void *buf, int count, MPI_Datatype datatype, MPI_Status *status)
      ;
 int MPI_File_read_all(MPI_File fh, void *buf, int count, MPI_Datatype datatype, MPI_Status *status)
@@ -10227,7 +10733,7 @@ int MPI_File_write_all(MPI_File fh, const void *buf, int count, MPI_Datatype dat
 
 
 
-  
+
 
 int MPI_File_iread(MPI_File fh, void *buf, int count, MPI_Datatype datatype, MPI_Request *request)
      ;
@@ -10238,7 +10744,7 @@ int MPI_File_seek(MPI_File fh, MPI_Offset offset, int whence) ;
 int MPI_File_get_position(MPI_File fh, MPI_Offset *offset) ;
 int MPI_File_get_byte_offset(MPI_File fh, MPI_Offset offset, MPI_Offset *disp) ;
 
- 
+
 int MPI_File_read_shared(MPI_File fh, void *buf, int count, MPI_Datatype datatype,
                          MPI_Status *status)  ;
 int MPI_File_write_shared(MPI_File fh, const void *buf, int count, MPI_Datatype datatype,
@@ -10254,7 +10760,7 @@ int MPI_File_write_ordered(MPI_File fh, const void *buf, int count, MPI_Datatype
 int MPI_File_seek_shared(MPI_File fh, MPI_Offset offset, int whence) ;
 int MPI_File_get_position_shared(MPI_File fh, MPI_Offset *offset) ;
 
- 
+
 int MPI_File_read_at_all_begin(MPI_File fh, MPI_Offset offset, void *buf, int count,
                                MPI_Datatype datatype)  ;
 int MPI_File_read_at_all_end(MPI_File fh, void *buf, MPI_Status *status) ;
@@ -10274,27 +10780,27 @@ int MPI_File_write_ordered_begin(MPI_File fh, const void *buf, int count, MPI_Da
      ;
 int MPI_File_write_ordered_end(MPI_File fh, const void *buf, MPI_Status *status) ;
 
- 
+
 int MPI_File_get_type_extent(MPI_File fh, MPI_Datatype datatype, MPI_Aint *extent) ;
 
- 
+
 int MPI_Register_datarep(const char *datarep, MPI_Datarep_conversion_function *read_conversion_fn,
 			 MPI_Datarep_conversion_function *write_conversion_fn,
 			 MPI_Datarep_extent_function *dtype_file_extent_fn, void *extra_state) ;
 
- 
+
 int MPI_File_set_atomicity(MPI_File fh, int flag) ;
 int MPI_File_get_atomicity(MPI_File fh, int *flag) ;
 int MPI_File_sync(MPI_File fh) ;
 
- 
 
 
 
 
 
 
- 
+
+
 int MPI_File_iread_at_all(MPI_File fh, MPI_Offset offset, void *buf, int count,
                            MPI_Datatype datatype, MPI_Request *request)
      ;
@@ -10307,32 +10813,28 @@ int MPI_File_iread_all(MPI_File fh, void *buf, int count, MPI_Datatype datatype,
 int MPI_File_iwrite_all(MPI_File fh, const void *buf, int count, MPI_Datatype datatype,
                          MPI_Request *request)
      ;
- 
-
-# 336 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
 
 
- 
- 
-# 349 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
- 
+
+
+
+
+
 MPI_File MPI_File_f2c(MPI_Fint file) ;
 MPI_Fint MPI_File_c2f(MPI_File file) ;
 
 
-# 374 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
-
- 
-# 403 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
 
 
 
- 
 
 
- 
+
+
+
+
 int PMPI_File_open(MPI_Comm, const char *, int, MPI_Info, MPI_File *) ;
 int PMPI_File_close(MPI_File *) ;
 int PMPI_File_delete(const char *, MPI_Info) ;
@@ -10344,13 +10846,13 @@ int PMPI_File_get_amode(MPI_File, int *) ;
 int PMPI_File_set_info(MPI_File, MPI_Info) ;
 int PMPI_File_get_info(MPI_File, MPI_Info *) ;
 
- 
-int PMPI_File_set_view(MPI_File, MPI_Offset, 
+
+int PMPI_File_set_view(MPI_File, MPI_Offset,
     MPI_Datatype, MPI_Datatype, const char *, MPI_Info) ;
-int PMPI_File_get_view(MPI_File, MPI_Offset *, 
+int PMPI_File_get_view(MPI_File, MPI_Offset *,
       MPI_Datatype *, MPI_Datatype *, char *) ;
 
- 
+
 int PMPI_File_read_at(MPI_File, MPI_Offset, void *,
 	      int, MPI_Datatype, MPI_Status *)
                ;
@@ -10366,7 +10868,7 @@ int PMPI_File_write_at_all(MPI_File, MPI_Offset, const void *,
 
 
 
-  
+
 
 int PMPI_File_iread_at(MPI_File, MPI_Offset, void *,
 	      int, MPI_Datatype, MPI_Request *)
@@ -10375,7 +10877,7 @@ int PMPI_File_iwrite_at(MPI_File, MPI_Offset, const void *,
 	      int, MPI_Datatype, MPI_Request *)
                ;
 
- 
+
 int PMPI_File_read(MPI_File, void *, int, MPI_Datatype, MPI_Status *)
                     ;
 int PMPI_File_read_all(MPI_File, void *, int, MPI_Datatype, MPI_Status *)
@@ -10387,7 +10889,7 @@ int PMPI_File_write_all(MPI_File, const void *, int, MPI_Datatype, MPI_Status *)
 
 
 
-  
+
 
 int PMPI_File_iread(MPI_File, void *, int, MPI_Datatype, MPI_Request *)
                      ;
@@ -10398,12 +10900,12 @@ int PMPI_File_seek(MPI_File, MPI_Offset, int) ;
 int PMPI_File_get_position(MPI_File, MPI_Offset *) ;
 int PMPI_File_get_byte_offset(MPI_File, MPI_Offset, MPI_Offset *) ;
 
- 
+
 int PMPI_File_read_shared(MPI_File, void *, int, MPI_Datatype, MPI_Status *)
                            ;
 int PMPI_File_write_shared(MPI_File, const void *, int, MPI_Datatype, MPI_Status *)
                             ;
-int PMPI_File_iread_shared(MPI_File, void *, int, 
+int PMPI_File_iread_shared(MPI_File, void *, int,
 			   MPI_Datatype, MPI_Request *)
                             ;
 int PMPI_File_iwrite_shared(MPI_File, const void *, int,
@@ -10416,7 +10918,7 @@ int PMPI_File_write_ordered(MPI_File, const void *, int, MPI_Datatype, MPI_Statu
 int PMPI_File_seek_shared(MPI_File, MPI_Offset, int) ;
 int PMPI_File_get_position_shared(MPI_File, MPI_Offset *) ;
 
- 
+
 int PMPI_File_read_at_all_begin(MPI_File, MPI_Offset, void *,
                                int, MPI_Datatype)
                                 ;
@@ -10438,29 +10940,29 @@ int PMPI_File_write_ordered_begin(MPI_File, const void *, int, MPI_Datatype)
                                    ;
 int PMPI_File_write_ordered_end(MPI_File, const void *, MPI_Status *) ;
 
- 
+
 int PMPI_File_get_type_extent(MPI_File, MPI_Datatype, MPI_Aint *) ;
 
- 
+
 int PMPI_Register_datarep(const char *,
 			 MPI_Datarep_conversion_function *,
 			 MPI_Datarep_conversion_function *,
 			 MPI_Datarep_extent_function *,
 			 void *) ;
 
- 
+
 int PMPI_File_set_atomicity(MPI_File, int) ;
 int PMPI_File_get_atomicity(MPI_File, int *) ;
 int PMPI_File_sync(MPI_File) ;
 
- 
 
 
 
 
 
 
- 
+
+
 int PMPI_File_iread_at_all(MPI_File fh, MPI_Offset offset, void *buf, int count,
                             MPI_Datatype datatype, MPI_Request *request)
      ;
@@ -10474,27 +10976,22 @@ int PMPI_File_iwrite_all(MPI_File fh, const void *buf, int count, MPI_Datatype d
                           MPI_Request *request)
      ;
 
-# 561 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
- 
+
 MPI_File PMPI_File_f2c(MPI_Fint) ;
 MPI_Fint PMPI_File_c2f(MPI_File) ;
 
-# 581 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
-
- 
-# 598 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpio.h"
 
 
 
 
 
-# 2307 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h" 2
-
-# 2325 "/gpfs20/shared/software/intel/toolkit/mpi/2021.4.0/include/mpi.h"
 
 
- 
+
+
+
+
 typedef int MPIX_Grequest_class;
 int MPIX_Grequest_class_create(MPI_Grequest_query_function *query_fn,
                                MPI_Grequest_free_function *free_fn,
@@ -10512,7 +11009,7 @@ int MPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
                         MPI_Request *request) ;
 
 
- 
+
 int PMPIX_Grequest_class_create(MPI_Grequest_query_function *query_fn,
                                 MPI_Grequest_free_function *free_fn,
                                 MPI_Grequest_cancel_function *cancel_fn,
@@ -10529,27 +11026,20 @@ int PMPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
                          MPI_Request *request) ;
 
 
-# 121 "../src/elpa_generalized/cannon.c" 2
 
-# 137 "../src/elpa_generalized/cannon.c"
 
-# 153 "../src/elpa_generalized/cannon.c"
 
 
 
 
 
-# 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 50 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 64 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
 
 
 
-# 142 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -10569,9 +11059,7 @@ int PMPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
 
 
 
-# 173 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 249 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -10583,12 +11071,9 @@ int PMPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
 
 
 
-# 360 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
-# 161 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_forw_template.c" 1
 
 
 
@@ -10645,7 +11130,6 @@ int PMPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
 
 
 
-# 75 "../src/elpa_generalized/cannon_forw_template.c"
 
 
 
@@ -10661,42 +11145,27 @@ int PMPIX_Grequest_start(MPI_Grequest_query_function *query_fn,
 
 
 
-# 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
 
-
-
-# 13 "../src/elpa_generalized/../general/precision_typedefs.h"
-
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
-
-# 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
-
-# 58 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
 
 void dlacpy_(char*, int*, int*, double*, int*, double*, int*);
-void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*); 
+void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
 
 
 void slacpy_(char*, int*, int*, float*, int*, float*, int*);
-void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*); 
+void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*);
 
 
 
 
 void zlacpy_(char*, int*, int*, double _Complex*, int*, double _Complex*, int*);
-void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*); 
+void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*);
 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
-void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*); 
+void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
 
 
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
-# 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
-# 58 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
 int numroc_(int*, int*, int*, int*, int*);
 
@@ -10718,18 +11187,17 @@ void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Compl
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
 
 
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, double *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-      
-      
-   
-      
-   
-   
+
+
+
+
+
+
+
 
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
@@ -10737,59 +11205,59 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
 
    double *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
-   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res; 
+   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
    double dOne = 1.0;
    double dZero = 0.0;
-   int one = 1; 
-   int zero = 0; 
+   int one = 1;
+   int zero = 0;
    int na_rows, na_cols;
-         
+
    MPI_Status status;
-   MPI_Request request_A_Recv; 
+   MPI_Request request_A_Recv;
    MPI_Request request_A_Send;
-   MPI_Request request_U_Recv; 
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
 
    na = a_desc[2];
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
-   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols); 
-   
-   
-   
-   
-   
-   
-   
+   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
+
+
+
+
+
+
+
 
    if (np_cols%np_rows != 0)
    {
-      
-      
+
+
       return;
    }
-  
+
    if (np_cols < np_rows != 0)
    {
-       
-       
+
+
        return;
    }
-   
-   ratio = np_cols/np_rows; 
-   last_proc_row = ((na-1)/nblk) % np_rows;          
-   last_proc_col = ((na-1)/nblk) % np_cols;          
-   
-   
+
+   ratio = np_cols/np_rows;
+   last_proc_row = ((na-1)/nblk) % np_rows;
+   last_proc_col = ((na-1)/nblk) % np_cols;
+
+
    if (na%nblk == 0) {
       if (my_pcol <= last_proc_col) {
          Buf_cols = na_cols;
       }
       else {
-         Buf_cols = na_cols + nblk;      
+         Buf_cols = na_cols + nblk;
       }
    }
    else {
@@ -10797,19 +11265,19 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          Buf_cols = na_cols;
       }
       else if (my_pcol > last_proc_col) {
-         Buf_cols = na_cols + nblk; 
-      }
-      else {  
-         Buf_cols = na_cols + nblk - na_cols%nblk;     
-      }
-   }
-  
-   if (na%nblk == 0) {
-      if (my_prow <= last_proc_row) {
-         Buf_rows = na_rows + 1;   
+         Buf_cols = na_cols + nblk;
       }
       else {
-         Buf_rows = na_rows + nblk;      
+         Buf_cols = na_cols + nblk - na_cols%nblk;
+      }
+   }
+
+   if (na%nblk == 0) {
+      if (my_prow <= last_proc_row) {
+         Buf_rows = na_rows + 1;
+      }
+      else {
+         Buf_rows = na_rows + nblk;
       }
    }
    else {
@@ -10817,135 +11285,132 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          Buf_rows = na_rows;
       }
       else if (my_prow > last_proc_row) {
-         Buf_rows = na_rows + nblk; 
+         Buf_rows = na_rows + nblk;
       }
-      else { 
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
+      else {
+         Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
 
-   intNumber = ceil((double)na/(double)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+   intNumber = ceil((double)na/(double)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    U_stored = malloc((Size_U_stored*(ToStore+1))*sizeof(double));
-   SizesU = malloc(ToStore*sizeof(int));  
+   SizesU = malloc(ToStore*sizeof(int));
    Buf_to_send_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(double));
    Buf_to_receive_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(double));
    Buf_to_send_U = malloc(Size_U_stored*sizeof(double));
    Buf_to_receive_U = malloc(Size_U_stored*sizeof(double));
    if(ratio != 1)
-      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(double));   
+      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(double));
    M = malloc(na_rows*na_cols*sizeof(double));
    M_T = malloc(na_rows*na_cols*sizeof(double));
    for(i = 0; i < na_rows*na_cols; i++)
-      M[i] = 0; 
+      M[i] = 0;
 
-   int useGPU = 0;
-# 226 "../src/elpa_generalized/cannon_forw_template.c"
 
-   
-   
-   
+
+
    if(ratio != 1) {
 
 
 
-      dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
+      dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
 
 
 
    }
-   Size_receive_A = 0; 
-   
-   
+   Size_receive_A = 0;
+
+
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
          if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, 
-                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, 
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
-            Size_receive_A_now = Size_receive_A_now/na_rows;       
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
 	      }
-      
-         Size_receive_A = Size_receive_A + Size_receive_A_now;  
 
-         
-         intNumber = pcol_from_where_to_receive_A/np_rows; 
-         
-         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];  
+         Size_receive_A = Size_receive_A + Size_receive_A_now;
+
+
+         intNumber = pcol_from_where_to_receive_A/np_rows;
+
+         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
          if (pcol_where_to_send_A != my_pcol) {
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
 	      }
          else {
             CopyFrom = A;
 	      }
-      
-         intNumber = ceil((double)Size_receive_A_now/(double)nblk);   
+
+         intNumber = ceil((double)Size_receive_A_now/(double)nblk);
          for(j = 0; j < intNumber; j++)
          {
-            width = nblk; 
+            width = nblk;
             if(nblk*(j+1) > Size_receive_A_now)
-               width = Size_receive_A_now - nblk*j; 
+               width = Size_receive_A_now - nblk*j;
             dlacpy_("A", &na_rows, &width, CopyFrom, &na_rows, CopyTo, &na_rows);
-            CopyTo = CopyTo + na_rows*nblk*ratio; 
-            CopyFrom = CopyFrom + na_rows*nblk; 
+            CopyTo = CopyTo + na_rows*nblk*ratio;
+            CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
 
-      else { 
+      else {
          if(my_prow > 0)
          {
-            dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
-            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A        , (int) zero, 
-                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, 
+            dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A        , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-            Size_receive_A = Size_receive_A/na_rows;       
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
-            dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);   
-            Size_receive_A = na_cols; 
+            dlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);
+            Size_receive_A = na_cols;
          }
       }
    }
-   
-   
-     
-   
-   num_of_iters = ceil((double)na_cols/(double)nblk);             
-   
-   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;                 
+
+
+
+
+   num_of_iters = ceil((double)na_cols/(double)nblk);
+
+   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;
    from_where_to_receive_U = (my_pcol + my_prow)%np_rows;
-   
-   if (where_to_send_U == my_prow) {   
+
+   if (where_to_send_U == my_prow) {
       Buf_pos = Buf_to_receive_U;
    }
    else {
-      Buf_pos = Buf_to_send_U;         
+      Buf_pos = Buf_to_send_U;
    }
-   
-   if (my_pcol >= my_prow) {  
-      curr_col_loc = 0;    
+
+   if (my_pcol >= my_prow) {
+      curr_col_loc = 0;
    }
    else  {
-      curr_col_loc = 1;   
-   }   
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+   }
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if (my_pcol >= my_prow ) {
       rows_in_block = ceil(((double)(my_pcol + 1) - (double)my_prow)/(double)np_rows)*nblk;
@@ -10953,132 +11418,132 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    else {
       rows_in_block = ratio*nblk;
    }
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if (rows_in_block > na_rows) {
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
       }
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         data_ptr = &U[curr_col_loc*na_rows];   
-         dlacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
+         data_ptr = &U[curr_col_loc*na_rows];
+         dlacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer = rows_in_block - ratio*nblk;    
-   *Buf_pos = (double)rows_in_buffer; 
+   rows_in_buffer = rows_in_block - ratio*nblk;
+   *Buf_pos = (double)rows_in_buffer;
    Size_send_U = Size_send_U + 1;
-   
-   
+
+
    if (where_to_send_U != my_prow)
-   {   
-      
-      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, (int) zero, col_comm, &status); 
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI); 
+   {
+
+      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, (int) zero, col_comm, &status);
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
    }
    else {
-      Size_receive_U = Size_send_U;         
+      Size_receive_U = Size_send_U;
    }
    for(i = 0; i < Size_receive_U; i++)
       U_stored[i] = Buf_to_receive_U[i];
-   Size_U_skewed = Size_receive_U; 
+   Size_U_skewed = Size_receive_U;
    Curr_pos_in_U_stored = Size_U_skewed;
 
-  
-   
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
-   
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
-      data_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
+      data_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
       Buf_to_receive_U = data_ptr;
-      
-      
-      Size_send_A = Size_receive_A;  
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv); 
-      
-      
+
+
+      Size_send_U = Size_receive_U;
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
+
+
       rows_in_buffer = (int)Buf_to_send_U[Size_receive_U-1];
       row_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
-      
-      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+
+      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = 0;                              
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = 0;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = nblk;                           
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = nblk;
       }
-    
-      num_of_blocks_in_U_buffer = ceil(((double)cols_in_buffer - (double)curr_col_loc_buf)/(double)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil(((double)cols_in_buffer - (double)curr_col_loc_buf)/(double)nblk);
+
       startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
       U_local_start = &Buf_to_send_U[startPos];
       Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
+      {
          curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-         proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+         proc_row_curr = (curr_col_glob/nblk)%np_rows;
+         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
-            rows_in_block_A = rows_in_block_A + nblk; 
+            rows_in_block_A = rows_in_block_A + nblk;
 	      }
          if (rows_in_block_A > na_rows) {
-            rows_in_block_A = na_rows; 
+            rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	      }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
 	      }
-      
-         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+
+         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
-            rows_in_block_U = rows_in_block_U + nblk; 
+            rows_in_block_U = rows_in_block_U + nblk;
 	      }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
@@ -11091,7 +11556,7 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
             if (j == 1) {
                dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	         }
-            else { 
+            else {
                dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	         }
 
@@ -11101,89 +11566,89 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
          Res_ptr = &M[curr_col_loc_res*na_rows];
-         curr_col_loc_buf = curr_col_loc_buf + nblk;  
-      } 
-     
+         curr_col_loc_buf = curr_col_loc_buf + nblk;
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
 
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
       Size_receive_A = Size_receive_A / na_rows;
-      
-      
+
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI); 
-      Size_receive_U = (int) Size_receive_UMPI; 
-       
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI);
+      Size_receive_U = (int) Size_receive_UMPI;
+
       if(j <= ToStore)
       {
          for(k = 0; k < Size_receive_U; k++)
-            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k]; 
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U; 
-         SizesU[j-1] = Size_receive_U; 
+            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k];
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U;
+         SizesU[j-1] = Size_receive_U;
       }
    }
-   
-   
+
+
    rows_in_buffer = (int)Buf_to_receive_U[Size_receive_U-1];
    row_origin_U = (my_pcol + my_prow + np_cols + np_rows -1)%np_rows;
 
-   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = 0;                              
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = 0;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = nblk;                           
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = nblk;
    }
-    
-   num_of_blocks_in_U_buffer = ceil(((double)cols_in_buffer - (double)curr_col_loc_buf)/(double)nblk); 
-      
+
+   num_of_blocks_in_U_buffer = ceil(((double)cols_in_buffer - (double)curr_col_loc_buf)/(double)nblk);
+
    startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
    U_local_start = &Buf_to_receive_U[startPos];
    Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
+   {
       curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-      proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+      proc_row_curr = (curr_col_glob/nblk)%np_rows;
+      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
       if (my_prow <= proc_row_curr) {
-         rows_in_block_A = rows_in_block_A + nblk; 
+         rows_in_block_A = rows_in_block_A + nblk;
       }
       if (rows_in_block_A > na_rows) {
-         rows_in_block_A = na_rows; 
+         rows_in_block_A = na_rows;
       }
       if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer - curr_col_loc_buf; 
+         cols_in_block = cols_in_buffer - curr_col_loc_buf;
       }
-      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
       if (proc_row_curr >= row_origin_U) {
-         rows_in_block_U = rows_in_block_U + nblk; 
+         rows_in_block_U = rows_in_block_U + nblk;
       }
       if (rows_in_block_U > rows_in_buffer) {
-         rows_in_block_U = rows_in_buffer; 
+         rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
 
@@ -11192,7 +11657,7 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          if (j == 1) {
             dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	 }
-         else { 
+         else {
             dgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
 
@@ -11202,163 +11667,163 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
       Res_ptr = &M[curr_col_loc_res*na_rows];
-      curr_col_loc_buf = curr_col_loc_buf + nblk;  
-   }  
-   
-   
-
-
-
-   pdtran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);     
+      curr_col_loc_buf = curr_col_loc_buf + nblk;
+   }
 
 
 
 
-   
-           
-   
-   
-   
-   if ((ratio != 1)||(my_prow != 0)) {   
-      Buf_pos = Buf_to_send_A;     
+
+   pdtran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+
+
+
+
+
+
+
+
+
+   if ((ratio != 1)||(my_prow != 0)) {
+      Buf_pos = Buf_to_send_A;
    }
    else {
-      Buf_pos = Buf_to_receive_A;  
+      Buf_pos = Buf_to_receive_A;
    }
-   
-   num_of_iters = ceil((double)na_cols/(double)nblk);             
-   
+
+   num_of_iters = ceil((double)na_cols/(double)nblk);
+
    cols_in_buffer_A_my_initial = 0;
-   Size_send_A = 0; 
-   
-   if (my_pcol <= my_prow)  
+   Size_send_A = 0;
+
+   if (my_pcol <= my_prow)
    {
-      curr_row_loc = 0;     
+      curr_row_loc = 0;
       rows_in_buffer_A_my_initial = na_rows;
    }
    else
    {
-      curr_row_loc = ceil((double)(((double)my_pcol - (double)my_prow)/(double)np_rows))*nblk; 
-      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;   
+      curr_row_loc = ceil((double)(((double)my_pcol - (double)my_prow)/(double)np_rows))*nblk;
+      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;
    }
-       
-   for(i = 0; i < num_of_iters; i++)       
+
+   for(i = 0; i < num_of_iters; i++)
    {
-      curr_col_loc = i*nblk;      
-      rows_in_block = na_rows - curr_row_loc;    
-      
+      curr_col_loc = i*nblk;
+      rows_in_block = na_rows - curr_row_loc;
+
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
          A_local_start = &M_T[curr_col_loc*na_rows + curr_row_loc];
-         dlacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);     
+         dlacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);
          Buf_pos = Buf_pos + rows_in_block*cols_in_block;
-         Size_send_A = Size_send_A + rows_in_block*cols_in_block; 
-         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block; 
+         Size_send_A = Size_send_A + rows_in_block*cols_in_block;
+         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block;
       }
       curr_row_loc = curr_row_loc + ratio*nblk;
    }
-   *Buf_pos = (double)cols_in_buffer_A_my_initial; 
+   *Buf_pos = (double)cols_in_buffer_A_my_initial;
    Size_send_A = Size_send_A + 1;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(pcol_from_where_to_receive_A < proc_col_min)
          proc_col_min = pcol_from_where_to_receive_A;
    }
-   
-   Size_receive_A = 0;       
-   cols_in_buffer_A = 0;     
-   rows_in_buffer_A = 0;     
+
+   Size_receive_A = 0;
+   cols_in_buffer_A = 0;
+   rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(pcol_where_to_send_A != my_pcol)   
+         if(pcol_where_to_send_A != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
-            Size_receive_A = Size_receive_A + Size_receive_A_now - 1; 
+            Size_receive_A = Size_receive_A + Size_receive_A_now - 1;
 
             cols_in_buffer_A_now = Buf_A[Size_receive_A_now-1];
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
-            
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
+
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((double)(((double)pcol_from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk; 
+               rows_in_buffer_A_now = na_rows - ceil((double)(((double)pcol_from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = pcol_from_where_to_receive_A/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = pcol_from_where_to_receive_A/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
          }
-         else  
+         else
          {
             cols_in_buffer_A_now = cols_in_buffer_A_my_initial;
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
             rows_in_buffer_A_now = rows_in_buffer_A_my_initial;
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = my_pcol/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = my_pcol/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_to_send_A;  
+            CopyFrom = Buf_to_send_A;
 
             Size_receive_A = Size_receive_A + Size_send_A - 1;
          }
-            
-         
-         intNumber = ceil((double)cols_in_buffer_A_now/(double)nblk);  
-         rows_in_block = rows_in_buffer_A_now; 
+
+
+         intNumber = ceil((double)cols_in_buffer_A_now/(double)nblk);
+         rows_in_block = rows_in_buffer_A_now;
          for(j = 0; j < intNumber; j++)
          {
             if ((j+1)*nblk < cols_in_buffer_A_now) {
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
 	    }
             else {
                cols_in_block = cols_in_buffer_A_now - j*nblk;
-	    }   
+	    }
             dlacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);  
-            rows_in_block = rows_in_block - ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);
+            rows_in_block = rows_in_block - ratio*nblk;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -11367,16 +11832,16 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((double)(((double)pcol_from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk; 
+               rows_in_buffer_A = na_rows - ceil((double)(((double)pcol_from_where_to_receive_A - (double)my_prow)/(double)np_rows))*nblk;
             }
          }
-         else    
+         else
          {
             Size_receive_A = Size_send_A;
             rows_in_buffer_A = rows_in_buffer_A_my_initial;
@@ -11396,40 +11861,40 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
       Size_receive_A = Size_receive_A + 1;
    }
 
-   
-   
+
+
    Size_receive_U = Size_U_skewed;
    U_to_calc = U_stored;
-   
-   
-   
+
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
-  
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
       if (j > ToStore)
       {
-         data_ptr = Buf_to_send_U; 
-         Buf_to_send_U = Buf_to_receive_U; 
+         data_ptr = Buf_to_send_U;
+         Buf_to_send_U = Buf_to_receive_U;
          Buf_to_receive_U = data_ptr;
       }
-        
-      
-      Size_send_A = Size_receive_A; 
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00080b), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00080b), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
+
+
+      Size_send_U = Size_receive_U;
       if (j > ToStore)
       {
          if(j > ToStore + 1)
@@ -11440,10 +11905,10 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          else {
 	    MPI_Isend(U_to_calc, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
 	 }
-         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);	 
+         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
       }
-      
-      
+
+
       rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
       row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
       if (my_pcol >= row_of_origin_U) {
@@ -11454,59 +11919,59 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
       }
       cols_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-2];
       rows_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-1];
-      
-      col_of_origin_A = np_cols; 
+
+      col_of_origin_A = np_cols;
       for(i = 0; i < ratio; i++)
       {
          intNumber = (my_pcol + my_prow + i*np_rows + np_cols + j - 1)%np_cols;
          if(intNumber < col_of_origin_A)
             col_of_origin_A = intNumber;
       }
-      
-      
-      
-      if (my_pcol >= row_of_origin_U) {   
-         curr_col_loc_res = 0;          
+
+
+
+      if (my_pcol >= row_of_origin_U) {
+         curr_col_loc_res = 0;
       }
       else {
-         curr_col_loc_res = nblk;       
+         curr_col_loc_res = nblk;
       }
-      num_of_blocks_in_U_buffer = ceil((double)((double)cols_in_buffer_U/(double)nblk)); 
-      if (my_pcol >= row_of_origin_U) {    
-         rows_in_block_U = ceil(((double)(my_pcol + 1) - (double)row_of_origin_U)/(double)np_rows)*nblk;  
+      num_of_blocks_in_U_buffer = ceil((double)((double)cols_in_buffer_U/(double)nblk));
+      if (my_pcol >= row_of_origin_U) {
+         rows_in_block_U = ceil(((double)(my_pcol + 1) - (double)row_of_origin_U)/(double)np_rows)*nblk;
       }
       else {
          rows_in_block_U = ratio*nblk;
       }
       U_local_start = U_to_calc;
-      
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
-         
-         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-         
-         Nb = curr_col_glob_res/nblk;    
-         owner = Nb%np_rows;             
-         curr_row_loc_res = (Nb/np_rows)*nblk; 
+      {
+
+         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+         Nb = curr_col_glob_res/nblk;
+         owner = Nb%np_rows;
+         curr_row_loc_res = (Nb/np_rows)*nblk;
          if(my_prow < owner)
-            curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-         curr_row_loc_A = curr_row_loc_res;     
+            curr_row_loc_res = curr_row_loc_res + nblk;
+
+         curr_row_loc_A = curr_row_loc_res;
          if(col_of_origin_A > my_prow)
-            curr_row_loc_A = curr_row_loc_A - nblk;  
-        
-         rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-         curr_col_loc_U = i*nblk;   
-      
+            curr_row_loc_A = curr_row_loc_A - nblk;
+
+         rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+         curr_col_loc_U = i*nblk;
+
          if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	 }
          else {
-            cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+            cols_in_block = cols_in_buffer_U - curr_col_loc_U;
          }
          if (rows_in_block_U > rows_in_buffer_U) {
-            rows_in_block_U = rows_in_buffer_U;     
+            rows_in_block_U = rows_in_buffer_U;
          }
          A_local_index = curr_row_loc_A;
          A_local_start = &Buf_to_send_A[A_local_index];
@@ -11516,68 +11981,68 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
          LDA_A_new = LDA_A;
          if ((rows_in_block > 0)&&(cols_in_block > 0))
          {
-            U_local_start_curr = U_local_start; 
- 
-            
+            U_local_start_curr = U_local_start;
+
+
             for (ii = 0; ii < ceil((double)rows_in_block_U/(double)nblk); ii++)
             {
                if ((ii+1)*nblk <= cols_in_buffer_A) {
-                  rows_in_block_U_curr = nblk; 
+                  rows_in_block_U_curr = nblk;
 	       }
                else {
-                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
 
 
 
                if ((j == 1)&&(ii == 0)) {
-                  dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+                  dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	       }
-               else { 
+               else {
                   dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
 
 
 
                LDA_A_new = LDA_A_new - nblk;
-      
-               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new; 
+
+               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new;
                A_local_start = &Buf_to_send_A[A_local_index];
-               LDA_A = LDA_A_new; 
+               LDA_A = LDA_A_new;
             }
          }
-      
+
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-         curr_col_loc_res = curr_col_loc_res + nblk; 
+         curr_col_loc_res = curr_col_loc_res + nblk;
          rows_in_block_U = rows_in_block_U + ratio*nblk;
-      }    
-      
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
-      
+
       if (j <= ToStore)
       {
          U_to_calc = &U_stored[Curr_pos_in_U_stored];
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1]; 
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1];
          Size_receive_U =  SizesU[j-1];
       }
       else
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-	      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI); 
+	      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
-   
-   
+
+
    if(ToStore < np_rows - 1)
       U_to_calc = Buf_to_receive_U;
    rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
-   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;     
+   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
    if (my_pcol >= row_of_origin_U) {
       cols_in_buffer_U = na_cols;
    }
@@ -11586,104 +12051,104 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    }
    cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-2];
    rows_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-   
-   col_of_origin_A = np_cols; 
+
+   col_of_origin_A = np_cols;
    for(i = 0; i < ratio; i++)
    {
       intNumber = (my_pcol + my_prow + i*np_rows + np_cols + np_rows - 1)%np_cols;
       if(intNumber < col_of_origin_A)
          col_of_origin_A = intNumber;
    }
-   
-   
-   if (my_pcol >= row_of_origin_U) {  
-      curr_col_loc_res = 0;          
+
+
+   if (my_pcol >= row_of_origin_U) {
+      curr_col_loc_res = 0;
    }
    else {
-      curr_col_loc_res = nblk;       
+      curr_col_loc_res = nblk;
    }
    num_of_blocks_in_U_buffer = ceil((double)((double)cols_in_buffer_U/(double)nblk));
-   if (my_pcol >= row_of_origin_U) {    
-      rows_in_block_U = ceil(((double)(my_pcol + 1) - (double)row_of_origin_U)/(double)np_rows)*nblk;  
+   if (my_pcol >= row_of_origin_U) {
+      rows_in_block_U = ceil(((double)(my_pcol + 1) - (double)row_of_origin_U)/(double)np_rows)*nblk;
    }
    else {
       rows_in_block_U = ratio*nblk;
    }
    U_local_start = U_to_calc;
-      
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
-      
-      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-      
-      Nb = curr_col_glob_res/nblk;    
-      owner = Nb%np_rows;             
-      curr_row_loc_res = (Nb/np_rows)*nblk; 
+   {
+
+      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+      Nb = curr_col_glob_res/nblk;
+      owner = Nb%np_rows;
+      curr_row_loc_res = (Nb/np_rows)*nblk;
       if(my_prow < owner)
-         curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-      curr_row_loc_A = curr_row_loc_res;     
+         curr_row_loc_res = curr_row_loc_res + nblk;
+
+      curr_row_loc_A = curr_row_loc_res;
       if(col_of_origin_A > my_prow)
          curr_row_loc_A = curr_row_loc_A - nblk;
-      
-      rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-      curr_col_loc_U = i*nblk;   
-      
+
+      rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+      curr_col_loc_U = i*nblk;
+
       if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+         cols_in_block = cols_in_buffer_U - curr_col_loc_U;
       }
       if (rows_in_block_U > rows_in_buffer_U) {
          rows_in_block_U = rows_in_buffer_U;
       }
- 
+
       A_local_index = curr_row_loc_A;
       A_local_start = &Buf_to_receive_A[A_local_index];
       Res_ptr = &Res[curr_col_loc_res*na_rows + curr_row_loc_res];
-      LDA_A = rows_in_buffer_A; 
-      LDA_A_new = LDA_A; 
+      LDA_A = rows_in_buffer_A;
+      LDA_A_new = LDA_A;
       if ((rows_in_block > 0) &&(cols_in_block > 0))
       {
-         U_local_start_curr = U_local_start; 
+         U_local_start_curr = U_local_start;
 
-         
+
          for (ii = 0; ii < ceil((double)rows_in_block_U/(double)nblk); ii++)
          {
             if ((ii+1)*nblk <= cols_in_buffer_A) {
-               rows_in_block_U_curr = nblk; 
+               rows_in_block_U_curr = nblk;
 	    }
             else {
-               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
 
 
 
             if ((j == 1)&&(ii == 0)) {
-               dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+               dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	    }
-            else { 
+            else {
                dgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	    }
 
 
 
             LDA_A_new = LDA_A_new - nblk;
-              
-            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block; 
+
+            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block;
             A_local_start = &Buf_to_receive_A[A_local_index];
             LDA_A = LDA_A_new;
          }
       }
-      
+
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-      curr_col_loc_res = curr_col_loc_res + nblk; 
+      curr_col_loc_res = curr_col_loc_res + nblk;
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
-   
+
 
 
 
@@ -11704,7 +12169,7 @@ void cannons_reduction_d(double* A, double* U, int np_rows, int np_cols, int my_
    free(Buf_to_receive_A);
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
-   free(M); 
+   free(M);
    free(M_T);
    if(ratio != 1)
       free(Buf_A);
@@ -11736,24 +12201,22 @@ void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_c
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   cannons_reduction_d(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 
-# 162 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_back_template.c" 1
 
 
 
@@ -11810,7 +12273,6 @@ void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_c
 
 
 
-# 75 "../src/elpa_generalized/cannon_back_template.c"
 
 
 
@@ -11823,238 +12285,238 @@ void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_c
 
 void cannons_triang_rectangular_d(double* U, double* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, double *Res, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-   
-   
-   
-   
-   
-   
-   
-   
-  
+
+
+
+
+
+
+
+
+
+
    int na, nb, nblk, width, na_rows, na_cols, nb_cols, cols_in_buffer_U_my_initial, cols_in_buffer_U, rows_in_buffer_U, Size_receive_U_now, rows_in_buffer_U_now, cols_in_buffer_U_now, rows_in_buffer_U_my_initial;
 
    int Size_receive_U_nowMPI, Size_receive_UMPI, Size_receive_BMPI;
-   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult; 
-   
+   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult;
+
    double *Buf_to_send_U, *Buf_to_receive_U, *Buf_to_send_B, *Buf_to_receive_B, *Buf_U, *PosBuff;
-  
-   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min; 
-   
+
+   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min;
+
    double *U_local_start, *Buf_pos, *B_local_start, *double_ptr, *CopyTo, *CopyFrom;
-   
+
    int ratio;
-   
+
    MPI_Status status;
 
    int one = 1;
-   int zero = 0; 
+   int zero = 0;
    double done = 1.0;
    double dzero = 0.0;
-      
+
    na = U_desc[2];
-   nblk = U_desc[4]; 
+   nblk = U_desc[4];
    nb = b_desc[3];
-   
+
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
    nb_cols = numroc_(&nb, &nblk, &my_pcol, &zero, &np_cols);
-   
-   MPI_Request request_U_Recv; 
+
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
-   MPI_Request request_B_Recv; 
+   MPI_Request request_B_Recv;
    MPI_Request request_B_Send;
-   
-   
+
+
    last_proc_col_B = ((nb-1)/nblk) % np_cols;
    last_proc_row_B = ((na-1)/nblk) % np_rows;
-   
-   
-   
+
+
+
     if(nb%nblk == 0)
       if(my_pcol <= last_proc_col_B)
          Buf_cols_B = nb_cols;
       else
-         Buf_cols_B = nb_cols + nblk;      
+         Buf_cols_B = nb_cols + nblk;
    else
       if(my_pcol < last_proc_col_B)
          Buf_cols_B = nb_cols;
       else if(my_pcol > last_proc_col_B)
-         Buf_cols_B = nb_cols + nblk; 
-      else  
-         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;     
-   
+         Buf_cols_B = nb_cols + nblk;
+      else
+         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;
+
    if(na%nblk == 0)
       if(my_prow <= last_proc_row_B)
          Buf_rows = na_rows;
       else
-         Buf_rows = na_rows + nblk;      
+         Buf_rows = na_rows + nblk;
    else
       if(my_prow < last_proc_row_B)
          Buf_rows = na_rows;
       else if(my_prow > last_proc_row_B)
-         Buf_rows = na_rows + nblk; 
-      else  
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
-   
-   ratio = np_cols/np_rows; 
-   
-   intNumber = ceil((double)na/(double)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+         Buf_rows = na_rows + nblk;
+      else
+         Buf_rows = na_rows + nblk - na_rows%nblk;
+
+   ratio = np_cols/np_rows;
+
+   intNumber = ceil((double)na/(double)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    Buf_to_send_U = malloc(ratio*Size_U_stored*sizeof(double));
    Buf_to_receive_U = malloc(ratio*Size_U_stored*sizeof(double));
    Buf_to_send_B = malloc(Buf_cols_B*Buf_rows*sizeof(double));
    Buf_to_receive_B = malloc(Buf_cols_B*Buf_rows*sizeof(double));
    if(ratio != 1)
-      Buf_U = malloc(Size_U_stored*sizeof(double));   
-    
+      Buf_U = malloc(Size_U_stored*sizeof(double));
+
    for(i = 0; i < na_rows*nb_cols; i++)
-     Res[i] = 0; 
-    
-   
-      
-   
-   if((ratio != 1)||(my_prow != 0))   
-      Buf_pos = Buf_to_send_U;     
+     Res[i] = 0;
+
+
+
+
+   if((ratio != 1)||(my_prow != 0))
+      Buf_pos = Buf_to_send_U;
    else
-      Buf_pos = Buf_to_receive_U;  
-      
-   
-   
-   if(my_pcol >= my_prow)  
-      curr_col_loc = 0;    
+      Buf_pos = Buf_to_receive_U;
+
+
+
+   if(my_pcol >= my_prow)
+      curr_col_loc = 0;
    else
-      curr_col_loc = 1;   
-      
-   num_of_iters = ceil((double)na_cols/(double)nblk);             
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+
+   num_of_iters = ceil((double)na_cols/(double)nblk);
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if(my_pcol >= my_prow )
       rows_in_block = ceil(((double)(my_pcol + 1) - (double)my_prow)/(double)np_rows)*nblk;
    else
       rows_in_block = ratio*nblk;
    cols_in_buffer_U_my_initial = 0;
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if(rows_in_block > na_rows)
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
 
       if ((na_cols - curr_col_loc) < nblk)
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       else
-         cols_in_block = nblk; 
-      
+         cols_in_block = nblk;
+
       if((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         double_ptr = &U[curr_col_loc*na_rows];   
-         dlacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
-         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block; 
+         double_ptr = &U[curr_col_loc*na_rows];
+         dlacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
+         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;    
-   *Buf_pos = (double)cols_in_buffer_U_my_initial; 
-   Buf_pos = Buf_pos + 1; 
-   *Buf_pos = (double)rows_in_buffer_U_my_initial; 
+   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;
+   *Buf_pos = (double)cols_in_buffer_U_my_initial;
+   Buf_pos = Buf_pos + 1;
+   *Buf_pos = (double)rows_in_buffer_U_my_initial;
    Size_send_U = Size_send_U + 2;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(from_where_to_receive_U < proc_col_min)
          proc_col_min = from_where_to_receive_U;
    }
-   
-   
-   Size_receive_U = 0;       
-   cols_in_buffer_U = 0;     
-   rows_in_buffer_U = 0;     
+
+
+   Size_receive_U = 0;
+   cols_in_buffer_U = 0;
+   rows_in_buffer_U = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(where_to_send_U != my_pcol)   
+         if(where_to_send_U != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, 0, Buf_U, (int) Size_U_stored, ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, 0, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_U_nowMPI);
             Size_receive_U_now = (int) Size_receive_U_nowMPI;
-            Size_receive_U = Size_receive_U + Size_receive_U_now - 2; 
-            
+            Size_receive_U = Size_receive_U + Size_receive_U_now - 2;
+
             cols_in_buffer_U_now = Buf_U[Size_receive_U_now - 2];
             cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
             rows_in_buffer_U_now = Buf_U[Size_receive_U_now - 1];
-            
-            if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
 
-            intNumber = from_where_to_receive_U/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(from_where_to_receive_U < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            if(rows_in_buffer_U < rows_in_buffer_U_now)
+               rows_in_buffer_U = rows_in_buffer_U_now;
+
+            intNumber = from_where_to_receive_U/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(from_where_to_receive_U < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_U; 
+            CopyFrom = Buf_U;
          }
-         else  
+         else
          {
             cols_in_buffer_U_now = cols_in_buffer_U_my_initial;
-            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now; 
-            
+            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
+
             rows_in_buffer_U_now = rows_in_buffer_U_my_initial;
             if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
+               rows_in_buffer_U = rows_in_buffer_U_now;
 
-            intNumber = my_pcol/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(my_pcol < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            intNumber = my_pcol/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(my_pcol < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_to_send_U;  
+            CopyFrom = Buf_to_send_U;
             Size_receive_U = Size_receive_U + Size_send_U - 2;
          }
-            
-         
-         intNumber = ceil((double)cols_in_buffer_U_now/(double)nblk);  
+
+
+         intNumber = ceil((double)cols_in_buffer_U_now/(double)nblk);
          if(from_where_to_receive_U >= my_prow)
-            rows_in_block = ceil(((double)(from_where_to_receive_U + 1) - (double)my_prow)/(double)np_rows)*nblk;  
+            rows_in_block = ceil(((double)(from_where_to_receive_U + 1) - (double)my_prow)/(double)np_rows)*nblk;
          else
-            rows_in_block = ratio*nblk; 
+            rows_in_block = ratio*nblk;
          for(j = 0; j < intNumber; j++)
          {
             if((j+1)*nblk < cols_in_buffer_U_now)
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
             else
                cols_in_block = cols_in_buffer_U_now - j*nblk;
-               
+
             dlacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;  
-            rows_in_block = rows_in_block + ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;
+            rows_in_block = rows_in_block + ratio*nblk;
             if(rows_in_block > rows_in_buffer_U_now)
-               rows_in_block = rows_in_buffer_U_now; 
+               rows_in_block = rows_in_buffer_U_now;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -12065,7 +12527,7 @@ void cannons_triang_rectangular_d(double* U, double* B, int np_rows, int np_cols
             cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
             rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
          }
-         else    
+         else
          {
             Size_receive_U = Size_send_U;
             rows_in_buffer_U = rows_in_buffer_U_my_initial;
@@ -12079,67 +12541,67 @@ void cannons_triang_rectangular_d(double* U, double* B, int np_rows, int np_cols
       Buf_to_receive_U[Size_receive_U + 1] = rows_in_buffer_U;
       Size_receive_U = Size_receive_U + 2;
    }
-      
-   
-   
+
+
+
    if(my_pcol > 0)
    {
-      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;                   
+      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;
       from_where_to_receive_B = (my_pcol + my_prow)%np_rows;
 
-      
-      if(where_to_send_B != my_prow)                  
+
+      if(where_to_send_B != my_prow)
       {
-         
+
          dlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_send_B, &na_rows);
-         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)0x4c00080b), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_B, 0, col_comm, &status); 
-         MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_BMPI); 
-         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-         else Size_receive_B=0; 
+         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)0x4c00080b), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_B, 0, col_comm, &status);
+         MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_BMPI);
+         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+         else Size_receive_B=0;
       }
       else
       {
-         dlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows); 
+         dlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
          Size_receive_B = na_rows;
       }
    }
    else
    {
-      dlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);        
-      Size_receive_B = na_rows; 
-   }   
-   
-   
+      dlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
+      Size_receive_B = na_rows;
+   }
+
+
    where_to_send_U = (my_pcol - 1 + np_cols)%np_cols;
    from_where_to_receive_U = (my_pcol + 1)%np_cols;
    where_to_send_B = (my_prow - 1 + np_rows)%np_rows;
-   from_where_to_receive_B = (my_prow + 1)%np_rows;    
+   from_where_to_receive_B = (my_prow + 1)%np_rows;
 
    for(i = 1; i < np_rows; i++)
    {
-      
-      double_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
-      Buf_to_receive_U = double_ptr; 
-      
-      double_ptr = Buf_to_send_B; 
-      Buf_to_send_B = Buf_to_receive_B; 
+
+      double_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
+      Buf_to_receive_U = double_ptr;
+
+      double_ptr = Buf_to_send_B;
+      Buf_to_send_B = Buf_to_receive_B;
       Buf_to_receive_B = double_ptr;
-            
+
       Size_send_U = Size_receive_U;
-      Size_send_B = Size_receive_B;                   
-        
-      
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, 0, row_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);      
-      
-      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)0x4c00080b), (int) where_to_send_B, 0, col_comm, &request_B_Send); 
-      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);      
-      
+      Size_send_B = Size_receive_B;
+
+
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00080b), (int) where_to_send_U, 0, row_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);
+
+      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)0x4c00080b), (int) where_to_send_B, 0, col_comm, &request_B_Send);
+      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)0x4c00080b), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);
+
       cols_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-2];
       rows_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-1];
-      
-      proc_col_min = np_cols; 
+
+      proc_col_min = np_cols;
       for(j = 0; j < ratio; j++)
       {
          col_of_origin_U = (my_pcol + my_prow + i - 1 + j*np_rows)%np_cols;
@@ -12147,51 +12609,51 @@ void cannons_triang_rectangular_d(double* U, double* B, int np_rows, int np_cols
             proc_col_min = col_of_origin_U;
       }
       col_of_origin_U = proc_col_min;
-      
-      num_of_blocks_in_U_buffer = ceil((double)cols_in_buffer_U/(double)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil((double)cols_in_buffer_U/(double)nblk);
+
       if (col_of_origin_U >= my_prow)
          B_local_start = Buf_to_send_B;
-      else 
+      else
          B_local_start = Buf_to_send_B + nblk;
-      
+
       U_local_start = Buf_to_send_U;
-      
+
       for(j = 0; j < num_of_blocks_in_U_buffer; j++)
       {
          curr_rows = (j+1)*nblk;
          if (curr_rows > rows_in_buffer_U)
-            curr_rows = rows_in_buffer_U; 
-         
+            curr_rows = rows_in_buffer_U;
+
          if((j+1)*nblk <= cols_in_buffer_U)
-            b_rows_mult = nblk; 
+            b_rows_mult = nblk;
          else
             b_rows_mult = cols_in_buffer_U - j*nblk;
-         
-         if(Size_receive_B!=0) dgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
-  
-         U_local_start = U_local_start + nblk*curr_rows; 
-         B_local_start = B_local_start + nblk; 
+
+         if(Size_receive_B!=0) dgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+         U_local_start = U_local_start + nblk*curr_rows;
+         B_local_start = B_local_start + nblk;
       }
-      
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
 
       MPI_Wait(&request_B_Send, &status);
       MPI_Wait(&request_B_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_BMPI); 
-      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-      else Size_receive_B=0; 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00080b), &Size_receive_BMPI);
+      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+      else Size_receive_B=0;
 
-   }         
-   
-   
+   }
+
+
    cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
    rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
-   
-   proc_col_min = np_cols; 
+
+   proc_col_min = np_cols;
    for(j = 0; j < ratio; j++)
    {
       col_of_origin_U = (my_pcol + my_prow + np_rows - 1 + j*np_rows)%np_cols;
@@ -12199,33 +12661,33 @@ void cannons_triang_rectangular_d(double* U, double* B, int np_rows, int np_cols
          proc_col_min = col_of_origin_U;
    }
    col_of_origin_U = proc_col_min;
-      
+
    num_of_blocks_in_U_buffer = ceil((double)cols_in_buffer_U/(double)nblk);
-  
+
    if (col_of_origin_U >= my_prow)
       B_local_start = Buf_to_receive_B;
-   else 
+   else
       B_local_start = Buf_to_receive_B + nblk;
-      
-   U_local_start = Buf_to_receive_U;  
-   
+
+   U_local_start = Buf_to_receive_U;
+
    for(j = 0; j < num_of_blocks_in_U_buffer; j++)
    {
       curr_rows = (j+1)*nblk;
       if (curr_rows > rows_in_buffer_U)
-         curr_rows = rows_in_buffer_U; 
-      
+         curr_rows = rows_in_buffer_U;
+
       if((j+1)*nblk <= cols_in_buffer_U)
-         b_rows_mult = nblk; 
+         b_rows_mult = nblk;
       else
          b_rows_mult = cols_in_buffer_U - j*nblk;
-      
-      if(Size_receive_B!=0) dgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
 
-      U_local_start = U_local_start + nblk*curr_rows; 
+      if(Size_receive_B!=0) dgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+      U_local_start = U_local_start + nblk*curr_rows;
       B_local_start = B_local_start + nblk;
    }
-   
+
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
    free(Buf_to_send_B);
@@ -12259,15 +12721,14 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
+
+
+
+
+
   cannons_triang_rectangular_d(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
 
-# 163 "../src/elpa_generalized/cannon.c" 2
 
 
 
@@ -12286,7 +12747,7 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 
 
 
- 
+
 void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_colsCast, int* a_desc,
                            double *Res, int ToStore, int row_comm, int col_comm);
 
@@ -12304,23 +12765,19 @@ void cannons_reduction_c_d(double* A, double* U, int local_rowsCast, int local_c
 
 
 
- 
+
 void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, double *Res, int row_comm, int col_comm);
 
 
 
-# 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 50 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 64 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
 
 
 
-# 142 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -12340,15 +12797,12 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 
 
 
-# 259 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
 
 
-# 274 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 350 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -12362,8 +12816,6 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 
 
 
-# 208 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_forw_template.c" 1
 
 
 
@@ -12420,7 +12872,6 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 
 
 
-# 75 "../src/elpa_generalized/cannon_forw_template.c"
 
 
 
@@ -12436,44 +12887,29 @@ void cannons_triang_rectangular_c_d(double* U, double* B, int local_rowsCast, in
 
 
 
-# 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 8 "../src/elpa_generalized/../general/precision_typedefs.h"
 
 
 
-
-
-
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
-
-# 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
-
-# 58 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
 
 void dlacpy_(char*, int*, int*, double*, int*, double*, int*);
-void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*); 
+void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
 
 
 void slacpy_(char*, int*, int*, float*, int*, float*, int*);
-void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*); 
+void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*);
 
 
 
 
 void zlacpy_(char*, int*, int*, double _Complex*, int*, double _Complex*, int*);
-void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*); 
+void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*);
 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
-void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*); 
+void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
 
 
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
-# 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
-# 58 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
 int numroc_(int*, int*, int*, int*, int*);
 
@@ -12495,18 +12931,17 @@ void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Compl
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
 
 
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, float *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-      
-      
-   
-      
-   
-   
+
+
+
+
+
+
+
 
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
@@ -12514,59 +12949,59 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
 
    float *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
-   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res; 
+   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
    float dOne = 1.0;
    float dZero = 0.0;
-   int one = 1; 
-   int zero = 0; 
+   int one = 1;
+   int zero = 0;
    int na_rows, na_cols;
-         
+
    MPI_Status status;
-   MPI_Request request_A_Recv; 
+   MPI_Request request_A_Recv;
    MPI_Request request_A_Send;
-   MPI_Request request_U_Recv; 
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
 
    na = a_desc[2];
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
-   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols); 
-   
-   
-   
-   
-   
-   
-   
+   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
+
+
+
+
+
+
+
 
    if (np_cols%np_rows != 0)
    {
-      
-      
+
+
       return;
    }
-  
+
    if (np_cols < np_rows != 0)
    {
-       
-       
+
+
        return;
    }
-   
-   ratio = np_cols/np_rows; 
-   last_proc_row = ((na-1)/nblk) % np_rows;          
-   last_proc_col = ((na-1)/nblk) % np_cols;          
-   
-   
+
+   ratio = np_cols/np_rows;
+   last_proc_row = ((na-1)/nblk) % np_rows;
+   last_proc_col = ((na-1)/nblk) % np_cols;
+
+
    if (na%nblk == 0) {
       if (my_pcol <= last_proc_col) {
          Buf_cols = na_cols;
       }
       else {
-         Buf_cols = na_cols + nblk;      
+         Buf_cols = na_cols + nblk;
       }
    }
    else {
@@ -12574,19 +13009,19 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          Buf_cols = na_cols;
       }
       else if (my_pcol > last_proc_col) {
-         Buf_cols = na_cols + nblk; 
-      }
-      else {  
-         Buf_cols = na_cols + nblk - na_cols%nblk;     
-      }
-   }
-  
-   if (na%nblk == 0) {
-      if (my_prow <= last_proc_row) {
-         Buf_rows = na_rows + 1;   
+         Buf_cols = na_cols + nblk;
       }
       else {
-         Buf_rows = na_rows + nblk;      
+         Buf_cols = na_cols + nblk - na_cols%nblk;
+      }
+   }
+
+   if (na%nblk == 0) {
+      if (my_prow <= last_proc_row) {
+         Buf_rows = na_rows + 1;
+      }
+      else {
+         Buf_rows = na_rows + nblk;
       }
    }
    else {
@@ -12594,135 +13029,132 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          Buf_rows = na_rows;
       }
       else if (my_prow > last_proc_row) {
-         Buf_rows = na_rows + nblk; 
+         Buf_rows = na_rows + nblk;
       }
-      else { 
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
+      else {
+         Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
 
-   intNumber = ceil((float)na/(float)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+   intNumber = ceil((float)na/(float)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    U_stored = malloc((Size_U_stored*(ToStore+1))*sizeof(float));
-   SizesU = malloc(ToStore*sizeof(int));  
+   SizesU = malloc(ToStore*sizeof(int));
    Buf_to_send_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(float));
    Buf_to_receive_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(float));
    Buf_to_send_U = malloc(Size_U_stored*sizeof(float));
    Buf_to_receive_U = malloc(Size_U_stored*sizeof(float));
    if(ratio != 1)
-      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(float));   
+      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(float));
    M = malloc(na_rows*na_cols*sizeof(float));
    M_T = malloc(na_rows*na_cols*sizeof(float));
    for(i = 0; i < na_rows*na_cols; i++)
-      M[i] = 0; 
+      M[i] = 0;
 
-   int useGPU = 0;
-# 226 "../src/elpa_generalized/cannon_forw_template.c"
 
-   
-   
-   
+
+
    if(ratio != 1) {
 
 
 
-      slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
+      slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
 
 
 
    }
-   Size_receive_A = 0; 
-   
-   
+   Size_receive_A = 0;
+
+
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
          if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, 
-                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, 
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
-            Size_receive_A_now = Size_receive_A_now/na_rows;       
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
 	      }
-      
-         Size_receive_A = Size_receive_A + Size_receive_A_now;  
 
-         
-         intNumber = pcol_from_where_to_receive_A/np_rows; 
-         
-         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];  
+         Size_receive_A = Size_receive_A + Size_receive_A_now;
+
+
+         intNumber = pcol_from_where_to_receive_A/np_rows;
+
+         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
          if (pcol_where_to_send_A != my_pcol) {
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
 	      }
          else {
             CopyFrom = A;
 	      }
-      
-         intNumber = ceil((float)Size_receive_A_now/(float)nblk);   
+
+         intNumber = ceil((float)Size_receive_A_now/(float)nblk);
          for(j = 0; j < intNumber; j++)
          {
-            width = nblk; 
+            width = nblk;
             if(nblk*(j+1) > Size_receive_A_now)
-               width = Size_receive_A_now - nblk*j; 
+               width = Size_receive_A_now - nblk*j;
             slacpy_("A", &na_rows, &width, CopyFrom, &na_rows, CopyTo, &na_rows);
-            CopyTo = CopyTo + na_rows*nblk*ratio; 
-            CopyFrom = CopyFrom + na_rows*nblk; 
+            CopyTo = CopyTo + na_rows*nblk*ratio;
+            CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
 
-      else { 
+      else {
          if(my_prow > 0)
          {
-            slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
-            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A        , (int) zero, 
-                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, 
+            slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A        , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-            Size_receive_A = Size_receive_A/na_rows;       
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
-            slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);   
-            Size_receive_A = na_cols; 
+            slacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);
+            Size_receive_A = na_cols;
          }
       }
    }
-   
-   
-     
-   
-   num_of_iters = ceil((float)na_cols/(float)nblk);             
-   
-   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;                 
+
+
+
+
+   num_of_iters = ceil((float)na_cols/(float)nblk);
+
+   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;
    from_where_to_receive_U = (my_pcol + my_prow)%np_rows;
-   
-   if (where_to_send_U == my_prow) {   
+
+   if (where_to_send_U == my_prow) {
       Buf_pos = Buf_to_receive_U;
    }
    else {
-      Buf_pos = Buf_to_send_U;         
+      Buf_pos = Buf_to_send_U;
    }
-   
-   if (my_pcol >= my_prow) {  
-      curr_col_loc = 0;    
+
+   if (my_pcol >= my_prow) {
+      curr_col_loc = 0;
    }
    else  {
-      curr_col_loc = 1;   
-   }   
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+   }
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if (my_pcol >= my_prow ) {
       rows_in_block = ceil(((float)(my_pcol + 1) - (float)my_prow)/(float)np_rows)*nblk;
@@ -12730,132 +13162,132 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    else {
       rows_in_block = ratio*nblk;
    }
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if (rows_in_block > na_rows) {
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
       }
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         data_ptr = &U[curr_col_loc*na_rows];   
-         slacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
+         data_ptr = &U[curr_col_loc*na_rows];
+         slacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer = rows_in_block - ratio*nblk;    
-   *Buf_pos = (float)rows_in_buffer; 
+   rows_in_buffer = rows_in_block - ratio*nblk;
+   *Buf_pos = (float)rows_in_buffer;
    Size_send_U = Size_send_U + 1;
-   
-   
+
+
    if (where_to_send_U != my_prow)
-   {   
-      
-      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, (int) zero, col_comm, &status); 
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI); 
+   {
+
+      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, (int) zero, col_comm, &status);
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
    }
    else {
-      Size_receive_U = Size_send_U;         
+      Size_receive_U = Size_send_U;
    }
    for(i = 0; i < Size_receive_U; i++)
       U_stored[i] = Buf_to_receive_U[i];
-   Size_U_skewed = Size_receive_U; 
+   Size_U_skewed = Size_receive_U;
    Curr_pos_in_U_stored = Size_U_skewed;
 
-  
-   
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
-   
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
-      data_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
+      data_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
       Buf_to_receive_U = data_ptr;
-      
-      
-      Size_send_A = Size_receive_A;  
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv); 
-      
-      
+
+
+      Size_send_U = Size_receive_U;
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
+
+
       rows_in_buffer = (int)Buf_to_send_U[Size_receive_U-1];
       row_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
-      
-      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+
+      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = 0;                              
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = 0;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = nblk;                           
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = nblk;
       }
-    
-      num_of_blocks_in_U_buffer = ceil(((float)cols_in_buffer - (float)curr_col_loc_buf)/(float)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil(((float)cols_in_buffer - (float)curr_col_loc_buf)/(float)nblk);
+
       startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
       U_local_start = &Buf_to_send_U[startPos];
       Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
+      {
          curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-         proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+         proc_row_curr = (curr_col_glob/nblk)%np_rows;
+         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
-            rows_in_block_A = rows_in_block_A + nblk; 
+            rows_in_block_A = rows_in_block_A + nblk;
 	      }
          if (rows_in_block_A > na_rows) {
-            rows_in_block_A = na_rows; 
+            rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	      }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
 	      }
-      
-         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+
+         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
-            rows_in_block_U = rows_in_block_U + nblk; 
+            rows_in_block_U = rows_in_block_U + nblk;
 	      }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
@@ -12868,7 +13300,7 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
             if (j == 1) {
                sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	         }
-            else { 
+            else {
                sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	         }
 
@@ -12878,89 +13310,89 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
          Res_ptr = &M[curr_col_loc_res*na_rows];
-         curr_col_loc_buf = curr_col_loc_buf + nblk;  
-      } 
-     
+         curr_col_loc_buf = curr_col_loc_buf + nblk;
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
 
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
       Size_receive_A = Size_receive_A / na_rows;
-      
-      
+
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI); 
-      Size_receive_U = (int) Size_receive_UMPI; 
-       
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI);
+      Size_receive_U = (int) Size_receive_UMPI;
+
       if(j <= ToStore)
       {
          for(k = 0; k < Size_receive_U; k++)
-            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k]; 
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U; 
-         SizesU[j-1] = Size_receive_U; 
+            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k];
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U;
+         SizesU[j-1] = Size_receive_U;
       }
    }
-   
-   
+
+
    rows_in_buffer = (int)Buf_to_receive_U[Size_receive_U-1];
    row_origin_U = (my_pcol + my_prow + np_cols + np_rows -1)%np_rows;
 
-   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = 0;                              
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = 0;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = nblk;                           
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = nblk;
    }
-    
-   num_of_blocks_in_U_buffer = ceil(((float)cols_in_buffer - (float)curr_col_loc_buf)/(float)nblk); 
-      
+
+   num_of_blocks_in_U_buffer = ceil(((float)cols_in_buffer - (float)curr_col_loc_buf)/(float)nblk);
+
    startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
    U_local_start = &Buf_to_receive_U[startPos];
    Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
+   {
       curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-      proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+      proc_row_curr = (curr_col_glob/nblk)%np_rows;
+      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
       if (my_prow <= proc_row_curr) {
-         rows_in_block_A = rows_in_block_A + nblk; 
+         rows_in_block_A = rows_in_block_A + nblk;
       }
       if (rows_in_block_A > na_rows) {
-         rows_in_block_A = na_rows; 
+         rows_in_block_A = na_rows;
       }
       if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer - curr_col_loc_buf; 
+         cols_in_block = cols_in_buffer - curr_col_loc_buf;
       }
-      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
       if (proc_row_curr >= row_origin_U) {
-         rows_in_block_U = rows_in_block_U + nblk; 
+         rows_in_block_U = rows_in_block_U + nblk;
       }
       if (rows_in_block_U > rows_in_buffer) {
-         rows_in_block_U = rows_in_buffer; 
+         rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
 
@@ -12969,7 +13401,7 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          if (j == 1) {
             sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	 }
-         else { 
+         else {
             sgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
 
@@ -12979,163 +13411,163 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
       Res_ptr = &M[curr_col_loc_res*na_rows];
-      curr_col_loc_buf = curr_col_loc_buf + nblk;  
-   }  
-   
-   
-
-
-
-   pstran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);     
+      curr_col_loc_buf = curr_col_loc_buf + nblk;
+   }
 
 
 
 
-   
-           
-   
-   
-   
-   if ((ratio != 1)||(my_prow != 0)) {   
-      Buf_pos = Buf_to_send_A;     
+
+   pstran_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+
+
+
+
+
+
+
+
+
+   if ((ratio != 1)||(my_prow != 0)) {
+      Buf_pos = Buf_to_send_A;
    }
    else {
-      Buf_pos = Buf_to_receive_A;  
+      Buf_pos = Buf_to_receive_A;
    }
-   
-   num_of_iters = ceil((float)na_cols/(float)nblk);             
-   
+
+   num_of_iters = ceil((float)na_cols/(float)nblk);
+
    cols_in_buffer_A_my_initial = 0;
-   Size_send_A = 0; 
-   
-   if (my_pcol <= my_prow)  
+   Size_send_A = 0;
+
+   if (my_pcol <= my_prow)
    {
-      curr_row_loc = 0;     
+      curr_row_loc = 0;
       rows_in_buffer_A_my_initial = na_rows;
    }
    else
    {
-      curr_row_loc = ceil((float)(((float)my_pcol - (float)my_prow)/(float)np_rows))*nblk; 
-      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;   
+      curr_row_loc = ceil((float)(((float)my_pcol - (float)my_prow)/(float)np_rows))*nblk;
+      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;
    }
-       
-   for(i = 0; i < num_of_iters; i++)       
+
+   for(i = 0; i < num_of_iters; i++)
    {
-      curr_col_loc = i*nblk;      
-      rows_in_block = na_rows - curr_row_loc;    
-      
+      curr_col_loc = i*nblk;
+      rows_in_block = na_rows - curr_row_loc;
+
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
          A_local_start = &M_T[curr_col_loc*na_rows + curr_row_loc];
-         slacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);     
+         slacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);
          Buf_pos = Buf_pos + rows_in_block*cols_in_block;
-         Size_send_A = Size_send_A + rows_in_block*cols_in_block; 
-         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block; 
+         Size_send_A = Size_send_A + rows_in_block*cols_in_block;
+         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block;
       }
       curr_row_loc = curr_row_loc + ratio*nblk;
    }
-   *Buf_pos = (float)cols_in_buffer_A_my_initial; 
+   *Buf_pos = (float)cols_in_buffer_A_my_initial;
    Size_send_A = Size_send_A + 1;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(pcol_from_where_to_receive_A < proc_col_min)
          proc_col_min = pcol_from_where_to_receive_A;
    }
-   
-   Size_receive_A = 0;       
-   cols_in_buffer_A = 0;     
-   rows_in_buffer_A = 0;     
+
+   Size_receive_A = 0;
+   cols_in_buffer_A = 0;
+   rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(pcol_where_to_send_A != my_pcol)   
+         if(pcol_where_to_send_A != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
-            Size_receive_A = Size_receive_A + Size_receive_A_now - 1; 
+            Size_receive_A = Size_receive_A + Size_receive_A_now - 1;
 
             cols_in_buffer_A_now = Buf_A[Size_receive_A_now-1];
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
-            
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
+
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((float)(((float)pcol_from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk; 
+               rows_in_buffer_A_now = na_rows - ceil((float)(((float)pcol_from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = pcol_from_where_to_receive_A/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = pcol_from_where_to_receive_A/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
          }
-         else  
+         else
          {
             cols_in_buffer_A_now = cols_in_buffer_A_my_initial;
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
             rows_in_buffer_A_now = rows_in_buffer_A_my_initial;
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = my_pcol/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = my_pcol/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_to_send_A;  
+            CopyFrom = Buf_to_send_A;
 
             Size_receive_A = Size_receive_A + Size_send_A - 1;
          }
-            
-         
-         intNumber = ceil((float)cols_in_buffer_A_now/(float)nblk);  
-         rows_in_block = rows_in_buffer_A_now; 
+
+
+         intNumber = ceil((float)cols_in_buffer_A_now/(float)nblk);
+         rows_in_block = rows_in_buffer_A_now;
          for(j = 0; j < intNumber; j++)
          {
             if ((j+1)*nblk < cols_in_buffer_A_now) {
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
 	    }
             else {
                cols_in_block = cols_in_buffer_A_now - j*nblk;
-	    }   
+	    }
             slacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);  
-            rows_in_block = rows_in_block - ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);
+            rows_in_block = rows_in_block - ratio*nblk;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -13144,16 +13576,16 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((float)(((float)pcol_from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk; 
+               rows_in_buffer_A = na_rows - ceil((float)(((float)pcol_from_where_to_receive_A - (float)my_prow)/(float)np_rows))*nblk;
             }
          }
-         else    
+         else
          {
             Size_receive_A = Size_send_A;
             rows_in_buffer_A = rows_in_buffer_A_my_initial;
@@ -13173,40 +13605,40 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
       Size_receive_A = Size_receive_A + 1;
    }
 
-   
-   
+
+
    Size_receive_U = Size_U_skewed;
    U_to_calc = U_stored;
-   
-   
-   
+
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
-  
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
       if (j > ToStore)
       {
-         data_ptr = Buf_to_send_U; 
-         Buf_to_send_U = Buf_to_receive_U; 
+         data_ptr = Buf_to_send_U;
+         Buf_to_send_U = Buf_to_receive_U;
          Buf_to_receive_U = data_ptr;
       }
-        
-      
-      Size_send_A = Size_receive_A; 
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)0x4c00040a), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00040a), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
+
+
+      Size_send_U = Size_receive_U;
       if (j > ToStore)
       {
          if(j > ToStore + 1)
@@ -13217,10 +13649,10 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          else {
 	    MPI_Isend(U_to_calc, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
 	 }
-         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);	 
+         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
       }
-      
-      
+
+
       rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
       row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
       if (my_pcol >= row_of_origin_U) {
@@ -13231,59 +13663,59 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
       }
       cols_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-2];
       rows_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-1];
-      
-      col_of_origin_A = np_cols; 
+
+      col_of_origin_A = np_cols;
       for(i = 0; i < ratio; i++)
       {
          intNumber = (my_pcol + my_prow + i*np_rows + np_cols + j - 1)%np_cols;
          if(intNumber < col_of_origin_A)
             col_of_origin_A = intNumber;
       }
-      
-      
-      
-      if (my_pcol >= row_of_origin_U) {   
-         curr_col_loc_res = 0;          
+
+
+
+      if (my_pcol >= row_of_origin_U) {
+         curr_col_loc_res = 0;
       }
       else {
-         curr_col_loc_res = nblk;       
+         curr_col_loc_res = nblk;
       }
-      num_of_blocks_in_U_buffer = ceil((float)((float)cols_in_buffer_U/(float)nblk)); 
-      if (my_pcol >= row_of_origin_U) {    
-         rows_in_block_U = ceil(((float)(my_pcol + 1) - (float)row_of_origin_U)/(float)np_rows)*nblk;  
+      num_of_blocks_in_U_buffer = ceil((float)((float)cols_in_buffer_U/(float)nblk));
+      if (my_pcol >= row_of_origin_U) {
+         rows_in_block_U = ceil(((float)(my_pcol + 1) - (float)row_of_origin_U)/(float)np_rows)*nblk;
       }
       else {
          rows_in_block_U = ratio*nblk;
       }
       U_local_start = U_to_calc;
-      
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
-         
-         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-         
-         Nb = curr_col_glob_res/nblk;    
-         owner = Nb%np_rows;             
-         curr_row_loc_res = (Nb/np_rows)*nblk; 
+      {
+
+         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+         Nb = curr_col_glob_res/nblk;
+         owner = Nb%np_rows;
+         curr_row_loc_res = (Nb/np_rows)*nblk;
          if(my_prow < owner)
-            curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-         curr_row_loc_A = curr_row_loc_res;     
+            curr_row_loc_res = curr_row_loc_res + nblk;
+
+         curr_row_loc_A = curr_row_loc_res;
          if(col_of_origin_A > my_prow)
-            curr_row_loc_A = curr_row_loc_A - nblk;  
-        
-         rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-         curr_col_loc_U = i*nblk;   
-      
+            curr_row_loc_A = curr_row_loc_A - nblk;
+
+         rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+         curr_col_loc_U = i*nblk;
+
          if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	 }
          else {
-            cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+            cols_in_block = cols_in_buffer_U - curr_col_loc_U;
          }
          if (rows_in_block_U > rows_in_buffer_U) {
-            rows_in_block_U = rows_in_buffer_U;     
+            rows_in_block_U = rows_in_buffer_U;
          }
          A_local_index = curr_row_loc_A;
          A_local_start = &Buf_to_send_A[A_local_index];
@@ -13293,68 +13725,68 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
          LDA_A_new = LDA_A;
          if ((rows_in_block > 0)&&(cols_in_block > 0))
          {
-            U_local_start_curr = U_local_start; 
- 
-            
+            U_local_start_curr = U_local_start;
+
+
             for (ii = 0; ii < ceil((float)rows_in_block_U/(float)nblk); ii++)
             {
                if ((ii+1)*nblk <= cols_in_buffer_A) {
-                  rows_in_block_U_curr = nblk; 
+                  rows_in_block_U_curr = nblk;
 	       }
                else {
-                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
 
 
 
                if ((j == 1)&&(ii == 0)) {
-                  sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+                  sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	       }
-               else { 
+               else {
                   sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
 
 
 
                LDA_A_new = LDA_A_new - nblk;
-      
-               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new; 
+
+               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new;
                A_local_start = &Buf_to_send_A[A_local_index];
-               LDA_A = LDA_A_new; 
+               LDA_A = LDA_A_new;
             }
          }
-      
+
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-         curr_col_loc_res = curr_col_loc_res + nblk; 
+         curr_col_loc_res = curr_col_loc_res + nblk;
          rows_in_block_U = rows_in_block_U + ratio*nblk;
-      }    
-      
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
-      
+
       if (j <= ToStore)
       {
          U_to_calc = &U_stored[Curr_pos_in_U_stored];
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1]; 
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1];
          Size_receive_U =  SizesU[j-1];
       }
       else
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-	      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI); 
+	      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
-   
-   
+
+
    if(ToStore < np_rows - 1)
       U_to_calc = Buf_to_receive_U;
    rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
-   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;     
+   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
    if (my_pcol >= row_of_origin_U) {
       cols_in_buffer_U = na_cols;
    }
@@ -13363,104 +13795,104 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    }
    cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-2];
    rows_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-   
-   col_of_origin_A = np_cols; 
+
+   col_of_origin_A = np_cols;
    for(i = 0; i < ratio; i++)
    {
       intNumber = (my_pcol + my_prow + i*np_rows + np_cols + np_rows - 1)%np_cols;
       if(intNumber < col_of_origin_A)
          col_of_origin_A = intNumber;
    }
-   
-   
-   if (my_pcol >= row_of_origin_U) {  
-      curr_col_loc_res = 0;          
+
+
+   if (my_pcol >= row_of_origin_U) {
+      curr_col_loc_res = 0;
    }
    else {
-      curr_col_loc_res = nblk;       
+      curr_col_loc_res = nblk;
    }
    num_of_blocks_in_U_buffer = ceil((float)((float)cols_in_buffer_U/(float)nblk));
-   if (my_pcol >= row_of_origin_U) {    
-      rows_in_block_U = ceil(((float)(my_pcol + 1) - (float)row_of_origin_U)/(float)np_rows)*nblk;  
+   if (my_pcol >= row_of_origin_U) {
+      rows_in_block_U = ceil(((float)(my_pcol + 1) - (float)row_of_origin_U)/(float)np_rows)*nblk;
    }
    else {
       rows_in_block_U = ratio*nblk;
    }
    U_local_start = U_to_calc;
-      
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
-      
-      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-      
-      Nb = curr_col_glob_res/nblk;    
-      owner = Nb%np_rows;             
-      curr_row_loc_res = (Nb/np_rows)*nblk; 
+   {
+
+      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+      Nb = curr_col_glob_res/nblk;
+      owner = Nb%np_rows;
+      curr_row_loc_res = (Nb/np_rows)*nblk;
       if(my_prow < owner)
-         curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-      curr_row_loc_A = curr_row_loc_res;     
+         curr_row_loc_res = curr_row_loc_res + nblk;
+
+      curr_row_loc_A = curr_row_loc_res;
       if(col_of_origin_A > my_prow)
          curr_row_loc_A = curr_row_loc_A - nblk;
-      
-      rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-      curr_col_loc_U = i*nblk;   
-      
+
+      rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+      curr_col_loc_U = i*nblk;
+
       if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+         cols_in_block = cols_in_buffer_U - curr_col_loc_U;
       }
       if (rows_in_block_U > rows_in_buffer_U) {
          rows_in_block_U = rows_in_buffer_U;
       }
- 
+
       A_local_index = curr_row_loc_A;
       A_local_start = &Buf_to_receive_A[A_local_index];
       Res_ptr = &Res[curr_col_loc_res*na_rows + curr_row_loc_res];
-      LDA_A = rows_in_buffer_A; 
-      LDA_A_new = LDA_A; 
+      LDA_A = rows_in_buffer_A;
+      LDA_A_new = LDA_A;
       if ((rows_in_block > 0) &&(cols_in_block > 0))
       {
-         U_local_start_curr = U_local_start; 
+         U_local_start_curr = U_local_start;
 
-         
+
          for (ii = 0; ii < ceil((float)rows_in_block_U/(float)nblk); ii++)
          {
             if ((ii+1)*nblk <= cols_in_buffer_A) {
-               rows_in_block_U_curr = nblk; 
+               rows_in_block_U_curr = nblk;
 	    }
             else {
-               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
 
 
 
             if ((j == 1)&&(ii == 0)) {
-               sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+               sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	    }
-            else { 
+            else {
                sgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	    }
 
 
 
             LDA_A_new = LDA_A_new - nblk;
-              
-            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block; 
+
+            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block;
             A_local_start = &Buf_to_receive_A[A_local_index];
             LDA_A = LDA_A_new;
          }
       }
-      
+
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-      curr_col_loc_res = curr_col_loc_res + nblk; 
+      curr_col_loc_res = curr_col_loc_res + nblk;
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
-   
+
 
 
 
@@ -13481,7 +13913,7 @@ void cannons_reduction_f(float* A, float* U, int np_rows, int np_cols, int my_pr
    free(Buf_to_receive_A);
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
-   free(M); 
+   free(M);
    free(M_T);
    if(ratio != 1)
       free(Buf_A);
@@ -13513,24 +13945,22 @@ void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_col
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   cannons_reduction_f(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 
-# 209 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_back_template.c" 1
 
 
 
@@ -13587,7 +14017,6 @@ void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_col
 
 
 
-# 75 "../src/elpa_generalized/cannon_back_template.c"
 
 
 
@@ -13600,238 +14029,238 @@ void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_col
 
 void cannons_triang_rectangular_f(float* U, float* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, float *Res, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-   
-   
-   
-   
-   
-   
-   
-   
-  
+
+
+
+
+
+
+
+
+
+
    int na, nb, nblk, width, na_rows, na_cols, nb_cols, cols_in_buffer_U_my_initial, cols_in_buffer_U, rows_in_buffer_U, Size_receive_U_now, rows_in_buffer_U_now, cols_in_buffer_U_now, rows_in_buffer_U_my_initial;
 
    int Size_receive_U_nowMPI, Size_receive_UMPI, Size_receive_BMPI;
-   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult; 
-   
+   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult;
+
    float *Buf_to_send_U, *Buf_to_receive_U, *Buf_to_send_B, *Buf_to_receive_B, *Buf_U, *PosBuff;
-  
-   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min; 
-   
+
+   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min;
+
    float *U_local_start, *Buf_pos, *B_local_start, *double_ptr, *CopyTo, *CopyFrom;
-   
+
    int ratio;
-   
+
    MPI_Status status;
 
    int one = 1;
-   int zero = 0; 
+   int zero = 0;
    float done = 1.0;
    float dzero = 0.0;
-      
+
    na = U_desc[2];
-   nblk = U_desc[4]; 
+   nblk = U_desc[4];
    nb = b_desc[3];
-   
+
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
    nb_cols = numroc_(&nb, &nblk, &my_pcol, &zero, &np_cols);
-   
-   MPI_Request request_U_Recv; 
+
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
-   MPI_Request request_B_Recv; 
+   MPI_Request request_B_Recv;
    MPI_Request request_B_Send;
-   
-   
+
+
    last_proc_col_B = ((nb-1)/nblk) % np_cols;
    last_proc_row_B = ((na-1)/nblk) % np_rows;
-   
-   
-   
+
+
+
     if(nb%nblk == 0)
       if(my_pcol <= last_proc_col_B)
          Buf_cols_B = nb_cols;
       else
-         Buf_cols_B = nb_cols + nblk;      
+         Buf_cols_B = nb_cols + nblk;
    else
       if(my_pcol < last_proc_col_B)
          Buf_cols_B = nb_cols;
       else if(my_pcol > last_proc_col_B)
-         Buf_cols_B = nb_cols + nblk; 
-      else  
-         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;     
-   
+         Buf_cols_B = nb_cols + nblk;
+      else
+         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;
+
    if(na%nblk == 0)
       if(my_prow <= last_proc_row_B)
          Buf_rows = na_rows;
       else
-         Buf_rows = na_rows + nblk;      
+         Buf_rows = na_rows + nblk;
    else
       if(my_prow < last_proc_row_B)
          Buf_rows = na_rows;
       else if(my_prow > last_proc_row_B)
-         Buf_rows = na_rows + nblk; 
-      else  
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
-   
-   ratio = np_cols/np_rows; 
-   
-   intNumber = ceil((float)na/(float)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+         Buf_rows = na_rows + nblk;
+      else
+         Buf_rows = na_rows + nblk - na_rows%nblk;
+
+   ratio = np_cols/np_rows;
+
+   intNumber = ceil((float)na/(float)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    Buf_to_send_U = malloc(ratio*Size_U_stored*sizeof(float));
    Buf_to_receive_U = malloc(ratio*Size_U_stored*sizeof(float));
    Buf_to_send_B = malloc(Buf_cols_B*Buf_rows*sizeof(float));
    Buf_to_receive_B = malloc(Buf_cols_B*Buf_rows*sizeof(float));
    if(ratio != 1)
-      Buf_U = malloc(Size_U_stored*sizeof(float));   
-    
+      Buf_U = malloc(Size_U_stored*sizeof(float));
+
    for(i = 0; i < na_rows*nb_cols; i++)
-     Res[i] = 0; 
-    
-   
-      
-   
-   if((ratio != 1)||(my_prow != 0))   
-      Buf_pos = Buf_to_send_U;     
+     Res[i] = 0;
+
+
+
+
+   if((ratio != 1)||(my_prow != 0))
+      Buf_pos = Buf_to_send_U;
    else
-      Buf_pos = Buf_to_receive_U;  
-      
-   
-   
-   if(my_pcol >= my_prow)  
-      curr_col_loc = 0;    
+      Buf_pos = Buf_to_receive_U;
+
+
+
+   if(my_pcol >= my_prow)
+      curr_col_loc = 0;
    else
-      curr_col_loc = 1;   
-      
-   num_of_iters = ceil((float)na_cols/(float)nblk);             
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+
+   num_of_iters = ceil((float)na_cols/(float)nblk);
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if(my_pcol >= my_prow )
       rows_in_block = ceil(((float)(my_pcol + 1) - (float)my_prow)/(float)np_rows)*nblk;
    else
       rows_in_block = ratio*nblk;
    cols_in_buffer_U_my_initial = 0;
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if(rows_in_block > na_rows)
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
 
       if ((na_cols - curr_col_loc) < nblk)
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       else
-         cols_in_block = nblk; 
-      
+         cols_in_block = nblk;
+
       if((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         double_ptr = &U[curr_col_loc*na_rows];   
-         slacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
-         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block; 
+         double_ptr = &U[curr_col_loc*na_rows];
+         slacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
+         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;    
-   *Buf_pos = (float)cols_in_buffer_U_my_initial; 
-   Buf_pos = Buf_pos + 1; 
-   *Buf_pos = (float)rows_in_buffer_U_my_initial; 
+   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;
+   *Buf_pos = (float)cols_in_buffer_U_my_initial;
+   Buf_pos = Buf_pos + 1;
+   *Buf_pos = (float)rows_in_buffer_U_my_initial;
    Size_send_U = Size_send_U + 2;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(from_where_to_receive_U < proc_col_min)
          proc_col_min = from_where_to_receive_U;
    }
-   
-   
-   Size_receive_U = 0;       
-   cols_in_buffer_U = 0;     
-   rows_in_buffer_U = 0;     
+
+
+   Size_receive_U = 0;
+   cols_in_buffer_U = 0;
+   rows_in_buffer_U = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(where_to_send_U != my_pcol)   
+         if(where_to_send_U != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, 0, Buf_U, (int) Size_U_stored, ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, 0, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_U_nowMPI);
             Size_receive_U_now = (int) Size_receive_U_nowMPI;
-            Size_receive_U = Size_receive_U + Size_receive_U_now - 2; 
-            
+            Size_receive_U = Size_receive_U + Size_receive_U_now - 2;
+
             cols_in_buffer_U_now = Buf_U[Size_receive_U_now - 2];
             cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
             rows_in_buffer_U_now = Buf_U[Size_receive_U_now - 1];
-            
-            if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
 
-            intNumber = from_where_to_receive_U/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(from_where_to_receive_U < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            if(rows_in_buffer_U < rows_in_buffer_U_now)
+               rows_in_buffer_U = rows_in_buffer_U_now;
+
+            intNumber = from_where_to_receive_U/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(from_where_to_receive_U < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_U; 
+            CopyFrom = Buf_U;
          }
-         else  
+         else
          {
             cols_in_buffer_U_now = cols_in_buffer_U_my_initial;
-            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now; 
-            
+            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
+
             rows_in_buffer_U_now = rows_in_buffer_U_my_initial;
             if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
+               rows_in_buffer_U = rows_in_buffer_U_now;
 
-            intNumber = my_pcol/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(my_pcol < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            intNumber = my_pcol/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(my_pcol < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_to_send_U;  
+            CopyFrom = Buf_to_send_U;
             Size_receive_U = Size_receive_U + Size_send_U - 2;
          }
-            
-         
-         intNumber = ceil((float)cols_in_buffer_U_now/(float)nblk);  
+
+
+         intNumber = ceil((float)cols_in_buffer_U_now/(float)nblk);
          if(from_where_to_receive_U >= my_prow)
-            rows_in_block = ceil(((float)(from_where_to_receive_U + 1) - (float)my_prow)/(float)np_rows)*nblk;  
+            rows_in_block = ceil(((float)(from_where_to_receive_U + 1) - (float)my_prow)/(float)np_rows)*nblk;
          else
-            rows_in_block = ratio*nblk; 
+            rows_in_block = ratio*nblk;
          for(j = 0; j < intNumber; j++)
          {
             if((j+1)*nblk < cols_in_buffer_U_now)
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
             else
                cols_in_block = cols_in_buffer_U_now - j*nblk;
-               
+
             slacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;  
-            rows_in_block = rows_in_block + ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;
+            rows_in_block = rows_in_block + ratio*nblk;
             if(rows_in_block > rows_in_buffer_U_now)
-               rows_in_block = rows_in_buffer_U_now; 
+               rows_in_block = rows_in_buffer_U_now;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -13842,7 +14271,7 @@ void cannons_triang_rectangular_f(float* U, float* B, int np_rows, int np_cols, 
             cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
             rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
          }
-         else    
+         else
          {
             Size_receive_U = Size_send_U;
             rows_in_buffer_U = rows_in_buffer_U_my_initial;
@@ -13856,67 +14285,67 @@ void cannons_triang_rectangular_f(float* U, float* B, int np_rows, int np_cols, 
       Buf_to_receive_U[Size_receive_U + 1] = rows_in_buffer_U;
       Size_receive_U = Size_receive_U + 2;
    }
-      
-   
-   
+
+
+
    if(my_pcol > 0)
    {
-      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;                   
+      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;
       from_where_to_receive_B = (my_pcol + my_prow)%np_rows;
 
-      
-      if(where_to_send_B != my_prow)                  
+
+      if(where_to_send_B != my_prow)
       {
-         
+
          slacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_send_B, &na_rows);
-         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)0x4c00040a), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_B, 0, col_comm, &status); 
-         MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_BMPI); 
-         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-         else Size_receive_B=0; 
+         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)0x4c00040a), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_B, 0, col_comm, &status);
+         MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_BMPI);
+         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+         else Size_receive_B=0;
       }
       else
       {
-         slacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows); 
+         slacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
          Size_receive_B = na_rows;
       }
    }
    else
    {
-      slacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);        
-      Size_receive_B = na_rows; 
-   }   
-   
-   
+      slacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
+      Size_receive_B = na_rows;
+   }
+
+
    where_to_send_U = (my_pcol - 1 + np_cols)%np_cols;
    from_where_to_receive_U = (my_pcol + 1)%np_cols;
    where_to_send_B = (my_prow - 1 + np_rows)%np_rows;
-   from_where_to_receive_B = (my_prow + 1)%np_rows;    
+   from_where_to_receive_B = (my_prow + 1)%np_rows;
 
    for(i = 1; i < np_rows; i++)
    {
-      
-      double_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
-      Buf_to_receive_U = double_ptr; 
-      
-      double_ptr = Buf_to_send_B; 
-      Buf_to_send_B = Buf_to_receive_B; 
+
+      double_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
+      Buf_to_receive_U = double_ptr;
+
+      double_ptr = Buf_to_send_B;
+      Buf_to_send_B = Buf_to_receive_B;
       Buf_to_receive_B = double_ptr;
-            
+
       Size_send_U = Size_receive_U;
-      Size_send_B = Size_receive_B;                   
-        
-      
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, 0, row_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);      
-      
-      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)0x4c00040a), (int) where_to_send_B, 0, col_comm, &request_B_Send); 
-      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);      
-      
+      Size_send_B = Size_receive_B;
+
+
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)0x4c00040a), (int) where_to_send_U, 0, row_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);
+
+      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)0x4c00040a), (int) where_to_send_B, 0, col_comm, &request_B_Send);
+      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)0x4c00040a), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);
+
       cols_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-2];
       rows_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-1];
-      
-      proc_col_min = np_cols; 
+
+      proc_col_min = np_cols;
       for(j = 0; j < ratio; j++)
       {
          col_of_origin_U = (my_pcol + my_prow + i - 1 + j*np_rows)%np_cols;
@@ -13924,51 +14353,51 @@ void cannons_triang_rectangular_f(float* U, float* B, int np_rows, int np_cols, 
             proc_col_min = col_of_origin_U;
       }
       col_of_origin_U = proc_col_min;
-      
-      num_of_blocks_in_U_buffer = ceil((float)cols_in_buffer_U/(float)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil((float)cols_in_buffer_U/(float)nblk);
+
       if (col_of_origin_U >= my_prow)
          B_local_start = Buf_to_send_B;
-      else 
+      else
          B_local_start = Buf_to_send_B + nblk;
-      
+
       U_local_start = Buf_to_send_U;
-      
+
       for(j = 0; j < num_of_blocks_in_U_buffer; j++)
       {
          curr_rows = (j+1)*nblk;
          if (curr_rows > rows_in_buffer_U)
-            curr_rows = rows_in_buffer_U; 
-         
+            curr_rows = rows_in_buffer_U;
+
          if((j+1)*nblk <= cols_in_buffer_U)
-            b_rows_mult = nblk; 
+            b_rows_mult = nblk;
          else
             b_rows_mult = cols_in_buffer_U - j*nblk;
-         
-         if(Size_receive_B!=0) sgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
-  
-         U_local_start = U_local_start + nblk*curr_rows; 
-         B_local_start = B_local_start + nblk; 
+
+         if(Size_receive_B!=0) sgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+         U_local_start = U_local_start + nblk*curr_rows;
+         B_local_start = B_local_start + nblk;
       }
-      
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
 
       MPI_Wait(&request_B_Send, &status);
       MPI_Wait(&request_B_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_BMPI); 
-      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-      else Size_receive_B=0; 
+      MPI_Get_count(&status, ((MPI_Datatype)0x4c00040a), &Size_receive_BMPI);
+      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+      else Size_receive_B=0;
 
-   }         
-   
-   
+   }
+
+
    cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
    rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
-   
-   proc_col_min = np_cols; 
+
+   proc_col_min = np_cols;
    for(j = 0; j < ratio; j++)
    {
       col_of_origin_U = (my_pcol + my_prow + np_rows - 1 + j*np_rows)%np_cols;
@@ -13976,33 +14405,33 @@ void cannons_triang_rectangular_f(float* U, float* B, int np_rows, int np_cols, 
          proc_col_min = col_of_origin_U;
    }
    col_of_origin_U = proc_col_min;
-      
+
    num_of_blocks_in_U_buffer = ceil((float)cols_in_buffer_U/(float)nblk);
-  
+
    if (col_of_origin_U >= my_prow)
       B_local_start = Buf_to_receive_B;
-   else 
+   else
       B_local_start = Buf_to_receive_B + nblk;
-      
-   U_local_start = Buf_to_receive_U;  
-   
+
+   U_local_start = Buf_to_receive_U;
+
    for(j = 0; j < num_of_blocks_in_U_buffer; j++)
    {
       curr_rows = (j+1)*nblk;
       if (curr_rows > rows_in_buffer_U)
-         curr_rows = rows_in_buffer_U; 
-      
+         curr_rows = rows_in_buffer_U;
+
       if((j+1)*nblk <= cols_in_buffer_U)
-         b_rows_mult = nblk; 
+         b_rows_mult = nblk;
       else
          b_rows_mult = cols_in_buffer_U - j*nblk;
-      
-      if(Size_receive_B!=0) sgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
 
-      U_local_start = U_local_start + nblk*curr_rows; 
+      if(Size_receive_B!=0) sgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+      U_local_start = U_local_start + nblk*curr_rows;
       B_local_start = B_local_start + nblk;
    }
-   
+
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
    free(Buf_to_send_B);
@@ -14036,15 +14465,14 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
+
+
+
+
+
   cannons_triang_rectangular_f(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
 
-# 210 "../src/elpa_generalized/cannon.c" 2
 
 
 
@@ -14063,7 +14491,7 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 
 
 
- 
+
 void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_colsCast, int* a_desc,
                            float *Res, int ToStore, int row_comm, int col_comm);
 
@@ -14081,20 +14509,16 @@ void cannons_reduction_c_f(float* A, float* U, int local_rowsCast, int local_col
 
 
 
- 
+
 void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, float *Res, int row_comm, int col_comm);
 
 
 
-# 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 50 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 362 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
-# 374 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -14109,7 +14533,6 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 
 
 
-# 473 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -14124,24 +14547,19 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 
 
 
-# 498 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
 
 
 
-# 585 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
 
 
 
-# 695 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 255 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_forw_template.c" 1
 
 
 
@@ -14198,7 +14616,6 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 
 
 
-# 75 "../src/elpa_generalized/cannon_forw_template.c"
 
 
 
@@ -14212,41 +14629,26 @@ void cannons_triang_rectangular_c_f(float* U, float* B, int local_rowsCast, int 
 
 
 
-
-
-# 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 13 "../src/elpa_generalized/../general/precision_typedefs.h"
-
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
-
-# 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
-
-# 58 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
 
 void dlacpy_(char*, int*, int*, double*, int*, double*, int*);
-void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*); 
+void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
 
 
 void slacpy_(char*, int*, int*, float*, int*, float*, int*);
-void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*); 
+void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*);
 
 
 
 
 void zlacpy_(char*, int*, int*, double _Complex*, int*, double _Complex*, int*);
-void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*); 
+void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*);
 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
-void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*); 
+void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
 
 
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
-# 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
-# 58 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
 int numroc_(int*, int*, int*, int*, int*);
 
@@ -14268,18 +14670,17 @@ void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Compl
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
 
 
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, double _Complex *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-      
-      
-   
-      
-   
-   
+
+
+
+
+
+
+
 
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
@@ -14287,59 +14688,59 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
 
    double _Complex *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
-   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res; 
+   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
    double _Complex dOne = 1.0;
    double _Complex dZero = 0.0;
-   int one = 1; 
-   int zero = 0; 
+   int one = 1;
+   int zero = 0;
    int na_rows, na_cols;
-         
+
    MPI_Status status;
-   MPI_Request request_A_Recv; 
+   MPI_Request request_A_Recv;
    MPI_Request request_A_Send;
-   MPI_Request request_U_Recv; 
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
 
    na = a_desc[2];
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
-   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols); 
-   
-   
-   
-   
-   
-   
-   
+   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
+
+
+
+
+
+
+
 
    if (np_cols%np_rows != 0)
    {
-      
-      
+
+
       return;
    }
-  
+
    if (np_cols < np_rows != 0)
    {
-       
-       
+
+
        return;
    }
-   
-   ratio = np_cols/np_rows; 
-   last_proc_row = ((na-1)/nblk) % np_rows;          
-   last_proc_col = ((na-1)/nblk) % np_cols;          
-   
-   
+
+   ratio = np_cols/np_rows;
+   last_proc_row = ((na-1)/nblk) % np_rows;
+   last_proc_col = ((na-1)/nblk) % np_cols;
+
+
    if (na%nblk == 0) {
       if (my_pcol <= last_proc_col) {
          Buf_cols = na_cols;
       }
       else {
-         Buf_cols = na_cols + nblk;      
+         Buf_cols = na_cols + nblk;
       }
    }
    else {
@@ -14347,19 +14748,19 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          Buf_cols = na_cols;
       }
       else if (my_pcol > last_proc_col) {
-         Buf_cols = na_cols + nblk; 
-      }
-      else {  
-         Buf_cols = na_cols + nblk - na_cols%nblk;     
-      }
-   }
-  
-   if (na%nblk == 0) {
-      if (my_prow <= last_proc_row) {
-         Buf_rows = na_rows + 1;   
+         Buf_cols = na_cols + nblk;
       }
       else {
-         Buf_rows = na_rows + nblk;      
+         Buf_cols = na_cols + nblk - na_cols%nblk;
+      }
+   }
+
+   if (na%nblk == 0) {
+      if (my_prow <= last_proc_row) {
+         Buf_rows = na_rows + 1;
+      }
+      else {
+         Buf_rows = na_rows + nblk;
       }
    }
    else {
@@ -14367,135 +14768,132 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          Buf_rows = na_rows;
       }
       else if (my_prow > last_proc_row) {
-         Buf_rows = na_rows + nblk; 
+         Buf_rows = na_rows + nblk;
       }
-      else { 
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
+      else {
+         Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
 
-   intNumber = ceil((double _Complex)na/(double _Complex)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+   intNumber = ceil((double _Complex)na/(double _Complex)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    U_stored = malloc((Size_U_stored*(ToStore+1))*sizeof(double _Complex));
-   SizesU = malloc(ToStore*sizeof(int));  
+   SizesU = malloc(ToStore*sizeof(int));
    Buf_to_send_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(double _Complex));
    Buf_to_receive_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(double _Complex));
    Buf_to_send_U = malloc(Size_U_stored*sizeof(double _Complex));
    Buf_to_receive_U = malloc(Size_U_stored*sizeof(double _Complex));
    if(ratio != 1)
-      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(double _Complex));   
+      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(double _Complex));
    M = malloc(na_rows*na_cols*sizeof(double _Complex));
    M_T = malloc(na_rows*na_cols*sizeof(double _Complex));
    for(i = 0; i < na_rows*na_cols; i++)
-      M[i] = 0; 
+      M[i] = 0;
 
-   int useGPU = 0;
-# 226 "../src/elpa_generalized/cannon_forw_template.c"
 
-   
-   
-   
+
+
    if(ratio != 1) {
 
 
 
-      zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
+      zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
 
 
 
    }
-   Size_receive_A = 0; 
-   
-   
+   Size_receive_A = 0;
+
+
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
          if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, 
-                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, 
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
-            Size_receive_A_now = Size_receive_A_now/na_rows;       
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
 	      }
-      
-         Size_receive_A = Size_receive_A + Size_receive_A_now;  
 
-         
-         intNumber = pcol_from_where_to_receive_A/np_rows; 
-         
-         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];  
+         Size_receive_A = Size_receive_A + Size_receive_A_now;
+
+
+         intNumber = pcol_from_where_to_receive_A/np_rows;
+
+         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
          if (pcol_where_to_send_A != my_pcol) {
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
 	      }
          else {
             CopyFrom = A;
 	      }
-      
-         intNumber = ceil((double _Complex)Size_receive_A_now/(double _Complex)nblk);   
+
+         intNumber = ceil((double _Complex)Size_receive_A_now/(double _Complex)nblk);
          for(j = 0; j < intNumber; j++)
          {
-            width = nblk; 
+            width = nblk;
             if(nblk*(j+1) > Size_receive_A_now)
-               width = Size_receive_A_now - nblk*j; 
+               width = Size_receive_A_now - nblk*j;
             zlacpy_("A", &na_rows, &width, CopyFrom, &na_rows, CopyTo, &na_rows);
-            CopyTo = CopyTo + na_rows*nblk*ratio; 
-            CopyFrom = CopyFrom + na_rows*nblk; 
+            CopyTo = CopyTo + na_rows*nblk*ratio;
+            CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
 
-      else { 
+      else {
          if(my_prow > 0)
          {
-            zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
-            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A        , (int) zero, 
-                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, 
+            zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A        , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-            Size_receive_A = Size_receive_A/na_rows;       
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
-            zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);   
-            Size_receive_A = na_cols; 
+            zlacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);
+            Size_receive_A = na_cols;
          }
       }
    }
-   
-   
-     
-   
-   num_of_iters = ceil((double _Complex)na_cols/(double _Complex)nblk);             
-   
-   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;                 
+
+
+
+
+   num_of_iters = ceil((double _Complex)na_cols/(double _Complex)nblk);
+
+   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;
    from_where_to_receive_U = (my_pcol + my_prow)%np_rows;
-   
-   if (where_to_send_U == my_prow) {   
+
+   if (where_to_send_U == my_prow) {
       Buf_pos = Buf_to_receive_U;
    }
    else {
-      Buf_pos = Buf_to_send_U;         
+      Buf_pos = Buf_to_send_U;
    }
-   
-   if (my_pcol >= my_prow) {  
-      curr_col_loc = 0;    
+
+   if (my_pcol >= my_prow) {
+      curr_col_loc = 0;
    }
    else  {
-      curr_col_loc = 1;   
-   }   
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+   }
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if (my_pcol >= my_prow ) {
       rows_in_block = ceil(((double _Complex)(my_pcol + 1) - (double _Complex)my_prow)/(double _Complex)np_rows)*nblk;
@@ -14503,132 +14901,132 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    else {
       rows_in_block = ratio*nblk;
    }
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if (rows_in_block > na_rows) {
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
       }
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         data_ptr = &U[curr_col_loc*na_rows];   
-         zlacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
+         data_ptr = &U[curr_col_loc*na_rows];
+         zlacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer = rows_in_block - ratio*nblk;    
-   *Buf_pos = (double _Complex)rows_in_buffer; 
+   rows_in_buffer = rows_in_block - ratio*nblk;
+   *Buf_pos = (double _Complex)rows_in_buffer;
    Size_send_U = Size_send_U + 1;
-   
-   
+
+
    if (where_to_send_U != my_prow)
-   {   
-      
-      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, (int) zero, col_comm, &status); 
-      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI); 
+   {
+
+      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, (int) zero, col_comm, &status);
+      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
    }
    else {
-      Size_receive_U = Size_send_U;         
+      Size_receive_U = Size_send_U;
    }
    for(i = 0; i < Size_receive_U; i++)
       U_stored[i] = Buf_to_receive_U[i];
-   Size_U_skewed = Size_receive_U; 
+   Size_U_skewed = Size_receive_U;
    Curr_pos_in_U_stored = Size_U_skewed;
 
-  
-   
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
-   
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
-      data_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
+      data_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
       Buf_to_receive_U = data_ptr;
-      
-      
-      Size_send_A = Size_receive_A;  
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv); 
-      
-      
+
+
+      Size_send_U = Size_receive_U;
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
+
+
       rows_in_buffer = (int)Buf_to_send_U[Size_receive_U-1];
       row_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
-      
-      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+
+      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = 0;                              
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = 0;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = nblk;                           
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = nblk;
       }
-    
-      num_of_blocks_in_U_buffer = ceil(((double _Complex)cols_in_buffer - (double _Complex)curr_col_loc_buf)/(double _Complex)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil(((double _Complex)cols_in_buffer - (double _Complex)curr_col_loc_buf)/(double _Complex)nblk);
+
       startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
       U_local_start = &Buf_to_send_U[startPos];
       Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
+      {
          curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-         proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+         proc_row_curr = (curr_col_glob/nblk)%np_rows;
+         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
-            rows_in_block_A = rows_in_block_A + nblk; 
+            rows_in_block_A = rows_in_block_A + nblk;
 	      }
          if (rows_in_block_A > na_rows) {
-            rows_in_block_A = na_rows; 
+            rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	      }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
 	      }
-      
-         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+
+         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
-            rows_in_block_U = rows_in_block_U + nblk; 
+            rows_in_block_U = rows_in_block_U + nblk;
 	      }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
@@ -14641,7 +15039,7 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
             if (j == 1) {
                zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	         }
-            else { 
+            else {
                zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	         }
 
@@ -14651,89 +15049,89 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
          Res_ptr = &M[curr_col_loc_res*na_rows];
-         curr_col_loc_buf = curr_col_loc_buf + nblk;  
-      } 
-     
+         curr_col_loc_buf = curr_col_loc_buf + nblk;
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
 
-      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
       Size_receive_A = Size_receive_A / na_rows;
-      
-      
+
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI); 
-      Size_receive_U = (int) Size_receive_UMPI; 
-       
+      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI);
+      Size_receive_U = (int) Size_receive_UMPI;
+
       if(j <= ToStore)
       {
          for(k = 0; k < Size_receive_U; k++)
-            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k]; 
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U; 
-         SizesU[j-1] = Size_receive_U; 
+            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k];
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U;
+         SizesU[j-1] = Size_receive_U;
       }
    }
-   
-   
+
+
    rows_in_buffer = (int)Buf_to_receive_U[Size_receive_U-1];
    row_origin_U = (my_pcol + my_prow + np_cols + np_rows -1)%np_rows;
 
-   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = 0;                              
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = 0;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = nblk;                           
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = nblk;
    }
-    
-   num_of_blocks_in_U_buffer = ceil(((double _Complex)cols_in_buffer - (double _Complex)curr_col_loc_buf)/(double _Complex)nblk); 
-      
+
+   num_of_blocks_in_U_buffer = ceil(((double _Complex)cols_in_buffer - (double _Complex)curr_col_loc_buf)/(double _Complex)nblk);
+
    startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
    U_local_start = &Buf_to_receive_U[startPos];
    Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
+   {
       curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-      proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+      proc_row_curr = (curr_col_glob/nblk)%np_rows;
+      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
       if (my_prow <= proc_row_curr) {
-         rows_in_block_A = rows_in_block_A + nblk; 
+         rows_in_block_A = rows_in_block_A + nblk;
       }
       if (rows_in_block_A > na_rows) {
-         rows_in_block_A = na_rows; 
+         rows_in_block_A = na_rows;
       }
       if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer - curr_col_loc_buf; 
+         cols_in_block = cols_in_buffer - curr_col_loc_buf;
       }
-      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
       if (proc_row_curr >= row_origin_U) {
-         rows_in_block_U = rows_in_block_U + nblk; 
+         rows_in_block_U = rows_in_block_U + nblk;
       }
       if (rows_in_block_U > rows_in_buffer) {
-         rows_in_block_U = rows_in_buffer; 
+         rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
 
@@ -14742,7 +15140,7 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          if (j == 1) {
             zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	 }
-         else { 
+         else {
             zgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
 
@@ -14752,163 +15150,163 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
       Res_ptr = &M[curr_col_loc_res*na_rows];
-      curr_col_loc_buf = curr_col_loc_buf + nblk;  
-   }  
-   
-   
-
-
-
-   pztranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);     
+      curr_col_loc_buf = curr_col_loc_buf + nblk;
+   }
 
 
 
 
-   
-           
-   
-   
-   
-   if ((ratio != 1)||(my_prow != 0)) {   
-      Buf_pos = Buf_to_send_A;     
+
+   pztranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+
+
+
+
+
+
+
+
+
+   if ((ratio != 1)||(my_prow != 0)) {
+      Buf_pos = Buf_to_send_A;
    }
    else {
-      Buf_pos = Buf_to_receive_A;  
+      Buf_pos = Buf_to_receive_A;
    }
-   
-   num_of_iters = ceil((double _Complex)na_cols/(double _Complex)nblk);             
-   
+
+   num_of_iters = ceil((double _Complex)na_cols/(double _Complex)nblk);
+
    cols_in_buffer_A_my_initial = 0;
-   Size_send_A = 0; 
-   
-   if (my_pcol <= my_prow)  
+   Size_send_A = 0;
+
+   if (my_pcol <= my_prow)
    {
-      curr_row_loc = 0;     
+      curr_row_loc = 0;
       rows_in_buffer_A_my_initial = na_rows;
    }
    else
    {
-      curr_row_loc = ceil((double _Complex)(((double _Complex)my_pcol - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk; 
-      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;   
+      curr_row_loc = ceil((double _Complex)(((double _Complex)my_pcol - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk;
+      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;
    }
-       
-   for(i = 0; i < num_of_iters; i++)       
+
+   for(i = 0; i < num_of_iters; i++)
    {
-      curr_col_loc = i*nblk;      
-      rows_in_block = na_rows - curr_row_loc;    
-      
+      curr_col_loc = i*nblk;
+      rows_in_block = na_rows - curr_row_loc;
+
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
          A_local_start = &M_T[curr_col_loc*na_rows + curr_row_loc];
-         zlacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);     
+         zlacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);
          Buf_pos = Buf_pos + rows_in_block*cols_in_block;
-         Size_send_A = Size_send_A + rows_in_block*cols_in_block; 
-         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block; 
+         Size_send_A = Size_send_A + rows_in_block*cols_in_block;
+         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block;
       }
       curr_row_loc = curr_row_loc + ratio*nblk;
    }
-   *Buf_pos = (double _Complex)cols_in_buffer_A_my_initial; 
+   *Buf_pos = (double _Complex)cols_in_buffer_A_my_initial;
    Size_send_A = Size_send_A + 1;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(pcol_from_where_to_receive_A < proc_col_min)
          proc_col_min = pcol_from_where_to_receive_A;
    }
-   
-   Size_receive_A = 0;       
-   cols_in_buffer_A = 0;     
-   rows_in_buffer_A = 0;     
+
+   Size_receive_A = 0;
+   cols_in_buffer_A = 0;
+   rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(pcol_where_to_send_A != my_pcol)   
+         if(pcol_where_to_send_A != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
-            Size_receive_A = Size_receive_A + Size_receive_A_now - 1; 
+            Size_receive_A = Size_receive_A + Size_receive_A_now - 1;
 
             cols_in_buffer_A_now = Buf_A[Size_receive_A_now-1];
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
-            
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
+
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((double _Complex)(((double _Complex)pcol_from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk; 
+               rows_in_buffer_A_now = na_rows - ceil((double _Complex)(((double _Complex)pcol_from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = pcol_from_where_to_receive_A/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = pcol_from_where_to_receive_A/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
          }
-         else  
+         else
          {
             cols_in_buffer_A_now = cols_in_buffer_A_my_initial;
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
             rows_in_buffer_A_now = rows_in_buffer_A_my_initial;
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = my_pcol/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = my_pcol/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_to_send_A;  
+            CopyFrom = Buf_to_send_A;
 
             Size_receive_A = Size_receive_A + Size_send_A - 1;
          }
-            
-         
-         intNumber = ceil((double _Complex)cols_in_buffer_A_now/(double _Complex)nblk);  
-         rows_in_block = rows_in_buffer_A_now; 
+
+
+         intNumber = ceil((double _Complex)cols_in_buffer_A_now/(double _Complex)nblk);
+         rows_in_block = rows_in_buffer_A_now;
          for(j = 0; j < intNumber; j++)
          {
             if ((j+1)*nblk < cols_in_buffer_A_now) {
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
 	    }
             else {
                cols_in_block = cols_in_buffer_A_now - j*nblk;
-	    }   
+	    }
             zlacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);  
-            rows_in_block = rows_in_block - ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);
+            rows_in_block = rows_in_block - ratio*nblk;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -14917,16 +15315,16 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((double _Complex)(((double _Complex)pcol_from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk; 
+               rows_in_buffer_A = na_rows - ceil((double _Complex)(((double _Complex)pcol_from_where_to_receive_A - (double _Complex)my_prow)/(double _Complex)np_rows))*nblk;
             }
          }
-         else    
+         else
          {
             Size_receive_A = Size_send_A;
             rows_in_buffer_A = rows_in_buffer_A_my_initial;
@@ -14946,40 +15344,40 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
       Size_receive_A = Size_receive_A + 1;
    }
 
-   
-   
+
+
    Size_receive_U = Size_U_skewed;
    U_to_calc = U_stored;
-   
-   
-   
+
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
-  
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
       if (j > ToStore)
       {
-         data_ptr = Buf_to_send_U; 
-         Buf_to_send_U = Buf_to_receive_U; 
+         data_ptr = Buf_to_send_U;
+         Buf_to_send_U = Buf_to_receive_U;
          Buf_to_receive_U = data_ptr;
       }
-        
-      
-      Size_send_A = Size_receive_A; 
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275072546), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275072546), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
+
+
+      Size_send_U = Size_receive_U;
       if (j > ToStore)
       {
          if(j > ToStore + 1)
@@ -14990,10 +15388,10 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          else {
 	    MPI_Isend(U_to_calc, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
 	 }
-         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);	 
+         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
       }
-      
-      
+
+
       rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
       row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
       if (my_pcol >= row_of_origin_U) {
@@ -15004,59 +15402,59 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
       }
       cols_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-2];
       rows_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-1];
-      
-      col_of_origin_A = np_cols; 
+
+      col_of_origin_A = np_cols;
       for(i = 0; i < ratio; i++)
       {
          intNumber = (my_pcol + my_prow + i*np_rows + np_cols + j - 1)%np_cols;
          if(intNumber < col_of_origin_A)
             col_of_origin_A = intNumber;
       }
-      
-      
-      
-      if (my_pcol >= row_of_origin_U) {   
-         curr_col_loc_res = 0;          
+
+
+
+      if (my_pcol >= row_of_origin_U) {
+         curr_col_loc_res = 0;
       }
       else {
-         curr_col_loc_res = nblk;       
+         curr_col_loc_res = nblk;
       }
-      num_of_blocks_in_U_buffer = ceil((double _Complex)((double _Complex)cols_in_buffer_U/(double _Complex)nblk)); 
-      if (my_pcol >= row_of_origin_U) {    
-         rows_in_block_U = ceil(((double _Complex)(my_pcol + 1) - (double _Complex)row_of_origin_U)/(double _Complex)np_rows)*nblk;  
+      num_of_blocks_in_U_buffer = ceil((double _Complex)((double _Complex)cols_in_buffer_U/(double _Complex)nblk));
+      if (my_pcol >= row_of_origin_U) {
+         rows_in_block_U = ceil(((double _Complex)(my_pcol + 1) - (double _Complex)row_of_origin_U)/(double _Complex)np_rows)*nblk;
       }
       else {
          rows_in_block_U = ratio*nblk;
       }
       U_local_start = U_to_calc;
-      
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
-         
-         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-         
-         Nb = curr_col_glob_res/nblk;    
-         owner = Nb%np_rows;             
-         curr_row_loc_res = (Nb/np_rows)*nblk; 
+      {
+
+         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+         Nb = curr_col_glob_res/nblk;
+         owner = Nb%np_rows;
+         curr_row_loc_res = (Nb/np_rows)*nblk;
          if(my_prow < owner)
-            curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-         curr_row_loc_A = curr_row_loc_res;     
+            curr_row_loc_res = curr_row_loc_res + nblk;
+
+         curr_row_loc_A = curr_row_loc_res;
          if(col_of_origin_A > my_prow)
-            curr_row_loc_A = curr_row_loc_A - nblk;  
-        
-         rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-         curr_col_loc_U = i*nblk;   
-      
+            curr_row_loc_A = curr_row_loc_A - nblk;
+
+         rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+         curr_col_loc_U = i*nblk;
+
          if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	 }
          else {
-            cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+            cols_in_block = cols_in_buffer_U - curr_col_loc_U;
          }
          if (rows_in_block_U > rows_in_buffer_U) {
-            rows_in_block_U = rows_in_buffer_U;     
+            rows_in_block_U = rows_in_buffer_U;
          }
          A_local_index = curr_row_loc_A;
          A_local_start = &Buf_to_send_A[A_local_index];
@@ -15066,68 +15464,68 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
          LDA_A_new = LDA_A;
          if ((rows_in_block > 0)&&(cols_in_block > 0))
          {
-            U_local_start_curr = U_local_start; 
- 
-            
+            U_local_start_curr = U_local_start;
+
+
             for (ii = 0; ii < ceil((double _Complex)rows_in_block_U/(double _Complex)nblk); ii++)
             {
                if ((ii+1)*nblk <= cols_in_buffer_A) {
-                  rows_in_block_U_curr = nblk; 
+                  rows_in_block_U_curr = nblk;
 	       }
                else {
-                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
 
 
 
                if ((j == 1)&&(ii == 0)) {
-                  zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+                  zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	       }
-               else { 
+               else {
                   zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
 
 
 
                LDA_A_new = LDA_A_new - nblk;
-      
-               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new; 
+
+               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new;
                A_local_start = &Buf_to_send_A[A_local_index];
-               LDA_A = LDA_A_new; 
+               LDA_A = LDA_A_new;
             }
          }
-      
+
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-         curr_col_loc_res = curr_col_loc_res + nblk; 
+         curr_col_loc_res = curr_col_loc_res + nblk;
          rows_in_block_U = rows_in_block_U + ratio*nblk;
-      }    
-      
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
-      
+
       if (j <= ToStore)
       {
          U_to_calc = &U_stored[Curr_pos_in_U_stored];
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1]; 
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1];
          Size_receive_U =  SizesU[j-1];
       }
       else
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-	      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI); 
+	      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
-   
-   
+
+
    if(ToStore < np_rows - 1)
       U_to_calc = Buf_to_receive_U;
    rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
-   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;     
+   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
    if (my_pcol >= row_of_origin_U) {
       cols_in_buffer_U = na_cols;
    }
@@ -15136,104 +15534,104 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    }
    cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-2];
    rows_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-   
-   col_of_origin_A = np_cols; 
+
+   col_of_origin_A = np_cols;
    for(i = 0; i < ratio; i++)
    {
       intNumber = (my_pcol + my_prow + i*np_rows + np_cols + np_rows - 1)%np_cols;
       if(intNumber < col_of_origin_A)
          col_of_origin_A = intNumber;
    }
-   
-   
-   if (my_pcol >= row_of_origin_U) {  
-      curr_col_loc_res = 0;          
+
+
+   if (my_pcol >= row_of_origin_U) {
+      curr_col_loc_res = 0;
    }
    else {
-      curr_col_loc_res = nblk;       
+      curr_col_loc_res = nblk;
    }
    num_of_blocks_in_U_buffer = ceil((double _Complex)((double _Complex)cols_in_buffer_U/(double _Complex)nblk));
-   if (my_pcol >= row_of_origin_U) {    
-      rows_in_block_U = ceil(((double _Complex)(my_pcol + 1) - (double _Complex)row_of_origin_U)/(double _Complex)np_rows)*nblk;  
+   if (my_pcol >= row_of_origin_U) {
+      rows_in_block_U = ceil(((double _Complex)(my_pcol + 1) - (double _Complex)row_of_origin_U)/(double _Complex)np_rows)*nblk;
    }
    else {
       rows_in_block_U = ratio*nblk;
    }
    U_local_start = U_to_calc;
-      
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
-      
-      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-      
-      Nb = curr_col_glob_res/nblk;    
-      owner = Nb%np_rows;             
-      curr_row_loc_res = (Nb/np_rows)*nblk; 
+   {
+
+      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+      Nb = curr_col_glob_res/nblk;
+      owner = Nb%np_rows;
+      curr_row_loc_res = (Nb/np_rows)*nblk;
       if(my_prow < owner)
-         curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-      curr_row_loc_A = curr_row_loc_res;     
+         curr_row_loc_res = curr_row_loc_res + nblk;
+
+      curr_row_loc_A = curr_row_loc_res;
       if(col_of_origin_A > my_prow)
          curr_row_loc_A = curr_row_loc_A - nblk;
-      
-      rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-      curr_col_loc_U = i*nblk;   
-      
+
+      rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+      curr_col_loc_U = i*nblk;
+
       if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+         cols_in_block = cols_in_buffer_U - curr_col_loc_U;
       }
       if (rows_in_block_U > rows_in_buffer_U) {
          rows_in_block_U = rows_in_buffer_U;
       }
- 
+
       A_local_index = curr_row_loc_A;
       A_local_start = &Buf_to_receive_A[A_local_index];
       Res_ptr = &Res[curr_col_loc_res*na_rows + curr_row_loc_res];
-      LDA_A = rows_in_buffer_A; 
-      LDA_A_new = LDA_A; 
+      LDA_A = rows_in_buffer_A;
+      LDA_A_new = LDA_A;
       if ((rows_in_block > 0) &&(cols_in_block > 0))
       {
-         U_local_start_curr = U_local_start; 
+         U_local_start_curr = U_local_start;
 
-         
+
          for (ii = 0; ii < ceil((double _Complex)rows_in_block_U/(double _Complex)nblk); ii++)
          {
             if ((ii+1)*nblk <= cols_in_buffer_A) {
-               rows_in_block_U_curr = nblk; 
+               rows_in_block_U_curr = nblk;
 	    }
             else {
-               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
 
 
 
             if ((j == 1)&&(ii == 0)) {
-               zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+               zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	    }
-            else { 
+            else {
                zgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	    }
 
 
 
             LDA_A_new = LDA_A_new - nblk;
-              
-            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block; 
+
+            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block;
             A_local_start = &Buf_to_receive_A[A_local_index];
             LDA_A = LDA_A_new;
          }
       }
-      
+
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-      curr_col_loc_res = curr_col_loc_res + nblk; 
+      curr_col_loc_res = curr_col_loc_res + nblk;
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
-   
+
 
 
 
@@ -15254,7 +15652,7 @@ void cannons_reduction_dc(double _Complex* A, double _Complex* U, int np_rows, i
    free(Buf_to_receive_A);
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
-   free(M); 
+   free(M);
    free(M_T);
    if(ratio != 1)
       free(Buf_A);
@@ -15286,24 +15684,22 @@ void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_ro
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   cannons_reduction_dc(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 
-# 256 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_back_template.c" 1
 
 
 
@@ -15360,7 +15756,6 @@ void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_ro
 
 
 
-# 75 "../src/elpa_generalized/cannon_back_template.c"
 
 
 
@@ -15373,238 +15768,238 @@ void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_ro
 
 void cannons_triang_rectangular_dc(double _Complex* U, double _Complex* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, double _Complex *Res, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-   
-   
-   
-   
-   
-   
-   
-   
-  
+
+
+
+
+
+
+
+
+
+
    int na, nb, nblk, width, na_rows, na_cols, nb_cols, cols_in_buffer_U_my_initial, cols_in_buffer_U, rows_in_buffer_U, Size_receive_U_now, rows_in_buffer_U_now, cols_in_buffer_U_now, rows_in_buffer_U_my_initial;
 
    int Size_receive_U_nowMPI, Size_receive_UMPI, Size_receive_BMPI;
-   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult; 
-   
+   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult;
+
    double _Complex *Buf_to_send_U, *Buf_to_receive_U, *Buf_to_send_B, *Buf_to_receive_B, *Buf_U, *PosBuff;
-  
-   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min; 
-   
+
+   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min;
+
    double _Complex *U_local_start, *Buf_pos, *B_local_start, *double_ptr, *CopyTo, *CopyFrom;
-   
+
    int ratio;
-   
+
    MPI_Status status;
 
    int one = 1;
-   int zero = 0; 
+   int zero = 0;
    double _Complex done = 1.0;
    double _Complex dzero = 0.0;
-      
+
    na = U_desc[2];
-   nblk = U_desc[4]; 
+   nblk = U_desc[4];
    nb = b_desc[3];
-   
+
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
    nb_cols = numroc_(&nb, &nblk, &my_pcol, &zero, &np_cols);
-   
-   MPI_Request request_U_Recv; 
+
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
-   MPI_Request request_B_Recv; 
+   MPI_Request request_B_Recv;
    MPI_Request request_B_Send;
-   
-   
+
+
    last_proc_col_B = ((nb-1)/nblk) % np_cols;
    last_proc_row_B = ((na-1)/nblk) % np_rows;
-   
-   
-   
+
+
+
     if(nb%nblk == 0)
       if(my_pcol <= last_proc_col_B)
          Buf_cols_B = nb_cols;
       else
-         Buf_cols_B = nb_cols + nblk;      
+         Buf_cols_B = nb_cols + nblk;
    else
       if(my_pcol < last_proc_col_B)
          Buf_cols_B = nb_cols;
       else if(my_pcol > last_proc_col_B)
-         Buf_cols_B = nb_cols + nblk; 
-      else  
-         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;     
-   
+         Buf_cols_B = nb_cols + nblk;
+      else
+         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;
+
    if(na%nblk == 0)
       if(my_prow <= last_proc_row_B)
          Buf_rows = na_rows;
       else
-         Buf_rows = na_rows + nblk;      
+         Buf_rows = na_rows + nblk;
    else
       if(my_prow < last_proc_row_B)
          Buf_rows = na_rows;
       else if(my_prow > last_proc_row_B)
-         Buf_rows = na_rows + nblk; 
-      else  
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
-   
-   ratio = np_cols/np_rows; 
-   
-   intNumber = ceil((double _Complex)na/(double _Complex)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+         Buf_rows = na_rows + nblk;
+      else
+         Buf_rows = na_rows + nblk - na_rows%nblk;
+
+   ratio = np_cols/np_rows;
+
+   intNumber = ceil((double _Complex)na/(double _Complex)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    Buf_to_send_U = malloc(ratio*Size_U_stored*sizeof(double _Complex));
    Buf_to_receive_U = malloc(ratio*Size_U_stored*sizeof(double _Complex));
    Buf_to_send_B = malloc(Buf_cols_B*Buf_rows*sizeof(double _Complex));
    Buf_to_receive_B = malloc(Buf_cols_B*Buf_rows*sizeof(double _Complex));
    if(ratio != 1)
-      Buf_U = malloc(Size_U_stored*sizeof(double _Complex));   
-    
+      Buf_U = malloc(Size_U_stored*sizeof(double _Complex));
+
    for(i = 0; i < na_rows*nb_cols; i++)
-     Res[i] = 0; 
-    
-   
-      
-   
-   if((ratio != 1)||(my_prow != 0))   
-      Buf_pos = Buf_to_send_U;     
+     Res[i] = 0;
+
+
+
+
+   if((ratio != 1)||(my_prow != 0))
+      Buf_pos = Buf_to_send_U;
    else
-      Buf_pos = Buf_to_receive_U;  
-      
-   
-   
-   if(my_pcol >= my_prow)  
-      curr_col_loc = 0;    
+      Buf_pos = Buf_to_receive_U;
+
+
+
+   if(my_pcol >= my_prow)
+      curr_col_loc = 0;
    else
-      curr_col_loc = 1;   
-      
-   num_of_iters = ceil((double _Complex)na_cols/(double _Complex)nblk);             
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+
+   num_of_iters = ceil((double _Complex)na_cols/(double _Complex)nblk);
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if(my_pcol >= my_prow )
       rows_in_block = ceil(((double _Complex)(my_pcol + 1) - (double _Complex)my_prow)/(double _Complex)np_rows)*nblk;
    else
       rows_in_block = ratio*nblk;
    cols_in_buffer_U_my_initial = 0;
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if(rows_in_block > na_rows)
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
 
       if ((na_cols - curr_col_loc) < nblk)
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       else
-         cols_in_block = nblk; 
-      
+         cols_in_block = nblk;
+
       if((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         double_ptr = &U[curr_col_loc*na_rows];   
-         zlacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
-         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block; 
+         double_ptr = &U[curr_col_loc*na_rows];
+         zlacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
+         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;    
-   *Buf_pos = (double _Complex)cols_in_buffer_U_my_initial; 
-   Buf_pos = Buf_pos + 1; 
-   *Buf_pos = (double _Complex)rows_in_buffer_U_my_initial; 
+   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;
+   *Buf_pos = (double _Complex)cols_in_buffer_U_my_initial;
+   Buf_pos = Buf_pos + 1;
+   *Buf_pos = (double _Complex)rows_in_buffer_U_my_initial;
    Size_send_U = Size_send_U + 2;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(from_where_to_receive_U < proc_col_min)
          proc_col_min = from_where_to_receive_U;
    }
-   
-   
-   Size_receive_U = 0;       
-   cols_in_buffer_U = 0;     
-   rows_in_buffer_U = 0;     
+
+
+   Size_receive_U = 0;
+   cols_in_buffer_U = 0;
+   rows_in_buffer_U = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(where_to_send_U != my_pcol)   
+         if(where_to_send_U != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, 0, Buf_U, (int) Size_U_stored, ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, 0, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_U_nowMPI);
             Size_receive_U_now = (int) Size_receive_U_nowMPI;
-            Size_receive_U = Size_receive_U + Size_receive_U_now - 2; 
-            
+            Size_receive_U = Size_receive_U + Size_receive_U_now - 2;
+
             cols_in_buffer_U_now = Buf_U[Size_receive_U_now - 2];
             cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
             rows_in_buffer_U_now = Buf_U[Size_receive_U_now - 1];
-            
-            if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
 
-            intNumber = from_where_to_receive_U/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(from_where_to_receive_U < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            if(rows_in_buffer_U < rows_in_buffer_U_now)
+               rows_in_buffer_U = rows_in_buffer_U_now;
+
+            intNumber = from_where_to_receive_U/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(from_where_to_receive_U < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_U; 
+            CopyFrom = Buf_U;
          }
-         else  
+         else
          {
             cols_in_buffer_U_now = cols_in_buffer_U_my_initial;
-            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now; 
-            
+            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
+
             rows_in_buffer_U_now = rows_in_buffer_U_my_initial;
             if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
+               rows_in_buffer_U = rows_in_buffer_U_now;
 
-            intNumber = my_pcol/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(my_pcol < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            intNumber = my_pcol/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(my_pcol < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_to_send_U;  
+            CopyFrom = Buf_to_send_U;
             Size_receive_U = Size_receive_U + Size_send_U - 2;
          }
-            
-         
-         intNumber = ceil((double _Complex)cols_in_buffer_U_now/(double _Complex)nblk);  
+
+
+         intNumber = ceil((double _Complex)cols_in_buffer_U_now/(double _Complex)nblk);
          if(from_where_to_receive_U >= my_prow)
-            rows_in_block = ceil(((double _Complex)(from_where_to_receive_U + 1) - (double _Complex)my_prow)/(double _Complex)np_rows)*nblk;  
+            rows_in_block = ceil(((double _Complex)(from_where_to_receive_U + 1) - (double _Complex)my_prow)/(double _Complex)np_rows)*nblk;
          else
-            rows_in_block = ratio*nblk; 
+            rows_in_block = ratio*nblk;
          for(j = 0; j < intNumber; j++)
          {
             if((j+1)*nblk < cols_in_buffer_U_now)
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
             else
                cols_in_block = cols_in_buffer_U_now - j*nblk;
-               
+
             zlacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;  
-            rows_in_block = rows_in_block + ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;
+            rows_in_block = rows_in_block + ratio*nblk;
             if(rows_in_block > rows_in_buffer_U_now)
-               rows_in_block = rows_in_buffer_U_now; 
+               rows_in_block = rows_in_buffer_U_now;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -15615,7 +16010,7 @@ void cannons_triang_rectangular_dc(double _Complex* U, double _Complex* B, int n
             cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
             rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
          }
-         else    
+         else
          {
             Size_receive_U = Size_send_U;
             rows_in_buffer_U = rows_in_buffer_U_my_initial;
@@ -15629,67 +16024,67 @@ void cannons_triang_rectangular_dc(double _Complex* U, double _Complex* B, int n
       Buf_to_receive_U[Size_receive_U + 1] = rows_in_buffer_U;
       Size_receive_U = Size_receive_U + 2;
    }
-      
-   
-   
+
+
+
    if(my_pcol > 0)
    {
-      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;                   
+      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;
       from_where_to_receive_B = (my_pcol + my_prow)%np_rows;
 
-      
-      if(where_to_send_B != my_prow)                  
+
+      if(where_to_send_B != my_prow)
       {
-         
+
          zlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_send_B, &na_rows);
-         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)1275072546), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)1275072546), (int) from_where_to_receive_B, 0, col_comm, &status); 
-         MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_BMPI); 
-         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-         else Size_receive_B=0; 
+         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)1275072546), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)1275072546), (int) from_where_to_receive_B, 0, col_comm, &status);
+         MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_BMPI);
+         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+         else Size_receive_B=0;
       }
       else
       {
-         zlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows); 
+         zlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
          Size_receive_B = na_rows;
       }
    }
    else
    {
-      zlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);        
-      Size_receive_B = na_rows; 
-   }   
-   
-   
+      zlacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
+      Size_receive_B = na_rows;
+   }
+
+
    where_to_send_U = (my_pcol - 1 + np_cols)%np_cols;
    from_where_to_receive_U = (my_pcol + 1)%np_cols;
    where_to_send_B = (my_prow - 1 + np_rows)%np_rows;
-   from_where_to_receive_B = (my_prow + 1)%np_rows;    
+   from_where_to_receive_B = (my_prow + 1)%np_rows;
 
    for(i = 1; i < np_rows; i++)
    {
-      
-      double_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
-      Buf_to_receive_U = double_ptr; 
-      
-      double_ptr = Buf_to_send_B; 
-      Buf_to_send_B = Buf_to_receive_B; 
+
+      double_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
+      Buf_to_receive_U = double_ptr;
+
+      double_ptr = Buf_to_send_B;
+      Buf_to_send_B = Buf_to_receive_B;
       Buf_to_receive_B = double_ptr;
-            
+
       Size_send_U = Size_receive_U;
-      Size_send_B = Size_receive_B;                   
-        
-      
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, 0, row_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);      
-      
-      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)1275072546), (int) where_to_send_B, 0, col_comm, &request_B_Send); 
-      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);      
-      
+      Size_send_B = Size_receive_B;
+
+
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275072546), (int) where_to_send_U, 0, row_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275072546), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);
+
+      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)1275072546), (int) where_to_send_B, 0, col_comm, &request_B_Send);
+      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)1275072546), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);
+
       cols_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-2];
       rows_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-1];
-      
-      proc_col_min = np_cols; 
+
+      proc_col_min = np_cols;
       for(j = 0; j < ratio; j++)
       {
          col_of_origin_U = (my_pcol + my_prow + i - 1 + j*np_rows)%np_cols;
@@ -15697,51 +16092,51 @@ void cannons_triang_rectangular_dc(double _Complex* U, double _Complex* B, int n
             proc_col_min = col_of_origin_U;
       }
       col_of_origin_U = proc_col_min;
-      
-      num_of_blocks_in_U_buffer = ceil((double _Complex)cols_in_buffer_U/(double _Complex)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil((double _Complex)cols_in_buffer_U/(double _Complex)nblk);
+
       if (col_of_origin_U >= my_prow)
          B_local_start = Buf_to_send_B;
-      else 
+      else
          B_local_start = Buf_to_send_B + nblk;
-      
+
       U_local_start = Buf_to_send_U;
-      
+
       for(j = 0; j < num_of_blocks_in_U_buffer; j++)
       {
          curr_rows = (j+1)*nblk;
          if (curr_rows > rows_in_buffer_U)
-            curr_rows = rows_in_buffer_U; 
-         
+            curr_rows = rows_in_buffer_U;
+
          if((j+1)*nblk <= cols_in_buffer_U)
-            b_rows_mult = nblk; 
+            b_rows_mult = nblk;
          else
             b_rows_mult = cols_in_buffer_U - j*nblk;
-         
-         if(Size_receive_B!=0) zgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
-  
-         U_local_start = U_local_start + nblk*curr_rows; 
-         B_local_start = B_local_start + nblk; 
+
+         if(Size_receive_B!=0) zgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+         U_local_start = U_local_start + nblk*curr_rows;
+         B_local_start = B_local_start + nblk;
       }
-      
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
 
       MPI_Wait(&request_B_Send, &status);
       MPI_Wait(&request_B_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_BMPI); 
-      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-      else Size_receive_B=0; 
+      MPI_Get_count(&status, ((MPI_Datatype)1275072546), &Size_receive_BMPI);
+      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+      else Size_receive_B=0;
 
-   }         
-   
-   
+   }
+
+
    cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
    rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
-   
-   proc_col_min = np_cols; 
+
+   proc_col_min = np_cols;
    for(j = 0; j < ratio; j++)
    {
       col_of_origin_U = (my_pcol + my_prow + np_rows - 1 + j*np_rows)%np_cols;
@@ -15749,33 +16144,33 @@ void cannons_triang_rectangular_dc(double _Complex* U, double _Complex* B, int n
          proc_col_min = col_of_origin_U;
    }
    col_of_origin_U = proc_col_min;
-      
+
    num_of_blocks_in_U_buffer = ceil((double _Complex)cols_in_buffer_U/(double _Complex)nblk);
-  
+
    if (col_of_origin_U >= my_prow)
       B_local_start = Buf_to_receive_B;
-   else 
+   else
       B_local_start = Buf_to_receive_B + nblk;
-      
-   U_local_start = Buf_to_receive_U;  
-   
+
+   U_local_start = Buf_to_receive_U;
+
    for(j = 0; j < num_of_blocks_in_U_buffer; j++)
    {
       curr_rows = (j+1)*nblk;
       if (curr_rows > rows_in_buffer_U)
-         curr_rows = rows_in_buffer_U; 
-      
+         curr_rows = rows_in_buffer_U;
+
       if((j+1)*nblk <= cols_in_buffer_U)
-         b_rows_mult = nblk; 
+         b_rows_mult = nblk;
       else
          b_rows_mult = cols_in_buffer_U - j*nblk;
-      
-      if(Size_receive_B!=0) zgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
 
-      U_local_start = U_local_start + nblk*curr_rows; 
+      if(Size_receive_B!=0) zgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+      U_local_start = U_local_start + nblk*curr_rows;
       B_local_start = B_local_start + nblk;
    }
-   
+
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
    free(Buf_to_send_B);
@@ -15809,15 +16204,14 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
+
+
+
+
+
   cannons_triang_rectangular_dc(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
 
-# 257 "../src/elpa_generalized/cannon.c" 2
 
 
 
@@ -15835,7 +16229,7 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 
 
 
- 
+
 void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_rowsCast, int local_colsCasr, int* a_desc,
                             double _Complex *Res, int ToStore, int row_comm, int col_comm);
 
@@ -15853,19 +16247,15 @@ void cannons_reduction_c_dc(double _Complex* A, double _Complex* U, int local_ro
 
 
 
- 
+
 void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, double _Complex *Res, int row_comm, int col_comm);
 
 
-# 1 "../src/elpa_generalized/../general/precision_macros.h" 1
-# 50 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 362 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
-# 374 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -15880,7 +16270,6 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 
 
 
-# 473 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
@@ -15891,24 +16280,19 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 
 
 
-# 590 "../src/elpa_generalized/../general/precision_macros.h"
 
-# 603 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
 
 
 
-# 690 "../src/elpa_generalized/../general/precision_macros.h"
 
 
 
 
 
 
-# 300 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_forw_template.c" 1
 
 
 
@@ -15965,7 +16349,6 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 
 
 
-# 75 "../src/elpa_generalized/cannon_forw_template.c"
 
 
 
@@ -15979,41 +16362,26 @@ void cannons_triang_rectangular_c_dc(double _Complex* U, double _Complex* B, int
 
 
 
-
-
-# 1 "../src/elpa_generalized/../general/precision_typedefs.h" 1
-# 13 "../src/elpa_generalized/../general/precision_typedefs.h"
-
-# 91 "../src/elpa_generalized/cannon_forw_template.c" 2
-
-# 1 "../src/elpa_generalized/../helpers/lapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
-
-# 58 "../src/elpa_generalized/../helpers/lapack_interfaces.h"
 
 void dlacpy_(char*, int*, int*, double*, int*, double*, int*);
-void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*); 
+void dgemm_(char*, char*, int*, int*, int*, double*, double*, int*, double*, int*, double*, double*, int*);
 
 
 void slacpy_(char*, int*, int*, float*, int*, float*, int*);
-void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*); 
+void sgemm_(char*, char*, int*, int*, int*, float*, float*, int*, float*, int*, float*, float*, int*);
 
 
 
 
 void zlacpy_(char*, int*, int*, double _Complex*, int*, double _Complex*, int*);
-void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*); 
+void zgemm_(char*, char*, int*, int*, int*, double _Complex*, double _Complex*, int*, double _Complex*, int*, double _Complex*, double _Complex*, int*);
 
 
 void clacpy_(char*, int*, int*, float _Complex*, int*, float _Complex*, int*);
-void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*); 
+void cgemm_(char*, char*, int*, int*, int*, float _Complex*, float _Complex*, int*, float _Complex*, int*, float _Complex*, float _Complex*, int*);
 
 
-# 93 "../src/elpa_generalized/cannon_forw_template.c" 2
-# 1 "../src/elpa_generalized/../helpers/scalapack_interfaces.h" 1
-# 50 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
-# 58 "../src/elpa_generalized/../helpers/scalapack_interfaces.h"
 
 int numroc_(int*, int*, int*, int*, int*);
 
@@ -16035,18 +16403,17 @@ void pclacpy_(char*, int*, int*, float _Complex*, int*, int*, int*, float _Compl
 void pctranc_(int*, int*, float _Complex*, float _Complex*, int*, int*, int*, float _Complex*, float _Complex*, int*, int*, int*);
 
 
-# 94 "../src/elpa_generalized/cannon_forw_template.c" 2
 
 void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int np_cols, int my_prow, int my_pcol,
                          int* a_desc, float _Complex *Res, int ToStore, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-      
-      
-   
-      
-   
-   
+
+
+
+
+
+
+
 
    int na, nblk, i, j, Size_send_A, Size_receive_A, Size_send_U, Size_receive_U, Buf_rows, Buf_cols, pcol_where_to_send_A, pcol_from_where_to_receive_A, where_to_send_U, from_where_to_receive_U, last_proc_row, last_proc_col, cols_in_buffer_A, rows_in_buffer_A, intNumber;
    int ratio, num_of_iters, cols_in_buffer, rows_in_block, rows_in_buffer, curr_col_loc, cols_in_block, curr_col_glob, curr_row_loc, Size_receive_A_now, Nb, owner, cols_in_buffer_A_now;
@@ -16054,59 +16421,59 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
 
    float _Complex *Buf_to_send_A, *Buf_to_receive_A, *Buf_to_send_U, *Buf_to_receive_U, *data_ptr, *Buf_A, *Buf_pos, *U_local_start, *Res_ptr, *M, *M_T, *A_local_start, *U_local_start_curr, *U_stored, *CopyTo, *CopyFrom, *U_to_calc;
 
-   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res; 
+   int  row_of_origin_U, rows_in_block_U, num_of_blocks_in_U_buffer, k, startPos, cols_in_buffer_U, rows_in_buffer_U, col_of_origin_A, curr_row_loc_res, curr_row_loc_A, curr_col_glob_res;
    int curr_col_loc_res, curr_col_loc_buf, proc_row_curr, curr_col_loc_U, A_local_index, LDA_A, LDA_A_new, index_row_A_for_LDA, ii, rows_in_block_U_curr, width, row_origin_U, rows_in_block_A, cols_in_buffer_A_my_initial, rows_in_buffer_A_my_initial, proc_col_min;
    int *SizesU;
    int Size_U_skewed, Size_U_stored, Curr_pos_in_U_stored, rows_in_buffer_A_now;
    float _Complex dOne = 1.0;
    float _Complex dZero = 0.0;
-   int one = 1; 
-   int zero = 0; 
+   int one = 1;
+   int zero = 0;
    int na_rows, na_cols;
-         
+
    MPI_Status status;
-   MPI_Request request_A_Recv; 
+   MPI_Request request_A_Recv;
    MPI_Request request_A_Send;
-   MPI_Request request_U_Recv; 
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
 
    na = a_desc[2];
    nblk = a_desc[4];
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
-   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols); 
-   
-   
-   
-   
-   
-   
-   
+   na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
+
+
+
+
+
+
+
 
    if (np_cols%np_rows != 0)
    {
-      
-      
+
+
       return;
    }
-  
+
    if (np_cols < np_rows != 0)
    {
-       
-       
+
+
        return;
    }
-   
-   ratio = np_cols/np_rows; 
-   last_proc_row = ((na-1)/nblk) % np_rows;          
-   last_proc_col = ((na-1)/nblk) % np_cols;          
-   
-   
+
+   ratio = np_cols/np_rows;
+   last_proc_row = ((na-1)/nblk) % np_rows;
+   last_proc_col = ((na-1)/nblk) % np_cols;
+
+
    if (na%nblk == 0) {
       if (my_pcol <= last_proc_col) {
          Buf_cols = na_cols;
       }
       else {
-         Buf_cols = na_cols + nblk;      
+         Buf_cols = na_cols + nblk;
       }
    }
    else {
@@ -16114,19 +16481,19 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          Buf_cols = na_cols;
       }
       else if (my_pcol > last_proc_col) {
-         Buf_cols = na_cols + nblk; 
-      }
-      else {  
-         Buf_cols = na_cols + nblk - na_cols%nblk;     
-      }
-   }
-  
-   if (na%nblk == 0) {
-      if (my_prow <= last_proc_row) {
-         Buf_rows = na_rows + 1;   
+         Buf_cols = na_cols + nblk;
       }
       else {
-         Buf_rows = na_rows + nblk;      
+         Buf_cols = na_cols + nblk - na_cols%nblk;
+      }
+   }
+
+   if (na%nblk == 0) {
+      if (my_prow <= last_proc_row) {
+         Buf_rows = na_rows + 1;
+      }
+      else {
+         Buf_rows = na_rows + nblk;
       }
    }
    else {
@@ -16134,135 +16501,132 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          Buf_rows = na_rows;
       }
       else if (my_prow > last_proc_row) {
-         Buf_rows = na_rows + nblk; 
+         Buf_rows = na_rows + nblk;
       }
-      else { 
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
+      else {
+         Buf_rows = na_rows + nblk - na_rows%nblk;
       }
    }
 
-   intNumber = ceil((float _Complex)na/(float _Complex)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+   intNumber = ceil((float _Complex)na/(float _Complex)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    U_stored = malloc((Size_U_stored*(ToStore+1))*sizeof(float _Complex));
-   SizesU = malloc(ToStore*sizeof(int));  
+   SizesU = malloc(ToStore*sizeof(int));
    Buf_to_send_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(float _Complex));
    Buf_to_receive_A = malloc(ratio*Buf_cols*Buf_rows*sizeof(float _Complex));
    Buf_to_send_U = malloc(Size_U_stored*sizeof(float _Complex));
    Buf_to_receive_U = malloc(Size_U_stored*sizeof(float _Complex));
    if(ratio != 1)
-      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(float _Complex));   
+      Buf_A = malloc(Buf_cols*Buf_rows*sizeof(float _Complex));
    M = malloc(na_rows*na_cols*sizeof(float _Complex));
    M_T = malloc(na_rows*na_cols*sizeof(float _Complex));
    for(i = 0; i < na_rows*na_cols; i++)
-      M[i] = 0; 
+      M[i] = 0;
 
-   int useGPU = 0;
-# 226 "../src/elpa_generalized/cannon_forw_template.c"
 
-   
-   
-   
+
+
    if(ratio != 1) {
 
 
 
-      clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
+      clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
 
 
 
    }
-   Size_receive_A = 0; 
-   
-   
+   Size_receive_A = 0;
+
+
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
          if(pcol_where_to_send_A != my_pcol)
          {
-            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, 
-                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, 
+            MPI_Sendrecv(Buf_to_send_A, (int) (na_cols*na_rows) , ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero,
+                         Buf_A        , (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
-            Size_receive_A_now = Size_receive_A_now/na_rows;       
+            Size_receive_A_now = Size_receive_A_now/na_rows;
          }
          else {
             Size_receive_A_now = na_cols;
 	      }
-      
-         Size_receive_A = Size_receive_A + Size_receive_A_now;  
 
-         
-         intNumber = pcol_from_where_to_receive_A/np_rows; 
-         
-         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];  
+         Size_receive_A = Size_receive_A + Size_receive_A_now;
+
+
+         intNumber = pcol_from_where_to_receive_A/np_rows;
+
+         CopyTo = &Buf_to_receive_A[intNumber*na_rows*nblk];
          if (pcol_where_to_send_A != my_pcol) {
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
 	      }
          else {
             CopyFrom = A;
 	      }
-      
-         intNumber = ceil((float _Complex)Size_receive_A_now/(float _Complex)nblk);   
+
+         intNumber = ceil((float _Complex)Size_receive_A_now/(float _Complex)nblk);
          for(j = 0; j < intNumber; j++)
          {
-            width = nblk; 
+            width = nblk;
             if(nblk*(j+1) > Size_receive_A_now)
-               width = Size_receive_A_now - nblk*j; 
+               width = Size_receive_A_now - nblk*j;
             clacpy_("A", &na_rows, &width, CopyFrom, &na_rows, CopyTo, &na_rows);
-            CopyTo = CopyTo + na_rows*nblk*ratio; 
-            CopyFrom = CopyFrom + na_rows*nblk; 
+            CopyTo = CopyTo + na_rows*nblk*ratio;
+            CopyFrom = CopyFrom + na_rows*nblk;
          }
       }
 
-      else { 
+      else {
          if(my_prow > 0)
          {
-            clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);   
-            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A        , (int) zero, 
-                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, 
+            clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_send_A, &na_rows);
+            MPI_Sendrecv(Buf_to_send_A   , (int) (na_cols*na_rows) , ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A        , (int) zero,
+                         Buf_to_receive_A, (int) (na_rows*Buf_cols), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero,
                          row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_AMPI);
             Size_receive_A = (int) Size_receive_AMPI;
-            Size_receive_A = Size_receive_A/na_rows;       
+            Size_receive_A = Size_receive_A/na_rows;
          }
          else
          {
-            clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);   
-            Size_receive_A = na_cols; 
+            clacpy_("A", &na_rows, &na_cols, A, &na_rows, Buf_to_receive_A, &na_rows);
+            Size_receive_A = na_cols;
          }
       }
    }
-   
-   
-     
-   
-   num_of_iters = ceil((float _Complex)na_cols/(float _Complex)nblk);             
-   
-   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;                 
+
+
+
+
+   num_of_iters = ceil((float _Complex)na_cols/(float _Complex)nblk);
+
+   where_to_send_U = (my_prow - my_pcol + np_cols)%np_rows;
    from_where_to_receive_U = (my_pcol + my_prow)%np_rows;
-   
-   if (where_to_send_U == my_prow) {   
+
+   if (where_to_send_U == my_prow) {
       Buf_pos = Buf_to_receive_U;
    }
    else {
-      Buf_pos = Buf_to_send_U;         
+      Buf_pos = Buf_to_send_U;
    }
-   
-   if (my_pcol >= my_prow) {  
-      curr_col_loc = 0;    
+
+   if (my_pcol >= my_prow) {
+      curr_col_loc = 0;
    }
    else  {
-      curr_col_loc = 1;   
-   }   
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+   }
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if (my_pcol >= my_prow ) {
       rows_in_block = ceil(((float _Complex)(my_pcol + 1) - (float _Complex)my_prow)/(float _Complex)np_rows)*nblk;
@@ -16270,132 +16634,132 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    else {
       rows_in_block = ratio*nblk;
    }
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if (rows_in_block > na_rows) {
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
       }
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         data_ptr = &U[curr_col_loc*na_rows];   
-         clacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
+         data_ptr = &U[curr_col_loc*na_rows];
+         clacpy_("A", &rows_in_block, &cols_in_block, data_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer = rows_in_block - ratio*nblk;    
-   *Buf_pos = (float _Complex)rows_in_buffer; 
+   rows_in_buffer = rows_in_block - ratio*nblk;
+   *Buf_pos = (float _Complex)rows_in_buffer;
    Size_send_U = Size_send_U + 1;
-   
-   
+
+
    if (where_to_send_U != my_prow)
-   {   
-      
-      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, (int) zero, col_comm, &status); 
-      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI); 
+   {
+
+      MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, (int) zero, Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, (int) zero, col_comm, &status);
+      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
    }
    else {
-      Size_receive_U = Size_send_U;         
+      Size_receive_U = Size_send_U;
    }
    for(i = 0; i < Size_receive_U; i++)
       U_stored[i] = Buf_to_receive_U[i];
-   Size_U_skewed = Size_receive_U; 
+   Size_U_skewed = Size_receive_U;
    Curr_pos_in_U_stored = Size_U_skewed;
 
-  
-   
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
-   
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
-      data_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
+      data_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
       Buf_to_receive_U = data_ptr;
-      
-      
-      Size_send_A = Size_receive_A;  
-      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) (Size_send_A*na_rows), ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (Buf_cols*na_rows*ratio), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv); 
-      
-      
+
+
+      Size_send_U = Size_receive_U;
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (Buf_rows*na_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
+
+
       rows_in_buffer = (int)Buf_to_send_U[Size_receive_U-1];
       row_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
-      
-      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+
+      if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = 0;                              
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = 0;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+      if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+      if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
       {
-         cols_in_buffer = na_cols - nblk;                   
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = 0;                              
+         cols_in_buffer = na_cols - nblk;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = 0;
       }
-      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+      if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
       {
-         cols_in_buffer = na_cols;                          
-         curr_col_loc_res = nblk;                           
-         curr_col_loc_buf = nblk;                           
+         cols_in_buffer = na_cols;
+         curr_col_loc_res = nblk;
+         curr_col_loc_buf = nblk;
       }
-    
-      num_of_blocks_in_U_buffer = ceil(((float _Complex)cols_in_buffer - (float _Complex)curr_col_loc_buf)/(float _Complex)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil(((float _Complex)cols_in_buffer - (float _Complex)curr_col_loc_buf)/(float _Complex)nblk);
+
       startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
       U_local_start = &Buf_to_send_U[startPos];
       Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
+      {
          curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-         proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+         proc_row_curr = (curr_col_glob/nblk)%np_rows;
+         rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
          if (my_prow <= proc_row_curr) {
-            rows_in_block_A = rows_in_block_A + nblk; 
+            rows_in_block_A = rows_in_block_A + nblk;
 	      }
          if (rows_in_block_A > na_rows) {
-            rows_in_block_A = na_rows; 
+            rows_in_block_A = na_rows;
          }
          if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	      }
          else {
             cols_in_block = cols_in_buffer - curr_col_loc_buf;
 	      }
-      
-         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+
+         rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
          if (proc_row_curr >= row_origin_U) {
-            rows_in_block_U = rows_in_block_U + nblk; 
+            rows_in_block_U = rows_in_block_U + nblk;
 	      }
          if (rows_in_block_U > rows_in_buffer) {
             rows_in_block_U = rows_in_buffer;
@@ -16408,7 +16772,7 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
             if (j == 1) {
                cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	         }
-            else { 
+            else {
                cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_send_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	         }
 
@@ -16418,89 +16782,89 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
          curr_col_loc_res = curr_col_loc_res + nblk;
          Res_ptr = &M[curr_col_loc_res*na_rows];
-         curr_col_loc_buf = curr_col_loc_buf + nblk;  
-      } 
-     
+         curr_col_loc_buf = curr_col_loc_buf + nblk;
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
 
-      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
       Size_receive_A = Size_receive_A / na_rows;
-      
-      
+
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI); 
-      Size_receive_U = (int) Size_receive_UMPI; 
-       
+      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI);
+      Size_receive_U = (int) Size_receive_UMPI;
+
       if(j <= ToStore)
       {
          for(k = 0; k < Size_receive_U; k++)
-            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k]; 
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U; 
-         SizesU[j-1] = Size_receive_U; 
+            U_stored[Curr_pos_in_U_stored + k] = Buf_to_receive_U[k];
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + Size_receive_U;
+         SizesU[j-1] = Size_receive_U;
       }
    }
-   
-   
+
+
    rows_in_buffer = (int)Buf_to_receive_U[Size_receive_U-1];
    row_origin_U = (my_pcol + my_prow + np_cols + np_rows -1)%np_rows;
 
-   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))   
+   if((my_pcol >= my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = 0;                              
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = 0;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))     
+   if((my_pcol < my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))    
+   if((my_pcol >= my_prow)&&(my_pcol < row_origin_U))
    {
-      cols_in_buffer = na_cols - nblk;                   
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = 0;                              
+      cols_in_buffer = na_cols - nblk;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = 0;
    }
-   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))    
+   if((my_pcol < my_prow)&&(my_pcol >= row_origin_U))
    {
-      cols_in_buffer = na_cols;                          
-      curr_col_loc_res = nblk;                           
-      curr_col_loc_buf = nblk;                           
+      cols_in_buffer = na_cols;
+      curr_col_loc_res = nblk;
+      curr_col_loc_buf = nblk;
    }
-    
-   num_of_blocks_in_U_buffer = ceil(((float _Complex)cols_in_buffer - (float _Complex)curr_col_loc_buf)/(float _Complex)nblk); 
-      
+
+   num_of_blocks_in_U_buffer = ceil(((float _Complex)cols_in_buffer - (float _Complex)curr_col_loc_buf)/(float _Complex)nblk);
+
    startPos = (curr_col_loc_buf + nblk)*curr_col_loc_buf/2;
    U_local_start = &Buf_to_receive_U[startPos];
    Res_ptr = &M[curr_col_loc_res*na_rows];
-  
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
+   {
       curr_col_glob = (curr_col_loc_res/nblk)*nblk*np_cols + my_pcol*nblk;
-      proc_row_curr = (curr_col_glob/nblk)%np_rows; 
-      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;     
+      proc_row_curr = (curr_col_glob/nblk)%np_rows;
+      rows_in_block_A = (curr_col_glob/(nblk*np_rows))*nblk;
       if (my_prow <= proc_row_curr) {
-         rows_in_block_A = rows_in_block_A + nblk; 
+         rows_in_block_A = rows_in_block_A + nblk;
       }
       if (rows_in_block_A > na_rows) {
-         rows_in_block_A = na_rows; 
+         rows_in_block_A = na_rows;
       }
       if ((curr_col_loc_buf + nblk) <= cols_in_buffer) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer - curr_col_loc_buf; 
+         cols_in_block = cols_in_buffer - curr_col_loc_buf;
       }
-      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;    
+      rows_in_block_U = (curr_col_glob/(nblk*np_rows))*nblk;
       if (proc_row_curr >= row_origin_U) {
-         rows_in_block_U = rows_in_block_U + nblk; 
+         rows_in_block_U = rows_in_block_U + nblk;
       }
       if (rows_in_block_U > rows_in_buffer) {
-         rows_in_block_U = rows_in_buffer; 
+         rows_in_block_U = rows_in_buffer;
       }
       if ((rows_in_block_A > 0)&&(cols_in_block > 0)) {
 
@@ -16509,7 +16873,7 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          if (j == 1) {
             cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	 }
-         else { 
+         else {
             cgemm_("N", "N", &rows_in_block_A, &cols_in_block, &rows_in_block_U, &dOne, Buf_to_receive_A, &na_rows, U_local_start, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
          }
 
@@ -16519,163 +16883,163 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
       curr_col_loc_res = curr_col_loc_res + nblk;
       Res_ptr = &M[curr_col_loc_res*na_rows];
-      curr_col_loc_buf = curr_col_loc_buf + nblk;  
-   }  
-   
-   
-
-
-
-   pctranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);     
+      curr_col_loc_buf = curr_col_loc_buf + nblk;
+   }
 
 
 
 
-   
-           
-   
-   
-   
-   if ((ratio != 1)||(my_prow != 0)) {   
-      Buf_pos = Buf_to_send_A;     
+
+   pctranc_(&na, &na, &dOne, M, &one, &one, a_desc, &dZero, M_T, &one, &one, a_desc);
+
+
+
+
+
+
+
+
+
+   if ((ratio != 1)||(my_prow != 0)) {
+      Buf_pos = Buf_to_send_A;
    }
    else {
-      Buf_pos = Buf_to_receive_A;  
+      Buf_pos = Buf_to_receive_A;
    }
-   
-   num_of_iters = ceil((float _Complex)na_cols/(float _Complex)nblk);             
-   
+
+   num_of_iters = ceil((float _Complex)na_cols/(float _Complex)nblk);
+
    cols_in_buffer_A_my_initial = 0;
-   Size_send_A = 0; 
-   
-   if (my_pcol <= my_prow)  
+   Size_send_A = 0;
+
+   if (my_pcol <= my_prow)
    {
-      curr_row_loc = 0;     
+      curr_row_loc = 0;
       rows_in_buffer_A_my_initial = na_rows;
    }
    else
    {
-      curr_row_loc = ceil((float _Complex)(((float _Complex)my_pcol - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk; 
-      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;   
+      curr_row_loc = ceil((float _Complex)(((float _Complex)my_pcol - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk;
+      rows_in_buffer_A_my_initial = na_rows - curr_row_loc;
    }
-       
-   for(i = 0; i < num_of_iters; i++)       
+
+   for(i = 0; i < num_of_iters; i++)
    {
-      curr_col_loc = i*nblk;      
-      rows_in_block = na_rows - curr_row_loc;    
-      
+      curr_col_loc = i*nblk;
+      rows_in_block = na_rows - curr_row_loc;
+
       if ((na_cols - curr_col_loc) < nblk) {
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       }
       else {
-         cols_in_block = nblk; 
+         cols_in_block = nblk;
       }
       if ((rows_in_block > 0)&&(cols_in_block > 0))
       {
          A_local_start = &M_T[curr_col_loc*na_rows + curr_row_loc];
-         clacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);     
+         clacpy_("A", &rows_in_block, &cols_in_block, A_local_start, &na_rows, Buf_pos, &rows_in_block);
          Buf_pos = Buf_pos + rows_in_block*cols_in_block;
-         Size_send_A = Size_send_A + rows_in_block*cols_in_block; 
-         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block; 
+         Size_send_A = Size_send_A + rows_in_block*cols_in_block;
+         cols_in_buffer_A_my_initial = cols_in_buffer_A_my_initial + cols_in_block;
       }
       curr_row_loc = curr_row_loc + ratio*nblk;
    }
-   *Buf_pos = (float _Complex)cols_in_buffer_A_my_initial; 
+   *Buf_pos = (float _Complex)cols_in_buffer_A_my_initial;
    Size_send_A = Size_send_A + 1;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(pcol_from_where_to_receive_A < proc_col_min)
          proc_col_min = pcol_from_where_to_receive_A;
    }
-   
-   Size_receive_A = 0;       
-   cols_in_buffer_A = 0;     
-   rows_in_buffer_A = 0;     
+
+   Size_receive_A = 0;
+   cols_in_buffer_A = 0;
+   rows_in_buffer_A = 0;
    for(i = 0; i < ratio; i++)
    {
-      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      pcol_where_to_send_A = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       pcol_from_where_to_receive_A = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(pcol_where_to_send_A != my_pcol)   
+         if(pcol_where_to_send_A != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, Buf_A, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_A_nowMPI);
             Size_receive_A_now = (int) Size_receive_A_nowMPI;
 
-            Size_receive_A = Size_receive_A + Size_receive_A_now - 1; 
+            Size_receive_A = Size_receive_A + Size_receive_A_now - 1;
 
             cols_in_buffer_A_now = Buf_A[Size_receive_A_now-1];
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
-            
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
+
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A_now = na_rows;
             }
             else
             {
-               rows_in_buffer_A_now = na_rows - ceil((float _Complex)(((float _Complex)pcol_from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk; 
+               rows_in_buffer_A_now = na_rows - ceil((float _Complex)(((float _Complex)pcol_from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk;
             }
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = pcol_from_where_to_receive_A/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = pcol_from_where_to_receive_A/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_A; 
+            CopyFrom = Buf_A;
          }
-         else  
+         else
          {
             cols_in_buffer_A_now = cols_in_buffer_A_my_initial;
-            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now; 
-            
+            cols_in_buffer_A = cols_in_buffer_A + cols_in_buffer_A_now;
+
             rows_in_buffer_A_now = rows_in_buffer_A_my_initial;
             if(rows_in_buffer_A < rows_in_buffer_A_now)
-               rows_in_buffer_A = rows_in_buffer_A_now; 
+               rows_in_buffer_A = rows_in_buffer_A_now;
 
-            intNumber = my_pcol/np_rows; 
-            if (proc_col_min <= my_prow) {   
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];  
+            intNumber = my_pcol/np_rows;
+            if (proc_col_min <= my_prow) {
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*(intNumber-1)*intNumber/2)];
 	    }
             else {
-               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];  
+               CopyTo = &Buf_to_receive_A[nblk*(na_rows*intNumber - nblk*intNumber*(intNumber+1)/2)];
 	    }
-            CopyFrom = Buf_to_send_A;  
+            CopyFrom = Buf_to_send_A;
 
             Size_receive_A = Size_receive_A + Size_send_A - 1;
          }
-            
-         
-         intNumber = ceil((float _Complex)cols_in_buffer_A_now/(float _Complex)nblk);  
-         rows_in_block = rows_in_buffer_A_now; 
+
+
+         intNumber = ceil((float _Complex)cols_in_buffer_A_now/(float _Complex)nblk);
+         rows_in_block = rows_in_buffer_A_now;
          for(j = 0; j < intNumber; j++)
          {
             if ((j+1)*nblk < cols_in_buffer_A_now) {
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
 	    }
             else {
                cols_in_block = cols_in_buffer_A_now - j*nblk;
-	    }   
+	    }
             clacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);  
-            rows_in_block = rows_in_block - ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + nblk*(ratio*rows_in_block - nblk*(ratio-1)*ratio/2);
+            rows_in_block = rows_in_block - ratio*nblk;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -16684,16 +17048,16 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
             Size_receive_A = (int) Size_receive_AMPI;
 
             cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-            if(pcol_from_where_to_receive_A <= my_prow)  
+            if(pcol_from_where_to_receive_A <= my_prow)
             {
                rows_in_buffer_A = na_rows;
             }
             else
             {
-               rows_in_buffer_A = na_rows - ceil((float _Complex)(((float _Complex)pcol_from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk; 
+               rows_in_buffer_A = na_rows - ceil((float _Complex)(((float _Complex)pcol_from_where_to_receive_A - (float _Complex)my_prow)/(float _Complex)np_rows))*nblk;
             }
          }
-         else    
+         else
          {
             Size_receive_A = Size_send_A;
             rows_in_buffer_A = rows_in_buffer_A_my_initial;
@@ -16713,40 +17077,40 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
       Size_receive_A = Size_receive_A + 1;
    }
 
-   
-   
+
+
    Size_receive_U = Size_U_skewed;
    U_to_calc = U_stored;
-   
-   
-   
+
+
+
    pcol_where_to_send_A = (my_pcol - 1 + np_cols)%np_cols;
    pcol_from_where_to_receive_A = (my_pcol + 1)%np_cols;
    where_to_send_U = (my_prow - 1 + np_rows)%np_rows;
    from_where_to_receive_U = (my_prow + 1)%np_rows;
    Curr_pos_in_U_stored = Size_U_skewed;
-  
+
    for(j = 1; j < np_rows; j++)
    {
-      
-      data_ptr = Buf_to_send_A; 
-      Buf_to_send_A = Buf_to_receive_A; 
-      Buf_to_receive_A = data_ptr; 
-      
+
+      data_ptr = Buf_to_send_A;
+      Buf_to_send_A = Buf_to_receive_A;
+      Buf_to_receive_A = data_ptr;
+
       if (j > ToStore)
       {
-         data_ptr = Buf_to_send_U; 
-         Buf_to_send_U = Buf_to_receive_U; 
+         data_ptr = Buf_to_send_U;
+         Buf_to_send_U = Buf_to_receive_U;
          Buf_to_receive_U = data_ptr;
       }
-        
-      
-      Size_send_A = Size_receive_A; 
-      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send); 
+
+
+      Size_send_A = Size_receive_A;
+      MPI_Isend(Buf_to_send_A, (int) Size_send_A, ((MPI_Datatype)1275070494), (int) pcol_where_to_send_A, (int) zero, row_comm, &request_A_Send);
       MPI_Irecv(Buf_to_receive_A, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275070494), (int) pcol_from_where_to_receive_A, (int) zero, row_comm, &request_A_Recv);
-         
-      
-      Size_send_U = Size_receive_U; 
+
+
+      Size_send_U = Size_receive_U;
       if (j > ToStore)
       {
          if(j > ToStore + 1)
@@ -16757,10 +17121,10 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          else {
 	    MPI_Isend(U_to_calc, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, (int) zero, col_comm, &request_U_Send);
 	 }
-         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);	 
+         MPI_Irecv(Buf_to_receive_U, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, (int) zero, col_comm, &request_U_Recv);
       }
-      
-      
+
+
       rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
       row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
       if (my_pcol >= row_of_origin_U) {
@@ -16771,59 +17135,59 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
       }
       cols_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-2];
       rows_in_buffer_A = (int)Buf_to_send_A[Size_receive_A-1];
-      
-      col_of_origin_A = np_cols; 
+
+      col_of_origin_A = np_cols;
       for(i = 0; i < ratio; i++)
       {
          intNumber = (my_pcol + my_prow + i*np_rows + np_cols + j - 1)%np_cols;
          if(intNumber < col_of_origin_A)
             col_of_origin_A = intNumber;
       }
-      
-      
-      
-      if (my_pcol >= row_of_origin_U) {   
-         curr_col_loc_res = 0;          
+
+
+
+      if (my_pcol >= row_of_origin_U) {
+         curr_col_loc_res = 0;
       }
       else {
-         curr_col_loc_res = nblk;       
+         curr_col_loc_res = nblk;
       }
-      num_of_blocks_in_U_buffer = ceil((float _Complex)((float _Complex)cols_in_buffer_U/(float _Complex)nblk)); 
-      if (my_pcol >= row_of_origin_U) {    
-         rows_in_block_U = ceil(((float _Complex)(my_pcol + 1) - (float _Complex)row_of_origin_U)/(float _Complex)np_rows)*nblk;  
+      num_of_blocks_in_U_buffer = ceil((float _Complex)((float _Complex)cols_in_buffer_U/(float _Complex)nblk));
+      if (my_pcol >= row_of_origin_U) {
+         rows_in_block_U = ceil(((float _Complex)(my_pcol + 1) - (float _Complex)row_of_origin_U)/(float _Complex)np_rows)*nblk;
       }
       else {
          rows_in_block_U = ratio*nblk;
       }
       U_local_start = U_to_calc;
-      
+
       for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-      { 
-         
-         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-         
-         Nb = curr_col_glob_res/nblk;    
-         owner = Nb%np_rows;             
-         curr_row_loc_res = (Nb/np_rows)*nblk; 
+      {
+
+         curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+         Nb = curr_col_glob_res/nblk;
+         owner = Nb%np_rows;
+         curr_row_loc_res = (Nb/np_rows)*nblk;
          if(my_prow < owner)
-            curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-         curr_row_loc_A = curr_row_loc_res;     
+            curr_row_loc_res = curr_row_loc_res + nblk;
+
+         curr_row_loc_A = curr_row_loc_res;
          if(col_of_origin_A > my_prow)
-            curr_row_loc_A = curr_row_loc_A - nblk;  
-        
-         rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-         curr_col_loc_U = i*nblk;   
-      
+            curr_row_loc_A = curr_row_loc_A - nblk;
+
+         rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+         curr_col_loc_U = i*nblk;
+
          if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-            cols_in_block = nblk;      
+            cols_in_block = nblk;
 	 }
          else {
-            cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+            cols_in_block = cols_in_buffer_U - curr_col_loc_U;
          }
          if (rows_in_block_U > rows_in_buffer_U) {
-            rows_in_block_U = rows_in_buffer_U;     
+            rows_in_block_U = rows_in_buffer_U;
          }
          A_local_index = curr_row_loc_A;
          A_local_start = &Buf_to_send_A[A_local_index];
@@ -16833,68 +17197,68 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
          LDA_A_new = LDA_A;
          if ((rows_in_block > 0)&&(cols_in_block > 0))
          {
-            U_local_start_curr = U_local_start; 
- 
-            
+            U_local_start_curr = U_local_start;
+
+
             for (ii = 0; ii < ceil((float _Complex)rows_in_block_U/(float _Complex)nblk); ii++)
             {
                if ((ii+1)*nblk <= cols_in_buffer_A) {
-                  rows_in_block_U_curr = nblk; 
+                  rows_in_block_U_curr = nblk;
 	       }
                else {
-                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+                  rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
                }
 
 
 
                if ((j == 1)&&(ii == 0)) {
-                  cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+                  cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	       }
-               else { 
+               else {
                   cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
                }
 
 
 
                LDA_A_new = LDA_A_new - nblk;
-      
-               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new; 
+
+               U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+               A_local_index = A_local_index - LDA_A + LDA_A*nblk + LDA_A_new;
                A_local_start = &Buf_to_send_A[A_local_index];
-               LDA_A = LDA_A_new; 
+               LDA_A = LDA_A_new;
             }
          }
-      
+
          U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-         curr_col_loc_res = curr_col_loc_res + nblk; 
+         curr_col_loc_res = curr_col_loc_res + nblk;
          rows_in_block_U = rows_in_block_U + ratio*nblk;
-      }    
-      
+      }
+
       MPI_Wait(&request_A_Send, &status);
       MPI_Wait(&request_A_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_AMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_AMPI);
       Size_receive_A = (int) Size_receive_AMPI;
-      
+
       if (j <= ToStore)
       {
          U_to_calc = &U_stored[Curr_pos_in_U_stored];
-         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1]; 
+         Curr_pos_in_U_stored = Curr_pos_in_U_stored + SizesU[j-1];
          Size_receive_U =  SizesU[j-1];
       }
       else
       {
          MPI_Wait(&request_U_Send, &status);
          MPI_Wait(&request_U_Recv, &status);
-	      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI); 
+	      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI);
          Size_receive_U = (int) Size_receive_UMPI;
       }
    }
-   
-   
+
+
    if(ToStore < np_rows - 1)
       U_to_calc = Buf_to_receive_U;
    rows_in_buffer_U = (int)U_to_calc[Size_receive_U-1];
-   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;     
+   row_of_origin_U = (my_pcol + my_prow + np_cols + j - 1)%np_rows;
    if (my_pcol >= row_of_origin_U) {
       cols_in_buffer_U = na_cols;
    }
@@ -16903,104 +17267,104 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    }
    cols_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-2];
    rows_in_buffer_A = (int)Buf_to_receive_A[Size_receive_A-1];
-   
-   col_of_origin_A = np_cols; 
+
+   col_of_origin_A = np_cols;
    for(i = 0; i < ratio; i++)
    {
       intNumber = (my_pcol + my_prow + i*np_rows + np_cols + np_rows - 1)%np_cols;
       if(intNumber < col_of_origin_A)
          col_of_origin_A = intNumber;
    }
-   
-   
-   if (my_pcol >= row_of_origin_U) {  
-      curr_col_loc_res = 0;          
+
+
+   if (my_pcol >= row_of_origin_U) {
+      curr_col_loc_res = 0;
    }
    else {
-      curr_col_loc_res = nblk;       
+      curr_col_loc_res = nblk;
    }
    num_of_blocks_in_U_buffer = ceil((float _Complex)((float _Complex)cols_in_buffer_U/(float _Complex)nblk));
-   if (my_pcol >= row_of_origin_U) {    
-      rows_in_block_U = ceil(((float _Complex)(my_pcol + 1) - (float _Complex)row_of_origin_U)/(float _Complex)np_rows)*nblk;  
+   if (my_pcol >= row_of_origin_U) {
+      rows_in_block_U = ceil(((float _Complex)(my_pcol + 1) - (float _Complex)row_of_origin_U)/(float _Complex)np_rows)*nblk;
    }
    else {
       rows_in_block_U = ratio*nblk;
    }
    U_local_start = U_to_calc;
-      
+
    for (i = 0; i < num_of_blocks_in_U_buffer; i++)
-   { 
-      
-      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;   
-      
-      Nb = curr_col_glob_res/nblk;    
-      owner = Nb%np_rows;             
-      curr_row_loc_res = (Nb/np_rows)*nblk; 
+   {
+
+      curr_col_glob_res = np_cols*nblk*(curr_col_loc_res/nblk) + curr_col_loc_res%nblk + ((np_cols+my_pcol)%np_cols)*nblk;
+
+      Nb = curr_col_glob_res/nblk;
+      owner = Nb%np_rows;
+      curr_row_loc_res = (Nb/np_rows)*nblk;
       if(my_prow < owner)
-         curr_row_loc_res = curr_row_loc_res + nblk; 
-      
-      curr_row_loc_A = curr_row_loc_res;     
+         curr_row_loc_res = curr_row_loc_res + nblk;
+
+      curr_row_loc_A = curr_row_loc_res;
       if(col_of_origin_A > my_prow)
          curr_row_loc_A = curr_row_loc_A - nblk;
-      
-      rows_in_block = rows_in_buffer_A - curr_row_loc_A;    
-              
-      curr_col_loc_U = i*nblk;   
-      
+
+      rows_in_block = rows_in_buffer_A - curr_row_loc_A;
+
+      curr_col_loc_U = i*nblk;
+
       if ((curr_col_loc_U + nblk) <= cols_in_buffer_U) {
-         cols_in_block = nblk;      
+         cols_in_block = nblk;
       }
       else {
-         cols_in_block = cols_in_buffer_U - curr_col_loc_U; 
+         cols_in_block = cols_in_buffer_U - curr_col_loc_U;
       }
       if (rows_in_block_U > rows_in_buffer_U) {
          rows_in_block_U = rows_in_buffer_U;
       }
- 
+
       A_local_index = curr_row_loc_A;
       A_local_start = &Buf_to_receive_A[A_local_index];
       Res_ptr = &Res[curr_col_loc_res*na_rows + curr_row_loc_res];
-      LDA_A = rows_in_buffer_A; 
-      LDA_A_new = LDA_A; 
+      LDA_A = rows_in_buffer_A;
+      LDA_A_new = LDA_A;
       if ((rows_in_block > 0) &&(cols_in_block > 0))
       {
-         U_local_start_curr = U_local_start; 
+         U_local_start_curr = U_local_start;
 
-         
+
          for (ii = 0; ii < ceil((float _Complex)rows_in_block_U/(float _Complex)nblk); ii++)
          {
             if ((ii+1)*nblk <= cols_in_buffer_A) {
-               rows_in_block_U_curr = nblk; 
+               rows_in_block_U_curr = nblk;
 	    }
             else {
-               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;  
+               rows_in_block_U_curr = cols_in_buffer_A - ii*nblk;
             }
 
 
 
             if ((j == 1)&&(ii == 0)) {
-               cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows); 
+               cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dZero, Res_ptr, &na_rows);
 	    }
-            else { 
+            else {
                cgemm_("N", "N", &rows_in_block, &cols_in_block, &rows_in_block_U_curr, &dOne, A_local_start, &LDA_A, U_local_start_curr, &rows_in_block_U, &dOne, Res_ptr, &na_rows);
 	    }
 
 
 
             LDA_A_new = LDA_A_new - nblk;
-              
-            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr; 
-            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block; 
+
+            U_local_start_curr = U_local_start_curr + rows_in_block_U_curr;
+            A_local_index = A_local_index - (LDA_A - rows_in_block) + LDA_A*nblk + LDA_A_new - rows_in_block;
             A_local_start = &Buf_to_receive_A[A_local_index];
             LDA_A = LDA_A_new;
          }
       }
-      
+
       U_local_start = U_local_start + rows_in_block_U*cols_in_block;
-      curr_col_loc_res = curr_col_loc_res + nblk; 
+      curr_col_loc_res = curr_col_loc_res + nblk;
       rows_in_block_U = rows_in_block_U + ratio*nblk;
    }
-   
+
 
 
 
@@ -17021,7 +17385,7 @@ void cannons_reduction_fc(float _Complex* A, float _Complex* U, int np_rows, int
    free(Buf_to_receive_A);
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
-   free(M); 
+   free(M);
    free(M_T);
    if(ratio != 1)
       free(Buf_A);
@@ -17053,24 +17417,22 @@ void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rows
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   cannons_reduction_fc(A, U, np_rows, np_cols, my_prow, my_pcol, a_desc, Res, ToStore, c_col_comm, c_row_comm);
 }
 
-# 301 "../src/elpa_generalized/cannon.c" 2
-# 1 "../src/elpa_generalized/cannon_back_template.c" 1
 
 
 
@@ -17127,7 +17489,6 @@ void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rows
 
 
 
-# 75 "../src/elpa_generalized/cannon_back_template.c"
 
 
 
@@ -17140,238 +17501,238 @@ void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rows
 
 void cannons_triang_rectangular_fc(float _Complex* U, float _Complex* B, int np_rows, int np_cols, int my_prow, int my_pcol, int* U_desc, int* b_desc, float _Complex *Res, MPI_Comm row_comm, MPI_Comm col_comm)
 {
-   
-   
-   
-   
-   
-   
-   
-   
-   
-  
+
+
+
+
+
+
+
+
+
+
    int na, nb, nblk, width, na_rows, na_cols, nb_cols, cols_in_buffer_U_my_initial, cols_in_buffer_U, rows_in_buffer_U, Size_receive_U_now, rows_in_buffer_U_now, cols_in_buffer_U_now, rows_in_buffer_U_my_initial;
 
    int Size_receive_U_nowMPI, Size_receive_UMPI, Size_receive_BMPI;
-   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult; 
-   
+   int i, j, Size_send_U, Size_receive_U, Size_send_B, Size_receive_B, intNumber, Buf_rows, Buf_cols_U, Buf_cols_B, curr_rows, num_of_iters, cols_in_buffer, rows_in_block, curr_col_loc, cols_in_block, num_of_blocks_in_U_buffer, col_of_origin_U, b_rows_mult, b_cols_mult;
+
    float _Complex *Buf_to_send_U, *Buf_to_receive_U, *Buf_to_send_B, *Buf_to_receive_B, *Buf_U, *PosBuff;
-  
-   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min; 
-   
+
+   int where_to_send_U, from_where_to_receive_U, where_to_send_B, from_where_to_receive_B, last_proc_col_B, last_proc_row_B, n, Size_U_stored, proc_col_min;
+
    float _Complex *U_local_start, *Buf_pos, *B_local_start, *double_ptr, *CopyTo, *CopyFrom;
-   
+
    int ratio;
-   
+
    MPI_Status status;
 
    int one = 1;
-   int zero = 0; 
+   int zero = 0;
    float _Complex done = 1.0;
    float _Complex dzero = 0.0;
-      
+
    na = U_desc[2];
-   nblk = U_desc[4]; 
+   nblk = U_desc[4];
    nb = b_desc[3];
-   
+
    na_rows = numroc_(&na, &nblk, &my_prow, &zero, &np_rows);
    na_cols = numroc_(&na, &nblk, &my_pcol, &zero, &np_cols);
    nb_cols = numroc_(&nb, &nblk, &my_pcol, &zero, &np_cols);
-   
-   MPI_Request request_U_Recv; 
+
+   MPI_Request request_U_Recv;
    MPI_Request request_U_Send;
-   MPI_Request request_B_Recv; 
+   MPI_Request request_B_Recv;
    MPI_Request request_B_Send;
-   
-   
+
+
    last_proc_col_B = ((nb-1)/nblk) % np_cols;
    last_proc_row_B = ((na-1)/nblk) % np_rows;
-   
-   
-   
+
+
+
     if(nb%nblk == 0)
       if(my_pcol <= last_proc_col_B)
          Buf_cols_B = nb_cols;
       else
-         Buf_cols_B = nb_cols + nblk;      
+         Buf_cols_B = nb_cols + nblk;
    else
       if(my_pcol < last_proc_col_B)
          Buf_cols_B = nb_cols;
       else if(my_pcol > last_proc_col_B)
-         Buf_cols_B = nb_cols + nblk; 
-      else  
-         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;     
-   
+         Buf_cols_B = nb_cols + nblk;
+      else
+         Buf_cols_B = nb_cols + nblk - nb_cols%nblk;
+
    if(na%nblk == 0)
       if(my_prow <= last_proc_row_B)
          Buf_rows = na_rows;
       else
-         Buf_rows = na_rows + nblk;      
+         Buf_rows = na_rows + nblk;
    else
       if(my_prow < last_proc_row_B)
          Buf_rows = na_rows;
       else if(my_prow > last_proc_row_B)
-         Buf_rows = na_rows + nblk; 
-      else  
-         Buf_rows = na_rows + nblk - na_rows%nblk;  
-   
-   ratio = np_cols/np_rows; 
-   
-   intNumber = ceil((float _Complex)na/(float _Complex)(np_cols*nblk));   
-   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;   
-   
+         Buf_rows = na_rows + nblk;
+      else
+         Buf_rows = na_rows + nblk - na_rows%nblk;
+
+   ratio = np_cols/np_rows;
+
+   intNumber = ceil((float _Complex)na/(float _Complex)(np_cols*nblk));
+   Size_U_stored = ratio*nblk*nblk*intNumber*(intNumber+1)/2 + 2;
+
    Buf_to_send_U = malloc(ratio*Size_U_stored*sizeof(float _Complex));
    Buf_to_receive_U = malloc(ratio*Size_U_stored*sizeof(float _Complex));
    Buf_to_send_B = malloc(Buf_cols_B*Buf_rows*sizeof(float _Complex));
    Buf_to_receive_B = malloc(Buf_cols_B*Buf_rows*sizeof(float _Complex));
    if(ratio != 1)
-      Buf_U = malloc(Size_U_stored*sizeof(float _Complex));   
-    
+      Buf_U = malloc(Size_U_stored*sizeof(float _Complex));
+
    for(i = 0; i < na_rows*nb_cols; i++)
-     Res[i] = 0; 
-    
-   
-      
-   
-   if((ratio != 1)||(my_prow != 0))   
-      Buf_pos = Buf_to_send_U;     
+     Res[i] = 0;
+
+
+
+
+   if((ratio != 1)||(my_prow != 0))
+      Buf_pos = Buf_to_send_U;
    else
-      Buf_pos = Buf_to_receive_U;  
-      
-   
-   
-   if(my_pcol >= my_prow)  
-      curr_col_loc = 0;    
+      Buf_pos = Buf_to_receive_U;
+
+
+
+   if(my_pcol >= my_prow)
+      curr_col_loc = 0;
    else
-      curr_col_loc = 1;   
-      
-   num_of_iters = ceil((float _Complex)na_cols/(float _Complex)nblk);             
-   num_of_iters = num_of_iters - curr_col_loc;   
-   curr_col_loc = curr_col_loc*nblk;             
+      curr_col_loc = 1;
+
+   num_of_iters = ceil((float _Complex)na_cols/(float _Complex)nblk);
+   num_of_iters = num_of_iters - curr_col_loc;
+   curr_col_loc = curr_col_loc*nblk;
 
    if(my_pcol >= my_prow )
       rows_in_block = ceil(((float _Complex)(my_pcol + 1) - (float _Complex)my_prow)/(float _Complex)np_rows)*nblk;
    else
       rows_in_block = ratio*nblk;
    cols_in_buffer_U_my_initial = 0;
-   Size_send_U = 0; 
-   for(i = 0; i < num_of_iters; i++)       
-   {      
+   Size_send_U = 0;
+   for(i = 0; i < num_of_iters; i++)
+   {
       if(rows_in_block > na_rows)
-         rows_in_block = na_rows; 
+         rows_in_block = na_rows;
 
       if ((na_cols - curr_col_loc) < nblk)
-         cols_in_block = na_cols - curr_col_loc;     
+         cols_in_block = na_cols - curr_col_loc;
       else
-         cols_in_block = nblk; 
-      
+         cols_in_block = nblk;
+
       if((rows_in_block > 0)&&(cols_in_block > 0))
       {
-         double_ptr = &U[curr_col_loc*na_rows];   
-         clacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);     
-         Buf_pos = Buf_pos + rows_in_block*cols_in_block;                         
-         Size_send_U = Size_send_U + rows_in_block*cols_in_block; 
-         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block; 
+         double_ptr = &U[curr_col_loc*na_rows];
+         clacpy_("A", &rows_in_block, &cols_in_block, double_ptr, &na_rows, Buf_pos, &rows_in_block);
+         Buf_pos = Buf_pos + rows_in_block*cols_in_block;
+         Size_send_U = Size_send_U + rows_in_block*cols_in_block;
+         cols_in_buffer_U_my_initial = cols_in_buffer_U_my_initial + cols_in_block;
       }
-      curr_col_loc = curr_col_loc + nblk;      
+      curr_col_loc = curr_col_loc + nblk;
       rows_in_block = rows_in_block + ratio*nblk;
    }
-   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;    
-   *Buf_pos = (float _Complex)cols_in_buffer_U_my_initial; 
-   Buf_pos = Buf_pos + 1; 
-   *Buf_pos = (float _Complex)rows_in_buffer_U_my_initial; 
+   rows_in_buffer_U_my_initial = rows_in_block - ratio*nblk;
+   *Buf_pos = (float _Complex)cols_in_buffer_U_my_initial;
+   Buf_pos = Buf_pos + 1;
+   *Buf_pos = (float _Complex)rows_in_buffer_U_my_initial;
    Size_send_U = Size_send_U + 2;
-   
-   
-   
-   proc_col_min = np_cols; 
+
+
+
+   proc_col_min = np_cols;
    for(i = 0; i < ratio; i++)
    {
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
       if(from_where_to_receive_U < proc_col_min)
          proc_col_min = from_where_to_receive_U;
    }
-   
-   
-   Size_receive_U = 0;       
-   cols_in_buffer_U = 0;     
-   rows_in_buffer_U = 0;     
+
+
+   Size_receive_U = 0;
+   cols_in_buffer_U = 0;
+   rows_in_buffer_U = 0;
    for(i = 0; i < ratio; i++)
    {
-      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;                
+      where_to_send_U = (my_pcol - my_prow - i*np_rows + np_cols)%np_cols;
       from_where_to_receive_U = (my_pcol + my_prow + i*np_rows)%np_cols;
-      
-      
-      if(ratio != 1)   
+
+
+      if(ratio != 1)
       {
-         if(where_to_send_U != my_pcol)   
+         if(where_to_send_U != my_pcol)
          {
             MPI_Sendrecv(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, 0, Buf_U, (int) Size_U_stored, ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, 0, row_comm, &status);
             MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_U_nowMPI);
             Size_receive_U_now = (int) Size_receive_U_nowMPI;
-            Size_receive_U = Size_receive_U + Size_receive_U_now - 2; 
-            
+            Size_receive_U = Size_receive_U + Size_receive_U_now - 2;
+
             cols_in_buffer_U_now = Buf_U[Size_receive_U_now - 2];
             cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
             rows_in_buffer_U_now = Buf_U[Size_receive_U_now - 1];
-            
-            if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
 
-            intNumber = from_where_to_receive_U/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(from_where_to_receive_U < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            if(rows_in_buffer_U < rows_in_buffer_U_now)
+               rows_in_buffer_U = rows_in_buffer_U_now;
+
+            intNumber = from_where_to_receive_U/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(from_where_to_receive_U < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_U; 
+            CopyFrom = Buf_U;
          }
-         else  
+         else
          {
             cols_in_buffer_U_now = cols_in_buffer_U_my_initial;
-            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now; 
-            
+            cols_in_buffer_U = cols_in_buffer_U + cols_in_buffer_U_now;
+
             rows_in_buffer_U_now = rows_in_buffer_U_my_initial;
             if(rows_in_buffer_U < rows_in_buffer_U_now)
-               rows_in_buffer_U = rows_in_buffer_U_now; 
+               rows_in_buffer_U = rows_in_buffer_U_now;
 
-            intNumber = my_pcol/np_rows; 
-            if(proc_col_min >= my_prow)   
-               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];  
-            else                         
-               if(my_pcol < my_prow)   
-                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];  
+            intNumber = my_pcol/np_rows;
+            if(proc_col_min >= my_prow)
+               CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber + 1)/2];
+            else
+               if(my_pcol < my_prow)
+                  CopyTo = &Buf_to_receive_U[nblk*nblk*ratio*(ratio - 1)/2];
                else
                   CopyTo = &Buf_to_receive_U[nblk*nblk*intNumber*(intNumber - 1)/2];
-            CopyFrom = Buf_to_send_U;  
+            CopyFrom = Buf_to_send_U;
             Size_receive_U = Size_receive_U + Size_send_U - 2;
          }
-            
-         
-         intNumber = ceil((float _Complex)cols_in_buffer_U_now/(float _Complex)nblk);  
+
+
+         intNumber = ceil((float _Complex)cols_in_buffer_U_now/(float _Complex)nblk);
          if(from_where_to_receive_U >= my_prow)
-            rows_in_block = ceil(((float _Complex)(from_where_to_receive_U + 1) - (float _Complex)my_prow)/(float _Complex)np_rows)*nblk;  
+            rows_in_block = ceil(((float _Complex)(from_where_to_receive_U + 1) - (float _Complex)my_prow)/(float _Complex)np_rows)*nblk;
          else
-            rows_in_block = ratio*nblk; 
+            rows_in_block = ratio*nblk;
          for(j = 0; j < intNumber; j++)
          {
             if((j+1)*nblk < cols_in_buffer_U_now)
-               cols_in_block = nblk; 
+               cols_in_block = nblk;
             else
                cols_in_block = cols_in_buffer_U_now - j*nblk;
-               
+
             clacpy_("A", &rows_in_block, &cols_in_block, CopyFrom, &rows_in_block, CopyTo, &rows_in_block);
 
-            CopyFrom = CopyFrom + rows_in_block*cols_in_block; 
-            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;  
-            rows_in_block = rows_in_block + ratio*nblk;     
+            CopyFrom = CopyFrom + rows_in_block*cols_in_block;
+            CopyTo = CopyTo + ratio*rows_in_block*nblk + nblk*nblk*ratio*(ratio-1)/2;
+            rows_in_block = rows_in_block + ratio*nblk;
             if(rows_in_block > rows_in_buffer_U_now)
-               rows_in_block = rows_in_buffer_U_now; 
+               rows_in_block = rows_in_buffer_U_now;
          }
       }
-      else    
+      else
       {
          if(my_prow > 0)
          {
@@ -17382,7 +17743,7 @@ void cannons_triang_rectangular_fc(float _Complex* U, float _Complex* B, int np_
             cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
             rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
          }
-         else    
+         else
          {
             Size_receive_U = Size_send_U;
             rows_in_buffer_U = rows_in_buffer_U_my_initial;
@@ -17396,67 +17757,67 @@ void cannons_triang_rectangular_fc(float _Complex* U, float _Complex* B, int np_
       Buf_to_receive_U[Size_receive_U + 1] = rows_in_buffer_U;
       Size_receive_U = Size_receive_U + 2;
    }
-      
-   
-   
+
+
+
    if(my_pcol > 0)
    {
-      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;                   
+      where_to_send_B = (my_prow - my_pcol + np_cols)%np_rows;
       from_where_to_receive_B = (my_pcol + my_prow)%np_rows;
 
-      
-      if(where_to_send_B != my_prow)                  
+
+      if(where_to_send_B != my_prow)
       {
-         
+
          clacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_send_B, &na_rows);
-         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)1275070494), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)1275070494), (int) from_where_to_receive_B, 0, col_comm, &status); 
-         MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_BMPI); 
-         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-         else Size_receive_B=0; 
+         MPI_Sendrecv(Buf_to_send_B, (int) (nb_cols*na_rows), ((MPI_Datatype)1275070494), (int) where_to_send_B, 0, Buf_to_receive_B, (int) (nb_cols*Buf_rows), ((MPI_Datatype)1275070494), (int) from_where_to_receive_B, 0, col_comm, &status);
+         MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_BMPI);
+         if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+         else Size_receive_B=0;
       }
       else
       {
-         clacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows); 
+         clacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
          Size_receive_B = na_rows;
       }
    }
    else
    {
-      clacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);        
-      Size_receive_B = na_rows; 
-   }   
-   
-   
+      clacpy_("A", &na_rows, &nb_cols, B, &na_rows, Buf_to_receive_B, &na_rows);
+      Size_receive_B = na_rows;
+   }
+
+
    where_to_send_U = (my_pcol - 1 + np_cols)%np_cols;
    from_where_to_receive_U = (my_pcol + 1)%np_cols;
    where_to_send_B = (my_prow - 1 + np_rows)%np_rows;
-   from_where_to_receive_B = (my_prow + 1)%np_rows;    
+   from_where_to_receive_B = (my_prow + 1)%np_rows;
 
    for(i = 1; i < np_rows; i++)
    {
-      
-      double_ptr = Buf_to_send_U; 
-      Buf_to_send_U = Buf_to_receive_U; 
-      Buf_to_receive_U = double_ptr; 
-      
-      double_ptr = Buf_to_send_B; 
-      Buf_to_send_B = Buf_to_receive_B; 
+
+      double_ptr = Buf_to_send_U;
+      Buf_to_send_U = Buf_to_receive_U;
+      Buf_to_receive_U = double_ptr;
+
+      double_ptr = Buf_to_send_B;
+      Buf_to_send_B = Buf_to_receive_B;
       Buf_to_receive_B = double_ptr;
-            
+
       Size_send_U = Size_receive_U;
-      Size_send_B = Size_receive_B;                   
-        
-      
-      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, 0, row_comm, &request_U_Send); 
-      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);      
-      
-      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)1275070494), (int) where_to_send_B, 0, col_comm, &request_B_Send); 
-      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);      
-      
+      Size_send_B = Size_receive_B;
+
+
+      MPI_Isend(Buf_to_send_U, (int) Size_send_U, ((MPI_Datatype)1275070494), (int) where_to_send_U, 0, row_comm, &request_U_Send);
+      MPI_Irecv(Buf_to_receive_U, (int) (ratio*Size_U_stored), ((MPI_Datatype)1275070494), (int) from_where_to_receive_U, 0, row_comm, &request_U_Recv);
+
+      MPI_Isend(Buf_to_send_B, (int) (Size_send_B*nb_cols), ((MPI_Datatype)1275070494), (int) where_to_send_B, 0, col_comm, &request_B_Send);
+      MPI_Irecv(Buf_to_receive_B, (int) (Buf_rows*nb_cols), ((MPI_Datatype)1275070494), (int) from_where_to_receive_B, 0, col_comm, &request_B_Recv);
+
       cols_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-2];
       rows_in_buffer_U = (int)Buf_to_send_U[Size_receive_U-1];
-      
-      proc_col_min = np_cols; 
+
+      proc_col_min = np_cols;
       for(j = 0; j < ratio; j++)
       {
          col_of_origin_U = (my_pcol + my_prow + i - 1 + j*np_rows)%np_cols;
@@ -17464,51 +17825,51 @@ void cannons_triang_rectangular_fc(float _Complex* U, float _Complex* B, int np_
             proc_col_min = col_of_origin_U;
       }
       col_of_origin_U = proc_col_min;
-      
-      num_of_blocks_in_U_buffer = ceil((float _Complex)cols_in_buffer_U/(float _Complex)nblk); 
-      
+
+      num_of_blocks_in_U_buffer = ceil((float _Complex)cols_in_buffer_U/(float _Complex)nblk);
+
       if (col_of_origin_U >= my_prow)
          B_local_start = Buf_to_send_B;
-      else 
+      else
          B_local_start = Buf_to_send_B + nblk;
-      
+
       U_local_start = Buf_to_send_U;
-      
+
       for(j = 0; j < num_of_blocks_in_U_buffer; j++)
       {
          curr_rows = (j+1)*nblk;
          if (curr_rows > rows_in_buffer_U)
-            curr_rows = rows_in_buffer_U; 
-         
+            curr_rows = rows_in_buffer_U;
+
          if((j+1)*nblk <= cols_in_buffer_U)
-            b_rows_mult = nblk; 
+            b_rows_mult = nblk;
          else
             b_rows_mult = cols_in_buffer_U - j*nblk;
-         
-         if(Size_receive_B!=0) cgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
-  
-         U_local_start = U_local_start + nblk*curr_rows; 
-         B_local_start = B_local_start + nblk; 
+
+         if(Size_receive_B!=0) cgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+         U_local_start = U_local_start + nblk*curr_rows;
+         B_local_start = B_local_start + nblk;
       }
-      
+
       MPI_Wait(&request_U_Send, &status);
       MPI_Wait(&request_U_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI); 
+      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_UMPI);
       Size_receive_U = (int) Size_receive_UMPI;
 
       MPI_Wait(&request_B_Send, &status);
       MPI_Wait(&request_B_Recv, &status);
-      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_BMPI); 
-      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols; 
-      else Size_receive_B=0; 
+      MPI_Get_count(&status, ((MPI_Datatype)1275070494), &Size_receive_BMPI);
+      if (nb_cols!=0) Size_receive_B = (int) Size_receive_BMPI / nb_cols;
+      else Size_receive_B=0;
 
-   }         
-   
-   
+   }
+
+
    cols_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-2];
    rows_in_buffer_U = (int)Buf_to_receive_U[Size_receive_U-1];
-   
-   proc_col_min = np_cols; 
+
+   proc_col_min = np_cols;
    for(j = 0; j < ratio; j++)
    {
       col_of_origin_U = (my_pcol + my_prow + np_rows - 1 + j*np_rows)%np_cols;
@@ -17516,33 +17877,33 @@ void cannons_triang_rectangular_fc(float _Complex* U, float _Complex* B, int np_
          proc_col_min = col_of_origin_U;
    }
    col_of_origin_U = proc_col_min;
-      
+
    num_of_blocks_in_U_buffer = ceil((float _Complex)cols_in_buffer_U/(float _Complex)nblk);
-  
+
    if (col_of_origin_U >= my_prow)
       B_local_start = Buf_to_receive_B;
-   else 
+   else
       B_local_start = Buf_to_receive_B + nblk;
-      
-   U_local_start = Buf_to_receive_U;  
-   
+
+   U_local_start = Buf_to_receive_U;
+
    for(j = 0; j < num_of_blocks_in_U_buffer; j++)
    {
       curr_rows = (j+1)*nblk;
       if (curr_rows > rows_in_buffer_U)
-         curr_rows = rows_in_buffer_U; 
-      
+         curr_rows = rows_in_buffer_U;
+
       if((j+1)*nblk <= cols_in_buffer_U)
-         b_rows_mult = nblk; 
+         b_rows_mult = nblk;
       else
          b_rows_mult = cols_in_buffer_U - j*nblk;
-      
-      if(Size_receive_B!=0) cgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows); 
 
-      U_local_start = U_local_start + nblk*curr_rows; 
+      if(Size_receive_B!=0) cgemm_("N", "N", &curr_rows, &nb_cols, &b_rows_mult, &done, U_local_start, &curr_rows, B_local_start, &Size_receive_B, &done, Res, &na_rows);
+
+      U_local_start = U_local_start + nblk*curr_rows;
       B_local_start = B_local_start + nblk;
    }
-   
+
    free(Buf_to_send_U);
    free(Buf_to_receive_U);
    free(Buf_to_send_B);
@@ -17576,15 +17937,14 @@ void cannons_triang_rectangular_c_fc(float _Complex* U, float _Complex* B, int l
   np_rows = (int) np_rowsMPI;
   np_cols = (int) np_colsMPI;
 
-  
-  
-  
-  
-  
+
+
+
+
+
   cannons_triang_rectangular_fc(U, B, np_rows, np_cols, my_prow, my_pcol, u_desc, b_desc, Res, c_col_comm, c_row_comm);
 }
 
-# 302 "../src/elpa_generalized/cannon.c" 2
 
 
 
@@ -17603,7 +17963,7 @@ void cannons_triang_rectangular_c_fc(float _Complex* U, float _Complex* B, int l
 
 
 
- 
+
 
 void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rowsCast, int local_colsCast, int* a_desc,
                          float _Complex *Res, int ToStore, int row_comm, int col_comm);
@@ -17622,6 +17982,6 @@ void cannons_reduction_c_fc(float _Complex* A, float _Complex* U, int local_rows
 
 
 
- 
+
 void cannons_triang_rectangular_c_fc(float _Complex* U, float _Complex* B, int local_rowsCast, int local_colsCast,
                                     int* u_desc, int* b_desc, float _Complex *Res, int row_comm, int col_comm);
