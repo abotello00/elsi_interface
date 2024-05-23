@@ -9,7 +9,7 @@
 !!
 module ELSI_SET
 
-   use ELSI_CONSTANT, only: MULTI_PROC
+   use ELSI_CONSTANT, only: MULTI_PROC, ELPA_SOLVER, EIGENEXA_SOLVER, MAGMA_SOLVER
    use ELSI_DATATYPE, only: elsi_handle
    use ELSI_MALLOC, only: elsi_allocate
    use ELSI_MPI
@@ -66,7 +66,7 @@ module ELSI_SET
    public :: elsi_set_chase_tol
    public :: elsi_set_chase_filter_deg
    public :: elsi_set_chase_extra_space
-   public :: elsi_set_chase_min_extra_space   
+   public :: elsi_set_chase_min_extra_space
    public :: elsi_set_chase_deg_opt
    public :: elsi_set_chase_evecs_recycl
    public :: elsi_set_chase_cholqr
@@ -1178,12 +1178,12 @@ subroutine elsi_set_chase_extra_space(eh, percent)
       call elsi_stop(eh%bh,msg,caller)
    end if
 
-   eh%ph%chase_extra_space = percent 
+   eh%ph%chase_extra_space = percent
 
 end subroutine
 
 !>
-!! Set if the degree optimization mechanism of Cheby. polynomimal is 
+!! Set if the degree optimization mechanism of Cheby. polynomimal is
 !! used in ChASE. Default is true.
 !!
 subroutine elsi_set_chase_deg_opt(eh, is_deg_opt)
@@ -1375,6 +1375,11 @@ subroutine elsi_set_occ_non_aufbau(eh,occ_non_aufbau,n_constraints,constr_state,
   character(len=*), parameter :: caller = "elsi_set_occ_non_aufbau"
 
   call elsi_check_init(eh%bh,eh%handle_init,caller)
+
+  if (all([ELPA_SOLVER, MAGMA_SOLVER, EIGENEXA_SOLVER] /= eh%ph%solver)) then
+    write(msg,"(A)") "Unsupported eigensolver"
+    call elsi_stop(eh%bh,msg,caller)
+  end if
 
   eh%ph%occ_non_aufbau = occ_non_aufbau
   eh%ph%n_constraints = n_constraints
