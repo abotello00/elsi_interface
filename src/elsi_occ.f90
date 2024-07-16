@@ -499,13 +499,13 @@ contains
                 do i_spin = 1,n_spin
                     do i_state = 1,n_state
                         ! test erf_v2
-                        call erf_v2( (eval(i_state,i_spin,i_kpt)-mu)*invert_width, res)
-                         occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
-                             *(1.0_r8-res)
-                         write(*,*) "res=",res
+                        ! call erf_v2( (eval(i_state,i_spin,i_kpt)-mu)*invert_width, res)
+                        !  occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
+                        !      *(1.0_r8-res)
+                        !  write(*,*) "res=",res
 
-                        ! occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
-                        !     *(1.0_r8-erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width))
+                        occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
+                            *(1.0_r8-erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width))
 
                         diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
                     end do
