@@ -202,7 +202,7 @@ contains
         ! endif
 
         ! Go through all occupation numbers to see if they are fractional
-        frac_tol = 1E-08
+        frac_tol = 1E-13
 
         ! Debug: print occupation numbers
         open(unit=10,file="occ.dat", action="write")
