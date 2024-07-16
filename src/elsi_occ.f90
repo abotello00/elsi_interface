@@ -216,7 +216,7 @@ contains
                     frac_diff = abs(i_occ_val-nint(i_occ_val))
 
                     ! Write to occ.dat
-                    write(10, '(2X, 3I5, F21.8, A, F21.8)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
+                    write(10, '(2X, 3I5, F21.8, 2X, F21.8)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
 
                     if (frac_diff .le. frac_tol) then
                     ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
