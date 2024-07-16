@@ -204,12 +204,19 @@ contains
         ! Go through all occupation numbers to see if they are fractional
         frac_tol = 1E-08
 
+        ! Debug: print occupation numbers
+        open(unit=10,file="occ.dat", action="write")
+        write(10,'(2X, 5A)') "i_k_point", "i_spin", "i_state", "occ", "frac_diff"
+
         loopi: do i_k_point = 1, n_kpt, 1
             loopj: do i_spin = 1, n_spin, 1
                 loopk: do i_state = 1, n_state, 1
 
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
                     frac_diff = abs(i_occ_val-nint(i_occ_val))
+
+                    ! Write to occ.dat
+                    write(10, '(2X, 3I5, 2F10.2)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
 
                     if (frac_diff .le. frac_tol) then
                     ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
@@ -223,12 +230,14 @@ contains
                         write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
                         call elsi_say(bh,msg)
 
-                        exit loopi
+                        !exit loopi
                     endif
 
                 enddo loopk
             enddo loopj
         enddo loopi
+
+        close(10)
 
         if (fractionally_occupied .eqv. .false.) then
             homo_level = -10000000.0d0
