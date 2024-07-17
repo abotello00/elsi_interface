@@ -227,10 +227,12 @@ contains
 
                         write(msg,"(A)") "ELSI found fractional occupation numbers."
                         call elsi_say(bh,msg)
+                        write(msg,"(A,F21.14,A)") "occupation :", i_occ_val
+                        call elsi_say(bh,msg)
                         write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
                         call elsi_say(bh,msg)
 
-                        !exit loopi
+                        exit loopi
                     endif
 
                 enddo loopk
