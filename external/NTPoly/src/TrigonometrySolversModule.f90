@@ -66,7 +66,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Compute the sine of a matrix. (dense version).
   SUBROUTINE DenseSine(Mat, OutputMat, solver_parameters_in)
     !> The matrix to compute.
-    TYPE(Matrix_ps), INTENT(IN)  :: Mat
+    TYPE(Matrix_ps), INTENT(INOUT)  :: Mat
     !> The sine of the input matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver
@@ -123,7 +123,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Compute the cosine of a matrix. (dense version).
   SUBROUTINE DenseCosine(Mat, OutputMat, solver_parameters_in)
     !> The matrix to compute.
-    TYPE(Matrix_ps), INTENT(IN)  :: Mat
+    TYPE(Matrix_ps), INTENT(INOUT)  :: Mat
     !> The cosine of the input matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver

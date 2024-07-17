@@ -65,7 +65,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Computes the matrix sign function (dense version).
   SUBROUTINE DenseSignFunction(InMat, OutputMat, solver_parameters_in)
     !> The matrix to compute the sign of.
-    TYPE(Matrix_ps), INTENT(IN)  :: InMat
+    TYPE(Matrix_ps), INTENT(INOUT)  :: InMat
     !> The sign of the input matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver

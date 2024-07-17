@@ -148,7 +148,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Compute the inverse of a matrix using the eigendecomposition.
   SUBROUTINE DenseInvert(InputMat, OutputMat, solver_parameters_in)
     !> The matrix to compute the pseudo inverse of.
-    TYPE(Matrix_ps), INTENT(IN)  :: InputMat
+    TYPE(Matrix_ps), INTENT(INOUT)  :: InputMat
     !> The pseudoinverse of the input matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver

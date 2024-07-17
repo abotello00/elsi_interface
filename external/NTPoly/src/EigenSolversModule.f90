@@ -32,7 +32,7 @@ CONTAINS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE EigenDecomposition(this, eigenvalues, eigenvectors_in, nvals_in, &
        & solver_parameters_in)
     !> The matrix to decompose.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> Diagonal matrix of eigenvalues.
     TYPE(Matrix_ps), INTENT(INOUT) :: eigenvalues
     !> The eigenvectors of a matrix.
@@ -72,7 +72,7 @@ CONTAINS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !! transformation of the eigenvalues.
   SUBROUTINE DenseMatrixFunction(this, ResultMat, func, solver_parameters_in)
     !> The matrix to apply the function to.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The transformed matrix
     TYPE(Matrix_ps), INTENT(INOUT) :: ResultMat
     INTERFACE
@@ -134,7 +134,7 @@ CONTAINS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE EigenSerial(this, eigenvalues, nvals, solver_params, &
        & eigenvectors_in)
     !> The matrix to compute.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The eigenvalues of the matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: eigenvalues
     !> The number of vals to compute.
@@ -178,7 +178,7 @@ CONTAINS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        & eigenvectors_in)
     USE DMatrixModule, ONLY : EigenDecomposition
     !> The matrix to compute.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The eigenvalues of the matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: eigenvalues
     !> Number of values to compute.
@@ -242,7 +242,7 @@ CONTAINS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        & eigenvectors_in)
     USE DMatrixModule, ONLY : EigenDecomposition
     !> The matrix to compute.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The eigenvalues of the matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: eigenvalues
     !> Number of values to compute.

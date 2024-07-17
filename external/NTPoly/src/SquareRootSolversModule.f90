@@ -60,7 +60,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Computes the matrix square root function (dense version).
   SUBROUTINE DenseSquareRoot(Mat, OutputMat, solver_parameters_in)
     !> The matrix to compute the square root of.
-    TYPE(Matrix_ps), INTENT(IN) :: Mat
+    TYPE(Matrix_ps), INTENT(INOUT) :: Mat
     !> The computed matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver
@@ -128,7 +128,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Computes the matrix inverse square root function (dense version).
   SUBROUTINE DenseInverseSquareRoot(Mat, OutputMat, solver_parameters_in)
     !> The matrix to compute the inverse square root of.
-    TYPE(Matrix_ps), INTENT(IN)  :: Mat
+    TYPE(Matrix_ps), INTENT(INOUT)  :: Mat
     !> The computed matrix.
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver

@@ -372,7 +372,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE ComputeDenseExponential(InputMat, OutputMat, solver_parameters_in)
     !> The input matrix
-    TYPE(Matrix_ps), INTENT(IN)  :: InputMat
+    TYPE(Matrix_ps), INTENT(INOUT)  :: InputMat
     !> OutputMat = exp(InputMat)
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver
@@ -637,7 +637,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE ComputeDenseLogarithm(InputMat, OutputMat, solver_parameters_in)
     !> The input matrix
-    TYPE(Matrix_ps), INTENT(IN)  :: InputMat
+    TYPE(Matrix_ps), INTENT(INOUT)  :: InputMat
     !> OutputMat = exp(InputMat)
     TYPE(Matrix_ps), INTENT(INOUT) :: OutputMat
     !> Parameters for the solver

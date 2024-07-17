@@ -2318,7 +2318,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Print matrix implementation (real).
   SUBROUTINE PrintMatrix_psr(this, file_name_in)
     !> The matrix to print.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> Optionally, you can pass a file to print to instead of the console.
     CHARACTER(len=*), OPTIONAL, INTENT(IN) :: file_name_in
     !! Temporary Variables
@@ -2341,7 +2341,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Print matrix implementation (complex).
   SUBROUTINE PrintMatrix_psc(this, file_name_in)
     !> The matrix to print.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> Optionally, you can pass a file to print to instead of the console.
     CHARACTER(len=*), OPTIONAL, INTENT(IN) :: file_name_in
     !! Temporary Variables
@@ -3223,7 +3223,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> still be replicated across slices.
   SUBROUTINE GatherMatrixToProcess_psr_id(this, local_mat, within_slice_id)
     !> The matrix to gather.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The full matrix, stored in a local matrix.
     TYPE(Matrix_lsr), INTENT(INOUT) :: local_mat
     !> Which process to gather on.
@@ -3275,7 +3275,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> every process.
   SUBROUTINE GatherMatrixToProcess_psr_all(this, local_mat)
     !> The matrix to gather.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The full matrix, stored in a local matrix.
     TYPE(Matrix_lsr), INTENT(INOUT) :: local_mat
     !! Local Variables
@@ -3313,7 +3313,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> still be replicated across slices.
   SUBROUTINE GatherMatrixToProcess_psc_id(this, local_mat, within_slice_id)
     !> The matrix to gather.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The full matrix, stored in a local matrix.
     TYPE(Matrix_lsc), INTENT(INOUT) :: local_mat
     !> Which process to gather on.
@@ -3365,7 +3365,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> every process.
   SUBROUTINE GatherMatrixToProcess_psc_all(this, local_mat)
     !> The matrix to gather.
-    TYPE(Matrix_ps), INTENT(IN) :: this
+    TYPE(Matrix_ps), INTENT(INOUT) :: this
     !> The full matrix, stored in a local matrix.
     TYPE(Matrix_lsc), INTENT(INOUT) :: local_mat
     !! Local Variables
