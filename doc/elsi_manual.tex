@@ -910,6 +910,7 @@ In all the subroutines listed below, the first argument (input and output) is an
 \multicolumn{4}{l}{\api{elsi\_set\_mu\_mp\_order}(handle, mu\_mp\_order)}\\
 \multicolumn{4}{l}{\api{elsi\_set\_n\_frozen}(handle, n\_frozen)}\\
 \multicolumn{4}{l}{\api{elsi\_set\_frozen\_idx}(handle, frozen\_idx)}\\
+\multicolumn{4}{l}{\api{elsi\_set\_occ\_non\_aufbau}(handle, occ\_non\_aufbau, n\_constraints, constr\_state, constr\_spin, constr\_occ)}\\
 \multicolumn{4}{l}{}\\
 \hline
 \multicolumn{1}{|l|}{\textbf{Argument}} & \multicolumn{1}{l|}{\textbf{Data Type}} & \multicolumn{1}{l|}{\textbf{Default}} & \multicolumn{1}{l|}{\textbf{Explanation}}\\
@@ -952,11 +953,27 @@ In all the subroutines listed below, the first argument (input and output) is an
 \hline
 \texttt{frozen\_idx}         & 1D integer array & -           & List of indices of states to be frozen. Only relevant if \texttt{n\_frozen} is set. By default, the first \texttt{n\_frozen} states are frozen.\\
 \hline
+\texttt{occ\_non\_aufbau} & logical & FALSE  & Flag to enable non-Aufbau
+occupation. \\
+\hline
+\texttt{n\_constraints} & integer & -  & Number of constraints for
+non-Aufbau occupation setting. \\
+\hline
+\texttt{constr\_state} & 2D integer array & -  & Array for constraint states. \\
+\hline
+\texttt{constr\_spin} & 1D integer array & -  & Array for constraint spins. \\
+\hline
+\texttt{constr\_occ} & 1D integer array & -  & Array for constraint
+occupations. \\
+\hline
 \end{longtable}
 
 \textbf{Remarks}
 
-(1) If the overlap matrix is an identity matrix, all settings related to the singularity (ill-conditioning) check are ignored. The \texttt{ovlp} passed into \api{elsi\_\{ev$\vert$dm\}\_\{real$\vert$complex\}\{\_sparse\}} is not referenced.
+(1) If the overlap matrix is an identity matrix, all settings related to
+the singularity (ill-conditioning) check are ignored. The \texttt{ovlp}
+passed into \api{elsi\_\{ev$\vert$dm\}\_\{real$\vert$complex\}\{\_sparse\}}
+is not referenced.
 
 (2) If the ill-conditioning check is not disabled, in the first iteration of each SCF cycle, all eigenvalues of the overlap matrix are computed. If there is any eigenvalue smaller than \texttt{illcond\_tol}, the matrix is considered to be ill-conditioned.
 
