@@ -283,7 +283,7 @@ contains
         write(msg,"(A,E12.4,A)") "Residual electron error :", diff
         call elsi_say(bh,msg)
 
-        ! (OLDER) fractional occupation check
+        ! Fractional occupation check from FHI-aims
         call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
             lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
             dummy_int, dummy_int, dummy_int)
