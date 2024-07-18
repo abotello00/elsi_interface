@@ -280,7 +280,7 @@ contains
         call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
             occ,mu,diff)
         call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
-        write(msg,"(A,E12.4,A)") "Residual electron error :", diff
+        write(msg,"(A,E12.4,A)") "Residual electron error for mid-point Fermi level :", diff
         call elsi_say(bh,msg)
 
         ! Fractional occupation check from FHI-aims
@@ -289,6 +289,11 @@ contains
             dummy_int, dummy_int, dummy_int)
 
         occupation_def = 0.05d0
+
+        write(msg,"(A,F21.14,A)") "homo_occ :", homo_occ
+        call elsi_say(bh,msg)
+        write(msg,"(A,F21.14,A)") "lumo_occ :", lumo_occ
+        call elsi_say(bh,msg)
 
         if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
             fractionally_occupied = .true.
