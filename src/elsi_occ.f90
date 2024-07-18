@@ -292,6 +292,8 @@ contains
 
         if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
             fractionally_occupied = .true.
+            write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
+            call elsi_say(bh,msg)
         else
             fractionally_occupied = .false.
         endif
