@@ -50,6 +50,7 @@ contains
         real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt)
         real(kind=r8), intent(out) :: mu
         real(kind=r8)  :: mu_tmp
+        real(kind=r8)  :: k_wt_renorm(n_kpt)
 
         ! dummy variables to call elsi_find_homo_lumo_gap
         integer(kind=i4) :: dummy_int
@@ -68,6 +69,7 @@ contains
         real(kind=r8) :: frac_diff
         logical :: fractionally_occupied
         character(len=200) :: msg
+        character(len=*), parameter :: caller = "elsi_mu_and_occ"
 
         !  counters
         real*8 :: midpoint, i_occ_val
@@ -275,10 +277,18 @@ contains
         ! Set mid-point inbetween this homo and lumo
         mu = (homo_level + lumo_level) / 2.0_r8
 
+        ! Check k-weights
+        if(abs(sum(k_wt)-1) >1e-5) then
+            write(msg,"(A,F21.14)") "Error: sum of k-vector weights is not one!", sum(k_wt)
+            call elsi_stop(bh,msg,caller)
+        end if
+        ! There can be numerical inaccuracy. This takes care of them.
+        k_wt_renorm = k_wt/sum(k_wt)
+
         ! Check electron number for this mu value
-        call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+        call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
             occ,mu,diff)
-        call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
+        call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
         write(msg,"(A,E12.4,A)") "Residual electron error for mid-point Fermi level :", diff
         call elsi_say(bh,msg)
 
@@ -354,11 +364,11 @@ contains
             ! Set mu to previous value
             mu = mu_tmp
             ! Check electron number for this mu value
-            call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+            call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
                 occ,mu,diff)
-            call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
+            call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
 
-            if (abs(diff) < ph%mu_tol) then
+            if (abs(diff) .le. ph%mu_tol) then
                 write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
                 call elsi_say(bh,msg)
                 write(msg,"(A)") "Reverting to previous chemical potential value."
