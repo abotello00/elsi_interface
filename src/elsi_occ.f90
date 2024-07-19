@@ -202,7 +202,6 @@ contains
         ! endif
 
         ! Go through all occupation numbers to see if they are fractional
-        frac_tol = 1E-13
 
         ! Debug: print occupation numbers
         ! open(unit=10,file="occ-init.dat", action="write")
@@ -284,63 +283,69 @@ contains
         call elsi_say(bh,msg)
 
         ! Fractional occupation check from FHI-aims
-        call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
-            lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
-            dummy_int, dummy_int, dummy_int)
+        ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
+        !     lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
+        !     dummy_int, dummy_int, dummy_int)
 
-        occupation_def = 0.05d0
+        ! occupation_def = 0.05d0
 
-        write(msg,"(A,F21.14,A)") "homo_occ :", homo_occ
-        call elsi_say(bh,msg)
-        write(msg,"(A,F21.14,A)") "lumo_occ :", lumo_occ
-        call elsi_say(bh,msg)
+        ! write(msg,"(A,F21.14,A)") "homo_occ :", homo_occ
+        ! call elsi_say(bh,msg)
+        ! write(msg,"(A,F21.14,A)") "lumo_occ :", lumo_occ
+        ! call elsi_say(bh,msg)
 
-        if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
-            fractionally_occupied = .true.
-            write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
-            call elsi_say(bh,msg)
-        else
-            fractionally_occupied = .false.
-        endif
+        ! if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
+        !     fractionally_occupied = .true.
+        !     write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
+        !     call elsi_say(bh,msg)
+        ! else
+        !     fractionally_occupied = .false.
+        ! endif
 
         ! Check for fractional occupation numbers after setting mid-point
-        ! open(unit=11,file="occ_mid.dat", action="write")
-        ! write(11,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "occ", "frac_diff"
+        frac_tol = 1E-13
 
-        ! loopi: do i_k_point = 1, n_kpt, 1
-        !     loopj: do i_spin = 1, n_spin, 1
-        !         loopk: do i_state = 1, n_state, 1
+        open(unit=11,file="occ_mid.dat", action="write")
+        write(11,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "occ", "frac_diff"
 
-        !             i_occ_val = occ(i_state, i_spin,  i_k_point)
-        !             frac_diff = abs(i_occ_val-nint(i_occ_val))
+        loopi: do i_k_point = 1, n_kpt, 1
+            loopj: do i_spin = 1, n_spin, 1
+                loopk: do i_state = 1, n_state, 1
 
-        !             ! Write to occ_mid.dat
-        !             write(11, '(2X, 3I5, F21.14, 2X, F21.14)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
+                    i_occ_val = occ(i_state, i_spin,  i_k_point)
+                    frac_diff = abs(i_occ_val-nint(i_occ_val))
 
-        !             if (frac_diff .le. frac_tol) then
-        !             ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
-        !             !     abs(anint(i_occ_val))), abs_tol) ) then
-        !                 fractionally_occupied = .false.
-        !             else
-        !                 fractionally_occupied = .true.
+                    ! Write to occ_mid.dat
+                    write(11, '(2X, 3I5, F21.14, 2X, F21.14)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
 
-        !                 write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
-        !                 call elsi_say(bh,msg)
-        !                 write(msg,"(A,F21.14,A)") "occupation :", i_occ_val
-        !                 call elsi_say(bh,msg)
-        !                 write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
-        !                 call elsi_say(bh,msg)
+                    if (frac_diff .le. frac_tol) then
+                    ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
+                    !     abs(anint(i_occ_val))), abs_tol) ) then
+                        fractionally_occupied = .false.
+                    else
+                        fractionally_occupied = .true.
 
-        !                 exit loopi
-        !             endif
+                        write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
+                        call elsi_say(bh,msg)
+                        write(msg,"(A,I5,A)") "i_k_point :", i_k_point
+                        call elsi_say(bh,msg)
+                        write(msg,"(A,I5,A)") "i_state :", i_state
+                        call elsi_say(bh,msg)
+                        write(msg,"(A,F21.14,A)") "occupation :", i_occ_val
+                        call elsi_say(bh,msg)
+                        write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
+                        call elsi_say(bh,msg)
 
-        !         enddo loopk
-        !     enddo loopj
-        ! enddo loopi
-        ! close(11)
+                        !exit loopi
+                    endif
+
+                enddo loopk
+            enddo loopj
+        enddo loopi
+        close(11)
 
         ! Proceed if not fractionally occupied
-        if ((fractionally_occupied .eqv. .false.) .and. (abs(diff) < ph%mu_tol)) then
+        if ((fractionally_occupied .eqv. .false.) .and. (abs(diff) .le. ph%mu_tol)) then
             ! Found mu at homo-lumo midpoint
             write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO. "
             call elsi_say(bh,msg)
