@@ -52,6 +52,8 @@ OPTION(USE_GPU_CUDA "Use GPU acceleration based on CUDA" OFF)
 OPTION(USE_MPI "Use MPI" ON)
 OPTION(ADD_UNDERSCORE "Suffix C functions with an underscore" ON)
 OPTION(BUILD_SHARED_LIBS "Whether to build shared or static libraries" OFF)
+OPTION(ELSI_INSTALL_PKGCONFIG_FILE "Whether to install the elsi.pc file for pkgconfig" ON)
+
 SET(ELPA2_KERNEL "" CACHE STRING "Use AVX/AVX2/AVX512 ELPA2 kernel")
 SET(MPIEXEC_NP "mpirun -n 4" CACHE STRING "Command to run parallel tests with multiple MPI tasks")
 SET(MPIEXEC_1P "mpirun -n 1" CACHE STRING "Command to run serial tests with 1 MPI task")
