@@ -123,3 +123,31 @@ subroutine elsi_get_elpa_gpu_string(gpu_string,status)
    endif
 
 end subroutine
+!>
+!! Return the REAL GPU KERNEL for ELPA2
+!!
+subroutine elsi_get_elpa_real_gpu_kernel(kernel)
+   use elpa
+   implicit none
+
+   integer, intent(out)          :: kernel !< GPU KERNEL for ELPA
+
+   integer, parameter :: compiled_real_gpu_kernel = @ELSI_ELPA_REAL_GPU_KERNEL@
+
+   kernel = compiled_real_gpu_kernel
+
+end subroutine
+!>
+!! Return the COMPLEX GPU KERNEL for ELPA2
+!!
+subroutine elsi_get_elpa_complex_gpu_kernel(kernel)
+   use elpa
+   implicit none
+
+   integer, intent(out)          :: kernel !< GPU KERNEL for ELPA
+
+   integer, parameter :: compiled_complex_gpu_kernel = @ELSI_ELPA_COMPLEX_GPU_KERNEL@
+
+   kernel = compiled_complex_gpu_kernel
+
+end subroutine
