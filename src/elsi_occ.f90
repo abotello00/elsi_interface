@@ -279,7 +279,7 @@ contains
 
         ! Check k-weights
         if(abs(sum(k_wt)-1) >1e-5) then
-            write(msg,"(A,F21.14)") "Error: sum of k-vector weights is not one!", sum(k_wt)
+            write(msg,"(A,F21.15)") "Error: sum of k-vector weights is not one!", sum(k_wt)
             call elsi_stop(bh,msg,caller)
         end if
         ! There can be numerical inaccuracy. This takes care of them.
@@ -326,7 +326,7 @@ contains
                     frac_diff = abs(i_occ_val-nint(i_occ_val))
 
                     ! Write to occ_mid.dat
-                    write(11, '(2X, 3I5, F21.14, 2X, F21.14)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
+                    write(11, '(2X, 3I5, F21.15, 2X, F21.15)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
 
                     if (frac_diff .le. frac_tol) then
                     ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
@@ -341,7 +341,7 @@ contains
                         call elsi_say(bh,msg)
                         write(msg,"(A,I5,A)") "i_state :", i_state
                         call elsi_say(bh,msg)
-                        write(msg,"(A,F21.14,A)") "occupation :", i_occ_val
+                        write(msg,"(A,F21.15,A)") "occupation :", i_occ_val
                         call elsi_say(bh,msg)
                         write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
                         call elsi_say(bh,msg)
@@ -558,6 +558,7 @@ contains
         integer(kind=i4) :: i_mp
         integer(kind=i4) :: i_constraints
 
+        character(len=200) :: msg
         character(len=*), parameter :: caller = "elsi_check_electrons"
 
         invert_width = 1.0_r8/ph%mu_width
@@ -575,6 +576,8 @@ contains
 
         select case(ph%mu_scheme)
         case(GAUSSIAN)
+            open(unit=12,file="occ_erf.dat", action="write")
+            write(12,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "erf", "occ", "diff"
             do i_kpt = 1,n_kpt
                 do i_spin = 1,n_spin
                     do i_state = 1,n_state
@@ -586,11 +589,16 @@ contains
 
                         occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
                             *(1.0_r8-erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width))
-
                         diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
+
+                    ! Write to occ_erf.dat
+                    write(12, '(2X, 3I5, F21.15, 2X, F21.15, 2X, E12.4)') i_kpt, i_spin, i_state, &
+                        erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), occ(i_state, i_spin, i_kpt), diff
+
                     end do
                 end do
             end do
+            close(12)
         case(FERMI)
             max_exp = maxexponent(mu)*log(2.0_r8)
 
