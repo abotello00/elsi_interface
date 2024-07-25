@@ -601,7 +601,7 @@ contains
                         diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
 
                     ! Write to occ_erf.dat
-                    write(12, '(2X, 3I5, ES24.16E3, 2X, ES24.16E3, 2X, ES24.16E3,2X,ES24.16E3, 2X, ES24.16E3)') i_kpt, i_spin, i_state, &
+                    write(12, '(2X, 3I5,2X, ES24.16E3, 2X, ES24.16E3, 2X, ES24.16E3,2X,ES24.16E3, 2X, ES24.16E3)') i_kpt, i_spin, i_state, &
                         erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), occ(i_state, i_spin, i_kpt), diff, k_wt(i_kpt)
 
                     end do
