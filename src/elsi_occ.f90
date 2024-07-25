@@ -51,6 +51,7 @@ contains
         real(kind=r8), intent(out) :: mu
         real(kind=r8)  :: mu_tmp
         real(kind=r8)  :: k_wt_renorm(n_kpt)
+        real(kind=r8)  :: occ_tmp(n_state,n_spin,n_kpt)
 
         ! dummy variables to call elsi_find_homo_lumo_gap
         integer(kind=i4) :: dummy_int
@@ -64,6 +65,7 @@ contains
         real(kind=r8) :: homo_occ
         real(kind=r8) :: lumo_occ
         real(kind=r8) :: diff
+        real(kind=r8) :: diff_tmp
         real(kind=r8) :: occupation_def
         real(kind=r8) :: frac_tol
         real(kind=r8) :: frac_diff
@@ -176,8 +178,10 @@ contains
 
         ! ----------------- Method III -----------------------------------------------------
 
-        ! Store temporary mu for later if mid-point calculation fails
+        ! Store temporary mu, occ and diff for later if mid-point calculation fails
         mu_tmp = mu
+        occ_tmp = occ
+        diff_tmp = diff
 
         ! Set spin degeneracy
         if(.not. ph%spin_is_set) then
@@ -321,7 +325,7 @@ contains
         ! endif
 
         ! Check for fractional occupation numbers after setting mid-point
-        frac_tol = 1E-13
+        frac_tol = 1E-05
 
         open(unit=11,file="occ_mid.dat", action="write")
         write(11,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "occ", "frac_diff"
@@ -369,12 +373,10 @@ contains
             call elsi_say(bh,msg)
         else
             ! Failed to find  mu at mid-point inbetween homo and lumo
-            ! Set mu to previous value
+            ! Set mu,occ and diff to previous value
             mu = mu_tmp
-            ! Check electron number for this mu value
-            call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
-                occ,mu,diff)
-            call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
+            occ = occ_tmp
+            diff = diff_tmp
 
             if (abs(diff) .le. ph%mu_tol) then
                 write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
@@ -585,8 +587,8 @@ contains
         select case(ph%mu_scheme)
         case(GAUSSIAN)
             open(unit=12,file="occ_erf.dat", action="write")
-            write(12,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "erf",&
-                "occ","diff", "k_wt"
+            write(12,'(A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A)') "i_k_point", "i_spin", "i_state", &
+                "eval", "mu", "invert_width","erf","occ","diff", "k_wt"
             do i_kpt = 1,n_kpt
                 do i_spin = 1,n_spin
                     do i_state = 1,n_state
@@ -601,8 +603,9 @@ contains
                         diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
 
                     ! Write to occ_erf.dat
-                    write(12, '(2X, 3I5,2X, ES24.16E3, 2X, ES24.16E3, 2X, ES24.16E3,2X,ES24.16E3, 2X, ES24.16E3)') i_kpt, i_spin, i_state, &
-                        erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), occ(i_state, i_spin, i_kpt), diff, k_wt(i_kpt)
+                    write(12, '(2X, 3I5,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3)') &
+                        i_kpt, i_spin, i_state, eval(i_state,i_spin,i_kpt), mu, invert_width, erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), &
+                        occ(i_state, i_spin, i_kpt), diff, k_wt(i_kpt)
 
                     end do
                 end do
