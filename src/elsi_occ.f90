@@ -282,14 +282,14 @@ contains
 
         ! Check k-weights
         if(abs(sum(k_wt)-1) >1e-5) then
-            write(msg,"(A,F21.15)") "Error: sum of k-vector weights is not one!", sum(k_wt)
+            write(msg,"(A,ES24.16E3)") "Error: sum of k-vector weights is not one!", sum(k_wt)
             call elsi_stop(bh,msg,caller)
         end if
         ! There can be numerical inaccuracy. This takes care of them.
-        write(msg,"(A,F21.15)") "Sum of k-vector weights:", sum(k_wt)
+        write(msg,"(A,ES24.16E3)") "Sum of k-vector weights:", sum(k_wt)
         call elsi_say(bh,msg)
         k_wt_renorm = k_wt/sum(k_wt)
-        write(msg,"(A,F21.15)") "Sum of renormalized k-vector weights:", sum(k_wt_renorm)
+        write(msg,"(A,ES24.16E3)") "Sum of renormalized k-vector weights:", sum(k_wt_renorm)
         call elsi_say(bh,msg)
 
 
@@ -297,7 +297,7 @@ contains
         call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
             occ,mu,diff)
         call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
-        write(msg,"(A,E12.4,A)") "Residual electron error for mid-point Fermi level :", diff
+        write(msg,"(A,ES24.16E3,A)") "Residual electron error for mid-point Fermi level :", diff
         call elsi_say(bh,msg)
 
         ! Fractional occupation check from FHI-aims
@@ -334,7 +334,7 @@ contains
                     frac_diff = abs(i_occ_val-nint(i_occ_val))
 
                     ! Write to occ_mid.dat
-                    write(11, '(2X, 3I5, F21.15, 2X, F21.15)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
+                    write(11, '(2X, 3I5, ES24.16E3, 2X, ES24.16E3)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
 
                     if (frac_diff .le. frac_tol) then
                     ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
@@ -349,9 +349,9 @@ contains
                         call elsi_say(bh,msg)
                         write(msg,"(A,I5,A)") "i_state :", i_state
                         call elsi_say(bh,msg)
-                        write(msg,"(A,F21.15,A)") "occupation :", i_occ_val
+                        write(msg,"(A,ES24.16E3,A)") "occupation :", i_occ_val
                         call elsi_say(bh,msg)
-                        write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
+                        write(msg,"(A,ES24.16E3,A)") "frac_diff :", frac_diff
                         call elsi_say(bh,msg)
 
                         !exit loopi
@@ -381,12 +381,12 @@ contains
                 call elsi_say(bh,msg)
                 write(msg,"(A)") "Reverting to previous chemical potential value."
                 call elsi_say(bh,msg)
-                write(msg,"(A,E12.4,A)") "Residual electron error :", diff
+                write(msg,"(A,ES24.16E3,A)") "Residual electron error :", diff
                 call elsi_say(bh,msg)
             else
                 write(msg,"(A)") "WARNING: ELSI failed to find chemical potential!"
                 call elsi_say(bh,msg)
-                write(msg,"(A,E12.4,A)") "Residual electron error :", diff
+                write(msg,"(A,ES24.16E3,A)") "Residual electron error :", diff
                 call elsi_say(bh,msg)
             endif
         endif
@@ -601,7 +601,7 @@ contains
                         diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
 
                     ! Write to occ_erf.dat
-                    write(12, '(2X, 3I5, F21.15, 2X, F21.15, 2X, F21.15,2X,F21.15, 2X, F21.15)') i_kpt, i_spin, i_state, &
+                    write(12, '(2X, 3I5, ES24.16E3, 2X, ES24.16E3, 2X, ES24.16E3,2X,ES24.16E3, 2X, ES24.16E3)') i_kpt, i_spin, i_state, &
                         erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), occ(i_state, i_spin, i_kpt), diff, k_wt(i_kpt)
 
                     end do
