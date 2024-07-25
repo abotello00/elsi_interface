@@ -274,6 +274,9 @@ contains
             enddo
         enddo
 
+        write(*,*) "homo_level", homo_level
+        write(*,*) "lumo_level", lumo_level
+
         ! Set mid-point inbetween this homo and lumo
         mu = (homo_level + lumo_level) / 2.0_r8
 
