@@ -50,13 +50,7 @@ contains
         real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt)
         real(kind=r8), intent(out) :: mu
         real(kind=r8)  :: mu_tmp
-        real(kind=r8)  :: k_wt_renorm(n_kpt)
         real(kind=r8)  :: occ_tmp(n_state,n_spin,n_kpt)
-
-        ! dummy variables to call elsi_find_homo_lumo_gap
-        integer(kind=i4) :: dummy_int
-        real(kind=r8)  :: dummy_real
-        logical :: dummy_log
 
         ! variables for homo and lumo level
         real(kind=r8) :: homo_level
@@ -82,101 +76,6 @@ contains
 
         ! Attempts to put Fermi level half-way between homo and lumo
         ! - UKH
-        !
-        ! ------------------------ Method I ----------------------------------
-        ! ! call elsi_find_homo_lumo_gap to calculate mid-point
-        ! ! chemical potential for this occ
-        ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
-        !     lumo_level, dummy_real, dummy_real, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
-        !     dummy_int, dummy_int, dummy_int)
-
-        ! ! Set chemical potential to be mid-point between homo and lumo
-        ! mu = (homo_level + lumo_level) / 2
-        ! ---------------------------------------------------------------------
-
-        ! -- Steps for updated method --
-        ! Check if occ numbers are fractional
-        ! If fractional we are done.
-        ! If not fractional occupation numbers, then find next lowest state and next highest
-        ! state.
-        ! Then place mu inbetween and determine check_electrons.
-        ! If n_electrons is correct, then we are done.
-        ! If not, go back to previous mu and recalculate check_electrons.
-        ! Also display warning: ELSI tried to place mu between homo and lumo but failed.
-
-        ! ----------------- Method II -------------------------------------
-        ! fractional occupation check
-        ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
-        !     lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
-        !     dummy_int, dummy_int, dummy_int)
-
-        ! found_midpoint = .false.
-        ! occupation_def = 0.05d0
-
-        ! if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
-        !     fractionally_occupied = .true.
-        ! else
-        !     fractionally_occupied = .false.
-        ! endif
-
-        ! if (fractionally_occupied == .true.) then
-        !     ! mu is found
-        !     found_midpoint = .true.
-        ! else
-        !     homo_level = -10000000.0d0
-        !     lumo_level = 10000000.0d0
-
-        !     ! Define the correct "half occupation" (with or without spin)
-        !     midpoint = spin_degen/2.0d0
-        !     ! (Rundong) Q4C currently works only for closed-shell systems (spin none), and
-        !     ! for the convenience of printing, we at present don't distinguish the
-        !     ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
-        !     ! for Q4C. Therefore, midpoint should be 0.5d0:
-        !     if(ph%flag_relativistic == .true.) midpoint = 0.5d0
-
-        !     ! Find mid-point mu
-        !     do i_k_point = 1, n_kpt, 1
-        !         do i_spin = 1, n_spin, 1
-        !             do i_state = 1, n_state, 1
-        !                 if (found_midpoint == .false.) then
-        !                     ! Search for global homo and lumo
-        !                     if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
-        !                         ! Check for HOMO
-        !                         if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
-        !                             homo_level = eval(i_state, i_spin, i_k_point)
-        !                         end if
-        !                     end if
-
-        !                     if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
-        !                         ! Check for LUMO
-        !                         if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
-        !                             lumo_level = eval(i_state, i_spin, i_k_point)
-        !                         end if
-        !                     end if
-
-        !                     ! Set new mu to be mid-point of homo_level and lumo_level
-        !                     mu = (homo_level + lumo_level) / 2
-
-        !                     call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-        !                         occ,mu,diff)
-
-        !                     if(abs(diff) < ph%mu_tol) then
-        !                         found_midpoint = .true.
-        !                     else
-        !                         found_midpoint = .false.
-        !                     end if
-        !                 endif
-        !             enddo
-        !         enddo
-        !     enddo
-
-        !     ! Failed to find mid-point mu
-        !     write(msg,"(A)") "WARNING: ELSI failed to place mu between homo and lumo!"
-        !     call elsi_say(bh,msg)
-        ! endif
-        ! ---------------------------------------------------------------------------------
-
-        ! ----------------- Method III -----------------------------------------------------
 
         ! Store temporary mu, occ and diff for later if mid-point calculation fails
         mu_tmp = mu
@@ -193,57 +92,6 @@ contains
         else
             spin_degen = ph%spin_degen
         end if
-
-        ! (OLDER) fractional occupation check
-        ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
-        !     lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
-        !     dummy_int, dummy_int, dummy_int)
-
-        ! occupation_def = 0.05d0
-
-        ! if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
-        !     fractionally_occupied = .true.
-        ! else
-        !     fractionally_occupied = .false.
-        ! endif
-
-        ! Go through all occupation numbers to see if they are fractional
-
-        ! Debug: print occupation numbers
-        ! open(unit=10,file="occ-init.dat", action="write")
-        ! write(10,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "occ", "frac_diff"
-
-        ! loopi: do i_k_point = 1, n_kpt, 1
-        !     loopj: do i_spin = 1, n_spin, 1
-        !         loopk: do i_state = 1, n_state, 1
-
-        !             i_occ_val = occ(i_state, i_spin,  i_k_point)
-        !             frac_diff = abs(i_occ_val-nint(i_occ_val))
-
-        !             ! Write to occ.dat
-        !             write(10, '(2X, 3I5, F21.14, 2X, F21.14)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
-
-        !             if (frac_diff .le. frac_tol) then
-        !             ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
-        !             !     abs(anint(i_occ_val))), abs_tol) ) then
-        !                 fractionally_occupied = .false.
-        !             else
-        !                 fractionally_occupied = .true.
-
-        !                 write(msg,"(A)") "ELSI found fractional occupation numbers."
-        !                 call elsi_say(bh,msg)
-        !                 write(msg,"(A,F21.14,A)") "occupation :", i_occ_val
-        !                 call elsi_say(bh,msg)
-        !                 write(msg,"(A,E12.4,A)") "frac_diff :", frac_diff
-        !                 call elsi_say(bh,msg)
-
-        !                 exit loopi
-        !             endif
-
-        !         enddo loopk
-        !     enddo loopj
-        ! enddo loopi
-        ! close(10)
 
         homo_level = -10000000.0d0
         lumo_level = 10000000.0d0
@@ -278,57 +126,18 @@ contains
             enddo
         enddo
 
-        ! write(*,*) "homo_level", homo_level
-        ! write(*,*) "lumo_level", lumo_level
-
         ! Set mid-point inbetween this homo and lumo
         mu = (homo_level + lumo_level) / 2.0_r8
 
-        ! Check k-weights
-        if(abs(sum(k_wt)-1) >1e-5) then
-            write(msg,"(A,ES24.16E3)") "Error: sum of k-vector weights is not one!", sum(k_wt)
-            call elsi_stop(bh,msg,caller)
-        end if
-        ! There can be numerical inaccuracy. This takes care of them.
-        write(msg,"(A,ES24.16E3)") "Sum of k-vector weights:", sum(k_wt)
-        call elsi_say(bh,msg)
-        k_wt_renorm = k_wt/sum(k_wt)
-        write(msg,"(A,ES24.16E3)") "Sum of renormalized k-vector weights:", sum(k_wt_renorm)
-        call elsi_say(bh,msg)
-
-
         ! Check electron number for this mu value
-        call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
+        call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
             occ,mu,diff)
-        call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
+        call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
         write(msg,"(A,ES24.16E3,A)") "Residual electron error for mid-point Fermi level :", diff
         call elsi_say(bh,msg)
 
-        ! Fractional occupation check from FHI-aims
-        ! call elsi_find_homo_lumo_gap(eval, occ, n_state, n_spin, n_kpt, spin_degen, ph%flag_relativistic, homo_level, &
-        !     lumo_level, homo_occ, lumo_occ, dummy_int, dummy_int, dummy_int, dummy_int, dummy_log, dummy_real, &
-        !     dummy_int, dummy_int, dummy_int)
-
-        ! occupation_def = 0.05d0
-
-        ! write(msg,"(A,F21.14,A)") "homo_occ :", homo_occ
-        ! call elsi_say(bh,msg)
-        ! write(msg,"(A,F21.14,A)") "lumo_occ :", lumo_occ
-        ! call elsi_say(bh,msg)
-
-        ! if ( (lumo_occ.ge.occupation_def) .or. (homo_occ.le.(spin_degen-occupation_def)) ) then
-        !     fractionally_occupied = .true.
-        !     write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
-        !     call elsi_say(bh,msg)
-        ! else
-        !     fractionally_occupied = .false.
-        ! endif
-
         ! Check for fractional occupation numbers after setting mid-point
         frac_tol = 1E-05
-
-        open(unit=11,file="occ_mid.dat", action="write")
-        write(11,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "occ", "frac_diff"
 
         loopi: do i_k_point = 1, n_kpt, 1
             loopj: do i_spin = 1, n_spin, 1
@@ -337,12 +146,7 @@ contains
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
                     frac_diff = abs(i_occ_val-nint(i_occ_val))
 
-                    ! Write to occ_mid.dat
-                    write(11, '(2X, 3I5, ES24.16E3, 2X, ES24.16E3)') i_k_point, i_spin, i_state, i_occ_val, frac_diff
-
                     if (frac_diff .le. frac_tol) then
-                    ! if ( abs(i_occ_val-anint(i_occ_val)) .le. max(frac_tol * max(abs(i_occ_val), &
-                    !     abs(anint(i_occ_val))), abs_tol) ) then
                         fractionally_occupied = .false.
                     else
                         fractionally_occupied = .true.
@@ -358,13 +162,12 @@ contains
                         write(msg,"(A,ES24.16E3,A)") "frac_diff :", frac_diff
                         call elsi_say(bh,msg)
 
-                        !exit loopi
+                        exit loopi
                     endif
 
                 enddo loopk
             enddo loopj
         enddo loopi
-        close(11)
 
         ! Proceed if not fractionally occupied
         if ((fractionally_occupied .eqv. .false.) .and. (abs(diff) .le. ph%mu_tol)) then
@@ -551,6 +354,7 @@ contains
         real(kind=r8), intent(in) :: mu
         real(kind=r8), intent(out) :: diff
 
+        real(kind=r8) :: k_wt_tmp(n_kpt)
         real(kind=r8) :: spin_degen
         real(kind=r8) :: invert_width
         real(kind=r8) :: delta
@@ -585,32 +389,23 @@ contains
         end if
 
         select case(ph%mu_scheme)
+
         case(GAUSSIAN)
-            open(unit=12,file="occ_erf.dat", action="write")
-            write(12,'(A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A,2X,A)') "i_k_point", "i_spin", "i_state", &
-                "eval", "mu", "invert_width","erf","occ","diff", "k_wt"
+        ! Modify to rescale k-weights when Fermi level is set
+        ! at mid-point between homo-lumo. Thank you Sebastian
+        ! for the insights!
+        ! - UKH
+            k_wt_tmp = k_wt / minval(k_wt)
             do i_kpt = 1,n_kpt
                 do i_spin = 1,n_spin
                     do i_state = 1,n_state
-                        ! test erf_v2
-                        ! call erf_v2( (eval(i_state,i_spin,i_kpt)-mu)*invert_width, res)
-                        !  occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
-                        !      *(1.0_r8-res)
-                        !  write(*,*) "res=",res
-
                         occ(i_state,i_spin,i_kpt) = spin_degen*0.5_r8&
                             *(1.0_r8-erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width))
-                        diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
-
-                    ! Write to occ_erf.dat
-                    write(12, '(2X, 3I5,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3,2X,ES24.16E3)') &
-                        i_kpt, i_spin, i_state, eval(i_state,i_spin,i_kpt), mu, invert_width, erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), &
-                        occ(i_state, i_spin, i_kpt), diff, k_wt(i_kpt)
-
+                        diff = diff+occ(i_state,i_spin,i_kpt)*k_wt_tmp(i_kpt)
                     end do
                 end do
             end do
-            close(12)
+            diff = diff * minval(k_wt)
         case(FERMI)
             max_exp = maxexponent(mu)*log(2.0_r8)
 
