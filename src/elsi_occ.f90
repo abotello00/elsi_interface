@@ -274,8 +274,8 @@ contains
             enddo
         enddo
 
-        write(*,*) "homo_level", homo_level
-        write(*,*) "lumo_level", lumo_level
+        ! write(*,*) "homo_level", homo_level
+        ! write(*,*) "lumo_level", lumo_level
 
         ! Set mid-point inbetween this homo and lumo
         mu = (homo_level + lumo_level) / 2.0_r8
@@ -286,7 +286,12 @@ contains
             call elsi_stop(bh,msg,caller)
         end if
         ! There can be numerical inaccuracy. This takes care of them.
+        write(msg,"(A,F21.15)") "Sum of k-vector weights:", sum(k_wt)
+        call elsi_say(bh,msg)
         k_wt_renorm = k_wt/sum(k_wt)
+        write(msg,"(A,F21.15)") "Sum of renormalized k-vector weights:", sum(k_wt_renorm)
+        call elsi_say(bh,msg)
+
 
         ! Check electron number for this mu value
         call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
@@ -580,7 +585,8 @@ contains
         select case(ph%mu_scheme)
         case(GAUSSIAN)
             open(unit=12,file="occ_erf.dat", action="write")
-            write(12,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "erf", "occ", "diff"
+            write(12,'(2X, A, 2X, A, 2X, A, 2X, A, 2X, A, 2X, A, 2X, A)') "i_k_point", "i_spin", "i_state", "erf",&
+                "occ","diff", "k_wt"
             do i_kpt = 1,n_kpt
                 do i_spin = 1,n_spin
                     do i_state = 1,n_state
@@ -595,8 +601,8 @@ contains
                         diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
 
                     ! Write to occ_erf.dat
-                    write(12, '(2X, 3I5, F21.15, 2X, F21.15, 2X, E12.4)') i_kpt, i_spin, i_state, &
-                        erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), occ(i_state, i_spin, i_kpt), diff
+                    write(12, '(2X, 3I5, F21.15, 2X, F21.15, 2X, F21.15,2X,F21.15, 2X, F21.15)') i_kpt, i_spin, i_state, &
+                        erf((eval(i_state,i_spin,i_kpt)-mu)*invert_width), occ(i_state, i_spin, i_kpt), diff, k_wt(i_kpt)
 
                     end do
                 end do
