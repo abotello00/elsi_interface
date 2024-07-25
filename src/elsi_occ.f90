@@ -296,7 +296,7 @@ contains
         ! Check electron number for this mu value
         call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
             occ,mu,diff)
-        !call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
+        call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
         write(msg,"(A,E12.4,A)") "Residual electron error for mid-point Fermi level :", diff
         call elsi_say(bh,msg)
 
@@ -374,7 +374,7 @@ contains
             ! Check electron number for this mu value
             call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt_renorm,eval,&
                 occ,mu,diff)
-            !call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
+            call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt_renorm,eval,occ,diff)
 
             if (abs(diff) .le. ph%mu_tol) then
                 write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
