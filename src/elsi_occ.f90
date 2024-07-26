@@ -135,7 +135,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
                     else
                         fractionally_occupied = .true.
 
-                        write(msg,"(A)") "ELSI found fractional occupation numbers chemical potential."
+                        write(msg,"(A)") "ELSI found fractional occupation numbers for current chemical potential."
                         call elsi_say(bh,msg)
                         write(msg,"(A)") "Keeping chemical potential where it is."
                         call elsi_say(bh,msg)
@@ -215,9 +215,6 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
                   write(msg,"(A,ES24.16E3,A)") "Residual electron error :", diff
                   call elsi_say(bh,msg)
             endif
-        else
-            write(msg,"(A)") "ELSI found fractional occupation numbers for initial occupancy check."
-            call elsi_say(bh,msg)
         end if
 
 end subroutine
