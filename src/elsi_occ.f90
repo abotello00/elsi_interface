@@ -66,26 +66,15 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
    character(len=200) :: msg
    character(len=*), parameter :: caller = "elsi_mu_and_occ"
 
-   real(kind=r8) :: occ1(n_state,n_spin,n_kpt)
-   real(kind=r8) :: occ2(n_state,n_spin,n_kpt)
-   real(kind=r8) :: mu1
-   real(kind=r8) :: mu2
-
     !  counters
     real*8 :: midpoint, i_occ_val
     integer :: i_state, i_spin, i_k_point
-
 
     call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,&
         eval,occ,mu)
 
         ! Attempts to put Fermi level half-way between homo and lumo
         ! - UKH
-
-        ! Store temporary mu, occ and diff for later if mid-point calculation fails
-        mu_tmp = mu
-        occ_tmp = occ
-        diff_tmp = diff
 
         ! Set spin degeneracy
         if(.not. ph%spin_is_set) then
@@ -131,22 +120,12 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
             enddo
         enddo
 
-        ! Set mid-point inbetween this homo and lumo
-        mu = (homo_level + lumo_level) / 2.0_r8
+        ! Initial fractional occupancy determination
+        frac_tol = 0.05
 
-        ! Check electron number for this mu value
-        call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-            occ,mu,diff)
-        call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
-        write(msg,"(A,ES24.16E3,A)") "Residual electron error for mid-point Fermi level :", diff
-        call elsi_say(bh,msg)
-
-        ! Check for fractional occupation numbers after setting mid-point
-        frac_tol = 1E-05
-
-        loopi: do i_k_point = 1, n_kpt, 1
-            loopj: do i_spin = 1, n_spin, 1
-                loopk: do i_state = 1, n_state, 1
+        loopii: do i_k_point = 1, n_kpt, 1
+            loopjj: do i_spin = 1, n_spin, 1
+                loopkk: do i_state = 1, n_state, 1
 
                     i_occ_val = occ(i_state, i_spin,  i_k_point)
                     frac_diff = abs(i_occ_val-nint(i_occ_val))
@@ -156,52 +135,93 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
                     else
                         fractionally_occupied = .true.
 
-                        write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
+                        write(msg,"(A)") "ELSI found fractional occupation numbers chemical potential."
                         call elsi_say(bh,msg)
-                        write(msg,"(A,I5,A)") "i_k_point :", i_k_point
-                        call elsi_say(bh,msg)
-                        write(msg,"(A,I5,A)") "i_state :", i_state
-                        call elsi_say(bh,msg)
-                        write(msg,"(A,ES24.16E3,A)") "occupation :", i_occ_val
-                        call elsi_say(bh,msg)
-                        write(msg,"(A,ES24.16E3,A)") "frac_diff :", frac_diff
+                        write(msg,"(A)") "Keeping chemical potential where it is."
                         call elsi_say(bh,msg)
 
-                        exit loopi
+                        exit loopii
                     endif
 
-                enddo loopk
-            enddo loopj
-        enddo loopi
+                enddo loopkk
+            enddo loopjj
+        enddo loopii
 
-        ! Proceed if not fractionally occupied
-        if ((fractionally_occupied .eqv. .false.) .and. (abs(diff) .le. ph%mu_tol)) then
-            ! Found mu at homo-lumo midpoint
-            write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO. "
+        if (.not. fractionally_occupied) then
+            ! Store temporary mu, occ and diff for later if mid-point calculation fails
+            mu_tmp = mu
+            occ_tmp = occ
+            diff_tmp = diff
+
+            ! Set mid-point inbetween this homo and lumo
+            mu = (homo_level + lumo_level) / 2.0_r8
+
+            ! Check electron number for this mu value
+            call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+                  occ,mu,diff)
+            ! call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
+            write(msg,"(A,ES24.16E3,A)") "Residual electron error for mid-point Fermi level :", diff
             call elsi_say(bh,msg)
-        else
-            ! Failed to find  mu at mid-point inbetween homo and lumo
-            ! Set mu,occ and diff to previous value
-            mu = mu_tmp
-            occ = occ_tmp
-            diff = diff_tmp
 
-            if (abs(diff) .le. ph%mu_tol) then
-                write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
-                call elsi_say(bh,msg)
-                write(msg,"(A)") "Reverting to previous chemical potential value."
-                call elsi_say(bh,msg)
-                write(msg,"(A,ES24.16E3,A)") "Residual electron error :", diff
-                call elsi_say(bh,msg)
+            ! Check for fractional occupation numbers after setting mid-point
+            frac_tol = 1E-05
+
+            loopi: do i_k_point = 1, n_kpt, 1
+                  loopj: do i_spin = 1, n_spin, 1
+                     loopk: do i_state = 1, n_state, 1
+
+                        i_occ_val = occ(i_state, i_spin,  i_k_point)
+                        frac_diff = abs(i_occ_val-nint(i_occ_val))
+
+                        if (frac_diff .le. frac_tol) then
+                              fractionally_occupied = .false.
+                        else
+                              fractionally_occupied = .true.
+
+                              write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
+                              call elsi_say(bh,msg)
+                              write(msg,"(A,I5,A)") "i_k_point :", i_k_point
+                              call elsi_say(bh,msg)
+                              write(msg,"(A,I5,A)") "i_state :", i_state
+                              call elsi_say(bh,msg)
+                              write(msg,"(A,ES24.16E3,A)") "occupation :", i_occ_val
+                              call elsi_say(bh,msg)
+                              write(msg,"(A,ES24.16E3,A)") "frac_diff :", frac_diff
+                              call elsi_say(bh,msg)
+
+                              exit loopi
+                        endif
+
+                     enddo loopk
+                  enddo loopj
+            enddo loopi
+
+            ! Proceed if not fractionally occupied
+            if ((fractionally_occupied .eqv. .false.) .and. (abs(diff) .le. ph%mu_tol)) then
+                  ! Found mu at homo-lumo midpoint
+                  write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO. "
+                  call elsi_say(bh,msg)
             else
-                write(msg,"(A)") "WARNING: ELSI failed to find chemical potential!"
-                call elsi_say(bh,msg)
-                write(msg,"(A,ES24.16E3,A)") "Residual electron error :", diff
-                call elsi_say(bh,msg)
+                  ! Failed to find  mu at mid-point inbetween homo and lumo
+                  ! Set mu,occ and diff to previous value
+                  mu = mu_tmp
+                  occ = occ_tmp
+                  diff = diff_tmp
+
+                  write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
+                  call elsi_say(bh,msg)
+                  write(msg,"(A)") "Reverting to previous chemical potential value."
+                  call elsi_say(bh,msg)
+                  write(msg,"(A,ES24.16E3,A)") "Residual electron error :", diff
+                  call elsi_say(bh,msg)
             endif
-        endif
+        else
+            write(msg,"(A)") "ELSI found fractional occupation numbers for initial occupancy check."
+            call elsi_say(bh,msg)
+        end if
 
 end subroutine
+
 !>
 !! Compute the chemical potential and occupation numbers normal distribution.
 !!
