@@ -167,6 +167,7 @@ module ELSI
    public :: elsi_static_excitations
    public :: elsi_check_electrons
    public :: elsi_find_homo_lumo_gap
+   public :: elsi_mu_and_occ
 
    ! Read and write matrix
    public :: elsi_init_rw
