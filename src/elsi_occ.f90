@@ -152,7 +152,6 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
             ! Store temporary mu, occ and diff for later if mid-point calculation fails
             mu_tmp = mu
             occ_tmp = occ
-            diff_tmp = diff
 
             ! Set mid-point inbetween this homo and lumo
             mu = (homo_level + lumo_level) / 2.0_r8
@@ -163,6 +162,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
             ! call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
             write(msg,"(A,ES24.16E3,A)") "Residual electron error for mid-point Fermi level :", diff
             call elsi_say(bh,msg)
+            diff_tmp = diff
 
             ! Check for fractional occupation numbers after setting mid-point
             frac_tol = 1E-05
