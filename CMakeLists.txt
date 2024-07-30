@@ -76,6 +76,7 @@ IF(NOT DEFINED CMAKE_C_COMPILER)
 ENDIF()
 ENABLE_LANGUAGE(C)
 
+
 IF(ENABLE_PEXSI)
   IF(NOT DEFINED CMAKE_CXX_COMPILER)
     MESSAGE(FATAL_ERROR "${MAGENTA}C++ compiler must be set${COLORRESET}")
@@ -83,6 +84,40 @@ IF(ENABLE_PEXSI)
   ENABLE_LANGUAGE(CXX)
 ENDIF()
 
+# -- Allow parent project to set compiler flags
+#
+if(NOT CMAKE_BUILD_TYPE)
+ set(CMAKE_BUILD_TYPE "Custom_ELSI")
+endif()
+string(TOUPPER "${CMAKE_BUILD_TYPE}" _uc_build_type)
+
+if(DEFINED ELSI_Fortran_FLAGS)
+ message(STATUS "Passed ELSI_Fortran_FLAGS: ${ELSI_Fortran_FLAGS}")
+ set(CMAKE_Fortran_FLAGS_${_uc_build_type} ${ELSI_Fortran_FLAGS})
+endif()
+message(DEBUG "CMAKE_Fortran_FLAGS: ${CMAKE_Fortran_FLAGS}")
+message(DEBUG "CMAKE_Fortran_FLAGS_${_uc_build_type}: ${CMAKE_Fortran_FLAGS_${_uc_build_type}}")
+message(STATUS "Fortran flags for ELSI: ${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_${_uc_build_type}}")
+
+if(DEFINED ELSI_C_FLAGS)
+ message(STATUS "Passed ELSI_C_FLAGS: ${ELSI_C_FLAGS}")
+ set(CMAKE_C_FLAGS_${_uc_build_type} ${ELSI_C_FLAGS})
+endif()
+message(DEBUG "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
+message(DEBUG "CMAKE_C_FLAGS_${_uc_build_type}: ${CMAKE_C_FLAGS_${_uc_build_type}}")
+message(STATUS "C flags for ELSI: ${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${_uc_build_type}}")
+
+if (DEFINED CMAKE_CXX_COMPILER)
+  if(DEFINED ELSI_CXX_FLAGS)
+    message(STATUS "Passed ELSI_CXX_FLAGS: ${ELSI_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS_${_uc_build_type} ${ELSI_CXX_FLAGS})
+  endif()
+  message(DEBUG "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+  message(DEBUG "CMAKE_CXX_FLAGS_${_uc_build_type}: ${CMAKE_CXX_FLAGS_${_uc_build_type}}")
+  message(STATUS "CXX flags for ELSI: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${_uc_build_type}}")
+endif()
+
+#-------------------------------
 IF(USE_GPU_CUDA)
   IF(${CMAKE_VERSION} VERSION_LESS 3.8)
     MESSAGE(FATAL_ERROR "${MAGENTA}CUDA support requires CMake 3.8 or higher${COLORRESET}")
