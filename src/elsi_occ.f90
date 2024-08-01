@@ -97,7 +97,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
         ! for the convenience of printing, we at present don't distinguish the
         ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
         ! for Q4C. Therefore, midpoint should be 0.5d0:
-        if(ph%flag_relativistic .eqv. .true.) midpoint = 0.5d0
+        if(ph%flag_x2c_q4c_midpoint .eqv. .true.) midpoint = 0.5d0
 
         ! finding homo-lumo level
         do i_k_point = 1, n_kpt, 1
@@ -950,7 +950,7 @@ end subroutine
 !! UKH
 
 subroutine elsi_find_homo_lumo_gap &
-      ( eval, occ, n_state, n_spin, n_kpt, spin_degen, flag_relativistic, homo_level, &
+      ( eval, occ, n_state, n_spin, n_kpt, spin_degen, flag_x2c_q4c_midpoint, homo_level, &
         lumo_level, homo_occ, lumo_occ, i_kpt_homo, i_kpt_lumo, i_spin_homo, i_spin_lumo, found_min_direct_gap,&
         min_direct_gap, i_kpt_min_direct_gap, i_spin_min_direct_homo, &
         i_spin_min_direct_lumo)
@@ -963,7 +963,7 @@ subroutine elsi_find_homo_lumo_gap &
   integer, intent(in) :: n_spin
   integer, intent(in) :: n_kpt
   real*8,  intent(in)  :: spin_degen
-  logical, intent(in) :: flag_relativistic
+  logical, intent(in) :: flag_x2c_q4c_midpoint
 
   real*8,  intent(out) :: homo_level
   real*8,  intent(out) :: lumo_level
@@ -1004,7 +1004,7 @@ subroutine elsi_find_homo_lumo_gap &
   ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
   ! for Q4C. Therefore, midpoint should be 0.5d0:
   !if(flag_rel.eq.REL_q4c.or.flag_rel.eq.REL_x2c) midpoint = 0.5d0
-  if(flag_relativistic .eqv. .TRUE.) midpoint = 0.5d0
+  if(flag_x2c_q4c_midpoint .eqv. .TRUE.) midpoint = 0.5d0
 
   homo_occ = 2.0d0
   lumo_occ = 0.0d0

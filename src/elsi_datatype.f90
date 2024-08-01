@@ -116,7 +116,7 @@ module ELSI_DATATYPE
       logical :: eval_ready = .false.
       logical :: evec_ready = .false.
       logical :: occ_ready = .false.
-      logical :: flag_relativistic = .false.
+      logical :: flag_x2c_q4c_midpoint = .false.
 
       ! Variables for non aufbau occupations
       logical :: occ_non_aufbau = .false. ! Value to turn on occ_non_aufbau code
