@@ -4,9 +4,9 @@ SET(CMAKE_Fortran_COMPILER "mpiifort" CACHE STRING "MPI Fortran compiler")
 SET(CMAKE_C_COMPILER "mpiicc" CACHE STRING "MPI C compiler")
 SET(CMAKE_CXX_COMPILER "mpiicpc" CACHE STRING "MPI C++ compiler")
 
-SET(CMAKE_Fortran_FLAGS "-fc=ifx -O3 -ip -fp-model precise" CACHE STRING "Fortran flags")
-SET(CMAKE_C_FLAGS "-cc=icx -O3 -ip -fp-model precise -std=c99" CACHE STRING "C flags")
-SET(CMAKE_CXX_FLAGS "-cxx=icpx -O3 -ip -fp-model precise -std=c++11" CACHE STRING "C++ flags")
+SET(CMAKE_Fortran_FLAGS "-fc=ifx -O3 -fp-model precise -Wno-error=implicit-function-declaration" CACHE STRING "Fortran flags")
+SET(CMAKE_C_FLAGS "-cc=icx -O3 -fp-model precise -std=c99 -Wno-error=implicit-function-declaration" CACHE STRING "C flags")
+SET(CMAKE_CXX_FLAGS "-cxx=icpx -O3 -fp-model precise -std=c++11 -Wno-error=implicit-function-declaration" CACHE STRING "C++ flags")
 SET(CMAKE_CUDA_FLAGS "-O3 -arch=sm_70" CACHE STRING "CUDA flags")
 
 SET(USE_GPU_CUDA ON CACHE BOOL "Use CUDA-based GPU acceleration in ELPA")
