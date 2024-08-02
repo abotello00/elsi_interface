@@ -214,9 +214,9 @@ build.intel-gpu:
   rules:
     - when: on_success
   tags:
-    - node18.timewarp
+    - node23.timewarp
   image:
-    name: uthpalaherath/ubuntu22-intel2024-cuda12:latest
+    name: uthpalaherath/ubuntu20-intel2024-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - source /opt/intel/oneapi/setvars.sh
@@ -399,9 +399,9 @@ test.intel-gpu:
   rules:
     - when: on_success
   tags:
-    - node18.timewarp
+    - node23.timewarp
   image:
-    name: uthpalaherath/ubuntu22-intel2024-cuda12:latest
+    name: uthpalaherath/ubuntu20-intel2024-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - source /opt/intel/oneapi/setvars.sh
