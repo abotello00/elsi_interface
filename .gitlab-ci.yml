@@ -249,7 +249,6 @@ build.intel2022-gpu:
     name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
-    - source /opt/intel/oneapi/setvars.sh
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
@@ -456,7 +455,6 @@ test.intel2022-gpu:
     name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
-    - source /opt/intel/oneapi/setvars.sh
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
