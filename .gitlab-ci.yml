@@ -238,6 +238,36 @@ build.intel-gpu:
     when: always
     expire_in: 1 days
 
+### Intel 2022 compilers + MPI + MKL + CUDA ###
+build.intel2022-gpu:
+  stage: build
+  rules:
+    - when: on_success
+  tags:
+    - node23.timewarp
+  image:
+    name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - source /opt/intel/oneapi/setvars.sh
+    - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
+    - cd external/SCOTCH/src/libscotch
+    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    - cd ../../../../
+    - cat ./toolchains/intel2022_gpu.cmake
+    - rm -rf $CI_JOB_NAME
+    - mkdir $CI_JOB_NAME
+    - cd $CI_JOB_NAME
+    - cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/intel2022_gpu.cmake ..
+    - make -j4
+  artifacts:
+    paths:
+      - $CI_JOB_NAME/
+    when: always
+    expire_in: 1 days
+
 ##### TEST STAGE #####
 
 ### GNU compilers + MPICH + Netlib BLAS, LAPACK, ScaLAPACK ###
@@ -408,6 +438,29 @@ test.intel-gpu:
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
     - cd build.intel-gpu
+    - ctest --output-on-failure
+  artifacts:
+    when: always
+    expire_in: 1 days
+
+### Intel 2022 compilers + MPI + MKL + CUDA ###
+test.intel2022-gpu:
+  stage: test
+  dependencies:
+    - build.intel2022-gpu
+  rules:
+    - when: on_success
+  tags:
+    - node23.timewarp
+  image:
+    name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - source /opt/intel/oneapi/setvars.sh
+    - ulimit -s unlimited
+    - export MKL_DYNAMIC=FALSE
+    - export MKL_NUM_THREADS=1
+    - cd build.intel2022-gpu
     - ctest --output-on-failure
   artifacts:
     when: always
