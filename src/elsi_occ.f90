@@ -93,11 +93,6 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
 
         ! Define the correct "half occupation" (with or without spin)
         midpoint = spin_degen/2.0d0
-        ! (Rundong) Q4C currently works only for closed-shell systems (spin none), and
-        ! for the convenience of printing, we at present don't distinguish the
-        ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
-        ! for Q4C. Therefore, midpoint should be 0.5d0:
-        if(ph%flag_x2c_q4c_midpoint .eqv. .true.) midpoint = 0.5d0
 
         ! finding homo-lumo level
         do i_k_point = 1, n_kpt, 1
@@ -959,43 +954,56 @@ end subroutine
 !! 7. Test within FHI-aims and Q4C in particular
 
 subroutine elsi_find_homo_lumo_gap &
-      ( eval, occ, n_state, n_spin, n_kpt, spin_degen, flag_x2c_q4c_midpoint, homo_level, &
-        lumo_level, homo_occ, lumo_occ, i_kpt_homo, i_kpt_lumo, i_spin_homo, i_spin_lumo, found_min_direct_gap,&
+      ( eh, eval, occ, n_state, n_spin, n_kpt, homo_level, lumo_level, homo_occ,&
+        lumo_occ, i_kpt_homo, i_kpt_lumo, i_spin_homo, i_spin_lumo, found_min_direct_gap,&
         min_direct_gap, i_kpt_min_direct_gap, i_spin_min_direct_homo, &
         i_spin_min_direct_lumo)
 
   implicit none
 
-  real*8,  intent(in)  :: eval(n_state, n_spin, n_kpt)
-  real*8,  intent(in)  :: occ(n_state, n_spin, n_kpt)
-  integer, intent(in) :: n_state
-  integer, intent(in) :: n_spin
-  integer, intent(in) :: n_kpt
-  real*8,  intent(in)  :: spin_degen
-  logical, intent(in) :: flag_x2c_q4c_midpoint
+  type(elsi_handle), intent(in) :: eh
+  real(kind=r8),  intent(in)  :: eval(n_state, n_spin, n_kpt)
+  real(kind=r8),  intent(in)  :: occ(n_state, n_spin, n_kpt)
+  integer(kind=i4), intent(in) :: n_state
+  integer(kind=i4), intent(in) :: n_spin
+  integer(kind=i4), intent(in) :: n_kpt
 
-  real*8,  intent(out) :: homo_level
-  real*8,  intent(out) :: lumo_level
-  real*8,  intent(out) :: homo_occ
-  real*8,  intent(out) :: lumo_occ
-  integer, intent(out) :: i_kpt_homo
-  integer, intent(out) :: i_kpt_lumo
-  integer, intent(out) :: i_spin_homo
-  integer, intent(out) :: i_spin_lumo
+  real(kind=r8),  intent(out) :: homo_level
+  real(kind=r8),  intent(out) :: lumo_level
+  real(kind=r8),  intent(out) :: homo_occ
+  real(kind=r8),  intent(out) :: lumo_occ
+  integer(kind=i4), intent(out) :: i_kpt_homo
+  integer(kind=i4), intent(out) :: i_kpt_lumo
+  integer(kind=i4), intent(out) :: i_spin_homo
+  integer(kind=i4), intent(out) :: i_spin_lumo
   logical, intent(out) :: found_min_direct_gap
-  real*8,  intent(out) :: min_direct_gap
-  integer, intent(out) :: i_kpt_min_direct_gap
-  integer, intent(out) :: i_spin_min_direct_homo
-  integer, intent(out) :: i_spin_min_direct_lumo
+  real(kind=r8),  intent(out) :: min_direct_gap
+  integer(kind=i4), intent(out) :: i_kpt_min_direct_gap
+  integer(kind=i4), intent(out) :: i_spin_min_direct_homo
+  integer(kind=i4), intent(out) :: i_spin_min_direct_lumo
+
+  ! variables for homo and lumo level
+  real(kind=r8)  :: spin_degen
 
   !  counters
-  real*8  :: direct_gap
-  real*8 :: current_homo_level, current_lumo_level
-  real*8 :: midpoint
-  integer :: current_homo_spin, current_lumo_spin
-  integer :: current_homo_state, current_lumo_state
-  integer :: i_state_homo, i_state_lumo
-  integer :: i_state, i_spin, i_k_point
+  real(kind=r8)  :: direct_gap
+  real(kind=r8) :: current_homo_level, current_lumo_level
+  real(kind=r8) :: midpoint
+  integer(kind=i4) :: current_homo_spin, current_lumo_spin
+  integer(kind=i4) :: current_homo_state, current_lumo_state
+  integer(kind=i4) :: i_state_homo, i_state_lumo
+  integer(kind=i4) :: i_state, i_spin, i_k_point
+
+  ! Set spin degeneracy
+  if(.not. eh%ph%spin_is_set) then
+    if(n_spin == 2) then
+      spin_degen = 1.0_r8
+    else
+      spin_degen = 2.0_r8
+    end if
+  else
+    spin_degen = eh%ph%spin_degen
+  end if
 
   ! Determine HOMO and LUMO values (VBM and CBM in case of periodic systems)
   ! safe initial values. If we break these, we have a problem somwehere else.
@@ -1008,12 +1016,6 @@ subroutine elsi_find_homo_lumo_gap &
 
   ! Define the correct "half occupation" (with or without spin)
   midpoint = spin_degen/2.0d0
-  ! (Rundong) Q4C currently works only for closed-shell systems (spin none), and
-  ! for the convenience of printing, we at present don't distinguish the
-  ! spin_degeneracy variable from an NR/SR case, viz. spin_degeneracy = 2.0d0
-  ! for Q4C. Therefore, midpoint should be 0.5d0:
-  !if(flag_rel.eq.REL_q4c.or.flag_rel.eq.REL_x2c) midpoint = 0.5d0
-  if(flag_x2c_q4c_midpoint .eqv. .TRUE.) midpoint = 0.5d0
 
   homo_occ = 2.0d0
   lumo_occ = 0.0d0
