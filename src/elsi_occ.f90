@@ -949,15 +949,6 @@ end subroutine
 !!
 !! UKH
 
-!! Refactor steps
-!! 1. Introduce the elsi type handles ph, bh as inputs to remove several inputs
-!! 2. Rewrite the input and output typings
-!! 3. Remove the spin degeneracy flag checking with saved types, look at elsi_get_occ_for_dm as inspiration
-!! 4. Remove unneccesary flags that shouldnt exist in ELSI like flag_x2c_q4c_midpoint
-!! 5. Rethink output structure
-!! 6. Test in ELSI tests?
-!! 7. Test within FHI-aims and Q4C in particular
-
 subroutine elsi_find_homo_lumo_gap &
       ( eval, occ, n_state, n_spin, n_kpt, spin_degen, flag_x2c_q4c_midpoint, homo_level, &
         lumo_level, homo_occ, lumo_occ, i_kpt_homo, i_kpt_lumo, i_spin_homo, i_spin_lumo, found_min_direct_gap,&
