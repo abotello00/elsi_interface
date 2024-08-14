@@ -2544,8 +2544,8 @@ end subroutine
 !>
 !! Compute the chemical potential and occupation numbers.
 !!
-subroutine elsi_compute_mu_and_occ(eh,n_electron,n_state,n_spin,n_kpt,k_wt,&
-   eval,occ,mu)
+subroutine elsi_compute_mu_and_occ(eh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,&
+   eval,occ,mu,mu_choice)
 
    implicit none
 
