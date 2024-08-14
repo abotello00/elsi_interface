@@ -2555,14 +2555,23 @@ subroutine elsi_compute_mu_and_occ(eh,n_electron,n_state,n_spin,n_kpt,k_wt,&
    integer(kind=i4), intent(in) :: n_spin !< Number of spins
    integer(kind=i4), intent(in) :: n_kpt !< Number of k-points
    real(kind=r8), intent(in) :: k_wt(n_kpt) !< K-points weights
+   real(kind=r8), intent(inout) :: frac_tol ! min. deviation from fully occupied or empty levels to be considered fractionally occupied 
    real(kind=r8), intent(in) :: eval(n_state,n_spin,n_kpt) !< Eigenvalues
    real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt) !< Occupation members
    real(kind=r8), intent(out) :: mu !< Chemical potential
+   character(len=20), intent(out) :: mu_choice              ! criterion by which chemical potential was found:
+                                                            ! 'fractional'   - open-shell system or metal, mu uniquely determined
+                                                            ! 'midpoint'     - system with a gap; mu at homo-lumo midpoint is
+                                                            !                  technically acceptable but this mu value is not unique
+                                                            ! 'off_midpoint' - system does not have significant fractional occupation numbers
+                                                            !                  but choosing mu at the midpoint between homo and lumo was
+                                                            !                  not possible
+                                                            ! 'undefined'    - mu definition unclear - should not happen.
 
    character(len=*), parameter :: caller = "elsi_compute_mu_and_occ"
 
-   call elsi_mu_and_occ(eh%ph,eh%bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-        occ,mu)
+   call elsi_mu_and_occ(eh%ph,eh%bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,eval,&
+        occ,mu,mu_choice)
 
 end subroutine
 

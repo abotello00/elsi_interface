@@ -72,8 +72,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
                                                             ! 'off_midpoint' - system does not have significant fractional occupation numbers
                                                             !                  but choosing mu at the midpoint between homo and lumo was
                                                             !                  not possible
-                                                            ! 'ambiguous'    - mu is not unabiguously defined but midpoint determination
-                                                            !                  failed
+                                                            ! 'undefined'    - mu definition unclear - should not happen.
    ! variables for homo and lumo level
    real(kind=r8) :: homo_level
    real(kind=r8) :: lumo_level
@@ -96,7 +95,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
     integer :: i_state, i_spin, i_k_point
 
     ! Initially, choice of mu is not known
-    mu_choice = 'ambiguous'
+    mu_choice = 'undefined'
 
     ! Check validity of user-supplied frac_tol value
     if (frac_tol.lt.1E-08) then
