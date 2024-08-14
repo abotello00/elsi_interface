@@ -32,26 +32,48 @@ module ELSI_OCC
 contains
 
 !>
-!! Compute the chemical potential and occupation numbers.
+!! Compute the chemical potential and occupation numbers and
+!! attempt to place the chemical potential at a predictable value
+!! in the event that fulfilling the charge norm leads to a range of
+!! valid choices for mu.  
 !!
-subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
-   mu)
+subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,eval,&
+   occ,mu,mu_choice)
 
+!! wraps around elsi_mu_and_occ_normal.
+!! elsi_mu_and_occ attempts to place the chemical potential (mu) predictably
+!! for later handling in a user code.
+!! - If fractional occupation numbers are found, mu can be placed unambiguously
+!!   and has a physical significance (electronic chemical potential).  
+!! - In the presence of an energy gap between occupied and unoccupied levels,
+!!   mu can be placed anywhere in the gap and achieve the target number of   
+!!   electrons - i.e., mu is not unambiguously defined. In this case, ELSI
+!!   attempts to place mu at the midpoint between HOMO and LUMO, but this is
+!!   an arbitrary choice. In this case, mu does not have a physical meaning.
+!! The criterion used for the choice of mu is communicated to the user code.
+  
    implicit none
 
    type(elsi_param_t), intent(in) :: ph
    type(elsi_basic_t), intent(in) :: bh
-   real(kind=r8), intent(in) :: n_electron
-   integer(kind=i4), intent(in) :: n_state
-   integer(kind=i4), intent(in) :: n_spin
-   integer(kind=i4), intent(in) :: n_kpt
-   real(kind=r8), intent(in) :: k_wt(n_kpt)
-   real(kind=r8), intent(in) :: eval(n_state,n_spin,n_kpt)
-   real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt)
-   real(kind=r8), intent(out) :: mu
-   real(kind=r8)  :: mu_tmp
-   real(kind=r8)  :: occ_tmp(n_state,n_spin,n_kpt)
-
+   real(kind=r8), intent(in) :: n_electron                  ! target number of electrons
+   integer(kind=i4), intent(in) :: n_state                  ! number of states
+   integer(kind=i4), intent(in) :: n_spin                   ! number of spin channels
+   integer(kind=i4), intent(in) :: n_kpt                    ! number of k-points
+   real(kind=r8), intent(in) :: k_wt(n_kpt)                 ! k-space integration weights
+   real(kind=r8), intent(inout) :: frac_tol                 ! min. deviation from fully occupied or empty levels to be considered fractionally occupied 
+   real(kind=r8), intent(in) :: eval(n_state,n_spin,n_kpt)  ! energy levels
+   real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt)  ! occupation numbers
+   real(kind=r8), intent(out) :: mu                         ! electronic chemical potential in broadening function
+   character(len=20), intent(out) :: mu_choice              ! criterion by which chemical potential was found:
+                                                            ! 'fractional'   - open-shell system or metal, mu uniquely determined
+                                                            ! 'midpoint'     - system with a gap; mu at homo-lumo midpoint is
+                                                            !                  technically acceptable but this mu value is not unique
+                                                            ! 'off_midpoint' - system does not have significant fractional occupation numbers
+                                                            !                  but choosing mu at the midpoint between homo and lumo was
+                                                            !                  not possible
+                                                            ! 'ambiguous'    - mu is not unabiguously defined but midpoint determination
+                                                            !                  failed
    ! variables for homo and lumo level
    real(kind=r8) :: homo_level
    real(kind=r8) :: lumo_level
@@ -59,164 +81,169 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
    real(kind=r8) :: homo_occ
    real(kind=r8) :: lumo_occ
    real(kind=r8) :: diff
-   real(kind=r8) :: diff_tmp
    real(kind=r8) :: occupation_def
-   real(kind=r8) :: frac_tol
    real(kind=r8) :: frac_diff
    logical :: fractionally_occupied
    character(len=200) :: msg
    character(len=*), parameter :: caller = "elsi_mu_and_occ"
 
+   ! internal temporary storage arrays
+   real(kind=r8)  :: mu_tmp
+   real(kind=r8)  :: occ_tmp(n_state,n_spin,n_kpt)
+   
     !  counters
     real*8 :: midpoint, i_occ_val
     integer :: i_state, i_spin, i_k_point
 
+    ! Initially, choice of mu is not known
+    mu_choice = 'ambiguous'
+
+    ! Check validity of user-supplied frac_tol value
+    if (frac_tol.lt.1E-08) then
+       ! In this case, the determination of fractional vs integer occupations
+       ! interferes with numerical uncertainty. We change it to a minimal lower bound,
+       ! rather than stopping. A user code should detect that frac_tol was
+       ! changed and do its own error handling if needed.
+
+       frac_tol = 1E-08
+
+       write(msg,"(A,A)") &
+            "Warning: Unsafe or invalid input value frac_tol in ELSI routine ", caller
+       write(msg,"(A,ES24.16E3,A)") &
+            "ELSI changed frac_tol to a minimal lower bound :", frac_tol
+       call elsi_say(bh,msg)       
+    end if
+    
+    ! Determine occupation numbers by fulfilling the target electron count.
+    ! In the presence of a HOMO-LUMO gap, mu may result anywhere in the gap
+    ! (not yet well defined).
     call elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,&
         eval,occ,mu)
 
-        ! Attempts to put Fermi level half-way between homo and lumo
-        ! - UKH
-
-        ! Set spin degeneracy
-        if(.not. ph%spin_is_set) then
-            if(n_spin == 2) then
-                spin_degen = 1.0_r8
-            else
-                spin_degen = 2.0_r8
-            end if
+    ! Next, analyze mu placement and attempt to make a predictable choice.
+    
+    ! Set spin degeneracy
+    if(.not. ph%spin_is_set) then
+        if(n_spin == 2) then
+            spin_degen = 1.0_r8
         else
-            spin_degen = ph%spin_degen
+            spin_degen = 2.0_r8
         end if
+    else
+        spin_degen = ph%spin_degen
+    end if
 
-        homo_level = -10000000.0d0
-        lumo_level = 10000000.0d0
+    ! Safe initial lower and upper bounds for spectrum
+    homo_level = -10000000.0d0
+    lumo_level = 10000000.0d0
 
-        ! Define the correct "half occupation" (with or without spin)
-        midpoint = spin_degen/2.0d0
+    ! Define the correct "half occupation" (with or without spin)
+    midpoint = spin_degen/2.0d0
 
-        ! finding homo-lumo level
-        do i_k_point = 1, n_kpt, 1
-            do i_spin = 1, n_spin, 1
-                do i_state = 1, n_state, 1
-                    ! search for the global HOMO and LUMO (any k-point)
-                    if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
-                        ! check if homo (including Fermi level)
-                        if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
-                            homo_level = eval(i_state, i_spin, i_k_point)
-                        end if
+    ! finding homo-lumo level
+    ! note that homo and lumo can result to be the same, in this definition,
+    ! if there exist levels that are exactly half-occupied.
+    do i_k_point = 1, n_kpt, 1
+        do i_spin = 1, n_spin, 1
+            do i_state = 1, n_state, 1
+                ! search for the global HOMO and LUMO (any k-point)
+                if (occ(i_state, i_spin, i_k_point) .ge. midpoint) then
+                    ! check if homo (including Fermi level)
+                    if (eval(i_state, i_spin, i_k_point) .gt. homo_level) then
+                        homo_level = eval(i_state, i_spin, i_k_point)
                     end if
+                end if
 
-                    if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
-                        ! check if lumo (including Fermi level)
-                        if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
-                            lumo_level = eval(i_state, i_spin, i_k_point)
-                        end if
+                if (occ(i_state, i_spin, i_k_point) .le. midpoint) then
+                    ! check if lumo (including Fermi level)
+                    if (eval(i_state, i_spin, i_k_point) .lt. lumo_level) then
+                        lumo_level = eval(i_state, i_spin, i_k_point)
                     end if
-                enddo
+                end if
             enddo
         enddo
+    enddo
 
-        ! Initial fractional occupancy determination
-        frac_tol = 0.05
+    ! Decide if the user code asks to consider the resulting occupation numbers
+    ! fractionally occupied based on its own definition, supplied by frac_tol        
+    loopii: do i_k_point = 1, n_kpt, 1
+        loopjj: do i_spin = 1, n_spin, 1
+            loopkk: do i_state = 1, n_state, 1
 
-        loopii: do i_k_point = 1, n_kpt, 1
-            loopjj: do i_spin = 1, n_spin, 1
-                loopkk: do i_state = 1, n_state, 1
+                ! Must ensure that the value checked here is bounded between 0 (unoccupied)
+                ! and 1 (fully occupied). If the maximum occupation is 2, then a level
+                ! occupied by 1 electron is still fractionally occupied.
+                i_occ_val = occ(i_state, i_spin,  i_k_point) / spin_degen
+                
+                frac_diff = abs(i_occ_val-nint(i_occ_val))
 
-                    i_occ_val = occ(i_state, i_spin,  i_k_point)
-                    frac_diff = abs(i_occ_val-nint(i_occ_val))
+                if (frac_diff .le. frac_tol) then
+                    fractionally_occupied = .false.
+                else
+                    fractionally_occupied = .true.                                        
+                    exit loopii
+                endif
 
-                    if (frac_diff .le. frac_tol) then
-                        fractionally_occupied = .false.
-                    else
-                        fractionally_occupied = .true.
+            enddo loopkk
+        enddo loopjj
+    enddo loopii
 
-                        ! write(msg,"(A)") "ELSI found fractional occupation numbers for current chemical potential."
-                        ! call elsi_say(bh,msg)
-                        ! write(msg,"(A)") "Keeping chemical potential where it is."
-                        ! call elsi_say(bh,msg)
+    ! Now determine which mu value ELSI decides to keep, and communicate the
+    ! rationale for the choice to the user code as well.
+    if (fractionally_occupied) then
 
-                        exit loopii
-                    endif
+        ! ELSI found fractional occupation numbers for current chemical potential.
+        ! Keeping chemical potential where it is.
+        mu_choice = 'fractional'
+    
+    else  ! i.e., (.not. fractionally_occupied)
+        ! Find out if the midpoint between homo and lumo is an acceptably accurate
+        ! choice of mu to make it predictable.
 
-                enddo loopkk
-            enddo loopjj
-        enddo loopii
+        ! One key point is that this choice must not introduce an inaccuracy of
+        ! any kind in the charge norm, i.e., the actual electron count.
 
-        if (.not. fractionally_occupied) then
-            ! Store temporary mu, occ and diff for later if mid-point calculation fails
-            mu_tmp = mu
-            occ_tmp = occ
+        ! Any such inaccuracy would already have been addressed in elsi_mu_and_occ_normal,
+        ! by way of a call to elsi_find_mu . If so, we must not undo this correction.
+       
+        ! Store temporary mu and occ for later if mid-point calculation fails
+        mu_tmp = mu
+        occ_tmp = occ
 
-            ! Set mid-point inbetween this homo and lumo
-            mu = (homo_level + lumo_level) / 2.0_r8
+        ! Set mid-point inbetween this homo and lumo
+        mu = (homo_level + lumo_level) / 2.0_r8
 
-            ! Check electron number for this mu value
-            call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
-                  occ,mu,diff)
-            ! call elsi_adjust_occ(ph,bh,n_state,n_spin,n_kpt,k_wt,eval,occ,diff)
-            ! write(msg,"(A,ES24.16E3,A)") "Residual electron error for mid-point Fermi level :", diff
-            ! call elsi_say(bh,msg)
-            diff_tmp = diff
+        ! Check electron number for this mu value
+        call elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+              occ,mu,diff)
 
-            ! Check for fractional occupation numbers after setting mid-point
-            frac_tol = 1E-05
+        if (abs(diff) < ph%mu_tol) then
+            ! Choosing mu at the midpoint between homo and lumo fulfills the
+            ! required charge norm, i.e., sum(occ) = n_electrons, exactly.
+            ! We can keep mu at the midpoint. We also keep the new occupation numbers.
+           
+            mu_choice = 'midpoint'
 
-            loopi: do i_k_point = 1, n_kpt, 1
-                  loopj: do i_spin = 1, n_spin, 1
-                     loopk: do i_state = 1, n_state, 1
+        else
+            ! A difference remains. We cannot use mu at the midpoint between HOMO and LUMO.
+           
+            mu_choice = 'off_midpoint'
 
-                        i_occ_val = occ(i_state, i_spin,  i_k_point)
-                        frac_diff = abs(i_occ_val-nint(i_occ_val))
-
-                        if (frac_diff .le. frac_tol) then
-                              fractionally_occupied = .false.
-                        else
-                              fractionally_occupied = .true.
-
-                              ! write(msg,"(A)") "ELSI found fractional occupation numbers for mid-point chemical potential."
-                              ! call elsi_say(bh,msg)
-                              ! write(msg,"(A,I5,A)") "i_k_point :", i_k_point
-                              ! call elsi_say(bh,msg)
-                              ! write(msg,"(A,I5,A)") "i_state :", i_state
-                              ! call elsi_say(bh,msg)
-                              ! write(msg,"(A,ES24.16E3,A)") "occupation :", i_occ_val
-                              ! call elsi_say(bh,msg)
-                              ! write(msg,"(A,ES24.16E3,A)") "frac_diff :", frac_diff
-                              ! call elsi_say(bh,msg)
-
-                              exit loopi
-                        endif
-
-                     enddo loopk
-                  enddo loopj
-            enddo loopi
-
-            ! Proceed if not fractionally occupied
-            if ((fractionally_occupied .eqv. .false.) .and. (abs(diff) .le. ph%mu_tol)) then
-                  ! Found mu at homo-lumo midpoint
-                  ! write(msg,"(A)") "ELSI found chemical potential half-way between HOMO and LUMO. "
-                  ! call elsi_say(bh,msg)
-            else
-                  ! Failed to find  mu at mid-point inbetween homo and lumo
-                  ! Set mu,occ and diff to previous value
-                  mu = mu_tmp
-                  occ = occ_tmp
-                  diff = diff_tmp
-
-                  ! write(msg,"(A)") "WARNING: ELSI failed to place chemical potential half-way between HOMO and LUMO!"
-                  ! call elsi_say(bh,msg)
-                  ! write(msg,"(A)") "Reverting to previous chemical potential value."
-                  ! call elsi_say(bh,msg)
-                  ! write(msg,"(A,ES24.16E3,A)") "Residual electron error :", diff
-                  ! call elsi_say(bh,msg)
-            endif
+            ! Set mu,occ and diff to previous value
+            mu = mu_tmp
+            occ = occ_tmp
+            diff = diff_tmp
+           
         end if
+
+    end if
 
 end subroutine
 
 !>
-!! Compute the chemical potential and occupation numbers normal distribution.
+!! Compute the chemical potential and occupation numbers but may leave mu
+!! at an arbitrary placement in a homo-lumo gap, in the event that a range
+!! of mu values all fulfill the charge norm criterion exactly.
 !!
 subroutine elsi_mu_and_occ_normal(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,occ,&
    mu)
