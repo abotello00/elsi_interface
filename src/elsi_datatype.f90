@@ -132,6 +132,15 @@ module ELSI_DATATYPE
       real(kind=r8) :: mu_tol
       integer(kind=i4) :: mu_max_steps
       integer(kind=i4) :: mu_mp_order
+      real(kind=r8) :: frac_tol ! Tolerance for fractional occupation
+      character(len=20) :: mu_choice ! criterion by which chemical potential was found:
+                                     ! 'fractional'   - open-shell system or metal, mu uniquely determined
+                                     ! 'midpoint'     - system with a gap; mu at homo-lumo midpoint is
+                                     !                  technically acceptable but this mu value is not unique
+                                     ! 'off_midpoint' - system does not have significant fractional occupation numbers
+                                     !                  but choosing mu at the midpoint between homo and lumo was
+                                     !                  not possible
+                                     ! 'undefined'    - mu definition unclear - should not happen.
 
       ! Frozen core
       integer(kind=i4) :: fc_method

@@ -22,6 +22,7 @@ module ELSI_SETUP
        fjson_reset_fj_handle
    use ELSI_PEXSI, only: elsi_set_pexsi_default,elsi_cleanup_pexsi
    use ELSI_CHASE, only: elsi_cleanup_chase
+   use ELSI_OUTPUT, only: elsi_say
    use ELSI_PRECISION, only: r8,i4,i8
    use ELSI_SIPS, only: elsi_cleanup_sips
    use ELSI_SORT, only: elsi_heapsort
@@ -62,7 +63,7 @@ contains
 !! and number of states.
 !!
 subroutine elsi_init(eh,solver,parallel_mode,matrix_format,n_basis,n_electron,&
-   n_state)
+   n_state,frac_tol)
 
    implicit none
 
@@ -73,8 +74,10 @@ subroutine elsi_init(eh,solver,parallel_mode,matrix_format,n_basis,n_electron,&
    integer(kind=i4), intent(in) :: n_basis !< Number of basis functions
    real(kind=r8), intent(in) :: n_electron !< Number of electrons
    integer(kind=i4), intent(in) :: n_state !< Number of states
+   real(kind=r8), intent(in), optional :: frac_tol
 
    character(len=*), parameter :: caller = "elsi_init"
+   character(len=200) :: msg
 
    ! For safety
    call elsi_cleanup(eh)
@@ -88,6 +91,27 @@ subroutine elsi_init(eh,solver,parallel_mode,matrix_format,n_basis,n_electron,&
    eh%ph%solver = solver
    eh%ph%matrix_format = matrix_format
    eh%ph%parallel_mode = parallel_mode
+   if (present(frac_tol)) then
+      if (frac_tol.lt.1E-08_r8) then
+         ! In this case, the determination of fractional vs integer occupations
+         ! interferes with numerical uncertainty. We change it to a minimal lower bound,
+         ! rather than stopping. A user code should detect that frac_tol was
+         ! changed and do its own error handling if needed.
+  
+         eh%ph%frac_tol = 1E-08_r8
+  
+         write(msg,"(A,A)") &
+              "Warning: Unsafe or invalid input value frac_tol in ELSI routine ", caller
+         write(msg,"(A,ES24.16E3,A)") &
+              "ELSI changed frac_tol to a minimal lower bound :", eh%ph%frac_tol
+         call elsi_say(eh%bh,msg)
+      else
+         eh%ph%frac_tol = frac_tol
+      end if
+   else
+      eh%ph%frac_tol = 1e-08_r8
+   endif
+   eh%ph%mu_choice = "undefined"
 
    if(parallel_mode == SINGLE_PROC) then
       eh%bh%n_lrow = n_basis

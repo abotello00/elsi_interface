@@ -37,8 +37,8 @@ contains
 !! in the event that fulfilling the charge norm leads to a range of
 !! valid choices for mu.  
 !!
-subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,eval,&
-   occ,mu,mu_choice)
+subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
+   occ,mu)
 
 !! wraps around elsi_mu_and_occ_normal.
 !! elsi_mu_and_occ attempts to place the chemical potential (mu) predictably
@@ -61,18 +61,9 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
    integer(kind=i4), intent(in) :: n_spin                   ! number of spin channels
    integer(kind=i4), intent(in) :: n_kpt                    ! number of k-points
    real(kind=r8), intent(in) :: k_wt(n_kpt)                 ! k-space integration weights
-   real(kind=r8), intent(inout) :: frac_tol                 ! min. deviation from fully occupied or empty levels to be considered fractionally occupied 
    real(kind=r8), intent(in) :: eval(n_state,n_spin,n_kpt)  ! energy levels
    real(kind=r8), intent(out) :: occ(n_state,n_spin,n_kpt)  ! occupation numbers
    real(kind=r8), intent(out) :: mu                         ! electronic chemical potential in broadening function
-   character(len=20), intent(out) :: mu_choice              ! criterion by which chemical potential was found:
-                                                            ! 'fractional'   - open-shell system or metal, mu uniquely determined
-                                                            ! 'midpoint'     - system with a gap; mu at homo-lumo midpoint is
-                                                            !                  technically acceptable but this mu value is not unique
-                                                            ! 'off_midpoint' - system does not have significant fractional occupation numbers
-                                                            !                  but choosing mu at the midpoint between homo and lumo was
-                                                            !                  not possible
-                                                            ! 'undefined'    - mu definition unclear - should not happen.
    ! variables for homo and lumo level
    real(kind=r8) :: homo_level
    real(kind=r8) :: lumo_level
@@ -95,23 +86,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
     integer :: i_state, i_spin, i_k_point
 
     ! Initially, choice of mu is not known
-    mu_choice = 'undefined'
-
-    ! Check validity of user-supplied frac_tol value
-    if (frac_tol.lt.1E-08) then
-       ! In this case, the determination of fractional vs integer occupations
-       ! interferes with numerical uncertainty. We change it to a minimal lower bound,
-       ! rather than stopping. A user code should detect that frac_tol was
-       ! changed and do its own error handling if needed.
-
-       frac_tol = 1E-08
-
-       write(msg,"(A,A)") &
-            "Warning: Unsafe or invalid input value frac_tol in ELSI routine ", caller
-       write(msg,"(A,ES24.16E3,A)") &
-            "ELSI changed frac_tol to a minimal lower bound :", frac_tol
-       call elsi_say(bh,msg)       
-    end if
+    ph%mu_choice = 'undefined'
     
     ! Determine occupation numbers by fulfilling the target electron count.
     ! In the presence of a HOMO-LUMO gap, mu may result anywhere in the gap
@@ -176,7 +151,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
                 
                 frac_diff = abs(i_occ_val-nint(i_occ_val))
 
-                if (frac_diff .le. frac_tol) then
+                if (frac_diff .le. ph%frac_tol) then
                     fractionally_occupied = .false.
                 else
                     fractionally_occupied = .true.                                        
@@ -193,7 +168,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
 
         ! ELSI found fractional occupation numbers for current chemical potential.
         ! Keeping chemical potential where it is.
-        mu_choice = 'fractional'
+        ph%mu_choice = 'fractional'
     
     else  ! i.e., (.not. fractionally_occupied)
         ! Find out if the midpoint between homo and lumo is an acceptably accurate
@@ -221,12 +196,12 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
             ! required charge norm, i.e., sum(occ) = n_electrons, exactly.
             ! We can keep mu at the midpoint. We also keep the new occupation numbers.
            
-            mu_choice = 'midpoint'
+            ph%mu_choice = 'midpoint'
 
         else
             ! A difference remains. We cannot use mu at the midpoint between HOMO and LUMO.
            
-            mu_choice = 'off_midpoint'
+            ph%mu_choice = 'off_midpoint'
 
             ! Set mu,occ and diff to previous value
             mu = mu_tmp
