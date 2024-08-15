@@ -54,7 +54,7 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
   
    implicit none
 
-   type(elsi_param_t), intent(in) :: ph
+   type(elsi_param_t), intent(inout) :: ph
    type(elsi_basic_t), intent(in) :: bh
    real(kind=r8), intent(in) :: n_electron                  ! target number of electrons
    integer(kind=i4), intent(in) :: n_state                  ! number of states
