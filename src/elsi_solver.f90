@@ -2655,7 +2655,7 @@ subroutine elsi_static_excitations(eh, n_electron, n_state, n_spin, n_kpt, &
 
     implicit none
 
-    type(elsi_handle), intent(in) :: eh
+    type(elsi_handle), intent(inout) :: eh
     real(kind=r8), intent(in) :: n_electron
     integer(kind=i4), intent(in) :: n_state
     integer(kind=i4), intent(in) :: n_spin
