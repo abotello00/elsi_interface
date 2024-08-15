@@ -231,7 +231,6 @@ subroutine elsi_mu_and_occ(ph,bh,n_electron,n_state,n_spin,n_kpt,k_wt,frac_tol,e
             ! Set mu,occ and diff to previous value
             mu = mu_tmp
             occ = occ_tmp
-            diff = diff_tmp
            
         end if
 
@@ -414,6 +413,8 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
    integer(kind=i4) :: i_mp
    integer(kind=i4) :: i_constraints
 
+   logical :: k_weight_rescaled
+   
    character(len=200) :: msg
    character(len=*), parameter :: caller = "elsi_check_electrons"
 
@@ -430,13 +431,22 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
       spin_degen = ph%spin_degen
    end if
 
+   ! This change reweights the summed-up occupation
+   ! numbers reduce the impact of numerical imprecisions in the overall sum.
+   ! specifically, we avoid cases when the occupation number times k-weight
+   ! eventually leaves the double precision range.
+   ! We do not address cases in which k-weights are pathologically small
+   ! since the rationale for such a case is not a priori clear.
+   if ( minval(k_wt).gt.1E-10 ) then
+      k_wt_tmp = k_wt / minval(k_wt)
+      k_weight_rescaled = .true.
+   else
+      ! cannot rescale using zero
+      k_weight_rescaled = .false.
+   end if
+   
    select case(ph%mu_scheme)
    case(GAUSSIAN)
-    ! Modify to rescale k-weights when Fermi level is set
-    ! at mid-point between homo-lumo. Thank you Sebastian
-    ! for the insights!
-    ! - UKH
-      k_wt_tmp = k_wt / minval(k_wt)
       do i_kpt = 1,n_kpt
          do i_spin = 1,n_spin
             do i_state = 1,n_state
@@ -446,7 +456,6 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
             end do
          end do
       end do
-      diff = diff * minval(k_wt)
    case(FERMI)
       max_exp = maxexponent(mu)*log(2.0_r8)
 
@@ -554,6 +563,11 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
       end do
    end if
 
+   ! after ALL k-space summations are done, reweight the sum as initiated earlier.
+   if (k_weight_rescaled) then
+      diff = diff * minval(k_wt)
+   end if
+   
    diff = diff-n_electron
 
 end subroutine
