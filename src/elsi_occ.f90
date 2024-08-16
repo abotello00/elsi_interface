@@ -442,7 +442,7 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
                if(arg < max_exp) then
                   occ(i_state,i_spin,i_kpt) = spin_degen/(1.0_r8+exp(arg))
 
-                  diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
+                  diff = diff+occ(i_state,i_spin,i_kpt)*k_wt_tmp(i_kpt)
                else
                   occ(i_state,i_spin,i_kpt) = 0.0_r8
                end if
@@ -478,7 +478,7 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
                   end do
                end if
 
-               diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
+               diff = diff+occ(i_state,i_spin,i_kpt)*k_wt_tmp(i_kpt)
             end do
          end do
       end do
@@ -501,7 +501,7 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
                      *(arg-1.0_r8)**2
                end if
 
-               diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
+               diff = diff+occ(i_state,i_spin,i_kpt)*k_wt_tmp(i_kpt)
             end do
          end do
       end do
@@ -515,7 +515,7 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
                occ(i_state,i_spin,i_kpt) = (0.5_r8-erf(arg)*0.5_r8&
                   -INVERT_SQRT_PI*sqrt(0.5_r8)*exp(-arg**2))*spin_degen
 
-               diff = diff+occ(i_state,i_spin,i_kpt)*k_wt(i_kpt)
+               diff = diff+occ(i_state,i_spin,i_kpt)*k_wt_tmp(i_kpt)
             end do
          end do
       end do
@@ -527,13 +527,13 @@ subroutine elsi_check_electrons(ph,n_electron,n_state,n_spin,n_kpt,k_wt,eval,&
          do i_kpt = 1, n_kpt, 1
             ! Calculate an inital electron difference
             diff = diff - occ(ph%constr_state(i_constraints,i_kpt),&
-               ph%constr_spin(i_constraints),i_kpt) * k_wt(i_kpt)
+               ph%constr_spin(i_constraints),i_kpt) * k_wt_tmp(i_kpt)
             ! Apply occupations from the property arrays
             occ(ph%constr_state(i_constraints,i_kpt),ph%constr_spin(i_constraints),&
                i_kpt) = ph%constr_occ(i_constraints)
             ! Check electron difference with constraint applied
             diff = diff + occ(ph%constr_state(i_constraints,i_kpt),&
-               ph%constr_spin(i_constraints),i_kpt) * k_wt(i_kpt)
+               ph%constr_spin(i_constraints),i_kpt) * k_wt_tmp(i_kpt)
          end do
       end do
    end if
