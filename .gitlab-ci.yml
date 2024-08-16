@@ -242,7 +242,7 @@ build.intel-gpu:
   rules:
     - when: on_success
   tags:
-    - node23.timewarp
+    - node17.timewarp
   image:
     name: uthpalaherath/ubuntu20-intel2024-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
@@ -272,7 +272,7 @@ build.intel2022-gpu:
   rules:
     - when: on_success
   tags:
-    - node23.timewarp
+    - node17.timewarp
   image:
     name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
@@ -505,7 +505,7 @@ test.intel-gpu:
   rules:
     - when: on_success
   tags:
-    - node23.timewarp
+    - node17.timewarp
   image:
     name: uthpalaherath/ubuntu20-intel2024-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
@@ -528,7 +528,7 @@ test.intel2022-gpu:
   rules:
     - when: on_success
   tags:
-    - node23.timewarp
+    - node17.timewarp
   image:
     name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
