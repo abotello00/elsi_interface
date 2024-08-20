@@ -37,6 +37,7 @@ module ELSI_SETUP
    public :: elsi_set_mpi_global
    public :: elsi_set_spin
    public :: elsi_set_kpoint
+   public :: elsi_set_fractol
    public :: elsi_set_blacs
    public :: elsi_set_csc_blk
    public :: elsi_reinit
@@ -63,7 +64,7 @@ contains
 !! and number of states.
 !!
 subroutine elsi_init(eh,solver,parallel_mode,matrix_format,n_basis,n_electron,&
-   n_state,frac_tol)
+   n_state)
 
    implicit none
 
@@ -74,7 +75,6 @@ subroutine elsi_init(eh,solver,parallel_mode,matrix_format,n_basis,n_electron,&
    integer(kind=i4), intent(in) :: n_basis !< Number of basis functions
    real(kind=r8), intent(in) :: n_electron !< Number of electrons
    integer(kind=i4), intent(in) :: n_state !< Number of states
-   real(kind=r8), intent(in), optional :: frac_tol
 
    character(len=*), parameter :: caller = "elsi_init"
    character(len=200) :: msg
@@ -91,26 +91,7 @@ subroutine elsi_init(eh,solver,parallel_mode,matrix_format,n_basis,n_electron,&
    eh%ph%solver = solver
    eh%ph%matrix_format = matrix_format
    eh%ph%parallel_mode = parallel_mode
-   if (present(frac_tol)) then
-      if (frac_tol.lt.1E-08_r8) then
-         ! In this case, the determination of fractional vs integer occupations
-         ! interferes with numerical uncertainty. We change it to a minimal lower bound,
-         ! rather than stopping. A user code should detect that frac_tol was
-         ! changed and do its own error handling if needed.
-  
-         eh%ph%frac_tol = 1E-08_r8
-  
-         write(msg,"(A,A)") &
-              "Warning: Unsafe or invalid input value frac_tol in ELSI routine ", caller
-         write(msg,"(A,ES24.16E3,A)") &
-              "ELSI changed frac_tol to a minimal lower bound :", eh%ph%frac_tol
-         call elsi_say(eh%bh,msg)
-      else
-         eh%ph%frac_tol = frac_tol
-      end if
-   else
-      eh%ph%frac_tol = 1e-08_r8
-   endif
+   eh%ph%frac_tol = 1E-08_r8
    eh%ph%mu_choice = "undefined"
 
    if(parallel_mode == SINGLE_PROC) then
@@ -221,6 +202,35 @@ subroutine elsi_set_kpoint(eh,n_kpt,i_kpt,i_wt)
    eh%ph%n_kpts = n_kpt
    eh%ph%i_kpt = i_kpt
    eh%ph%i_wt = i_wt
+
+end subroutine
+
+!>
+!! Set the number folerance for fractional occupations.
+!!
+subroutine elsi_set_fractol(eh,frac_tol)
+
+   implicit none
+
+   type(elsi_handle), intent(inout) :: eh !< Handle
+   real(kind=r8), intent(in) :: frac_tol !< Tolerance for fractional occupations.
+
+   if (frac_tol.lt.1E-08_r8) then
+      ! In this case, the determination of fractional vs integer occupations
+      ! interferes with numerical uncertainty. We change it to a minimal lower bound,
+      ! rather than stopping. A user code should detect that frac_tol was
+      ! changed and do its own error handling if needed.
+
+      eh%ph%frac_tol = 1E-08_r8
+
+      write(msg,"(A,A)") &
+           "Warning: Unsafe or invalid input value frac_tol in ELSI routine ", caller
+      write(msg,"(A,ES24.16E3,A)") &
+           "ELSI changed frac_tol to a minimal lower bound :", eh%ph%frac_tol
+      call elsi_say(eh%bh,msg)
+   else
+      eh%ph%frac_tol = frac_tol
+   end if
 
 end subroutine
 
