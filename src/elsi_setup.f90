@@ -77,7 +77,6 @@ subroutine elsi_init(eh,solver,parallel_mode,matrix_format,n_basis,n_electron,&
    integer(kind=i4), intent(in) :: n_state !< Number of states
 
    character(len=*), parameter :: caller = "elsi_init"
-   character(len=200) :: msg
 
    ! For safety
    call elsi_cleanup(eh)
@@ -215,6 +214,8 @@ subroutine elsi_set_fractol(eh,frac_tol)
    type(elsi_handle), intent(inout) :: eh !< Handle
    real(kind=r8), intent(in) :: frac_tol !< Tolerance for fractional occupations.
 
+   character(len=200) :: msg
+
    if (frac_tol.lt.1E-08_r8) then
       ! In this case, the determination of fractional vs integer occupations
       ! interferes with numerical uncertainty. We change it to a minimal lower bound,
@@ -225,7 +226,8 @@ subroutine elsi_set_fractol(eh,frac_tol)
 
       write(msg,"(A,A)") &
            "Warning: Unsafe or invalid input value frac_tol in ELSI routine ", caller
-      write(msg,"(A,ES24.16E3,A)") &
+      call elsi_say(eh%bh,msg)
+      write(msg,"(A,ES24.16E3)") &
            "ELSI changed frac_tol to a minimal lower bound :", eh%ph%frac_tol
       call elsi_say(eh%bh,msg)
    else
