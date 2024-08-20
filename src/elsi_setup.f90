@@ -37,7 +37,7 @@ module ELSI_SETUP
    public :: elsi_set_mpi_global
    public :: elsi_set_spin
    public :: elsi_set_kpoint
-   public :: elsi_set_fractol
+   public :: elsi_set_frac_tol
    public :: elsi_set_blacs
    public :: elsi_set_csc_blk
    public :: elsi_reinit
@@ -207,7 +207,7 @@ end subroutine
 !>
 !! Set the number folerance for fractional occupations.
 !!
-subroutine elsi_set_fractol(eh,frac_tol)
+subroutine elsi_set_frac_tol(eh,frac_tol)
 
    implicit none
 
@@ -215,6 +215,7 @@ subroutine elsi_set_fractol(eh,frac_tol)
    real(kind=r8), intent(in) :: frac_tol !< Tolerance for fractional occupations.
 
    character(len=200) :: msg
+   character(len=*), parameter :: caller = "elsi_set_frac_tol"
 
    if (frac_tol.lt.1E-08_r8) then
       ! In this case, the determination of fractional vs integer occupations
