@@ -244,10 +244,9 @@ build.intel-gpu:
   tags:
     - node17.timewarp
   image:
-    name: uthpalaherath/ubuntu20-intel2024-cuda11:latest
+    name: uthpalaherath/ubuntu20-intel2024.1-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
-    - source /opt/intel/oneapi/setvars.sh
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
@@ -507,7 +506,7 @@ test.intel-gpu:
   tags:
     - node17.timewarp
   image:
-    name: uthpalaherath/ubuntu20-intel2024-cuda11:latest
+    name: uthpalaherath/ubuntu20-intel2024.1-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - source /opt/intel/oneapi/setvars.sh
