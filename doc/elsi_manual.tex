@@ -43,11 +43,13 @@ where $\boldsymbol{H}$ and $\boldsymbol{S}$ are the so-called Hamiltonian and ov
 
 \section{Solver Libraries Supported by ELSI}
 \label{sec:solvers}
-Distributed-memory solvers supported in the current version of ELSI are: ELPA~\cite{elpa_auckenthaler_2011,elpa_marek_2014,elpa_kus_2019a,elpa_kus_2019b}, libOMM~\cite{libomm_corsetti_2014}, PEXSI~\cite{pexsi_lin_2009,pexsi_lin_2013,pexsi_lin_2014,pselinv_jacquelin_2016,pexsi_jia_2017}, EigenExa~\cite{eigenexa_imamura_2011,eigenexa_fukaya_2015}, SLEPc-SIPc~\cite{slepc_hernandez_2005,sips_campos_2012,sips_keceli_2016,sips_keceli_2018}, NTPoly~\cite{ntpoly_dawson_2018}, BSEPACK~\cite{bsepack_shao_2016} and ChASE~\cite{winkelmann2019chase,chase_pasc22}. Shared-memory solvers supported in the current version of ELSI are: LAPACK~\cite{lapack_anderson_1999}, MAGMA~\cite{magma_tomov_2010,magma_dongarra_2014} and ChASE~\cite{winkelmann2019chase,chase_pasc22}.
+Distributed-memory solvers supported in the current version of ELSI are: ELPA~\cite{elpa_auckenthaler_2011,elpa_marek_2014,elpa_kus_2019a,elpa_kus_2019b}, libOMM~\cite{libomm_corsetti_2014}, PEXSI~\cite{pexsi_lin_2009,pexsi_lin_2013,pexsi_lin_2014,pselinv_jacquelin_2016,pexsi_jia_2017}, EigenExa~\cite{eigenexa_imamura_2011,eigenexa_fukaya_2015}, SLEPc-SIPc~\cite{slepc_hernandez_2005,sips_campos_2012,sips_keceli_2016,sips_keceli_2018}, NTPoly~\cite{ntpoly_dawson_2018}, BSEPACK~\cite{bsepack_shao_2016}, ChASE~\cite{winkelmann2019chase,chase_pasc22}, and DLA-Future~\cite{solca2024dlaf}. Shared-memory solvers supported in the current version of ELSI are: LAPACK~\cite{lapack_anderson_1999}, MAGMA~\cite{magma_tomov_2010,magma_dongarra_2014} and ChASE~\cite{winkelmann2019chase,chase_pasc22}.
 
 What follows is a brief summary of the solvers supported in ELSI. For technical descriptions of the solvers, the reader is referred to the original publications of the solvers, e.g., those in the reference list of this document.
 
 \href{https://elpa.mpcdf.mpg.de}{\tcb{ELPA}}: The massively parallel dense eigensolver ELPA facilitates the solution of symmetric or Hermitian eigenproblems on high-performance computers. It features an efficient two-stage tridiagonalization algorithm which is better suited for parallel computing than the conventional one-stage algorithm.
+
+\href{https://github.com/eth-cscs/DLA-Future-Fortran}{\tcb{DLA-Future}}: provides an efficient GPU-enabled distributed eigenvalue solver, beased on the C++ \texttt{std::execution} concurrently proposal, for the solution of large symmetric or Hermitian eigenvalue problems.
 
 \href{https://esl.cecam.org/LibOMM}{\tcb{libOMM}}: The orbital minimization method (OMM) bypasses the explicit solution of the Kohn-Sham eigenproblem by efficient iterative algorithms which directly minimize an unconstrained energy functional using a set of auxiliary Wannier functions. The Wannier functions are defined on the occupied subspace of the system, reducing the size of the problem. The density matrix is then obtained directly, without calculating the Kohn-Sham orbitals.
 
@@ -90,14 +92,21 @@ well as redistributed source code for the solver libraries ELPA (versions
      \href{https://cmake.org}{CMake} software. Minimum requirements
      include:
 \begin{Verbatim}[commandchars=\\\{\}]
-\tcb{CMake} [minimum version 3.0; newer version recommended] \tcb{Fortran
-compiler} [Fortran 2003 compliant] \tcb{C compiler} [C99 compliant]
+\tcb{CMake} [minimum version 3.0; newer version recommended] 
+\tcb{Fortran compiler} [Fortran 2003 compliant]
+\tcb{C compiler} [C99 compliant]
 \tcb{MPI} [MPI-3]
 \end{Verbatim}
 
 The PEXSi, EigenExa, SLEPc-SIPs, BSEPACK, MAGMA, and ChASE solvers are not enabled by default. Enabling the PEXSI and ChASE solvers requires:
 \begin{Verbatim}[commandchars=\\\{\}]
 \tcb{C++ compiler}  [C++ 11 compliant]
+\end{Verbatim}
+
+Enabling the DLA-Future solver requires:
+\begin{Verbatim}[commandchars=\\\{\}]
+\tcb{DLA-Future-Fortran}  [version 0.2.0 or newer]
+\tcb{MPI}  [thread support level \texttt{MPI\_THREAD\_MULTIPLE}]
 \end{Verbatim}
 
 Enabling the EigenExa solver requires:
@@ -117,7 +126,7 @@ Enabling the MAGMA solver requires:
 \tcb{CUDA}  [version 10.0 or newer]
 \end{Verbatim}
 
-Enabling the CUDA-based GPU acceleration in the ELPA and ChASE solvers requires:
+Enabling the CUDA-based GPU acceleration in the ELPA, ChASE and DLA-Future solvers requires:
 \begin{Verbatim}[commandchars=\\\{\}]
 \tcb{CUDA}  [version 10.0 or newer recommended]
 \end{Verbatim}
@@ -203,7 +212,7 @@ CUDA runtime and cuBLAS libraries. Different versions of internally built
 ELPA can be enabled by the cmake options \texttt{USE\_ELPA\_2021} and
 \texttt{USE\_ELPA\_2023}.
 
-The PEXSI, EigenExa, SLEPc-SIPs, BSEPACK, MAGMA, and ChASE solvers are not enabled by default. They may be activated by the keywords \texttt{ENABLE\_PEXSI}, \texttt{ENABLE\_EIGENEXA}, \texttt{ENABLE\_SIPS}, \texttt{ENABLE\_BSEPACK}, \texttt{ENABLE\_MAGMA} and \texttt{ENABLE\_CHASE}, respectively. PEXSI 1.2.0, EigenExa 2.11, SLEPc 3.9, 3.10, 3.11, 3.12, 3.13, BSEPACK 0.1, and MAGMA 2.5 have been tested with this version of ELSI. Older/newer versions may or may not be compatible. The PETSc library, required by SLEPc, must be compiled with MPI support, and (at least) with MUMPS and ParMETIS enabled.
+The PEXSI, EigenExa, SLEPc-SIPs, BSEPACK, MAGMA, ChASE, and DLA-Future solvers are not enabled by default. They may be activated by the keywords \texttt{ENABLE\_PEXSI}, \texttt{ENABLE\_EIGENEXA}, \texttt{ENABLE\_SIPS}, \texttt{ENABLE\_BSEPACK}, \texttt{ENABLE\_MAGMA}, \texttt{ENABLE\_CHASE}, and \texttt{ENABLE\_DLAF}, respectively. PEXSI 1.2.0, EigenExa 2.11, SLEPc 3.9, 3.10, 3.11, 3.12, 3.13, BSEPACK 0.1, MAGMA 2.5, and DLA-Future 0.6.0 (with DLA-Future-Fortran 0.2.0) have been tested with this version of ELSI. Older/newer versions may or may not be compatible. The PETSc library, required by SLEPc, must be compiled with MPI support, and (at least) with MUMPS and ParMETIS enabled.
 
 Experienced users are encouraged to link ELSI against externally
 installed, better optimized solver libraries. The keywords
@@ -211,7 +220,9 @@ installed, better optimized solver libraries. The keywords
 \texttt{USE\_EXTERNAL\_PEXSI}, \texttt{USE\_EXTERNAL\_NTPOLY},
 \texttt{USE\_EXTERNAL\_BSEPACK}, and \texttt{USE\_EXTERNAL\_CHASE}
 control the usage of externally compiled ELPA, libOMM, PEXSI, NTPoly,
-BSEPACK, and ChASE, respectively.
+BSEPACK, and ChASE, respectively. DLA-Future is only available as an external library.
+Therefore, \texttt{ENABLE\_DLAF} already looks for an installed version of DLA-Future.
+It is recommended to install DLA-Future using the Spack package manager.
 
 All external libraries and include paths should be set via \texttt{INC\_PATHS}, \texttt{LIB\_PATHS}, and \texttt{LIBS}, each of which is a list of items separated with `` '' (space) or ``;'' (semicolon). If an external library depends on additional libraries, \texttt{LIBS} should include all the relevant dependencies. For instance, \texttt{LIBS} should include the MAGMA library and CUDA libraries when enabling MAGMA support.
 
@@ -274,6 +285,8 @@ are made below the table.
 \hline
 \texttt{ENABLE\_CHASE\_NCCL}             & boolean & OFF         & Enable ChASE support with NCCL\\
 \hline
+\texttt{ENABLE\_DLAF}             & boolean & OFF         & Enable DLA-Future support\\
+\hline
 \texttt{ENABLE\_TESTS}            & boolean & OFF         & Build Fortran test programs\\
 \hline
 \texttt{INC\_PATHS}               & string  & none        & Include directories of external libraries\\
@@ -315,7 +328,9 @@ are made below the table.
 
 (4) \texttt{SCOTCH\_LAST\_RESORT}: The compilation of PT-SCOTCH is a multi-step process. First, two auxiliary executables are created. Then, some header files are generated on-the-fly by the two executables. Finally, the main source files are compiled with the generated header files included. The header generation step may fail on platforms where directly running an executable is prohibited, e.g. login nodes of a supercomputer. Often this can be circumvented by requesting an interactive session to a compute node and compiling the code there, or by submitting the compilation as a job to the queuing system. However, this may still fail on platforms where an executable compiled with MPI must be launched by an MPI job launcher (aprun, mpirun, srun, etc). If the standard compilation of PT-SCOTCH fails due to this reason, the user may set \texttt{SCOTCH\_LAST\_RESORT} to the command that starts an MPI job with one MPI task, e.g. ``\texttt{mpirun -n 1}''. This command is then used to launch the auxiliary executables to generate necessary header files for PT-SCOTCH.
 
-(5) External libraries: ELSI redistributes source code of ELPA, libOMM, NTPoly, PEXSI, SuperLU\_DIST, PT-SCOTCH and ChASE libraries, which are built by default together with the ELSI interface. Experienced users are encouraged to link the ELSI interface against external, better optimized solver libraries. See Sec.~\ref{subsec:config_solvers} for more information.
+(5) External libraries: ELSI redistributes source code of ELPA, libOMM, NTPoly, PEXSI, SuperLU\_DIST, PT-SCOTCH and ChASE libraries, which are built by default together with the ELSI interface. Experienced users are encouraged to link the ELSI interface against external, better optimized solver libraries. See Sec.~\ref{subsec:config_solvers} for more information. DLA-Future is only available as an external library.
+
+(6) DLA-Future is only available as external library (i.e. it is not redistributed with ELSI). \texttt{ENABLE\_DLAF} requires DLA-Future to be installed, and to set \texttt{INC\_PATHS}, \texttt{LIB\_PATHS}, and \texttt{LIBS} accordingly.
 
 \section{Importing ELSI into Third-Party Code Projects}
 \label{sec:import}
@@ -394,7 +409,7 @@ The ELSI interface must be initialized via the \texttt{elsi\_init} subroutine be
 \hline
 \texttt{handle}         & elsi\_handle & out & ELSI handle.\\
 \hline
-\texttt{solver}         & integer      & in  & 0: \texttt{AUTO}. 1: \texttt{ELPA}. 2: \texttt{libOMM}. 3: \texttt{PEXSI}. 4: \texttt{EigenExa}. 5: \texttt{SLEPc-SIPs}. 6: \texttt{NTPoly}. 7: \texttt{MAGMA}. 8: \texttt{BSEPACK}. 9: \texttt{ChASE}. See remark 1.\\
+  \texttt{solver}         & integer      & in  & 0: \texttt{AUTO}. 1: \texttt{ELPA}. 2: \texttt{libOMM}. 3: \texttt{PEXSI}. 4: \texttt{EigenExa}. 5: \texttt{SLEPc-SIPs}. 6: \texttt{NTPoly}. 7: \texttt{MAGMA}. 8: \texttt{BSEPACK}. 9: \texttt{ChASE}. 10: \texttt{DLA-Future}. See remark 1.\\
 \hline
 \texttt{parallel\_mode} & integer      & in  & 0: \texttt{SINGLE\_PROC}. 1: \texttt{MULTI\_PROC}. See remark 4.\\
 \hline
@@ -438,15 +453,17 @@ The table below summarizes the supported problem types for each solver.
 \hline
 \texttt{BSEPACK}    & \texttt{MULTI\_PROC}  & \texttt{BLACS\_DENSE} & Real/complex & BSE-EV\\
 \hline
-\texttt{ChASE}       & \texttt{SINGLE\_PROC} & \texttt{BLACS\_DENSE} & Real/complex & KS-EV\\
+\texttt{ChASE}      & \texttt{SINGLE\_PROC} & \texttt{BLACS\_DENSE} & Real/complex & KS-EV\\
 \hline
-\texttt{ChASE}       & \texttt{MULTI\_PROC}  & \texttt{BLACS\_DENSE}  & Real/complex & KS-EV\\
+\texttt{ChASE}      & \texttt{MULTI\_PROC}  & \texttt{BLACS\_DENSE} & Real/complex & KS-EV\\
+\hline
+\texttt{DLAF}       & \texttt{MULTI\_PROC}  & All                   & Real/complex & KS-EV\\
 \hline
 \end{tabular}
 
 (2) \texttt{matrix\_format}: ``\texttt{BLACS\_DENSE}'' refers to a dense matrix format in a 2-dimensional block-cyclic distribution, i.e. the BLACS standard. ``\texttt{PEXSI\_CSC}'' refers to a compressed sparse column (CSC) matrix format in a 1-dimensional block distribution. ``\texttt{SIESTA\_CSC}'' refers to a compressed sparse column (CSC) matrix format in a 1-dimensional block-cyclic distribution. As the Hamiltonian, overlap, and density matrices are symmetric (Hermitian), compressed sparse row (CSR) matrix format is effectively supported. ``\texttt{GENERIC\_COO}'' refers to a coordinate (COO) sparse matrix format in an arbitrary distribution. Please refer to Sec.~\ref{subsec:setup_matrix} for specifications of these matrix formats.
 
-(3) \texttt{n\_state}: If ELPA, EigenExa, SLEPc-SIPs, MAGMA or ChASE is the chosen solver, this parameter specifies the number of eigenstates to solve. EigenExa internally computes all the eigenstates unless \texttt{n\_state} is 0. When \texttt{n\_state} is larger than 0 and smaller than \texttt{n\_basis}, ELSI simply discards the unwanted solutions. libOMM, PEXSI and NTPoly do not make use of this parameter.
+(3) \texttt{n\_state}: If ELPA, EigenExa, SLEPc-SIPs, MAGMA, ChASE, and DLA-Future is the chosen solver, this parameter specifies the number of eigenstates to solve. EigenExa internally computes all the eigenstates unless \texttt{n\_state} is 0. When \texttt{n\_state} is larger than 0 and smaller than \texttt{n\_basis}, ELSI simply discards the unwanted solutions. libOMM, PEXSI and NTPoly do not make use of this parameter.
 
 (4) \texttt{parallel\_mode}: The two parallelization modes, ``\texttt{SINGLE\_PROC}'' and ``\texttt{MULTI\_PROC}'', allow for two parallelization strategies commonly employed by electronic structure codes. See below.
 
@@ -504,6 +521,8 @@ The MPI communicator used by ELSI is passed into ELSI by the calling code via th
 \texttt{comm}   & integer      & in    & MPI communicator.\\
 \hline
 \end{tabular}
+
+DLA-Future requires MPI with thread support \texttt{MPI\_THREAD\_MULTIPLE}. MPI needs to be initialized with \texttt{MPI\_Init\_thread}.
 
 \subsection{Setting Up Matrix Formats}
 \label{subsec:setup_matrix}

@@ -1,5 +1,9 @@
 # ELSI changelog
 
+## v.X.YY.Z ()
+
+* Add upport for external [DLA-Future](https://github.com/eth-cscs/DLA-Future) solver (via [DLA-Future-Fortran](https://github.com/eth-cscs/DLA-Future-Fortran) interface).
+
 ## v.2.10.0 (November 2023)
 
 * Include ELPA-2023.05.001:

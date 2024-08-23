@@ -31,6 +31,10 @@ Enabling the CUDA-based GPU acceleration in the ELPA solver requires:
 * CMake (3.8 or newer)
 * CUDA (10.0 or newer recommended)
 
+Enabling the DLA-Future solver (external-only) requires:
+
+* [DLA-Future-Fortran](https://github.com/eth-cscs/DLA-Future-Fortran)
+
 ## Quick start
 
 We recommend preparing and editing configuration settings in a toolchain file
@@ -75,8 +79,9 @@ optimization flags:
 
 The ELPA, libOMM, NTPoly, BSEPACK, and PEXSI solver libraries, as well as the
 SuperLU\_DIST and PT-SCOTCH libraries (both required by PEXSI) are redistributed
-through this ELSI package. Experienced users are encouraged to link the ELSI
-interface against externally installed, better optimized solver libraries.
+through this ELSI package. The DLA-Future solver library is only available as an 
+external dependency. Experienced users are encouraged to link the ELSI interface
+against externally installed, better optimized solver libraries.
 Relevant options are:
 
 * `USE_EXTERNAL_ELPA`
@@ -110,8 +115,8 @@ flags to compile the CUDA sources may be specified by setting these keywords:
 Please note that in the current version of ELSI, the redistributed PEXSI and
 BSEPACK solvers are not enabled by default. They may be switched on by
 `ENABLE_PEXSI` and `ENABLE_BSEPACK`, respectively. In addition, `ENABLE_SIPS`,
-`ELABLE_EIGENEXA`, and `ENABLE_MAGMA` may be used to enable support for the
-SLEPc, EigenExa, and MAGMA solvers, respectively. These libraries are not
+`ELABLE_EIGENEXA`, `ENABLE_MAGMA`, and `ENABLE_DLAF` may be used to enable support
+for the SLEPc, EigenExa, MAGMA, and DLA-Future solvers, respectively. These libraries are not
 redistributed with ELSI, thus must be installed separately by the user.
 
 ### 3) Tests

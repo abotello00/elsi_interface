@@ -12,9 +12,11 @@ module ELSI_SOLVER
    use ELSI_BSEPACK, only: elsi_solve_bsepack
    use ELSI_CONSTANT, only: ELPA_SOLVER,OMM_SOLVER,PEXSI_SOLVER,SIPS_SOLVER,&
        NTPOLY_SOLVER,EIGENEXA_SOLVER,MAGMA_SOLVER,BSEPACK_SOLVER,CHASE_SOLVER,&
-       MULTI_PROC,SINGLE_PROC,PEXSI_CSC,SIESTA_CSC,GENERIC_COO,GET_DM,GET_EDM
+       MULTI_PROC,SINGLE_PROC,PEXSI_CSC,SIESTA_CSC,GENERIC_COO,GET_DM,GET_EDM,&
+       DLAF_SOLVER
    use ELSI_DATATYPE, only: elsi_handle,elsi_param_t,elsi_basic_t
    use ELSI_DECISION, only: elsi_decide_ev,elsi_decide_dm
+   use ELSI_DLAF, only: elsi_init_dlaf, elsi_solve_dlaf
    use ELSI_EIGENEXA, only: elsi_init_eigenexa,elsi_solve_eigenexa
    use ELSI_ELPA, only: elsi_init_elpa,elsi_solve_elpa,elsi_do_fc_elpa,&
        elsi_undo_fc_elpa, elsi_cholesky_inverse_inplace_elpa
@@ -334,6 +336,9 @@ subroutine elsi_ev_real(eh,ham,ovlp,eval,evec)
             call elsi_solve_chase_mp(eh%ph,eh%bh,ham,ovlp,eval,evec)
          end if
       end if
+   case(DLAF_SOLVER)
+      call elsi_init_dlaf(eh%ph,eh%bh)
+      call elsi_solve_dlaf(eh%ph,eh%bh,ham,ovlp,eval,evec)
    case default
       write(msg,"(A)") "Unsupported eigensolver"
       call elsi_stop(eh%bh,msg,caller)
@@ -461,6 +466,9 @@ subroutine elsi_ev_complex(eh,ham,ovlp,eval,evec)
             call elsi_solve_chase_mp(eh%ph,eh%bh,ham,ovlp,eval,evec)
          end if
       end if
+   case(DLAF_SOLVER)
+      call elsi_init_dlaf(eh%ph,eh%bh)
+      call elsi_solve_dlaf(eh%ph,eh%bh,ham,ovlp,eval,evec)
    case default
       write(msg,"(A)") "Unsupported eigensolver"
       call elsi_stop(eh%bh,msg,caller)

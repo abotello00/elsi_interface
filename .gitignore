@@ -17,3 +17,15 @@ tags
 /install/
 /lib/
 /build*/
+external/SCOTCH/src/libscotch/tmp2.*
+# Spack
+/build-*
+# macOS
+.DS_Store
+# LaTeX
+doc/*.aux
+doc/*.bbl
+doc/*.blg
+doc/*.out
+doc/*.synctex.gz
+doc/*.toc

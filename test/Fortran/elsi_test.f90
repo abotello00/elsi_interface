@@ -27,7 +27,21 @@ program elsi_test
 
    real(kind=r8) :: mu_width
 
+#ifdef ENABLED_DLAF
+   integer(kind=i4) :: mpi_thread_support_provided
+
+   call MPI_Init_thread(MPI_THREAD_MULTIPLE, mpi_thread_support_provided, ierr)
+   if(mpi_thread_support_provided < MPI_THREAD_MULTIPLE) then
+      if(myid == 0) then
+         write(*,"(A)") "MPI_THREAD_MULTIPLE is not supported!"
+      end if
+      call MPI_Abort(MPI_COMM_WORLD,0,ierr)
+      stop
+   end if
+#else
    call MPI_Init(ierr)
+#endif
+
    call MPI_Comm_rank(MPI_COMM_WORLD,myid,ierr)
 
    ! Read command line arguments
@@ -158,28 +172,29 @@ subroutine test_die()
    implicit none
 
    if(myid == 0) then
-      write(*,"(A)") "  ########################################"
-      write(*,"(A)") "  ##                                    ##"
-      write(*,"(A)") "  ##  Wrong command line argument(s)!!  ##"
-      write(*,"(A)") "  ##                                    ##"
-      write(*,"(A)") "  ##  Arg #1: 'ev', 'dm', or 'bse'      ##"
-      write(*,"(A)") "  ##  Arg #2: 0 = BLACS_DENSE           ##"
-      write(*,"(A)") "  ##          1 = PEXSI_CSC             ##"
-      write(*,"(A)") "  ##          2 = SIESTA_CSC            ##"
-      write(*,"(A)") "  ##          3 = GENERIC_COO           ##"
-      write(*,"(A)") "  ##  Arg #3: 'real' or 'complex'       ##"
-      write(*,"(A)") "  ##  Arg #4: 1 = ELPA                  ##"
-      write(*,"(A)") "  ##          2 = libOMM                ##"
-      write(*,"(A)") "  ##          3 = PEXSI                 ##"
-      write(*,"(A)") "  ##          4 = EigenExa              ##"
-      write(*,"(A)") "  ##          5 = SLEPc-SIPs            ##"
-      write(*,"(A)") "  ##          6 = NTPoly                ##"
-      write(*,"(A)") "  ##          7 = MAGMA                 ##"
-      write(*,"(A)") "  ##          8 = BSEPACK               ##"
-      write(*,"(A)") "  ##          9 = ChASE                 ##"      
-      write(*,"(A)") "  ##  Arg #5: H matrix file             ##"
-      write(*,"(A)") "  ##  Arg #6: S matrix file             ##"
-      write(*,"(A)") "  ##                                    ##"
+      write(*,"(A)") "  #########################################"
+      write(*,"(A)") "  ##                                     ##"
+      write(*,"(A)") "  ##  Wrong command line argument(s)!!   ##"
+      write(*,"(A)") "  ##                                     ##"
+      write(*,"(A)") "  ##  Arg #1: 'ev', 'dm', or 'bse'       ##"
+      write(*,"(A)") "  ##  Arg #2: 0 = BLACS_DENSE            ##"
+      write(*,"(A)") "  ##          1 = PEXSI_CSC              ##"
+      write(*,"(A)") "  ##          2 = SIESTA_CSC             ##"
+      write(*,"(A)") "  ##          3 = GENERIC_COO            ##"
+      write(*,"(A)") "  ##  Arg #3: 'real' or 'complex'        ##"
+      write(*,"(A)") "  ##  Arg #4:  1 = ELPA                  ##"
+      write(*,"(A)") "  ##           2 = libOMM                ##"
+      write(*,"(A)") "  ##           3 = PEXSI                 ##"
+      write(*,"(A)") "  ##           4 = EigenExa              ##"
+      write(*,"(A)") "  ##           5 = SLEPc-SIPs            ##"
+      write(*,"(A)") "  ##           6 = NTPoly                ##"
+      write(*,"(A)") "  ##           7 = MAGMA                 ##"
+      write(*,"(A)") "  ##           8 = BSEPACK               ##"
+      write(*,"(A)") "  ##           9 = ChASE                 ##"      
+      write(*,"(A)") "  ##          10 = DLA-Future            ##"      
+      write(*,"(A)") "  ##  Arg #5: H matrix file              ##"
+      write(*,"(A)") "  ##  Arg #6: S matrix file              ##"
+      write(*,"(A)") "  ##                                     ##"
       write(*,"(A)") "  ########################################"
       call MPI_Abort(MPI_COMM_WORLD,0,ierr)
       stop

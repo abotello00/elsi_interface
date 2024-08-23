@@ -12,6 +12,7 @@ module ELSI_SETUP
    use ELSI_CONSTANT, only: UNSET,AUTO_SOLVER,PEXSI_SOLVER,BSEPACK_SOLVER,&
        SINGLE_PROC,MULTI_PROC,PEXSI_CSC,SIESTA_CSC
    use ELSI_DATATYPE, only: elsi_handle
+   use ELSI_DLAF, only: elsi_cleanup_dlaf
    use ELSI_EIGENEXA, only: elsi_cleanup_eigenexa
    use ELSI_ELPA, only: elsi_cleanup_elpa
    use ELSI_MAGMA, only: elsi_cleanup_magma
@@ -531,6 +532,7 @@ subroutine elsi_reinit(eh)
       eh%ph%first_sips_to_blacs = .true.
       eh%ph%first_sips_to_ntpoly = .true.
       eh%ph%elpa_first = .true.
+      eh%ph%dlaf_first = .true.
       eh%ph%omm_first = .true.
       eh%ph%pexsi_first = .true.
       eh%ph%sips_first = .true.
@@ -656,6 +658,7 @@ subroutine elsi_cleanup(eh)
    character(len=*), parameter :: caller = "elsi_cleanup"
 
    call elsi_cleanup_elpa(eh%ph)
+   call elsi_cleanup_dlaf(eh%ph, eh%bh)
    call elsi_cleanup_omm(eh%ph)
    call elsi_cleanup_pexsi(eh%ph)
    call elsi_cleanup_eigenexa(eh%ph)

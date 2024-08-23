@@ -34,9 +34,13 @@ MACRO(add_test_target arg1)
 ENDMACRO()
 
 ADD_EXECUTABLE(elsi_test ${ftest_src})
+if(ENABLE_DLAF)
+  # DLA-Future requires MPI_THREADED_MULTIPLE
+  target_compile_definitions(elsi_test PUBLIC ENABLED_DLAF)
+endif()
 add_test_target(elsi_test)
 SET_TARGET_PROPERTIES(elsi_test
-  PROPERTIES LINKER_LANGUAGE Fortran)
+	PROPERTIES LINKER_LANGUAGE Fortran Fortran_PREPROCESS "ON")
 
 ### Matrix IO tests ###
 LIST(APPEND ftestrw_src
@@ -194,6 +198,12 @@ ENDIF()
 IF(ENABLE_CHASE)
   test_fortran(01_chase e 0 r 9 ${h_real} ${s_real})
   test_fortran(02_chase e 0 c 9 ${h_cmplx} ${s_cmplx})
+ENDIF()
+
+### Parallel Fortran tests: ev + DLA-Future ###
+IF(ENABLE_DLAF)
+  test_fortran(01_dlaf e 0 r 10 ${h_real} ${s_real})
+  test_fortran(02_dlaf e 0 c 10 ${h_cmplx} ${s_cmplx})
 ENDIF()
 
 ### Serial Fortran tests: ev + LAPACK ###
