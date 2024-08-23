@@ -40,6 +40,34 @@ build.gnu:
       - $CI_JOB_NAME/
     expire_in: 1 days
 
+### GNU compilers + Spack-installed packages ###
+build.spack:
+  stage: build
+  rules:
+    - when: on_success
+  tags:
+    - docker
+  image:
+    name: uthpalaherath/dla-future-external:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - export PATH=/spack-view/bin:$PATH
+    - export LD_LIBRARY_PATH=/spack-view/lib/:$LD_LIBRARY_PATH
+    - cd external/SCOTCH/src/libscotch
+    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    - cd ../../../../
+    - cat ./toolchains/spack.cmake
+    - rm -rf $CI_JOB_NAME
+    - mkdir $CI_JOB_NAME
+    - cd $CI_JOB_NAME
+    - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=../toolchains/spack.cmake ..
+    - ninja -j4
+  artifacts:
+    when: always
+    paths:
+      - $CI_JOB_NAME/
+    expire_in: 1 days
+
 ### NVIDIA HPC SDK (20.7) ###
 build.nvhpc:
   stage: build
@@ -267,6 +295,35 @@ build.intel2022-gpu:
     when: always
     expire_in: 1 days
 
+### GNU compilers + Spack-installed packages + CUDA ###
+build.spack-cuda:
+  stage: build
+  rules:
+    - when: on_success
+  tags:
+    - docker
+  image:
+    name: uthpalaherath/dla-future-external-cuda:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - export PATH=/spack-view/bin:$PATH
+    - export LD_LIBRARY_PATH=/spack-view/lib/:/spack-view/lib64:$LD_LIBRARY_PATH
+    - cd external/SCOTCH/src/libscotch
+    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
+    - cd ../../../../
+    - cat ./toolchains/spack-cuda.cmake
+    - rm -rf $CI_JOB_NAME
+    - mkdir $CI_JOB_NAME
+    - cd $CI_JOB_NAME
+    - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=../toolchains/spack-cuda.cmake ..
+    - ninja -j4
+  artifacts:
+    when: always
+    paths:
+      - $CI_JOB_NAME/
+    expire_in: 1 days
+
+
 ##### TEST STAGE #####
 
 ### GNU compilers + MPICH + Netlib BLAS, LAPACK, ScaLAPACK ###
@@ -285,6 +342,27 @@ test.gnu:
     - export PATH=$MPICH_HOME/bin/:$PATH
     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
     - cd build.gnu
+    - ctest --output-on-failure
+  artifacts:
+    when: always
+    expire_in: 1 days
+
+### GNU compilers + Spack-installed packages ###
+test.spack:
+  stage: test
+  dependencies:
+    - build.spack
+  rules:
+    - when: on_success
+  tags:
+    - docker
+  image:
+    name: uthpalaherath/dla-future-external:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - export PATH=/spack-view/bin:$PATH
+    - export LD_LIBRARY_PATH=/spack-view/lib/:$LD_LIBRARY_PATH
+    - cd build.spack
     - ctest --output-on-failure
   artifacts:
     when: always
@@ -459,6 +537,27 @@ test.intel2022-gpu:
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
     - cd build.intel2022-gpu
+    - ctest --output-on-failure
+  artifacts:
+    when: always
+    expire_in: 1 days
+
+### GNU compilers + Spack-installed packages + CUDA ###
+test.spack-cuda:
+  stage: test
+  dependencies:
+    - build.spack-cuda
+  rules:
+    - when: on_success
+  tags:
+    - docker
+  image:
+    name: uthpalaherath/dla-future-external-cuda:latest
+    entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
+  script:
+    - export PATH=/spack-view/bin:$PATH
+    - export LD_LIBRARY_PATH=/spack-view/lib/:/spack-view/lib64:$LD_LIBRARY_PATH
+    - cd build.spack-cuda
     - ctest --output-on-failure
   artifacts:
     when: always

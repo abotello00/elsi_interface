@@ -86,6 +86,12 @@ ELSE()
   LIST(APPEND elsi_src elsi_chase.f90)
 ENDIF()
 
+IF(NOT ENABLE_DLAF)
+  LIST(APPEND elsi_src stub_dlaf.f90)
+ELSE()
+  LIST(APPEND elsi_src elsi_dlaf.f90)
+ENDIF()
+
 ADD_LIBRARY(elsi ${elsi_src})
 
 IF(NOT USE_EXTERNAL_ELPA)
@@ -155,6 +161,10 @@ IF(ENABLE_CHASE)
     ADD_DEPENDENCIES(elsi chase)
     TARGET_LINK_LIBRARIES(elsi PUBLIC chase )
   ENDIF()
+ENDIF()
+
+IF(ENABLE_DLAF)
+  TARGET_LINK_LIBRARIES(elsi PUBLIC DLAF::Fortran)
 ENDIF()
 
 TARGET_LINK_LIBRARIES(elsi PUBLIC

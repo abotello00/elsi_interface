@@ -180,6 +180,11 @@ module ELSI_DATATYPE
       class(elpa_t), pointer :: elpa_solve => null()
       class(elpa_autotune_t), pointer :: elpa_tune => null()
 
+      ! DLA-Future
+      logical :: dlaf_started = .false.
+      logical :: dlaf_grid_created = .false.
+      logical :: dlaf_first = .false.
+
       ! libOMM
       integer(kind=i4) :: omm_n_lrow
       integer(kind=i4) :: omm_n_elpa

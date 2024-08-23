@@ -81,6 +81,8 @@ subroutine test_ev_real_den(comm,solver,h_file,s_file)
          write(*,"(2X,A)") "Now start testing  elsi_ev_real + MAGMA"
       else if(solver == 9) then
          write(*,"(2X,A)") "Now start testing  elsi_ev_real + ChASE"
+      else if(solver == 10) then
+         write(*,"(2X,A)") "Now start testing  elsi_ev_real + DLA-Future"
       end if
       write(*,*)
    end if
