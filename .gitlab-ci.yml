@@ -301,7 +301,7 @@ build.spack-cuda:
   rules:
     - when: on_success
   tags:
-    - docker
+    - node17.timewarp
   image:
     name: uthpalaherath/dla-future-external-cuda:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
@@ -550,7 +550,7 @@ test.spack-cuda:
   rules:
     - when: on_success
   tags:
-    - docker
+    - node17.timewarp
   image:
     name: uthpalaherath/dla-future-external-cuda:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
