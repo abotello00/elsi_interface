@@ -25,9 +25,6 @@ build.gnu:
   script:
     - export PATH=$MPICH_HOME/bin/:$PATH
     - export LD_LIBRARY_PATH=$MPICH_HOME/lib:$LD_LIBRARY_PATH
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/gnu.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -53,9 +50,6 @@ build.spack:
   script:
     - export PATH=/spack-view/bin:$PATH
     - export LD_LIBRARY_PATH=/spack-view/lib/:$LD_LIBRARY_PATH
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/spack.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -105,9 +99,6 @@ build.intel:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/intel.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -134,9 +125,6 @@ build.intel-shared:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/intel.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -163,9 +151,6 @@ build.intel-debug:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/intel_debug.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -192,9 +177,6 @@ build.intel-external:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/intel_external.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -221,9 +203,6 @@ build.intel-external-llvm:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/intel_external_llvm.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -250,9 +229,6 @@ build.intel-gpu:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/intel_gpu.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -279,9 +255,6 @@ build.intel2022-gpu:
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/intel2022_gpu.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
@@ -307,9 +280,6 @@ build.spack-cuda:
   script:
     - export PATH=/spack-view/bin:$PATH
     - export LD_LIBRARY_PATH=/spack-view/lib/:/spack-view/lib64:$LD_LIBRARY_PATH
-    - cd external/SCOTCH/src/libscotch
-    - bison -p scotchyy -y -b y -d -v -o ./tmp2.c ./parser_yy.y
-    - cd ../../../../
     - cat ./toolchains/spack-cuda.cmake
     - rm -rf $CI_JOB_NAME
     - mkdir $CI_JOB_NAME
