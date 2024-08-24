@@ -7,8 +7,8 @@ SET(CMAKE_Fortran_FLAGS "-O3 -ffree-line-length-none -fallow-argument-mismatch" 
 SET(CMAKE_C_FLAGS "-O3 -std=c99" CACHE STRING "C flags")
 SET(CMAKE_CXX_FLAGS "-O3 -std=c++11" CACHE STRING "C++ flags")
 
-SET(CMAKE_CUDA_ARCHITECTURES "35" CACHE STRING "CUDA architecture")
-SET(CMAKE_CUDA_FLAGS "-O3 -arch=sm_35" CACHE STRING "CUDA flags")
+SET(CMAKE_CUDA_ARCHITECTURES "60" CACHE STRING "CUDA architecture")
+SET(CMAKE_CUDA_FLAGS "-O3 -arch=sm_60" CACHE STRING "CUDA flags")
 
 SET(USE_GPU_CUDA ON CACHE BOOL "Use CUDA-based GPU acceleration in ELPA")
 
