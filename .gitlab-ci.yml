@@ -483,7 +483,6 @@ test.intel-gpu:
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
     - nvidia-smi
-    - source /opt/intel/oneapi/setvars.sh
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
