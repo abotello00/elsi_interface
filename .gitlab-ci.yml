@@ -226,6 +226,7 @@ build.intel-gpu:
     name: uthpalaherath/ubuntu20-intel2024.1-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
+    - nvidia-smi
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
@@ -252,6 +253,7 @@ build.intel2022-gpu:
     name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
+    - nvidia-smi
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
@@ -278,6 +280,7 @@ build.spack-cuda:
     name: uthpalaherath/dla-future-external-cuda:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
+    - nvidia-smi
     - export PATH=/spack-view/bin:$PATH
     - export LD_LIBRARY_PATH=/spack-view/lib/:/spack-view/lib64:$LD_LIBRARY_PATH
     - cat ./toolchains/spack-cuda.cmake
@@ -479,6 +482,7 @@ test.intel-gpu:
     name: uthpalaherath/ubuntu20-intel2024.1-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
+    - nvidia-smi
     - source /opt/intel/oneapi/setvars.sh
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
@@ -502,6 +506,7 @@ test.intel2022-gpu:
     name: uthpalaherath/ubuntu20-intel2022-cuda11:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
+    - nvidia-smi
     - ulimit -s unlimited
     - export MKL_DYNAMIC=FALSE
     - export MKL_NUM_THREADS=1
@@ -524,6 +529,7 @@ test.spack-cuda:
     name: uthpalaherath/dla-future-external-cuda:latest
     entrypoint: [ '/bin/bash', '-c', 'ln -snf /bin/bash /bin/sh && /bin/bash -c $0' ]
   script:
+    - nvidia-smi
     - export PATH=/spack-view/bin:$PATH
     - export LD_LIBRARY_PATH=/spack-view/lib/:/spack-view/lib64:$LD_LIBRARY_PATH
     - cd build.spack-cuda
