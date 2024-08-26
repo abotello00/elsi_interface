@@ -3,14 +3,21 @@
 ## v.X.YY.Z ()
 
 * Add upport for external [DLA-Future](https://github.com/eth-cscs/DLA-Future) solver (via [DLA-Future-Fortran](https://github.com/eth-cscs/DLA-Future-Fortran) interface).
+* Removed internal ELPA 2023 and ELPA 2024 versions and defaulted to version 2020.
+* Added multiple methods for chemical potential determination.
+* Added subroutine find_homo_lumo_gap to calculate the HOMO, LUMO levels and the gap.
+* Included support for PEXSI v2.0.0.
+* Included support for EigenExa v2.12.
+* Included support for NTPoly v.3.0.0.
 
 ## v.2.10.0 (November 2023)
 
 * Include ELPA-2023.05.001:
   * ELPA-2023.05.001 is the new default version on Linux for CPUs. If ELSI is run with GPU or on a Mac we still use ELPA-2020.05.001 (the old default). The reasons are build problems we have encountered. This should be resolved with the ELPA-2023.11.001 release.
-  * Added support for LLVM compiler (Clang). The Chase solver (v.1.4.0) has been integrated into ELSI.
+  * Added support for LLVM compiler (Clang).
   * Different ELPA versions can be enforced by setting `USE_ELPA_2020`, `USE_ELPA_2021`, or `USE_ELPA_2023` in the CMake cache file.
-* The [ChASE](https://chase-library.github.io/ChASE/chase.html) solver (v1.4.0) is integrated into ELSI. 
+* The Chase solver (v.1.4.0) has been integrated into ELSI.
+* The [ChASE](https://chase-library.github.io/ChASE/chase.html) solver (v1.4.0) is integrated into ELSI.
 * A new method for calculating static excitation through the delta-SCF method has been implemented.
 * An interface with Slate for matrix inversion was added.
 * A method to calculate electronic excitations for core-level spectroscopy has been implemented.
