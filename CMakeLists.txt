@@ -2,7 +2,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0 FATAL_ERROR)
 
 ### Project ###
-PROJECT(elsi VERSION 2.9.1 LANGUAGES NONE)
+PROJECT(elsi VERSION 2.11.0 LANGUAGES NONE)
 SET(elsi_URL "http://elsi-interchange.org")
 SET(elsi_EMAIL "elsi-team@duke.edu")
 SET(elsi_LICENSE "BSD 3")
@@ -49,7 +49,6 @@ OPTION(USE_EXTERNAL_NTPOLY "Use external NTPoly" OFF)
 OPTION(USE_EXTERNAL_BSEPACK "Use external BSEPACK" OFF)
 OPTION(USE_EXTERNAL_CHASE "Enable ChASE" OFF)
 OPTION(USE_GPU_CUDA "Use GPU acceleration based on CUDA" OFF)
-OPTION(USE_SCALAPACK "Use Scalapack library" ON)
 OPTION(USE_MPI "Use MPI" ON)
 OPTION(ADD_UNDERSCORE "Suffix C functions with an underscore" ON)
 OPTION(BUILD_SHARED_LIBS "Whether to build shared or static libraries" OFF)
