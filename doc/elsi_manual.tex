@@ -22,7 +22,7 @@
 \begin{document}
 % Title
 \title{\includegraphics[scale=0.07]{elsi_logo.png}\\ \vspace{0.5cm}
-\textbf{ELSI Interface Users' Guide\\v2.10.0}}
+\textbf{ELSI Interface Users' Guide\\v2.11.0}}
 \author{The ELSI Team\\ \url{https://elsi-interchange.org}}
 \maketitle
 
@@ -32,8 +32,13 @@
 % Chapter1
 \chapter{Introduction}
 \section{ELSI: ELectronic Structure Infrastructure}
-\label{sec:elsi}
-Computer simulations based on electronic structure theory, particularly Kohn-Sham density-functional theory (KS-DFT), are facilitating scientific discoveries across a broad range of disciplines such as chemistry, physics, and materials science. Despite its remarkable success, routine application of KS-DFT to systems consisting of thousands of atoms is still difficult. The major computational bottleneck is an eigenvalue problem
+\label{sec:elsi} Computer simulations based on electronic structure theory,
+particularly Kohn-Sham density-functional theory (KS-DFT), are facilitating
+scientific discoveries across a broad range of disciplines such as
+chemistry, physics, and materials science. Despite its remarkable success,
+routine application of KS-DFT to systems consisting of thousands of atoms
+is still difficult. The major computational bottleneck is an eigenvalue
+problem
 \begin{equation}
 \label{eq:ks}
 \boldsymbol{H} \boldsymbol{C} = \boldsymbol{S} \boldsymbol{C} \boldsymbol{\Sigma},
@@ -86,13 +91,13 @@ ELSI is a National Science Foundation Software Infrastructure for Sustained Inno
 \section{Prerequisites}
 \label{sec:prereq} The ELSI package contains the ELSI interface software as
 well as redistributed source code for the solver libraries ELPA (versions
-2020.05.001, 2021.11.001 and 2023.05.001), libOMM (version 1.0.0), PEXSI
+2020.05.001 and 2021.11.001), libOMM (version 1.0.0), PEXSI
      (version 1.2.0), NTPoly (version 2.7.0), and ChASE (version 1.4.0).
      The installation of ELSI makes use of the
      \href{https://cmake.org}{CMake} software. Minimum requirements
      include:
 \begin{Verbatim}[commandchars=\\\{\}]
-\tcb{CMake} [minimum version 3.0; newer version recommended] 
+\tcb{CMake} [minimum version 3.0; newer version recommended]
 \tcb{Fortran compiler} [Fortran 2003 compliant]
 \tcb{C compiler} [C99 compliant]
 \tcb{MPI} [MPI-3]
@@ -208,11 +213,22 @@ eigenvectors, which is often a bottleneck when calculating a large portion
 of the eigenspectrum. In addition, ELPA supports GPU acceleration on NVIDIA
 devices via the CUDA programming model and the cuBLAS library. This feature
 may be enabled by the keyword \texttt{USE\_GPU\_CUDA}, which requires the
-CUDA runtime and cuBLAS libraries. Different versions of internally built
-ELPA can be enabled by the cmake options \texttt{USE\_ELPA\_2021} and
-\texttt{USE\_ELPA\_2023}.
+CUDA runtime and cuBLAS libraries. Attempts to create a fully
+platform-independent version of ELPA built into ELSI for ELPA versions
+above 2023 has been unsuccessful and thus defaults to the 2020 version. For
+versions above 2023 an external compilation of ELPA ON THE EXACT NODE USED
+FOR COMPUTATION will be required for now.
 
-The PEXSI, EigenExa, SLEPc-SIPs, BSEPACK, MAGMA, ChASE, and DLA-Future solvers are not enabled by default. They may be activated by the keywords \texttt{ENABLE\_PEXSI}, \texttt{ENABLE\_EIGENEXA}, \texttt{ENABLE\_SIPS}, \texttt{ENABLE\_BSEPACK}, \texttt{ENABLE\_MAGMA}, \texttt{ENABLE\_CHASE}, and \texttt{ENABLE\_DLAF}, respectively. PEXSI 1.2.0, EigenExa 2.11, SLEPc 3.9, 3.10, 3.11, 3.12, 3.13, BSEPACK 0.1, MAGMA 2.5, and DLA-Future 0.6.0 (with DLA-Future-Fortran 0.2.0) have been tested with this version of ELSI. Older/newer versions may or may not be compatible. The PETSc library, required by SLEPc, must be compiled with MPI support, and (at least) with MUMPS and ParMETIS enabled.
+The PEXSI, EigenExa, SLEPc-SIPs, BSEPACK, MAGMA, ChASE, and DLA-Future
+solvers are not enabled by default. They may be activated by the keywords
+\texttt{ENABLE\_PEXSI}, \texttt{ENABLE\_EIGENEXA}, \texttt{ENABLE\_SIPS},
+\texttt{ENABLE\_BSEPACK}, \texttt{ENABLE\_MAGMA}, \texttt{ENABLE\_CHASE},
+and \texttt{ENABLE\_DLAF}, respectively. PEXSI 2.0.0, EigenExa 2.12, SLEPc
+3.9, 3.10, 3.11, 3.12, 3.13, BSEPACK 0.1, MAGMA 2.5, ChASE 1.4.0 and
+  DLA-Future 0.6.0 (with DLA-Future-Fortran 0.2.0) have been tested with
+  this version of ELSI. Older/newer versions may or may not be compatible.
+  The PETSc library, required by SLEPc, must be compiled with MPI support,
+  and (at least) with MUMPS and ParMETIS enabled.
 
 Experienced users are encouraged to link ELSI against externally
 installed, better optimized solver libraries. The keywords
@@ -236,68 +252,50 @@ system are listed here in alphabetical order. Some additional explanations
 are made below the table.
 
 \begin{longtable}[]{|p{40mm}|p{15mm}|p{20mm}|p{87mm}|}
-\hline
-\multicolumn{1}{|l|}{\textbf{Option}} & \multicolumn{1}{l|}{\textbf{Type}} & \multicolumn{1}{l|}{\textbf{Default}} & \multicolumn{1}{l|}{\textbf{Explanation}}\\
-\hline
-\texttt{ADD\_UNDERSCORE}          & boolean & ON          & Suffix C functions with an underscore\\
-\hline
-\texttt{BUILD\_SHARED\_LIBS}      & boolean & OFF         & Build ELSI as a shared library\\
-\hline
-\texttt{CMAKE\_C\_COMPILER}       & string  & none        & MPI C compiler\\
-\hline
-\texttt{CMAKE\_C\_FLAGS}          & string  & none        & C flags\\
-\hline
-\texttt{CMAKE\_CUDA\_COMPILER}    & string  & none        & CUDA compiler (nvcc)\\
-\hline
-\texttt{CMAKE\_CUDA\_FLAGS}       & string  & none        & CUDA flags\\
-\hline
-\texttt{CMAKE\_CXX\_COMPILER}     & string  & none        & MPI C++ compiler\\
-\hline
-\texttt{CMAKE\_CXX\_FLAGS}        & string  & none        & C++ flags\\
-\hline
-\texttt{CMAKE\_Fortran\_COMPILER} & string  & none        & MPI Fortran compiler\\
-\hline
-\texttt{CMAKE\_Fortran\_FLAGS}    & string  & none        & Fortran flags\\
-\hline
-\texttt{CMAKE\_INSTALL\_PREFIX}   & path    & /usr/local  & Path to install ELSI\\
-\hline
-\texttt{USE\_ELPA\_2021}          & boolean & OFF         & Enable ELPA
-2021\\
-\hline
-\texttt{USE\_ELPA\_2023}          & boolean & OFF         & Enable ELPA
-2023\\
-\hline
-\texttt{ELPA2\_KERNEL}            & string  & none        & ELPA2 kernel\\
-\hline
-\texttt{ENABLE\_BSEPACK}          & boolean & OFF         & Enable BSEPACK support\\
-\hline
-\texttt{ENABLE\_C\_TESTS}         & boolean & OFF         & Build C test programs\\
-\hline
-\texttt{ENABLE\_EIGENEXA}         & boolean & OFF         & Enable EigenExa support\\
-\hline
-\texttt{ENABLE\_MAGMA}            & boolean & OFF         & Enable MAGMA support\\
-\hline
-\texttt{ENABLE\_PEXSI}            & boolean & OFF         & Enable PEXSI support\\
-\hline
-\texttt{ENABLE\_SIPS}             & boolean & OFF         & Enable SLEPc-SIPs support\\
-\hline
-\texttt{ENABLE\_CHASE}             & boolean & OFF         & Enable ChASE support\\
-\hline
-\texttt{ENABLE\_CHASE\_NCCL}             & boolean & OFF         & Enable ChASE support with NCCL\\
-\hline
-\texttt{ENABLE\_DLAF}             & boolean & OFF         & Enable DLA-Future support\\
-\hline
-\texttt{ENABLE\_TESTS}            & boolean & OFF         & Build Fortran test programs\\
-\hline
-\texttt{INC\_PATHS}               & string  & none        & Include directories of external libraries\\
-\hline
-\texttt{LIB\_PATHS}               & string  & none        & Directories containing external libraries\\
-\hline
-\texttt{LIBS}                     & string  & none        & External libraries\\
-\hline
-\texttt{MPIEXEC\_NP}              & string  & mpirun -n 4 & Command to run tests in parallel with MPI\\
-\hline
-\texttt{MPIEXEC\_1P}              & string  & mpirun -n 1 & Command to run tests in serial with MPI\\
+\hline \multicolumn{1}{|l|}{\textbf{Option}}
+& \multicolumn{1}{l|}{\textbf{Type}}
+& \multicolumn{1}{l|}{\textbf{Default}}
+& \multicolumn{1}{l|}{\textbf{Explanation}}\\
+\hline \texttt{ADD\_UNDERSCORE} & boolean & ON & Suffix C functions with an
+underscore\\
+\hline \texttt{BUILD\_SHARED\_LIBS} & boolean & OFF & Build ELSI as
+a shared library\\
+\hline \texttt{CMAKE\_C\_COMPILER} & string & none & MPI C compiler\\
+\hline \texttt{CMAKE\_C\_FLAGS} & string & none & C flags\\
+\hline \texttt{CMAKE\_CUDA\_COMPILER} & string & none & CUDA compiler
+(nvcc)\\
+\hline \texttt{CMAKE\_CUDA\_FLAGS} & string & none & CUDA flags\\
+\hline \texttt{CMAKE\_CXX\_COMPILER} & string & none & MPI C++ compiler\\
+\hline \texttt{CMAKE\_CXX\_FLAGS} & string & none & C++ flags\\
+\hline \texttt{CMAKE\_Fortran\_COMPILER} & string & none & MPI Fortran
+compiler\\
+\hline \texttt{CMAKE\_Fortran\_FLAGS} & string & none & Fortran flags\\
+\hline \texttt{CMAKE\_INSTALL\_PREFIX} & path & /usr/local & Path to
+install ELSI\\
+\hline \texttt{USE\_ELPA\_2021} & boolean & OFF & Enable ELPA 2021\\
+\hline \texttt{ELPA2\_KERNEL} & string & none & ELPA2 kernel\\
+\hline \texttt{ENABLE\_BSEPACK} & boolean & OFF & Enable BSEPACK support\\
+\hline \texttt{ENABLE\_C\_TESTS} & boolean & OFF & Build C test programs\\
+\hline \texttt{ENABLE\_EIGENEXA} & boolean & OFF & Enable EigenExa
+support\\
+\hline \texttt{ENABLE\_MAGMA} & boolean & OFF & Enable MAGMA support\\
+\hline \texttt{ENABLE\_PEXSI} & boolean & OFF & Enable PEXSI support\\
+\hline \texttt{ENABLE\_SIPS} & boolean & OFF & Enable SLEPc-SIPs support\\
+\hline \texttt{ENABLE\_CHASE} & boolean & OFF & Enable ChASE support\\
+\hline \texttt{ENABLE\_CHASE\_NCCL} & boolean & OFF & Enable ChASE support
+with NCCL\\
+\hline \texttt{ENABLE\_DLAF} & boolean & OFF & Enable DLA-Future support\\
+\hline \texttt{ENABLE\_TESTS} & boolean & OFF & Build Fortran test
+programs\\
+\hline \texttt{INC\_PATHS} & string & none & Include directories of
+external libraries\\
+\hline \texttt{LIB\_PATHS} & string & none & Directories containing
+external libraries\\
+\hline \texttt{LIBS} & string & none & External libraries\\
+\hline \texttt{MPIEXEC\_NP} & string & mpirun -n 4 & Command to run tests
+in parallel with MPI\\
+\hline \texttt{MPIEXEC\_1P} & string & mpirun -n 1 & Command to run tests
+in serial with MPI\\
 \hline
 
 \texttt{SCOTCH\_LAST\_RESORT}     & string  & none        & Command to invoke PT-SCOTCH header generator\\
@@ -2125,7 +2123,7 @@ ELSI interface software is licensed under the 3-clause BSD license:
 
 \begin{tcolorbox}
 \begin{Verbatim}
-Copyright (c) 2015-2023, the ELSI team.
+Copyright (c) 2015-2024, the ELSI team.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -2153,6 +2151,10 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \end{Verbatim}
 \end{tcolorbox}
 
-The source code of ELPA 2020.05.001, 2021.11.001 and 2023.05.001 (LGPL3), libOMM 1.0.0 (BSD2), NTPoly 2.7.0 (MIT), PEXSI 1.2.0 (BSD3), PT-SCOTCH 6.1.0 (CeCILL-C), SuperLU\_DIST 6.2.0 (BSD3), BSEPACK 0.1 (BSD3), ChASE 1.4.0 (BSD3) are redistributed through this version of ELSI. Individual license of each library can be found in the corresponding subfolder.
+The source code of ELPA 2020.05.001, and 2021.11.001 (LGPL3), libOMM 1.0.0
+(BSD2), NTPoly 2.7.0 (MIT), PEXSI 1.2.0 (BSD3), PT-SCOTCH 6.1.0 (CeCILL-C),
+SuperLU\_DIST 6.2.0 (BSD3), BSEPACK 0.1 (BSD3), ChASE 1.4.0 (BSD3) are
+redistributed through this version of ELSI. Individual license of each
+library can be found in the corresponding subfolder.
 
 \end{document}
