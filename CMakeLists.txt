@@ -148,7 +148,7 @@ generate_library_targets(LIB_PATHS LIBS)
 ### Compilations ###
 IF(USE_EXTERNAL_ELPA)
   MESSAGE(STATUS "Using external ELPA")
-  IF("${ELSI_ELPA_GPU_STRING}" STREQUAL "")
+  IF(NOT DEFINED ELSI_ELPA_GPU_STRING)
     MESSAGE(WARNING "ELSI_ELPA_GPU_STRING not set for external ELPA library")
     MESSAGE(WARNING "Setting 'gpu' by default")
     SET(ELSI_ELPA_GPU_STRING "gpu" CACHE STRING "String to be used in the ELPA 'set' method for GPU support")
