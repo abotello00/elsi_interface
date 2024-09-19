@@ -64,6 +64,13 @@ SET(SCOTCH_LAST_RESORT "NOT_USED" CACHE STRING "Command to run PT-SCOTCH header 
 #- SET(LIB_PATHS "" CACHE STRING "List of directories containing libraries to be linked against")
 #- SET(INC_PATHS "" CACHE STRING "List of include directories")
 #- SET(LIBS "" CACHE STRING "List of external libraries to be linked against")
+#
+IF(NOT DEFINED ELSI_ELPA_REAL_GPU_KERNEL)
+  SET(ELSI_ELPA_REAL_GPU_KERNEL "ELPA_2STAGE_REAL_GPU")
+ENDIF()
+IF(NOT DEFINED ELSI_ELPA_COMPLEX_GPU_KERNEL)
+ SET(ELSI_ELPA_COMPLEX_GPU_KERNEL "ELPA_2STAGE_COMPLEX_GPU")
+ENDIF()
 
 ### Compilers ###
 IF(NOT DEFINED CMAKE_Fortran_COMPILER)
