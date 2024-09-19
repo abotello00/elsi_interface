@@ -6,7 +6,7 @@
 * Removed internal ELPA 2023 and ELPA 2024 versions and defaulted to version 2020. We have not been able to create a fully platform-independant version of the source code of the 2023+ versions. For versions above 2023 an external compilation of ELPA ON THE EXACT NODE USED FOR COMPUTATION will be required for now.
 * Adjusted chemical potential determination in ELSI's determination of occupation numbers. k-point weights for very dense k-space grids are now handled with higher numerical precision by re-weighting ahead of charge norm determination. In the case of a sufficiently large energy band gap, ELSI now places the chemical potential value halfway between HOMO (VBM) and LUMO (CBM) if possible.
 * Added variables to elsi_handle that specify the definition of fractional occupation numbers (vs. integer) and that communicate the method of chemical potential determination (specified by fractional occupation numbers, mid-point between HOMO/LUMO, or no midpoint placement possible while keeping the exact charge norm) back to the user code.
-* Added subroutine find_homo_lumo_gap to calculate the HOMO, LUMO levels and the gap.
+* Added subroutine find_homo_lumo_gap to calculate the HOMO, LUMO levels and the gap. (Thanks to Konstantin and James!)
 * Fixed stalling during density matrix calculation by setting n_states_solve to be used across all tasks. (Thanks to Sebastian Kokott!)
 * Implemented a more flexible scheme for using GPU strings in ELPA. This also resolves the silent failing of GPU offloading inside ELPA introduced in a previous commit. (Thanks to Alberto Garcia!)
 * Fixed compilation issues for PTSCOTCH required by PEXSI due to different versions of bison and flex. (Thanks to Alberto Garcia!)
