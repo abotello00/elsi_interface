@@ -4,7 +4,7 @@
 
 ELSI is a unified software interface designed for electronic structure codes to
 connect with various high-performance eigensolvers and density matrix solvers.
-For more information, visit the [ELSI interchange](https://elsi-interchange.org)
+For more information, visit the [ELSI interchange](https://wordpress.elsi-interchange.org/)
 website.
 
 ## Installation
