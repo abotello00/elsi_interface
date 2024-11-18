@@ -12,7 +12,7 @@
 * Fixed compilation issues for PTSCOTCH required by PEXSI due to different versions of bison and flex. (Thanks to Alberto Garcia!)
 * Corrected Fortran MPI datatype for long integer. (Thanks to Sebastian Kokott!)
 * Patched deprecated MPI calls in the PEXSI subsystem. (Thanks to Sebastian Ehlert and Alberto Garcia!)
-* Addressed platform dependent compiler issues in the ChASE solver. (Thanks to Xinzhe Wu!)
+* Addressed platform dependent compiler issues in the ChASE solver. (Thanks to Xinzhe Wu and Edoardo di Napoli!)
 * Added support for Intel LLVM compilers.
 * Included support for PEXSI v2.0.0. (Thanks to David Williams-Young!)
 * Included support for NTPoly v.3.0.0. (Thanks to William Dawson!)
