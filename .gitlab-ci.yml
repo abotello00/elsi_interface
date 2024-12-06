@@ -62,7 +62,7 @@ build.spack:
       - $CI_JOB_NAME/
     expire_in: 1 days
 
-### NVIDIA HPC SDK (20.7) ###
+### NVIDIA HPC SDK (24.11) ###
 build.nvhpc:
   stage: build
   rules:
@@ -70,7 +70,7 @@ build.nvhpc:
   tags:
     - docker
   image:
-    name: uthpalaherath/centos-nvhpc:latest
+    name: uthpalaherath/ubuntu20-nvhpc-24.11:latest
   script:
     - cat ./toolchains/nvhpc.cmake
     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
@@ -340,7 +340,7 @@ test.spack:
     when: always
     expire_in: 1 days
 
-### NVIDIA HPC SDK (20.7) ###
+### NVIDIA HPC SDK (24.11) ###
 test.nvhpc:
   stage: test
   dependencies:
@@ -350,7 +350,7 @@ test.nvhpc:
   tags:
     - docker
   image:
-    name: uthpalaherath/centos-nvhpc:latest
+    name: uthpalaherath/ubuntu20-nvhpc-24.11:latest
   script:
     - export LD_PRELOAD=/usr/lib64/libstdc++.so.6
     - cd build.nvhpc
