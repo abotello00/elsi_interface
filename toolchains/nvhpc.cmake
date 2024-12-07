@@ -17,5 +17,5 @@ SET(ENABLE_C_TESTS ON CACHE BOOL "Enable C tests")
 SET(LIB_PATHS "$ENV{nvhome}/Linux_x86_64/24.11/comm_libs/12.6/openmpi4/openmpi-4.1.5/lib $ENV{nvhome}/Linux_x86_64/24.11/compilers/lib" CACHE STRING "External library paths")
 SET(LIBS "scalapack lapack blas" CACHE STRING "External libraries")
 
-# SET(MPIEXEC_1P "mpirun --allow-run-as-root --mca io romio314 -n 1" CACHE STRING "Command to run serial tests with 1 MPI task")
-# SET(MPIEXEC_NP "mpirun --allow-run-as-root --mca io romio314 -n 4" CACHE STRING "Command to run parallel tests with multiple MPI tasks")
+SET(MPIEXEC_1P "mpirun --allow-run-as-root --mca io romio314 -n 1" CACHE STRING "Command to run serial tests with 1 MPI task")
+SET(MPIEXEC_NP "mpirun --allow-run-as-root --mca io romio314 -n 4" CACHE STRING "Command to run parallel tests with multiple MPI tasks")
