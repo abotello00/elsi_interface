@@ -25,6 +25,7 @@ MODULE SMatrixAlgebraModule
   PUBLIC :: MatrixColumnNorm
   PUBLIC :: MatrixNorm
   PUBLIC :: MatrixGrandSum
+  PUBLIC :: MatrixDiagonalScale
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   INTERFACE ScaleMatrix
      MODULE PROCEDURE ScaleMatrix_lsr
@@ -75,6 +76,10 @@ MODULE SMatrixAlgebraModule
      MODULE PROCEDURE DenseBranch_lsr
      MODULE PROCEDURE DenseBranch_lsc
   END INTERFACE DenseBranch
+  INTERFACE MatrixDiagonalScale
+     MODULE PROCEDURE MatrixDiagonalScale_lsr
+     MODULE PROCEDURE MatrixDiagonalScale_lsc
+  END INTERFACE MatrixDiagonalScale
 CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Will scale a sparse matrix by a constant.
   PURE SUBROUTINE ScaleMatrix_lsr(matA,constant)
@@ -941,13 +946,15 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL MultiplyMatrix(DenseA, DenseB, DenseC, &
          & IsATransposed_in = IsATransposed, IsBTransposed_in = IsBTransposed)
 
+    !! Cleanup Intermediate
+    CALL DestructMatrix(DenseA)
+    CALL DestructMatrix(DenseB)
+
     !! Convert Back
     CALL ConstructMatrixSFromD(DenseC, matC, threshold)
     CALL ScaleMatrix(matC, alpha)
 
     !! Cleanup
-    CALL DestructMatrix(DenseA)
-    CALL DestructMatrix(DenseB)
     CALL DestructMatrix(DenseC)
   END SUBROUTINE DenseBranch_lsr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -982,13 +989,15 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL MultiplyMatrix(DenseA, DenseB, DenseC, &
          & IsATransposed_in = IsATransposed, IsBTransposed_in = IsBTransposed)
 
+    !! Cleanup Intermediate
+    CALL DestructMatrix(DenseA)
+    CALL DestructMatrix(DenseB)
+
     !! Convert Back
     CALL ConstructMatrixSFromD(DenseC, matC, threshold)
     CALL ScaleMatrix(matC, alpha)
 
     !! Cleanup
-    CALL DestructMatrix(DenseA)
-    CALL DestructMatrix(DenseB)
     CALL DestructMatrix(DenseC)
   END SUBROUTINE DenseBranch_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1217,5 +1226,47 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL DestructTripletList(sorted_pruned_list)
     CALL DestructTripletList(unsorted_pruned_list)
   END SUBROUTINE PruneList_lsc
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Scale a matrix using a diagonal matrix (triplet list form).
+  SUBROUTINE MatrixDiagonalScale_lsr(mat, tlist)
+    !> The matrix to scale.
+    TYPE(Matrix_lsr), INTENT(INOUT)  :: mat
+    !> The diagonal matrix.
+    TYPE(TripletList_r), INTENT(IN)  :: tlist
+    !! Intermediate Data
+    REAL(NTREAL) :: val
+
+
+
+    INTEGER :: col, II
+
+    DO II = 1, tlist%CurrentSize
+       col = tlist%DATA(II)%index_column
+       val = tlist%DATA(II)%point_value
+       mat%values(mat%outer_index(col) + 1:mat%outer_index(col + 1)) = &
+            val * mat%values(mat%outer_index(col) + 1:mat%outer_index(col + 1))
+    END DO
+  END SUBROUTINE MatrixDiagonalScale_lsr
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Scale a matrix using a diagonal matrix (triplet list form).
+  SUBROUTINE MatrixDiagonalScale_lsc(mat, tlist)
+    !> The matrix to scale.
+    TYPE(Matrix_lsc), INTENT(INOUT)  :: mat
+    !> The diagonal matrix.
+    TYPE(TripletList_c), INTENT(IN)  :: tlist
+    !! Intermediate Data
+    COMPLEX(NTCOMPLEX) :: val
+
+
+
+    INTEGER :: col, II
+
+    DO II = 1, tlist%CurrentSize
+       col = tlist%DATA(II)%index_column
+       val = tlist%DATA(II)%point_value
+       mat%values(mat%outer_index(col) + 1:mat%outer_index(col + 1)) = &
+            val * mat%values(mat%outer_index(col) + 1:mat%outer_index(col + 1))
+    END DO
+  END SUBROUTINE MatrixDiagonalScale_lsc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 END MODULE SMatrixAlgebraModule

@@ -39,8 +39,10 @@ MODULE TripletListModule
   PUBLIC :: SymmetrizeTripletList
   PUBLIC :: GetTripletListSize
   PUBLIC :: RedistributeTripletLists
+  PUBLIC :: AllGatherTripletList
   PUBLIC :: ShiftTripletList
   PUBLIC :: ConvertTripletListType
+  PUBLIC :: MergeTripletLists
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   INTERFACE ConstructTripletList
      MODULE PROCEDURE ConstructTripletListSup_r
@@ -49,6 +51,7 @@ MODULE TripletListModule
   INTERFACE CopyTripletList
      MODULE PROCEDURE CopyTripletList_r
      MODULE PROCEDURE CopyTripletList_c
+     MODULE PROCEDURE CopyTripletList_rc
   END INTERFACE CopyTripletList
   INTERFACE DestructTripletList
      MODULE PROCEDURE DestructTripletList_r
@@ -90,6 +93,10 @@ MODULE TripletListModule
      MODULE PROCEDURE RedistributeTripletLists_r
      MODULE PROCEDURE RedistributeTripletLists_c
   END INTERFACE RedistributeTripletLists
+  INTERFACE AllGatherTripletList
+     MODULE PROCEDURE AllGatherTripletList_r
+     MODULE PROCEDURE AllGatherTripletList_c
+  END INTERFACE AllGatherTripletList
   INTERFACE ShiftTripletList
      MODULE PROCEDURE ShiftTripletList_r
      MODULE PROCEDURE ShiftTripletList_c
@@ -98,6 +105,10 @@ MODULE TripletListModule
      MODULE PROCEDURE ConvertTripletListToReal
      MODULE PROCEDURE ConvertTripletListToComplex
   END INTERFACE ConvertTripletListType
+  INTERFACE MergeTripletLists
+     MODULE PROCEDURE MergeTripletLists_r
+     MODULE PROCEDURE MergeTripletLists_c
+  END INTERFACE MergeTripletLists
 CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Subroutine wrapper for constructing a triplet list.
   PURE SUBROUTINE ConstructTripletListSup_r(this, size_in)
@@ -171,6 +182,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   END SUBROUTINE DestructTripletList_c
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Copy a triplet list (real).
   SUBROUTINE CopyTripletList_r(tripA, tripB)
     !> The triplet list to copy.
     TYPE(TripletList_r), INTENT(IN) :: tripA
@@ -186,6 +198,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     tripB%DATA(:tripB%CurrentSize) = tripA%DATA(:tripB%CurrentSize)
   END SUBROUTINE CopyTripletList_r
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Copy a triplet list (complex).
   SUBROUTINE CopyTripletList_c(tripA, tripB)
     !> The triplet list to copy.
     TYPE(TripletList_c), INTENT(IN) :: tripA
@@ -200,6 +213,24 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ALLOCATE(tripB%DATA(tripB%CurrentSize))
     tripB%DATA(:tripB%CurrentSize) = tripA%DATA(:tripB%CurrentSize)
   END SUBROUTINE CopyTripletList_c
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Copy and upcast a triplet list (real -> complex).
+  SUBROUTINE CopyTripletList_rc(tripA, tripB)
+    !> The triplet list to copy.
+    TYPE(TripletList_r), INTENT(IN) :: tripA
+    !> tripB = tripA
+    TYPE(TripletList_c), INTENT(INOUT) :: tripB
+    !! Local varaibles
+    INTEGER II
+
+    CALL ConstructTripletList(tripB, tripA%CurrentSize)
+    DO II = 1, tripA%CurrentSize
+       tripB%DATA(II)%index_row = tripA%DATA(II)%index_row
+       tripB%DATA(II)%index_column = tripA%DATA(II)%index_column
+       tripB%DATA(II)%point_value = &
+            & CMPLX(tripA%DATA(II)%point_value, KIND=NTCOMPLEX)
+    END DO
+  END SUBROUTINE CopyTripletList_rc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Increase the size of a triplet list.
   PURE SUBROUTINE ResizeTripletList_r(this, size)
@@ -598,7 +629,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> A list of triplet lists, one for each process.
     TYPE(TripletList_r), DIMENSION(:), INTENT(IN) :: triplet_lists
     !> The mpi communicator to redistribute along.
-    INTEGER, INTENT(INOUT) :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The resulting local triplet list.
     TYPE(TripletList_r), INTENT(INOUT) :: local_data_out
     !! Local data (type specific)
@@ -708,7 +739,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !> A list of triplet lists, one for each process.
     TYPE(TripletList_c), DIMENSION(:), INTENT(IN) :: triplet_lists
     !> The mpi communicator to redistribute along.
-    INTEGER, INTENT(INOUT) :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The resulting local triplet list.
     TYPE(TripletList_c), INTENT(INOUT) :: local_data_out
     !! Local data (type specific)
@@ -810,6 +841,176 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
   END SUBROUTINE RedistributeTripletLists_c
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Gather triplet lists from a set of processors.
+  SUBROUTINE AllGatherTripletList_r(triplet_in, comm, gathered_out)
+    !> Locally held triplet list
+    TYPE(TripletList_r), INTENT(IN) :: triplet_in
+    !> The mpi communicator to gather along.
+    INTEGER, INTENT(IN) :: comm
+    !> The resulting gathered triplet list.
+    TYPE(TripletList_r), INTENT(INOUT) :: gathered_out
+    !! Local data (type specific)
+    REAL(NTREAL), DIMENSION(:), ALLOCATABLE :: send_buffer_val
+    REAL(NTREAL), DIMENSION(:), ALLOCATABLE :: recv_buffer_val
+    TYPE(Triplet_r) :: temp_triplet
+
+
+
+    !! Local Data - Send/Recv Buffers
+    INTEGER, DIMENSION(:), ALLOCATABLE :: send_buffer_row
+    INTEGER, DIMENSION(:), ALLOCATABLE :: send_buffer_col
+    INTEGER, DIMENSION(:), ALLOCATABLE :: recv_buffer_row
+    INTEGER, DIMENSION(:), ALLOCATABLE :: recv_buffer_col
+
+    !! Sizes help
+    INTEGER, DIMENSION(:), ALLOCATABLE :: recvcounts
+    INTEGER, DIMENSION(:), ALLOCATABLE :: displ
+    INTEGER :: gather_size
+
+    !! Temporary variables
+    INTEGER :: num_processes, II, ierr
+
+    !! Figure out the comm size
+    CALL MPI_COMM_SIZE(comm, num_processes, ierr)
+
+    !! Get the count 
+    ALLOCATE(recvcounts(num_processes))
+    CALL MPI_Allgather(triplet_in%CurrentSize, 1, MPI_INTEGER, recvcounts, &
+         & 1, MPI_INTEGER, comm, ierr)
+
+    !! Get the displacements
+    gather_size = SUM(recvcounts)
+    ALLOCATE(displ(num_processes))
+    displ(1) = 0
+    DO II = 2, num_processes
+       displ(II) = displ(II - 1) + recvcounts(II - 1)
+    END DO
+
+    !! Prepare the send buffers
+    ALLOCATE(send_buffer_row(triplet_in%CurrentSize))
+    ALLOCATE(send_buffer_col(triplet_in%CurrentSize))
+    ALLOCATE(send_buffer_val(triplet_in%CurrentSize))
+    DO II = 1, triplet_in%CurrentSize
+       CALL GetTripletAt(triplet_in, II, temp_triplet)
+       send_buffer_row(II) = temp_triplet%index_row
+       send_buffer_col(II) = temp_triplet%index_column
+       send_buffer_val(II) = temp_triplet%point_value
+    END DO
+
+    !! Gather Call
+    ALLOCATE(recv_buffer_row(gather_size))
+    ALLOCATE(recv_buffer_col(gather_size))
+    ALLOCATE(recv_buffer_val(gather_size))
+    CALL MPI_Allgatherv(send_buffer_row, triplet_in%CurrentSize, MPI_INTEGER, &
+         & recv_buffer_row, recvcounts, displ, MPI_INTEGER, comm, ierr)
+    CALL MPI_Allgatherv(send_buffer_col, triplet_in%CurrentSize, MPI_INTEGER, &
+         & recv_buffer_col, recvcounts, displ, MPI_INTEGER, comm, ierr)
+    CALL MPI_Allgatherv(send_buffer_val, triplet_in%CurrentSize, MPINTREAL, &
+         & recv_buffer_val, recvcounts, displ, MPINTREAL, comm, ierr)
+
+    !! Unpack
+    CALL ConstructTripletList(gathered_out, gather_size)
+    DO II = 1, gather_size
+       gathered_out%DATA(II)%index_row = recv_buffer_row(II)
+       gathered_out%DATA(II)%index_column = recv_buffer_col(II)
+       gathered_out%DATA(II)%point_value = recv_buffer_val(II)
+    END DO
+
+    !! Cleanup
+    DEALLOCATE(recvcounts)
+    DEALLOCATE(displ)
+    DEALLOCATE(send_buffer_row)
+    DEALLOCATE(send_buffer_col)
+    DEALLOCATE(send_buffer_val)
+
+
+  END SUBROUTINE AllGatherTripletList_r
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Gather triplet lists from a set of processors.
+  SUBROUTINE AllGatherTripletList_c(triplet_in, comm, gathered_out)
+    !> Locally held triplet list
+    TYPE(TripletList_c), INTENT(IN) :: triplet_in
+    !> The mpi communicator to gather along.
+    INTEGER, INTENT(IN) :: comm
+    !> The resulting gathered triplet list.
+    TYPE(TripletList_c), INTENT(INOUT) :: gathered_out
+    !! Local data (type specific)
+    COMPLEX(NTCOMPLEX), DIMENSION(:), ALLOCATABLE :: send_buffer_val
+    COMPLEX(NTCOMPLEX), DIMENSION(:), ALLOCATABLE :: recv_buffer_val
+    TYPE(Triplet_c) :: temp_triplet
+
+
+
+    !! Local Data - Send/Recv Buffers
+    INTEGER, DIMENSION(:), ALLOCATABLE :: send_buffer_row
+    INTEGER, DIMENSION(:), ALLOCATABLE :: send_buffer_col
+    INTEGER, DIMENSION(:), ALLOCATABLE :: recv_buffer_row
+    INTEGER, DIMENSION(:), ALLOCATABLE :: recv_buffer_col
+
+    !! Sizes help
+    INTEGER, DIMENSION(:), ALLOCATABLE :: recvcounts
+    INTEGER, DIMENSION(:), ALLOCATABLE :: displ
+    INTEGER :: gather_size
+
+    !! Temporary variables
+    INTEGER :: num_processes, II, ierr
+
+    !! Figure out the comm size
+    CALL MPI_COMM_SIZE(comm, num_processes, ierr)
+
+    !! Get the count 
+    ALLOCATE(recvcounts(num_processes))
+    CALL MPI_Allgather(triplet_in%CurrentSize, 1, MPI_INTEGER, recvcounts, &
+         & 1, MPI_INTEGER, comm, ierr)
+
+    !! Get the displacements
+    gather_size = SUM(recvcounts)
+    ALLOCATE(displ(num_processes))
+    displ(1) = 0
+    DO II = 2, num_processes
+       displ(II) = displ(II - 1) + recvcounts(II - 1)
+    END DO
+
+    !! Prepare the send buffers
+    ALLOCATE(send_buffer_row(triplet_in%CurrentSize))
+    ALLOCATE(send_buffer_col(triplet_in%CurrentSize))
+    ALLOCATE(send_buffer_val(triplet_in%CurrentSize))
+    DO II = 1, triplet_in%CurrentSize
+       CALL GetTripletAt(triplet_in, II, temp_triplet)
+       send_buffer_row(II) = temp_triplet%index_row
+       send_buffer_col(II) = temp_triplet%index_column
+       send_buffer_val(II) = temp_triplet%point_value
+    END DO
+
+    !! Gather Call
+    ALLOCATE(recv_buffer_row(gather_size))
+    ALLOCATE(recv_buffer_col(gather_size))
+    ALLOCATE(recv_buffer_val(gather_size))
+    CALL MPI_Allgatherv(send_buffer_row, triplet_in%CurrentSize, MPI_INTEGER, &
+         & recv_buffer_row, recvcounts, displ, MPI_INTEGER, comm, ierr)
+    CALL MPI_Allgatherv(send_buffer_col, triplet_in%CurrentSize, MPI_INTEGER, &
+         & recv_buffer_col, recvcounts, displ, MPI_INTEGER, comm, ierr)
+    CALL MPI_Allgatherv(send_buffer_val, triplet_in%CurrentSize, MPINTCOMPLEX, &
+         & recv_buffer_val, recvcounts, displ, MPINTCOMPLEX, comm, ierr)
+
+    !! Unpack
+    CALL ConstructTripletList(gathered_out, gather_size)
+    DO II = 1, gather_size
+       gathered_out%DATA(II)%index_row = recv_buffer_row(II)
+       gathered_out%DATA(II)%index_column = recv_buffer_col(II)
+       gathered_out%DATA(II)%point_value = recv_buffer_val(II)
+    END DO
+
+    !! Cleanup
+    DEALLOCATE(recvcounts)
+    DEALLOCATE(displ)
+    DEALLOCATE(send_buffer_row)
+    DEALLOCATE(send_buffer_col)
+    DEALLOCATE(send_buffer_val)
+
+
+  END SUBROUTINE AllGatherTripletList_c
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Shift the rows and columns of a triplet list by set values.
   !> Frequently, we have a triplet list that comes from the global matrix which
@@ -1090,5 +1291,69 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     END DO
 
   END SUBROUTINE ConvertTripletListToComplex
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Merge a list of TripletList objects together.
+  SUBROUTINE MergeTripletLists_r(this, tlists)
+    !> The starting triplet list. This will be completely replaced.
+    TYPE(TripletList_r), INTENT(INOUT) :: this
+    !> An array of triplet list objects.
+    TYPE(TripletList_r), DIMENSION(:), INTENT(IN) :: tlists
+
+
+    INTEGER :: new_size
+    INTEGER :: II, JJ, KK
+
+    !! Figure out how big the list should be
+    new_size = 0
+    DO II = 1, SIZE(tlists)
+       new_size = new_size + tlists(II)%CurrentSize
+    END DO
+
+    !! Allocate
+    CALL ConstructTripletList(this, new_size)
+
+    !! Copy
+    KK = 1
+    JJ = 1
+    DO II = 1, SIZE(tlists)
+       DO JJ = 1, tlists(II)%CurrentSize
+          this%DATA(KK) = tlists(II)%DATA(JJ)
+          KK = KK + 1
+       END DO
+    END DO
+
+  END SUBROUTINE MergeTripletLists_r
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> Merge a list of TripletList objects together.
+  SUBROUTINE MergeTripletLists_c(this, tlists)
+    !> The starting triplet list. This will be completely replaced.
+    TYPE(TripletList_c), INTENT(INOUT) :: this
+    !> An array of triplet list objects.
+    TYPE(TripletList_c), DIMENSION(:), INTENT(IN) :: tlists
+
+
+    INTEGER :: new_size
+    INTEGER :: II, JJ, KK
+
+    !! Figure out how big the list should be
+    new_size = 0
+    DO II = 1, SIZE(tlists)
+       new_size = new_size + tlists(II)%CurrentSize
+    END DO
+
+    !! Allocate
+    CALL ConstructTripletList(this, new_size)
+
+    !! Copy
+    KK = 1
+    JJ = 1
+    DO II = 1, SIZE(tlists)
+       DO JJ = 1, tlists(II)%CurrentSize
+          this%DATA(KK) = tlists(II)%DATA(JJ)
+          KK = KK + 1
+       END DO
+    END DO
+
+  END SUBROUTINE MergeTripletLists_c
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 END MODULE TripletListModule

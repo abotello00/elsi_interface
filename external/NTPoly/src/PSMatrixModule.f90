@@ -87,6 +87,7 @@ MODULE PSMatrixModule
   PUBLIC :: CommSplitMatrix
   PUBLIC :: ResizeMatrix
   PUBLIC :: GatherMatrixToProcess
+  PUBLIC :: GatherMatrixTripletList
   PUBLIC :: IsIdentity
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   INTERFACE ConstructEmptyMatrix
@@ -180,6 +181,10 @@ MODULE PSMatrixModule
      MODULE PROCEDURE GatherMatrixToProcess_psc_id
      MODULE PROCEDURE GatherMatrixToProcess_psc_all
   END INTERFACE GatherMatrixToProcess
+  INTERFACE GatherMatrixTripletList
+     MODULE PROCEDURE GatherMatrixTripletList_r
+     MODULE PROCEDURE GatherMatrixTripletList_c
+  END INTERFACE GatherMatrixTripletList
 CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Construct an empty sparse, distributed, matrix.
   SUBROUTINE ConstructEmptyMatrix_ps(this, matrix_dim, process_grid_in, &
@@ -398,7 +403,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           OPEN(local_file_handler, file = file_name, iostat = ierr, &
                & status = "old")
           IF (ierr .NE. 0) THEN
-             CALL SetGenericError(err, TRIM(file_name) // " doesn't exist", &
+             CALL SetGenericError(err, TRIM(file_name) // " does not exist", &
                   & .TRUE.)
           END IF
           !! Parse the header.
@@ -600,7 +605,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        CALL ConstructError(err)
        CALL MPI_File_open(process_grid_in%global_comm, file_name, &
             & MPI_MODE_RDONLY, MPI_INFO_NULL, mpi_file_handler, ierr)
-       error_occured = CheckMPIError(err, TRIM(file_name)//" doesn't exist", &
+       error_occured = CheckMPIError(err, TRIM(file_name)//" does not exist", &
             & ierr, .TRUE.)
 
        !! General Sizes
@@ -650,12 +655,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        END IF
 
        !! Compute Offset
-       local_triplets = total_values / this%process_grid%total_processors
-       local_offset = local_triplets * this%process_grid%global_rank
+       local_triplets = INT(total_values / this%process_grid%total_processors)
+       local_offset = INT(local_triplets, KIND=NTLONG) * &
+            & this%process_grid%global_rank
        header_size = 3 * bytes_per_int + bytes_per_long
        IF (this%process_grid%global_rank .EQ. &
             & this%process_grid%total_processors - 1) THEN
-          local_triplets = INT(total_values) - INT(local_offset)
+          local_triplets = INT(total_values - local_offset)
        END IF
        local_offset = local_offset*(bytes_per_int*2 + bytes_per_data) + &
             & header_size
@@ -745,6 +751,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL MPI_Allgather(SIZE(merged_local_data%values), 1, MPINTINTEGER, &
          & local_values_buffer, 1, MPINTINTEGER, &
          & this%process_grid%within_slice_comm, ierr)
+    total_values = GetMatrixSize(this)
 
     write_offset = 0
     write_offset = write_offset + header_size
@@ -773,7 +780,6 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           END IF
           CALL MPI_File_write_at(mpi_file_handler, zero_offset, header_buffer, &
                & 3, MPINTINTEGER, message_status, ierr)
-          total_values = SUM(local_values_buffer)
           CALL MPI_File_write_at(mpi_file_handler, &
                & zero_offset + bytes_per_int * 3, total_values, &
                & 1, MPINTLONG, message_status, ierr)
@@ -834,6 +840,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL MPI_Allgather(SIZE(merged_local_data%values), 1, MPINTINTEGER, &
          & local_values_buffer, 1, MPINTINTEGER, &
          & this%process_grid%within_slice_comm, ierr)
+    total_values = GetMatrixSize(this)
 
     write_offset = 0
     write_offset = write_offset + header_size
@@ -862,7 +869,6 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           END IF
           CALL MPI_File_write_at(mpi_file_handler, zero_offset, header_buffer, &
                & 3, MPINTINTEGER, message_status, ierr)
-          total_values = SUM(local_values_buffer)
           CALL MPI_File_write_at(mpi_file_handler, &
                & zero_offset + bytes_per_int * 3, total_values, &
                & 1, MPINTLONG, message_status, ierr)
@@ -926,7 +932,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Temporary Values
     INTEGER :: II, OFF_JJ
     INTEGER :: NEW_LINE_LENGTH
-    CHARACTER(LEN = MAX_LINE_LENGTH*2) :: temp_string1
+    CHARACTER(LEN = MAX_LINE_LENGTH * 2) :: temp_string1
     CHARACTER(LEN = MAX_LINE_LENGTH) :: temp_string2
     CHARACTER(LEN = MAX_LINE_LENGTH) :: temp_string3
     INTEGER :: temp_length
@@ -939,14 +945,14 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL MPI_Type_size(MPI_CHARACTER, bytes_per_character, ierr)
 
     !! Create the matrix size line
-    NEW_LINE_LENGTH = LEN(new_LINE('A'))
+    NEW_LINE_LENGTH = LEN(NEW_LINE('A'))
 
 
 
 
 
     WRITE(temp_string1, '(A)') "%%MatrixMarket matrix coordinate real general" &
-         & // new_LINE('A') // "%" // new_LINE('A')
+         & // NEW_LINE('A') // "%" // NEW_LINE('A')
 
     ALLOCATE(CHARACTER(LEN = LEN_TRIM(temp_string1)) :: header_line1)
     header_line1(:) = TRIM(temp_string1)
@@ -961,6 +967,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Data
     CALL MatrixToTripletList(merged_local_data, tlist)
+    CALL DestructMatrix(merged_local_data)
 
     !! Absolute Positions
     CALL ShiftTripletList(tlist, this%start_row - 1, this%start_column - 1)
@@ -1004,6 +1011,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             & temp_string2(1:temp_length)
        OFF_JJ = OFF_JJ + temp_length
     END DO
+    CALL DestructTripletList(tlist)
 
     !! Figure out the offset sizes
     ALLOCATE(local_values_buffer(this%process_grid%slice_size))
@@ -1020,7 +1028,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     IF (this%process_grid%between_slice_rank .EQ. 0) THEN
        CALL MPI_File_open(this%process_grid%within_slice_comm, file_name, &
             & IOR(MPI_MODE_CREATE,MPI_MODE_WRONLY), MPI_INFO_NULL, &
-            & mpi_file_handler,ierr)
+            & mpi_file_handler, ierr)
        CALL MPI_File_set_size(mpi_file_handler, zero_size, ierr)
 
        !! Write Header
@@ -1049,6 +1057,11 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        CALL MPI_File_close(mpi_file_handler, ierr)
     END IF
     CALL MPI_Barrier(this%process_grid%global_comm, ierr)
+
+    DEALLOCATE(header_line1)
+    DEALLOCATE(header_line2)
+    DEALLOCATE(write_buffer)
+    DEALLOCATE(local_values_buffer)
 
   END SUBROUTINE WriteMatrixToMatrixMarket_psr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1081,7 +1094,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Temporary Values
     INTEGER :: II, OFF_JJ
     INTEGER :: NEW_LINE_LENGTH
-    CHARACTER(LEN = MAX_LINE_LENGTH*2) :: temp_string1
+    CHARACTER(LEN = MAX_LINE_LENGTH * 2) :: temp_string1
     CHARACTER(LEN = MAX_LINE_LENGTH) :: temp_string2
     CHARACTER(LEN = MAX_LINE_LENGTH) :: temp_string3
     INTEGER :: temp_length
@@ -1094,11 +1107,11 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     CALL MPI_Type_size(MPI_CHARACTER, bytes_per_character, ierr)
 
     !! Create the matrix size line
-    NEW_LINE_LENGTH = LEN(new_LINE('A'))
+    NEW_LINE_LENGTH = LEN(NEW_LINE('A'))
 
     WRITE(temp_string1, '(A)') &
          & "%%MatrixMarket matrix coordinate complex general" &
-         & // new_LINE('A') // "%" // new_LINE('A')
+         & // NEW_LINE('A') // "%" // NEW_LINE('A')
 
 
 
@@ -1116,6 +1129,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !! Local Data
     CALL MatrixToTripletList(merged_local_data, tlist)
+    CALL DestructMatrix(merged_local_data)
 
     !! Absolute Positions
     CALL ShiftTripletList(tlist, this%start_row - 1, this%start_column - 1)
@@ -1159,6 +1173,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             & temp_string2(1:temp_length)
        OFF_JJ = OFF_JJ + temp_length
     END DO
+    CALL DestructTripletList(tlist)
 
     !! Figure out the offset sizes
     ALLOCATE(local_values_buffer(this%process_grid%slice_size))
@@ -1175,7 +1190,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     IF (this%process_grid%between_slice_rank .EQ. 0) THEN
        CALL MPI_File_open(this%process_grid%within_slice_comm, file_name, &
             & IOR(MPI_MODE_CREATE,MPI_MODE_WRONLY), MPI_INFO_NULL, &
-            & mpi_file_handler,ierr)
+            & mpi_file_handler, ierr)
        CALL MPI_File_set_size(mpi_file_handler, zero_size, ierr)
 
        !! Write Header
@@ -1204,6 +1219,11 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        CALL MPI_File_close(mpi_file_handler, ierr)
     END IF
     CALL MPI_Barrier(this%process_grid%global_comm, ierr)
+
+    DEALLOCATE(header_line1)
+    DEALLOCATE(header_line2)
+    DEALLOCATE(write_buffer)
+    DEALLOCATE(local_values_buffer)
 
 
   END SUBROUTINE WriteMatrixToMatrixMarket_psc
@@ -1261,6 +1281,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        CALL ShiftTripletList(shifted, 1 - this%start_row, 1 - this%start_column)
        CALL SortTripletList(shifted, this%local_columns, &
             & this%local_rows, sorted_tlist)
+       CALL DestructTripletList(shifted)
        !! Build
        CALL ConstructMatrixFromTripletList(local_matrix, sorted_tlist, &
             & this%local_rows, this%local_columns)
@@ -1346,6 +1367,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        CALL ShiftTripletList(shifted, 1 - this%start_row, 1 - this%start_column)
        CALL SortTripletList(shifted, this%local_columns, &
             & this%local_rows, sorted_tlist)
+       CALL DestructTripletList(shifted)
        !! Build
        CALL ConstructMatrixFromTripletList(local_matrix, sorted_tlist, &
             & this%local_rows, this%local_columns)
@@ -1402,7 +1424,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Local Data
     INTEGER :: II, JJ, KK
 
-    !! There can't be more than one entry per row
+    !! There can not be more than one entry per row
     CALL ConstructTripletList(tlist, this%local_rows)
 
     KK = 0
@@ -1438,7 +1460,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Local Data
     INTEGER :: II, JJ, KK
 
-    !! There can't be more than one entry per row
+    !! There can not be more than one entry per row
     CALL ConstructTripletList(tlist, this%local_rows)
 
     KK = 0
@@ -1506,7 +1528,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     INTEGER :: II, KK
 
     !! Build Local Triplet List
-    !! There can't be more than one entry per row
+    !! There can not be more than one entry per row
     CALL ConstructTripletList(tlist, this%local_rows)
     KK = 0
     IF (rows) THEN
@@ -1556,7 +1578,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     INTEGER :: II, KK
 
     !! Build Local Triplet List
-    !! There can't be more than one entry per row
+    !! There can not be more than one entry per row
     CALL ConstructTripletList(tlist, this%local_rows)
     KK = 0
     IF (rows) THEN
@@ -2389,9 +2411,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Local Data
-    TYPE(ProcessGrid_t) :: grid_temp
-    LOGICAL :: is_complex_temp
-    INTEGER :: II, size_temp
+    INTEGER :: II
 
     CALL GetMatrixTripletList(this, tlist)
     CALL ConstructTripletList(new_list)
@@ -2403,13 +2423,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        END IF
     END DO
 
-    size_temp = this%actual_matrix_dimension
-    grid_temp = this%process_grid
-    is_complex_temp = this%is_complex
-    CALL DestructMatrix(this)
-    CALL ConstructEmptyMatrix(this, size_temp, grid_temp, is_complex_temp)
-
-    CALL FillMatrixFromTripletList(this, new_list)
+    CALL FillMatrixFromTripletList(this, new_list, preduplicated_in=.TRUE.)
   END SUBROUTINE FilterMatrix_psr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Filter matrix implementation (real).
@@ -2425,9 +2439,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
     !! Local Data
-    TYPE(ProcessGrid_t) :: grid_temp
-    LOGICAL :: is_complex_temp
-    INTEGER :: II, size_temp
+    INTEGER :: II
 
     CALL GetMatrixTripletList(this, tlist)
     CALL ConstructTripletList(new_list)
@@ -2439,13 +2451,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        END IF
     END DO
 
-    size_temp = this%actual_matrix_dimension
-    grid_temp = this%process_grid
-    is_complex_temp = this%is_complex
-    CALL DestructMatrix(this)
-    CALL ConstructEmptyMatrix(this, size_temp, grid_temp, is_complex_temp)
-
-    CALL FillMatrixFromTripletList(this, new_list)
+    CALL FillMatrixFromTripletList(this, new_list, preduplicated_in=.TRUE.)
   END SUBROUTINE FilterMatrix_psc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Get the total number of non-zero entries in the distributed sparse matrix.
@@ -2540,31 +2546,45 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Local Variables
     TYPE(TripletList_r) :: tlist
     TYPE(TripletList_r) :: new_list
-    TYPE(Triplet_r) :: trip, trip_t
+    TYPE(Triplet_r) :: trip
 
 
     !! Local Data
-    INTEGER :: II
-
-    CALL ConstructTripletList(new_list)
+    INTEGER :: II, KK
 
     CALL GetMatrixTripletList(AMat, tlist)
+
+    !! Determine the size.
+    !! these loops could be merged using append but I choose not to for the
+    !! sake of memory.
+    KK = 0
     DO II = 1, tlist%CurrentSize
        IF (MOD(II, AMat%process_grid%num_process_slices) .EQ. &
             & AMat%process_grid%my_slice) THEN
-          CALL GetTripletAt(tlist, II, trip)
-          trip_t%index_row = trip%index_column
-          trip_t%index_column = trip%index_row
-          trip_t%point_value = trip%point_value
-          CALL AppendToTripletList(new_list, trip_t)
+          KK = KK + 1
        END IF
     END DO
+    CALL ConstructTripletList(new_list, KK)
 
+    !! Fill the Triplet List
+    KK = 0
+    DO II = 1, tlist%CurrentSize
+       IF (MOD(II, AMat%process_grid%num_process_slices) .EQ. &
+            & AMat%process_grid%my_slice) THEN
+          KK = KK + 1
+          CALL GetTripletAt(tlist, II, trip)
+          new_list%DATA(KK)%index_row = trip%index_column
+          new_list%DATA(KK)%index_column = trip%index_row
+          new_list%DATA(KK)%point_value = trip%point_value
+       END IF
+    END DO
+    CALL DestructTripletList(tlist)
+
+    !! Create the matrix
     CALL DestructMatrix(TransMat)
     CALL ConstructEmptyMatrix(TransMat, AMat)
     CALL FillMatrixFromTripletList(TransMat, new_list)
     CALL DestructTripletList(new_list)
-    CALL DestructTripletList(tlist)
 
   END SUBROUTINE TransposeMatrix_psr
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2577,31 +2597,45 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! Local Variables
     TYPE(TripletList_c) :: tlist
     TYPE(TripletList_c) :: new_list
-    TYPE(Triplet_c) :: trip, trip_t
+    TYPE(Triplet_c) :: trip
 
 
     !! Local Data
-    INTEGER :: II
-
-    CALL ConstructTripletList(new_list)
+    INTEGER :: II, KK
 
     CALL GetMatrixTripletList(AMat, tlist)
+
+    !! Determine the size.
+    !! these loops could be merged using append but I choose not to for the
+    !! sake of memory.
+    KK = 0
     DO II = 1, tlist%CurrentSize
        IF (MOD(II, AMat%process_grid%num_process_slices) .EQ. &
             & AMat%process_grid%my_slice) THEN
-          CALL GetTripletAt(tlist, II, trip)
-          trip_t%index_row = trip%index_column
-          trip_t%index_column = trip%index_row
-          trip_t%point_value = trip%point_value
-          CALL AppendToTripletList(new_list, trip_t)
+          KK = KK + 1
        END IF
     END DO
+    CALL ConstructTripletList(new_list, KK)
 
+    !! Fill the Triplet List
+    KK = 0
+    DO II = 1, tlist%CurrentSize
+       IF (MOD(II, AMat%process_grid%num_process_slices) .EQ. &
+            & AMat%process_grid%my_slice) THEN
+          KK = KK + 1
+          CALL GetTripletAt(tlist, II, trip)
+          new_list%DATA(KK)%index_row = trip%index_column
+          new_list%DATA(KK)%index_column = trip%index_row
+          new_list%DATA(KK)%point_value = trip%point_value
+       END IF
+    END DO
+    CALL DestructTripletList(tlist)
+
+    !! Create the matrix
     CALL DestructMatrix(TransMat)
     CALL ConstructEmptyMatrix(TransMat, AMat)
     CALL FillMatrixFromTripletList(TransMat, new_list)
     CALL DestructTripletList(new_list)
-    CALL DestructTripletList(tlist)
 
   END SUBROUTINE TransposeMatrix_psc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3438,7 +3472,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        IF (trip%index_row .NE. trip%index_column) THEN
           is_identity = .FALSE.
           EXIT
-       ELSE IF (trip%point_value .NE. 1.0_NTREAL) THEN
+
+
+
+
+       ELSE IF (ABS(trip%point_value - 1.0_NTREAL) &
+            & .GT. TINY(1.0_NTREAL)) THEN
+
           is_identity = .FALSE.
        ELSE
           diag_count = diag_count + 1
@@ -3469,6 +3509,7 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     TYPE(Triplet_c) :: trip
 
 
+
     !! Local Data
     INTEGER :: II
     INTEGER :: ierr
@@ -3483,7 +3524,13 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        IF (trip%index_row .NE. trip%index_column) THEN
           is_identity = .FALSE.
           EXIT
-       ELSE IF (trip%point_value .NE. 1.0_NTREAL) THEN
+
+       ELSE IF (ABS(trip%point_value - 1.0_NTCOMPLEX) &
+            & .GT. TINY(1.0_NTREAL)) THEN
+
+
+
+
           is_identity = .FALSE.
        ELSE
           diag_count = diag_count + 1
@@ -3501,6 +3548,37 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          & .NOT. (diag_count .EQ. this%actual_matrix_dimension)) THEN
        is_identity = .FALSE.
     END IF
+
   END FUNCTION IsIdentity_psc
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> This gathers the entire matrix into a triplet list on all processes.
+  SUBROUTINE GatherMatrixTripletList_r(this, tlist)
+    !> The matrix to gather.
+    TYPE(Matrix_ps), INTENT(IN) :: this
+    !> The full matrix, stored in a local matrix.
+    TYPE(TripletList_r), INTENT(INOUT) :: tlist
+    !! Local Variables
+    TYPE(Matrix_lsr) :: lmat
+
+
+    CALL GatherMatrixToProcess(this, lmat)
+    CALL MatrixToTripletList(lmat, tlist)
+    CALL DestructMatrix(lmat)
+  END SUBROUTINE GatherMatrixTripletList_r
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !> This gathers the entire matrix into a triplet list on all processes.
+  SUBROUTINE GatherMatrixTripletList_c(this, tlist)
+    !> The matrix to gather.
+    TYPE(Matrix_ps), INTENT(IN) :: this
+    !> The full matrix, stored in a local matrix.
+    TYPE(TripletList_c), INTENT(INOUT) :: tlist
+    !! Local Variables
+    TYPE(Matrix_lsc) :: lmat
+
+
+    CALL GatherMatrixToProcess(this, lmat)
+    CALL MatrixToTripletList(lmat, tlist)
+    CALL DestructMatrix(lmat)
+  END SUBROUTINE GatherMatrixTripletList_c
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 END MODULE PSMatrixModule

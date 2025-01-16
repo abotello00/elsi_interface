@@ -78,9 +78,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE ReduceAndComposeMatrixSizes_lsr(matrix, comm, gathered_matrix, &
        & helper)
     !> The matrix to send.
-    TYPE(Matrix_lsr), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsr), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
     TYPE(Matrix_lsr), INTENT(INOUT)     :: gathered_matrix
     !> The  helper associated with this gather.
@@ -110,9 +110,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE ReduceAndComposeMatrixSizes_lsc(matrix, comm, gathered_matrix, &
        & helper)
     !! The matrix to send.
-    TYPE(Matrix_lsc), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsc), INTENT(IN) :: matrix
     !! The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
     TYPE(Matrix_lsc), INTENT(INOUT)     :: gathered_matrix
     !! The helper associated with this gather.
@@ -143,11 +143,11 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE ReduceAndComposeMatrixData_lsr(matrix, comm, gathered_matrix, &
        & helper)
     !> The matrix to send.
-    TYPE(Matrix_lsr), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsr), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
-    TYPE(Matrix_lsr), INTENT(INOUT)     :: gathered_matrix
+    TYPE(Matrix_lsr), INTENT(INOUT) :: gathered_matrix
     !> The helper associated with this gather.
     TYPE(ReduceHelper_t), INTENT(INOUT) :: helper
     !! Local Data
@@ -189,11 +189,11 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE ReduceAndComposeMatrixData_lsc(matrix, comm, gathered_matrix, &
        & helper)
     !> The matrix to send.
-    TYPE(Matrix_lsc), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsc), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
-    TYPE(Matrix_lsc), INTENT(INOUT)     :: gathered_matrix
+    TYPE(Matrix_lsc), INTENT(INOUT) :: gathered_matrix
     !> The helper associated with this gather.
     TYPE(ReduceHelper_t), INTENT(INOUT) :: helper
     !! Local Data
@@ -292,9 +292,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> lose the opportunity for overlapping communication.
   SUBROUTINE ReduceAndComposeMatrix_lsr(matrix, comm, gathered_matrix)
     !> The matrix to send.
-    TYPE(Matrix_lsr), INTENT(IN)    :: matrix
+    TYPE(Matrix_lsr), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)          :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
     TYPE(Matrix_lsr), INTENT(INOUT) :: gathered_matrix
     !! Local Variables
@@ -319,9 +319,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> lose the opportunity for overlapping communication.
   SUBROUTINE ReduceAndComposeMatrix_lsc(matrix, comm, gathered_matrix)
     !> The matrix to send.
-    TYPE(Matrix_lsc), INTENT(IN)    :: matrix
+    TYPE(Matrix_lsc), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)          :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
     TYPE(Matrix_lsc), INTENT(INOUT) :: gathered_matrix
     !! Local Variables
@@ -345,11 +345,11 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> The first routine to call, gathers the sizes of the data to be sent.
   SUBROUTINE ReduceAndSumMatrixSizes_lsr(matrix, comm, gathered_matrix, helper)
     !> The matrix to send.
-    TYPE(Matrix_lsr), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsr), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
-    TYPE(Matrix_lsr), INTENT(INOUT)     :: gathered_matrix
+    TYPE(Matrix_lsr), INTENT(INOUT) :: gathered_matrix
     !> The  helper associated with this gather.
     TYPE(ReduceHelper_t), INTENT(INOUT) :: helper
 
@@ -377,9 +377,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> The first routine to call, gathers the sizes of the data to be sent.
   SUBROUTINE ReduceAndSumMatrixSizes_lsc(matrix, comm, gathered_matrix, helper)
     !> The matrix to send.
-    TYPE(Matrix_lsc), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsc), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
     TYPE(Matrix_lsc), INTENT(INOUT)     :: gathered_matrix
     !> The helper associated with this gather.
@@ -409,9 +409,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Second routine to call for gathering and summing up the data.
   SUBROUTINE ReduceAndSumMatrixData_lsr(matrix, comm, gathered_matrix, helper)
     !> The matrix to send.
-    TYPE(Matrix_lsr), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsr), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
     TYPE(Matrix_lsr), INTENT(INOUT)     :: gathered_matrix
     !> The helper associated with this gather.
@@ -454,9 +454,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Second routine to call for gathering and summing up the data.
   SUBROUTINE ReduceAndSumMatrixData_lsc(matrix, comm, gathered_matrix, helper)
     !> The matrix to send.
-    TYPE(Matrix_lsc), INTENT(IN)    :: matrix
+    TYPE(Matrix_lsc), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The matrix we are gathering.
     TYPE(Matrix_lsc), INTENT(INOUT) :: gathered_matrix
     !> The helper associated with this gather.
@@ -610,9 +610,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> lose the opportunity for overlapping communication.
   SUBROUTINE ReduceAndSumMatrix_lsr(matrix, comm, gathered_matrix, threshold)
     !> The matrix to send.
-    TYPE(Matrix_lsr), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsr), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The gathered_matrix the matrix being gathered.
     TYPE(Matrix_lsr), INTENT(INOUT)     :: gathered_matrix
     !> The threshold the threshold for flushing values.
@@ -638,9 +638,9 @@ CONTAINS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> lose the opportunity for overlapping communication.
   SUBROUTINE ReduceAndSumMatrix_lsc(matrix, comm, gathered_matrix, threshold)
     !> The matrix to send.
-    TYPE(Matrix_lsc), INTENT(IN)        :: matrix
+    TYPE(Matrix_lsc), INTENT(IN) :: matrix
     !> The communicator to send along.
-    INTEGER, INTENT(INOUT)              :: comm
+    INTEGER, INTENT(IN) :: comm
     !> The threshold the threshold for flushing values.
     TYPE(Matrix_lsc), INTENT(INOUT)     :: gathered_matrix
     !> The threshold the threshold for flushing values.
