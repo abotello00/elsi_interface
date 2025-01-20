@@ -13,7 +13,8 @@ module ELSI_UTIL
        MULTI_PROC,SINGLE_PROC,BLACS_DENSE,PEXSI_CSC,SIESTA_CSC,GENERIC_COO,&
        AUTO_SOLVER,ELPA_SOLVER,OMM_SOLVER,PEXSI_SOLVER,EIGENEXA_SOLVER,&
        SIPS_SOLVER,NTPOLY_SOLVER,MAGMA_SOLVER,BSEPACK_SOLVER,CHASE_SOLVER,&
-       UT_MAT,GET_DM
+       UT_MAT,GET_DM, BUILD_DM_UNSET, BUILD_DM_RANK_UPDATE, BUILD_DM_ELPA_MULTIPLY_AT_A, &
+       BUILD_DM_ELPA_MULTIPLY, BUILD_DM_PDGEMM
    use ELSI_DATATYPE, only: elsi_param_t,elsi_basic_t
    use ELSI_MALLOC, only: elsi_allocate,elsi_deallocate
    use ELSI_MPI
@@ -105,6 +106,7 @@ subroutine elsi_reset_param(ph)
    ph%mu_tol = 1.0e-13_r8
    ph%mu_max_steps = 100
    ph%mu_mp_order = 1
+   ph%build_dm_method = 0
    ph%fc_method = 2
    ph%n_basis_c = 0
    ph%n_basis_v = UNSET
@@ -815,13 +817,42 @@ subroutine elsi_set_full_mat_cmplx(ph,bh,uplo,mat)
 end subroutine
 
 !>
+!! Convenience function to describe the possible methods
+!! to build the DM/EDM that can be externally selected
+function build_dm_method_str(method) result(str)
+  integer(kind=i4), intent(in) :: method
+  character(len=40)            :: str
+
+  select case (method)
+  case ( BUILD_DM_UNSET )
+     str = "un-specified"
+  case ( BUILD_DM_RANK_UPDATE )
+     str = "rank update"
+  case ( BUILD_DM_ELPA_MULTIPLY_AT_A )
+     str = "ELPA multiply (A^T*A)"
+  case ( BUILD_DM_ELPA_MULTIPLY )
+     str = "ELPA multiply (A^T*B)"
+  case ( BUILD_DM_PDGEMM )
+     str = "PDGEMM/PZGEMM"
+  case default
+     write(str,"(a,i2)") "invalid !! : ", method
+  end select
+end function build_dm_method_str
+
+!>
 !! Construct density matrix or energy-weighted density matrix from eigenvectors.
 !! Factor contains occupation numbers (GET_DM) or (minus) occupation numbers
 !! multiplied with eigenvalues (GET_EDM).
-!!
-subroutine elsi_build_dm_edm_real(ph,bh,factor,evec,dm,which)
-
+!! (Refactored version)
+subroutine elsi_build_dm_edm_real(ph, bh, factor, evec, dm, which)
    implicit none
+
+   ! Method constants
+   integer(kind=i4), parameter :: NO_COMPUTATION = 0
+   integer(kind=i4), parameter :: USE_PDGEMM = 1
+   integer(kind=i4), parameter :: USE_RANK_UPDATE = 2
+   integer(kind=i4), parameter :: USE_ELPA_AT_A = 3
+   integer(kind=i4), parameter :: USE_ELPA_AT_B = 4
 
    type(elsi_param_t), intent(in) :: ph
    type(elsi_basic_t), intent(in) :: bh
@@ -830,38 +861,168 @@ subroutine elsi_build_dm_edm_real(ph,bh,factor,evec,dm,which)
    real(kind=r8), intent(out) :: dm(bh%n_lrow,bh%n_lcol)
    integer(kind=i4), intent(in) :: which
 
-   real(kind=r8) :: alpha
-   real(kind=r8) :: dummy(1,1)
-   real(kind=r8) :: t0
-   real(kind=r8) :: t1
-   integer(kind=i4) :: i
-   integer(kind=i4) :: gid
-   integer(kind=i4) :: max_state
-   integer(kind=i4) :: ierr
-   logical :: use_elpa_mult
-   character(len=200) :: msg
-
+   ! Local variables
    real(kind=r8), allocatable :: tmp(:,:)
+   real(kind=r8) :: alpha
+   integer(kind=i4) :: i, gid, max_state, ierr
+   real(kind=r8) :: t0, t1
 
+   character(len=200) :: msg
    character(len=*), parameter :: caller = "elsi_build_dm_edm_real"
+   real(kind=r8), parameter :: OCCUPATION_TOLERANCE = 1.0e-12_r8
 
-   call elsi_get_time(t0)
+   ! Initialize timing and arrays
+   call initialize_computation()
 
-   call elsi_allocate(bh,tmp,bh%n_lrow,bh%n_lcol,"tmp",caller)
+   ! Determine computation method based on conditions
+   select case (determine_computation_method())
+      case (USE_PDGEMM)
+         call compute_using_pdgemm()
+      case (USE_RANK_UPDATE)
+         call compute_using_rank_update()
+      case (USE_ELPA_AT_A)
+         call compute_using_elpa_at_a()
+      case (USE_ELPA_AT_B)
+         call compute_using_elpa_at_b()
+   end select
 
-   dm(:,:) = 0.0_r8
+   ! Cleanup and finalize
+   call finalize_computation()
 
-   if(which == GET_DM) then
-      alpha = 1.0_r8
-   else
-      alpha = -1.0_r8
-   end if
+contains
 
-   ! Methfessel-Paxton or energy density matrix may have negative factors
-   if(any(factor(1:ph%n_states_solve) < 0.0_r8)) then
+   subroutine initialize_computation()
+      call elsi_get_time(t0)
+      call elsi_allocate(bh, tmp, bh%n_lrow, bh%n_lcol, "tmp", caller)
+      dm(:,:) = 0.0_r8
+      alpha = merge(1.0_r8, -1.0_r8, which == GET_DM)
+
+      if(which == GET_DM) then
+         write(msg,"(A)") "Computing the DM"
+      else
+         write(msg,"(A)") "Computing the EDM"
+      end if
+      call elsi_say(bh, msg)
+
+   end subroutine
+
+   integer function determine_computation_method()
+      if (ph%build_dm_method /= BUILD_DM_UNSET) then
+         write(msg,"(A)") "External method requirement: " // &
+              trim(build_dm_method_str(ph%build_dm_method))
+         call elsi_say(bh,msg)
+      endif
+
+      ! Check if pdgemm is forced or required due to negative factors
+      ! Methfessel-Paxton DM, or energy density matrix may have negative factors
+      ! (negative occupations or positive eigenvalues, respectively)
+      if (ph%build_dm_method == BUILD_DM_PDGEMM .or. &
+          any(factor(1:ph%n_states_solve) < 0.0_r8)) then
+         determine_computation_method = USE_PDGEMM
+         write(msg,"(A)") "Selected method: PDGEMM (either forced or required due to negative factors)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Check if any factors are positive (if not, no computation needed)
+      if (.not. any(factor(1:ph%n_states_solve) > 0.0_r8)) then
+         determine_computation_method = NO_COMPUTATION
+         write(msg,"(A)") "Selected method: NO_COMPUTATION (no positive factors)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Determine max_state based on occupation criteria
+      call determine_max_state()
+
+      ! Check if rank update is explicitly requested
+      if (ph%build_dm_method == BUILD_DM_RANK_UPDATE) then
+         determine_computation_method = USE_RANK_UPDATE
+         write(msg,"(A)") "Selected method: RANK_UPDATE (explicitly requested)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Check ELPA multiplication capabilities
+      if (.not. can_use_elpa()) then
+         determine_computation_method = USE_RANK_UPDATE
+         write(msg,"(A)") "Selected method: RANK_UPDATE (ELPA capabilities not available)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Determine specific ELPA method based on settings and capabilities
+      if (ph%build_dm_method == BUILD_DM_ELPA_MULTIPLY) then
+         determine_computation_method = USE_ELPA_AT_B
+         write(msg,"(A)") "Selected method: ELPA_AT_B (explicitly requested)"
+         call elsi_say(bh,msg)
+      else if (ph%build_dm_method == BUILD_DM_ELPA_MULTIPLY_AT_A .or. &
+               ph%build_dm_method == BUILD_DM_UNSET) then
+         ! Try to set multiply_at_a flag
+         call ph%elpa_aux%set("multiply_at_a", 1, ierr)
+         if (ierr == 0) then
+            ! This method, if supported, is faster both on GPUs and on CPUs
+            determine_computation_method = USE_ELPA_AT_A
+            write(msg,"(A)") "Selected method: ELPA_AT_A (preferred and supported)"
+            call elsi_say(bh,msg)
+         else
+            ! If multiply_at_a setting fails, fall back to ELPA_AT_B, or to
+            ! RANK_UPDATE, depending on whether we are using GPUs or not
+            if (ph%elpa_gpu == 1) then
+               determine_computation_method = USE_ELPA_AT_B
+               write(msg,"(A)") "Selected method: ELPA_AT_B (fallback due to multiply_at_a not supported)"
+            else
+               determine_computation_method = USE_RANK_UPDATE
+               write(msg,"(A)") "Selected method: RANK_UPDATE (fallback on CPU due to multiply_at_a not supported)"
+            endif
+            call elsi_say(bh,msg)
+         endif
+      endif
+   end function
+
+   logical function can_use_elpa()
+      can_use_elpa = associated(ph%elpa_aux) .and. &
+                     ph%solver == ELPA_SOLVER .and. &
+                     bh%blk*(max(bh%n_prow,bh%n_pcol)-1) < max_state .and. &
+                     ph%n_basis_c == 0
+   end function
+
+   subroutine determine_max_state()
+      ! Occupation tolerance check is used to further reduce the number
+      ! of states contributing when n_states_solve is too large
+      if(which == GET_DM) then
+         do i = 1,ph%n_states_solve
+            if(factor(i) > 0.0_r8 .and. factor(i) > OCCUPATION_TOLERANCE) then
+               max_state = i
+            end if
+         end do
+      else
+         do i = 1,ph%n_states_solve
+            if(factor(i) > 0.0_r8) then
+               max_state = i
+            end if
+         end do
+      endif
+      write(msg,"(A,3i10)") " max_state, n_states_solve, n_basis:", &
+           max_state, ph%n_states_solve, ph%n_basis
+      call elsi_say(bh, msg)
+   end subroutine
+
+   subroutine prepare_tmp_matrix()
       do i = 1,bh%n_lcol
          call elsi_get_gid(bh%my_pcol,bh%n_pcol,bh%blk,i,gid)
+         if(gid <= max_state) then
+            tmp(:,i) = evec(:,i)*sqrt(factor(gid))
+         end if
+      end do
+   end subroutine
 
+   subroutine compute_using_pdgemm()
+      write(msg,"(A)") "Using pdgemm method"
+      call elsi_say(bh,msg)
+
+      do i = 1,bh%n_lcol
+         call elsi_get_gid(bh%my_pcol,bh%n_pcol,bh%blk,i,gid)
          if(gid <= ph%n_states_solve) then
             tmp(:,i) = evec(:,i)*factor(gid)
          end if
@@ -869,71 +1030,71 @@ subroutine elsi_build_dm_edm_real(ph,bh,factor,evec,dm,which)
 
       call pdgemm("N","T",ph%n_basis,ph%n_basis,ph%n_states_solve,alpha,tmp,1,&
            1,bh%desc,evec,1,1,bh%desc,0.0_r8,dm,1,1,bh%desc)
-   else if(any(factor(1:ph%n_states_solve) > 0.0_r8)) then
-      do i = 1,ph%n_states_solve
-         if(factor(i) > 0.0_r8) then
-            max_state = i
-         end if
-      end do
+   end subroutine
 
-      do i = 1,bh%n_lcol
-         call elsi_get_gid(bh%my_pcol,bh%n_pcol,bh%blk,i,gid)
+   subroutine compute_using_rank_update()
+      write(msg,"(A)") "Using rank-k update with pdsyrk"
+      call elsi_say(bh,msg)
 
-         if(gid <= max_state) then
-            tmp(:,i) = evec(:,i)*sqrt(factor(gid))
-         end if
-      end do
+      call prepare_tmp_matrix()
 
-      if(associated(ph%elpa_aux)) then
-         call ph%elpa_aux%set("multiply_at_a",1,ierr)
-
-         ! ELPA routine only faster on GPUs
-         if(ierr /= 0 .or. ph%elpa_gpu == 0 .or. ph%solver /= ELPA_SOLVER&
-            .or. bh%blk*(max(bh%n_prow,bh%n_pcol)-1) >= max_state&
-            .or. ph%n_basis_c > 0) then
-            use_elpa_mult = .false.
-         else
-            use_elpa_mult = .true.
-         end if
-      else
-         use_elpa_mult = .false.
-      end if
-
-      if(use_elpa_mult) then
-         call pdtran(ph%n_basis,ph%n_basis,1.0_r8,tmp,1,1,bh%desc,0.0_r8,dm,1,&
-              1,bh%desc)
-
-         call ph%elpa_aux%hermitian_multiply("N","U",max_state,dm,dummy,&
-              bh%n_lrow,bh%n_lcol,tmp,bh%n_lrow,bh%n_lcol,ierr)
-
-         call elsi_check_err(bh,"ELPA matrix multiplication",ierr,caller)
-
-         dm(:,:) = alpha*tmp
-      else
-         call pdsyrk("U","N",ph%n_basis,max_state,alpha,tmp,1,1,bh%desc,0.0_r8,&
-              dm,1,1,bh%desc)
-      end if
-
-      if(associated(ph%elpa_aux)) then
-         call ph%elpa_aux%set("multiply_at_a",0,ierr)
-      end if
+      call pdsyrk("U","N",ph%n_basis,max_state,alpha,tmp,1,1,bh%desc,0.0_r8,&
+           dm,1,1,bh%desc)
 
       call elsi_set_full_mat(ph,bh,UT_MAT,dm)
-   end if
+   end subroutine
 
-   call elsi_deallocate(bh,tmp,"tmp")
+   subroutine compute_using_elpa_at_a()
+      real(kind=r8) :: dummy(1,1)
 
-   call elsi_get_time(t1)
+      write(msg,"(A)") "Using optimized (2020) A^T*A routine"
+      call elsi_say(bh,msg)
 
-   if(which == GET_DM) then
-      write(msg,"(A)") "Finished density matrix calculation"
-   else
-      write(msg,"(A)") "Finished energy density matrix calculation"
-   end if
+      call prepare_tmp_matrix()
+      ! multiply_at_a flag already set in determine_computation_method()
 
-   call elsi_say(bh,msg)
-   write(msg,"(A,F10.3,A)") "| Time :",t1-t0," s"
-   call elsi_say(bh,msg)
+      call pdtran(ph%n_basis,ph%n_basis,1.0_r8,tmp,1,1,bh%desc,0.0_r8,dm,1,1,bh%desc)
+      call ph%elpa_aux%hermitian_multiply("N","U",max_state,dm,dummy,&
+           bh%n_lrow,bh%n_lcol,tmp,bh%n_lrow,bh%n_lcol,ierr)
+      call elsi_check_err(bh,"ELPA matrix multiplication",ierr,caller)
+
+      dm(:,:) = alpha*tmp
+      call ph%elpa_aux%set("multiply_at_a",0,ierr)
+      call elsi_set_full_mat(ph,bh,UT_MAT,dm)
+   end subroutine
+
+   subroutine compute_using_elpa_at_b()
+      write(msg,"(A)") "Using generic A^T*B routine for A^T*A operation"
+      call elsi_say(bh,msg)
+
+      call prepare_tmp_matrix()
+      call pdtran(ph%n_basis,ph%n_basis,1.0_r8,tmp,1,1,bh%desc,0.0_r8,dm,1,1,bh%desc)
+
+      ! Note that 'dm' is passed in both slots ('a' and 'b'), but they are used read-only,
+      ! so there should be no problem with the Fortran no-aliasing rule
+      ! Note also the ph%n_basis dimension spec (essential)
+      call ph%elpa_aux%hermitian_multiply("N","U",ph%n_basis,dm,dm,&
+           bh%n_lrow,bh%n_lcol,tmp,bh%n_lrow,bh%n_lcol,ierr)
+      call elsi_check_err(bh,"ELPA matrix multiplication",ierr,caller)
+
+      dm(:,:) = alpha*tmp
+      call elsi_set_full_mat(ph,bh,UT_MAT,dm)
+   end subroutine
+
+   subroutine finalize_computation()
+      call elsi_deallocate(bh,tmp,"tmp")
+      call elsi_get_time(t1)
+
+      if(which == GET_DM) then
+         write(msg,"(A)") "Finished density matrix calculation"
+      else
+         write(msg,"(A)") "Finished energy density matrix calculation"
+      end if
+
+      call elsi_say(bh,msg)
+      write(msg,"(A,F10.3,A)") "| Time :",t1-t0," s"
+      call elsi_say(bh,msg)
+   end subroutine
 
 end subroutine
 
@@ -941,10 +1102,16 @@ end subroutine
 !! Construct density matrix or energy-weighted density matrix from eigenvectors.
 !! Factor contains occupation numbers (GET_DM) or (minus) occupation numbers
 !! multiplied with eigenvalues (GET_EDM).
-!!
-subroutine elsi_build_dm_edm_cmplx(ph,bh,factor,evec,dm,which)
-
+!! (Refactored complex version)
+subroutine elsi_build_dm_edm_cmplx(ph, bh, factor, evec, dm, which)
    implicit none
+
+   ! Method constants
+   integer(kind=i4), parameter :: NO_COMPUTATION = 0
+   integer(kind=i4), parameter :: USE_PDGEMM = 1
+   integer(kind=i4), parameter :: USE_RANK_UPDATE = 2
+   integer(kind=i4), parameter :: USE_ELPA_AT_A = 3
+   integer(kind=i4), parameter :: USE_ELPA_AT_B = 4
 
    type(elsi_param_t), intent(in) :: ph
    type(elsi_basic_t), intent(in) :: bh
@@ -953,98 +1120,241 @@ subroutine elsi_build_dm_edm_cmplx(ph,bh,factor,evec,dm,which)
    complex(kind=r8), intent(out) :: dm(bh%n_lrow,bh%n_lcol)
    integer(kind=i4), intent(in) :: which
 
-   complex(kind=r8) :: alpha
-   complex(kind=r8) :: dummy(1,1)
-   real(kind=r8) :: t0
-   real(kind=r8) :: t1
-   integer(kind=i4) :: i
-   integer(kind=i4) :: gid
-   integer(kind=i4) :: max_state
-   integer(kind=i4) :: ierr
-   logical :: use_elpa_mult
-   character(len=200) :: msg
-
+  ! Local variables
    complex(kind=r8), allocatable :: tmp(:,:)
+   complex(kind=r8) :: alpha
+   integer(kind=i4) :: i, gid, max_state, ierr
+   real(kind=r8) :: t0, t1
 
+   character(len=200) :: msg
    character(len=*), parameter :: caller = "elsi_build_dm_edm_cmplx"
+   real(kind=r8), parameter :: OCCUPATION_TOLERANCE = 1.0e-12_r8
 
-   call elsi_get_time(t0)
+   ! Initialize timing and arrays
+   call initialize_computation()
 
-   call elsi_allocate(bh,tmp,bh%n_lrow,bh%n_lcol,"tmp",caller)
+   ! Determine computation method based on conditions
+   select case (determine_computation_method())
+      case (USE_PDGEMM)
+         call compute_using_pdgemm()
+      case (USE_RANK_UPDATE)
+         call compute_using_rank_update()
+      case (USE_ELPA_AT_A)
+         call compute_using_elpa_at_a()
+      case (USE_ELPA_AT_B)
+         call compute_using_elpa_at_b()
+   end select
 
-   dm(:,:) = (0.0_r8,0.0_r8)
+   ! Cleanup and finalize
+   call finalize_computation()
 
-   if(which == GET_DM) then
-      alpha = (1.0_r8,0.0_r8)
-   else
-      alpha = (-1.0_r8,0.0_r8)
-   end if
+contains
 
-   if(any(factor(1:ph%n_states_solve) /= 0.0_r8)) then
-      do i = 1,ph%n_states_solve
-         if(factor(i) /= 0.0_r8) then
-            max_state = i
-         end if
-      end do
+   subroutine initialize_computation()
+      call elsi_get_time(t0)
+      call elsi_allocate(bh, tmp, bh%n_lrow, bh%n_lcol, "tmp", caller)
+      dm(:,:) = (0.0_r8,0.0_r8)
+      alpha = merge((1.0_r8,0.0_r8), (-1.0_r8,0.0_r8), which == GET_DM)
 
+      if(which == GET_DM) then
+         write(msg,"(A)") "Computing the DM"
+      else
+         write(msg,"(A)") "Computing the EDM"
+      end if
+      call elsi_say(bh, msg)
+   end subroutine
+
+   integer function determine_computation_method()
+      if (ph%build_dm_method /= BUILD_DM_UNSET) then
+         write(msg,"(A)") "External method requirement: " // &
+              trim(build_dm_method_str(ph%build_dm_method))
+         call elsi_say(bh,msg)
+      endif
+
+      ! Check if pdgemm is forced
+      ! There is no need to use it in the complex case, as the
+      ! square roots needed in other methods can always be taken
+      ! with complex numbers (see below)
+      if (ph%build_dm_method == BUILD_DM_PDGEMM) then
+         determine_computation_method = USE_PDGEMM
+         write(msg,"(A)") "Selected method: PDGEMM (forced)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Check if any factors are nonzero (if not, no computation needed)
+      if (.not. any(factor(1:ph%n_states_solve) /= 0.0_r8)) then
+         determine_computation_method = NO_COMPUTATION
+         write(msg,"(A)") "Selected method: NO_COMPUTATION (no nonzero factors)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Determine max_state based on occupation criteria
+      call determine_max_state()
+
+      ! Check if rank update is explicitly requested
+      if (ph%build_dm_method == BUILD_DM_RANK_UPDATE) then
+         determine_computation_method = USE_RANK_UPDATE
+         write(msg,"(A)") "Selected method: RANK_UPDATE (explicitly requested)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Check ELPA multiplication capabilities
+      if (.not. can_use_elpa()) then
+         determine_computation_method = USE_RANK_UPDATE
+         write(msg,"(A)") "Selected method: RANK_UPDATE (ELPA capabilities not available)"
+         call elsi_say(bh,msg)
+         return
+      endif
+
+      ! Determine specific ELPA method based on settings and capabilities
+      if (ph%build_dm_method == BUILD_DM_ELPA_MULTIPLY) then
+         determine_computation_method = USE_ELPA_AT_B
+         write(msg,"(A)") "Selected method: ELPA_AT_B (explicitly requested)"
+         call elsi_say(bh,msg)
+      else if (ph%build_dm_method == BUILD_DM_ELPA_MULTIPLY_AT_A .or. &
+               ph%build_dm_method == BUILD_DM_UNSET) then
+         ! Try to set multiply_at_a flag
+         call ph%elpa_aux%set("multiply_at_a", 1, ierr)
+         if (ierr == 0) then
+            ! This method, if supported, seems faster both on GPUs and on CPUs
+            determine_computation_method = USE_ELPA_AT_A
+            write(msg,"(A)") "Selected method: ELPA_AT_A (preferred and supported)"
+            call elsi_say(bh,msg)
+         else
+            ! If multiply_at_a setting fails, fall back to ELPA_AT_B, or to
+            ! RANK_UPDATE, depending on whether we are using GPUs or not
+            if (ph%elpa_gpu == 1) then
+               determine_computation_method = USE_ELPA_AT_B
+               write(msg,"(A)") "Selected method: ELPA_AT_B (fallback due to multiply_at_a not supported)"
+            else
+               determine_computation_method = USE_RANK_UPDATE
+               write(msg,"(A)") "Selected method: RANK_UPDATE (fallback on CPU due to multiply_at_a not supported)"
+            endif
+            call elsi_say(bh,msg)
+         endif
+      endif
+   end function
+
+   logical function can_use_elpa()
+      can_use_elpa = associated(ph%elpa_aux) .and. &
+                     ph%solver == ELPA_SOLVER .and. &
+                     bh%blk*(max(bh%n_prow,bh%n_pcol)-1) < max_state .and. &
+                     ph%n_basis_c == 0
+   end function
+
+   subroutine determine_max_state()
+      if(which == GET_DM) then
+         do i = 1,ph%n_states_solve
+            if(abs(factor(i)) > OCCUPATION_TOLERANCE) then
+               max_state = i
+            end if
+         end do
+      else
+         do i = 1,ph%n_states_solve
+            if(factor(i) /= 0.0_r8) then
+               max_state = i
+            end if
+         end do
+      endif
+      write(msg,"(A,3i10)") " max_state, n_states_solve, n_basis:", &
+           max_state, ph%n_states_solve, ph%n_basis
+      call elsi_say(bh, msg)
+   end subroutine
+
+   subroutine prepare_tmp_matrix()
+     ! Note the complex square root
       do i = 1,bh%n_lcol
          call elsi_get_gid(bh%my_pcol,bh%n_pcol,bh%blk,i,gid)
-
          if(gid <= max_state) then
             tmp(:,i) = evec(:,i)*sqrt(cmplx(factor(gid),kind=r8))
          end if
       end do
+   end subroutine
 
-      if(associated(ph%elpa_aux)) then
-         call ph%elpa_aux%set("multiply_at_a",1,ierr)
+   subroutine compute_using_pdgemm()
+      write(msg,"(A)") "Using pdgemm method - wasteful and not needed!"
+      call elsi_say(bh,msg)
 
-         ! ELPA routine only faster on GPUs
-         if(ierr /= 0 .or. ph%elpa_gpu == 0 .or. ph%solver /= ELPA_SOLVER&
-            .or. bh%blk*(max(bh%n_prow,bh%n_pcol)-1) >= max_state&
-            .or. ph%n_basis_c > 0) then
-            use_elpa_mult = .false.
-         else
-            use_elpa_mult = .true.
+      do i = 1,bh%n_lcol
+         call elsi_get_gid(bh%my_pcol,bh%n_pcol,bh%blk,i,gid)
+         if(gid <= ph%n_states_solve) then
+            tmp(:,i) = evec(:,i)*cmplx(factor(gid),kind=r8)
          end if
-      else
-         use_elpa_mult = .false.
-      end if
+      end do
 
-      if(use_elpa_mult) then
-         call pztranc(ph%n_basis,ph%n_basis,(1.0_r8,0.0_r8),tmp,1,1,bh%desc,&
-              (0.0_r8,0.0_r8),dm,1,1,bh%desc)
+      call pzgemm("N","C",ph%n_basis,ph%n_basis,ph%n_states_solve,alpha,tmp,1,&
+           1,bh%desc,evec,1,1,bh%desc,(0.0_r8,0.0_r8),dm,1,1,bh%desc)
+   end subroutine
 
-         call ph%elpa_aux%hermitian_multiply("N","U",max_state,dm,dummy,&
-              bh%n_lrow,bh%n_lcol,tmp,bh%n_lrow,bh%n_lcol,ierr)
+   subroutine compute_using_rank_update()
+      write(msg,"(A)") "Using rank-k update with pzherk"
+      call elsi_say(bh,msg)
 
-         call elsi_check_err(bh,"ELPA matrix multiplication",ierr,caller)
+      call prepare_tmp_matrix()
 
-         dm(:,:) = alpha*tmp
-      else
-         call pzherk("U","N",ph%n_basis,max_state,alpha,tmp,1,1,bh%desc,&
-              (0.0_r8,0.0_r8),dm,1,1,bh%desc)
-      end if
-
-      if(associated(ph%elpa_aux)) then
-         call ph%elpa_aux%set("multiply_at_a",0,ierr)
-      end if
+      call pzherk("U","N",ph%n_basis,max_state,alpha,tmp,1,1,bh%desc,(0.0_r8,0.0_r8),&
+           dm,1,1,bh%desc)
 
       call elsi_set_full_mat(ph,bh,UT_MAT,dm)
-   end if
+   end subroutine
 
-   call elsi_deallocate(bh,tmp,"tmp")
+   subroutine compute_using_elpa_at_a()
+      complex(kind=r8) :: dummy(1,1)
 
-   call elsi_get_time(t1)
+      write(msg,"(A)") "Using optimized (2020) A^T*A routine"
+      call elsi_say(bh,msg)
 
-   if(which == GET_DM) then
-      write(msg,"(A)") "Finished density matrix calculation"
-   else
-      write(msg,"(A)") "Finished energy density matrix calculation"
-   end if
+      call prepare_tmp_matrix()
+      ! multiply_at_a flag already set in determine_computation_method()
 
-   call elsi_say(bh,msg)
-   write(msg,"(A,F10.3,A)") "| Time :",t1-t0," s"
-   call elsi_say(bh,msg)
+      call pztranc(ph%n_basis,ph%n_basis,(1.0_r8,0.0_r8),tmp,1,1,bh%desc,(0.0_r8,0.0_r8),&
+           dm,1,1,bh%desc)
+      call ph%elpa_aux%hermitian_multiply("N","U",max_state,dm,dummy,&
+           bh%n_lrow,bh%n_lcol,tmp,bh%n_lrow,bh%n_lcol,ierr)
+      call elsi_check_err(bh,"ELPA matrix multiplication",ierr,caller)
+
+      dm(:,:) = alpha*tmp
+      call ph%elpa_aux%set("multiply_at_a",0,ierr)
+      call elsi_set_full_mat(ph,bh,UT_MAT,dm)
+   end subroutine
+
+   subroutine compute_using_elpa_at_b()
+      write(msg,"(A)") "Using generic A^T*B routine for A^T*A operation"
+      call elsi_say(bh,msg)
+
+      call prepare_tmp_matrix()
+      call pztranc(ph%n_basis,ph%n_basis,(1.0_r8,0.0_r8),tmp,1,1,bh%desc,(0.0_r8,0.0_r8),&
+           dm,1,1,bh%desc)
+
+      ! Note that 'dm' is passed in both slots ('a' and 'b'), but they are used read-only,
+      ! so there should be no problem with the Fortran no-aliasing rule
+      ! Note also the ph%n_basis dimension spec (essential)
+      call ph%elpa_aux%hermitian_multiply("N","U",ph%n_basis,dm,dm,&
+           bh%n_lrow,bh%n_lcol,tmp,bh%n_lrow,bh%n_lcol,ierr)
+      call elsi_check_err(bh,"ELPA matrix multiplication",ierr,caller)
+
+      dm(:,:) = alpha*tmp
+      call elsi_set_full_mat(ph,bh,UT_MAT,dm)
+   end subroutine
+
+   subroutine finalize_computation()
+      call elsi_deallocate(bh,tmp,"tmp")
+      call elsi_get_time(t1)
+
+      if(which == GET_DM) then
+         write(msg,"(A)") "Finished density matrix calculation"
+      else
+         write(msg,"(A)") "Finished energy density matrix calculation"
+      end if
+
+      call elsi_say(bh,msg)
+      write(msg,"(A,F10.3,A)") "| Time :",t1-t0," s"
+      call elsi_say(bh,msg)
+
+   end subroutine
 
 end subroutine
 

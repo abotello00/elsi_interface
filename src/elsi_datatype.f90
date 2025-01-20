@@ -142,6 +142,8 @@ module ELSI_DATATYPE
                                      !                  not possible
                                      ! 'undefined'    - mu definition unclear - should not happen.
 
+      integer(kind=i4) :: build_dm_method
+
       ! Frozen core
       integer(kind=i4) :: fc_method
       integer(kind=i4) :: n_basis_c

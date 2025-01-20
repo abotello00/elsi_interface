@@ -70,6 +70,12 @@ module ELSI_CONSTANT
    integer(kind=i4), parameter :: GET_EDM = 1
    integer(kind=i4), parameter :: GET_FDM = 2
 
+   integer(kind=i4), parameter :: BUILD_DM_UNSET               = 0
+   integer(kind=i4), parameter :: BUILD_DM_RANK_UPDATE         = 1
+   integer(kind=i4), parameter :: BUILD_DM_ELPA_MULTIPLY_AT_A  = 2
+   integer(kind=i4), parameter :: BUILD_DM_ELPA_MULTIPLY       = 3
+   integer(kind=i4), parameter :: BUILD_DM_PDGEMM              = 4
+
    ! Frozen core
    integer(kind=i4), parameter :: FC_BASIC = 0
    integer(kind=i4), parameter :: FC_PLUS_C = 1

@@ -74,6 +74,7 @@ module ELSI_SET
    public :: elsi_set_mu_broaden_width
    public :: elsi_set_mu_tol
    public :: elsi_set_mu_mp_order
+   public :: elsi_set_build_dm_method
    public :: elsi_set_n_frozen
    public :: elsi_set_frozen_idx
    public :: elsi_set_frozen_method
@@ -1527,6 +1528,33 @@ subroutine elsi_set_frozen_method(eh,frozen_method)
    eh%ph%fc_method = frozen_method
 
 end subroutine
+
+
+!>
+!! Set the method to compute the DM and the EDM from the eigenvectors
+!!
+subroutine elsi_set_build_dm_method(eh, build_dm_method)
+
+   implicit none
+
+   type(elsi_handle), intent(inout) :: eh !< Handle
+   integer(kind=i4), intent(in) :: build_dm_method !< DM/EDM building method
+
+   character(len=200) :: msg
+
+   character(len=*), parameter :: caller = "elsi_set_build_dm_method"
+
+   call elsi_check_init(eh%bh,eh%handle_init,caller)
+
+   if(build_dm_method < 0 .or. build_dm_method > 4) then
+      write(msg,"(A)") "Input value should be 0, 1, 2, 3, or 4"
+      call elsi_stop(eh%bh,msg,caller)
+   end if
+
+   eh%ph%build_dm_method = build_dm_method
+
+end subroutine
+
 
 !>
 !! Set a UUID.

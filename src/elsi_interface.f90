@@ -96,6 +96,7 @@ module ELSI
    public :: elsi_set_mu_broaden_width
    public :: elsi_set_mu_tol
    public :: elsi_set_mu_mp_order
+   public :: elsi_set_build_dm_method
    public :: elsi_set_n_frozen
    public :: elsi_set_frozen_method
    public :: elsi_set_frozen_idx
