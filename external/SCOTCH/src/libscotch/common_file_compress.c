@@ -70,6 +70,8 @@
 #include "lzma.h"
 #endif /* COMMON_FILE_COMPRESS_LZMA */
 
+#include            <sys/wait.h>                  /* For waitpid () */
+
 /*
 **  The static definitions.
 */
