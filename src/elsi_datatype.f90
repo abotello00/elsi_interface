@@ -176,6 +176,8 @@ module ELSI_DATATYPE
       logical :: elpa_first
       logical :: elpa_started = .false.
       character(len=30) :: elpa_gpu_string = "gpu"
+      integer :: elpa_real_gpu_kernel
+      integer :: elpa_complex_gpu_kernel
       class(elpa_t), pointer :: elpa_aux => null()
       class(elpa_t), pointer :: elpa_solve => null()
       class(elpa_autotune_t), pointer :: elpa_tune => null()

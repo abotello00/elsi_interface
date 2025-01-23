@@ -119,6 +119,9 @@ subroutine elsi_init_elpa(ph,bh)
       call elsi_get_elpa_gpu_string(ph%elpa_gpu_string,ierr)
       call elsi_check_err(bh,"ELPA GPU string initialization failed",ierr,caller)
 
+      call elsi_get_elpa_real_gpu_kernel(ph%elpa_real_gpu_kernel)
+      call elsi_get_elpa_complex_gpu_kernel(ph%elpa_complex_gpu_kernel)
+
       call MPI_Comm_split(bh%comm,bh%my_pcol,bh%my_prow,ph%elpa_comm_row,ierr)
 
       call elsi_check_err(bh,"MPI_Comm_split",ierr,caller)
@@ -1724,8 +1727,8 @@ subroutine elsi_elpa_setup(ph,bh,is_aux)
             call ph%elpa_aux%set(trim(ph%elpa_gpu_string),0,ierr)
          else
             call ph%elpa_aux%set(trim(ph%elpa_gpu_string),1,ierr)
-            call ph%elpa_aux%set("real_kernel",ELPA_2STAGE_REAL_GPU,ierr)
-            call ph%elpa_aux%set("complex_kernel",ELPA_2STAGE_COMPLEX_GPU,ierr)
+            call ph%elpa_aux%set("real_kernel",ph%elpa_real_gpu_kernel,ierr)
+            call ph%elpa_aux%set("complex_kernel",ph%elpa_complex_gpu_kernel,ierr)
          end if
       else
          call ph%elpa_aux%set("solver",1,ierr)
@@ -1791,8 +1794,8 @@ subroutine elsi_elpa_setup(ph,bh,is_aux)
             call ph%elpa_solve%set("gpu_solve_tridi",1,ierr)
             call ph%elpa_solve%set("gpu_trans_ev_tridi_to_band",1,ierr)
             call ph%elpa_solve%set("gpu_trans_ev_band_to_full",1,ierr)
-            call ph%elpa_solve%set("real_kernel",ELPA_2STAGE_REAL_GPU,ierr)
-            call ph%elpa_solve%set("complex_kernel",ELPA_2STAGE_COMPLEX_GPU,ierr)
+            call ph%elpa_solve%set("real_kernel",ph%elpa_real_gpu_kernel,ierr)
+            call ph%elpa_solve%set("complex_kernel",ph%elpa_complex_gpu_kernel,ierr)
          end if
       end if
    end if
