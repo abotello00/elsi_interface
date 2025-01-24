@@ -79,7 +79,7 @@ optimization flags:
 
 The ELPA, libOMM, NTPoly, BSEPACK, and PEXSI solver libraries, as well as the
 SuperLU\_DIST and PT-SCOTCH libraries (both required by PEXSI) are redistributed
-through this ELSI package. The DLA-Future solver library is only available as an 
+through this ELSI package. The DLA-Future solver library is only available as an
 external dependency. Experienced users are encouraged to link the ELSI interface
 against externally installed, better optimized solver libraries.
 Relevant options are:
@@ -143,4 +143,4 @@ A complete description of the ELSI build system is available in
 For comments, feedback, and suggestions, please
 [contact the ELSI team](mailto:elsi-team@duke.edu).
 
-Copyright (c) 2015-2023, the ELSI team. All rights reserved.
+Copyright (c) 2015-2025, the ELSI team. All rights reserved.
