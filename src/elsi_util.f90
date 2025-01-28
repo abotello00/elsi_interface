@@ -869,7 +869,6 @@ subroutine elsi_build_dm_edm_real(ph, bh, factor, evec, dm, which)
 
    character(len=200) :: msg
    character(len=*), parameter :: caller = "elsi_build_dm_edm_real"
-   real(kind=r8), parameter :: OCCUPATION_TOLERANCE = 1.0e-12_r8
 
    ! Initialize timing and arrays
    call initialize_computation()
@@ -988,11 +987,18 @@ contains
    end function
 
    subroutine determine_max_state()
-      ! Occupation tolerance check is used to further reduce the number
-      ! of states contributing when n_states_solve is too large
-      if(which == GET_DM) then
+     ! Occupation tolerance check might be used to further reduce the number
+     ! of states contributing when n_states_solve is too large
+     ! This is deactivated now to minimize changes with respect
+     ! to previous usage. 'max_state' can be monitored in the
+     ! output if a large enough verbosity level is requested.
+
+     ! real(kind=r8), parameter :: OCCUPATION_TOLERANCE = 1.0e-12_r8
+
+     if(which == GET_DM) then
          do i = 1,ph%n_states_solve
-            if(factor(i) > 0.0_r8 .and. factor(i) > OCCUPATION_TOLERANCE) then
+            !! if(factor(i) > 0.0_r8 .and. factor(i) > OCCUPATION_TOLERANCE) then
+            if(factor(i) > 0.0_r8) then
                max_state = i
             end if
          end do
@@ -1128,7 +1134,6 @@ subroutine elsi_build_dm_edm_cmplx(ph, bh, factor, evec, dm, which)
 
    character(len=200) :: msg
    character(len=*), parameter :: caller = "elsi_build_dm_edm_cmplx"
-   real(kind=r8), parameter :: OCCUPATION_TOLERANCE = 1.0e-12_r8
 
    ! Initialize timing and arrays
    call initialize_computation()
@@ -1246,9 +1251,18 @@ contains
    end function
 
    subroutine determine_max_state()
+     ! Occupation tolerance check might be used to further reduce the number
+     ! of states contributing when n_states_solve is too large
+     ! This is deactivated now to minimize changes with respect
+     ! to previous usage. 'max_state' can be monitored in the
+     ! output if a large enough verbosity level is requested.
+
+     ! real(kind=r8), parameter :: OCCUPATION_TOLERANCE = 1.0e-12_r8
+
       if(which == GET_DM) then
          do i = 1,ph%n_states_solve
-            if(abs(factor(i)) > OCCUPATION_TOLERANCE) then
+            !! if(abs(factor(i)) > OCCUPATION_TOLERANCE) then
+            if(factor(i) /= 0.0_r8) then
                max_state = i
             end if
          end do
