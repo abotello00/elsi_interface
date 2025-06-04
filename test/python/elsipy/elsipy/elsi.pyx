@@ -1,4 +1,3 @@
-from mpi4py import MPI
 from mpi4py cimport MPI
 cimport numpy as np
 import numpy as np
@@ -34,6 +33,39 @@ cdef class elsi:
             raise Exception("Parallel mode request. But we did not recieve MPI Communicator.")
         c_elsi_set_mpi(self.eh, MPI_Comm_c2f(<MPI_Comm>(<MPI.Comm>comm).ob_mpi))
 
+    def elsi_set_mpi_global(self,comm):
+        c_elsi_set_mpi_global(self.eh, MPI_Comm_c2f(<MPI_Comm>(<MPI.Comm>comm).ob_mpi))
+
+    def elsi_set_unit_ovl(self, int unit_ovlp):
+        c_elsi_set_unit_ovlp(self.eh, unit_ovlp)
+
+    def elsi_set_kpoint(self, int n_kpt, int i_kpt, double weight):
+        c_elsi_set_kpoint(self.eh, n_kpt, i_kpt, weight)
+
+    def elsi_set_csc(self,int nnz, int nnz_l,int n_lcol,int[:] row_ind, int [:] col_ptr ):
+        cdef int *ptr_row_ind = &row_ind[0]
+        cdef int *ptr_col_ptr = &col_ptr[0]
+        c_elsi_set_csc(self.eh,  nnz, nnz_l, n_lcol,  ptr_row_ind, ptr_col_ptr )
+
+    def elsi_set_csc_blk(self, int blk):
+        c_elsi_set_csc_blk(self.eh, blk)
+
+    def elsi_set_coo(self,int nnz, int nnz_l,int[:] row_ind, int [:] col_ind ):
+        cdef int *ptr_row_ind = &row_ind[0]
+        cdef int *ptr_col_ind = &col_ind[0]
+        c_elsi_set_coo(self.eh,  nnz, nnz_l,  ptr_row_ind, ptr_col_ind )
+
+    def elsi_ev_complex_sparse(self, complex[:] h_matrix,complex[:] s_matrix, int n_basis):
+        cdef np.ndarray[double, ndim=1] eig_vals = np.zeros((self.n_basis), dtype=np.dtype("d"))
+        cdef np.ndarray[complex, ndim=2] eig_vecs = np.zeros((self.n_basis, self.n_basis), dtype=np.dtype("complex"))
+        cdef complex *ptr_h_matrix = &h_matrix[0]
+        cdef complex *ptr_s_matrix = &s_matrix[0]
+        cdef double *ptr_eig_vals = &eig_vals[0]
+        cdef complex *ptr_eig_vecs = &eig_vecs[0,0]
+        c_elsi_ev_complex_sparse(self.eh, ptr_h_matrix, ptr_s_matrix, ptr_eig_vals, ptr_eig_vecs)
+        return eig_vals, eig_vecs
+
+
     def elsi_set_blacs(self,blacs_ctxt,block_size):
         cdef int ictxt = 0
         if blacs_ctxt==-1:
@@ -55,6 +87,17 @@ cdef class elsi:
         c_elsi_ev_real(self.eh, ptr_h_matrix, ptr_s_matrix, ptr_eig_vals, ptr_eig_vecs)
         return eig_vals, eig_vecs
 
+    def elsi_ev_complex(self,complex[:,:] h_matrix,complex[:,:] s_matrix):
+        cdef Py_ssize_t n_lrow = h_matrix.shape[0]
+        cdef Py_ssize_t n_lcol = h_matrix.shape[1]
+        cdef np.ndarray[double, ndim=1] eig_vals = np.zeros((self.n_basis), dtype=np.dtype("d"))
+        cdef np.ndarray[complex, ndim=2] eig_vecs = np.zeros((n_lrow, n_lcol), dtype=np.dtype("complex"))
+        cdef complex *ptr_h_matrix = &h_matrix[0,0]
+        cdef complex *ptr_s_matrix = &s_matrix[0,0]
+        cdef double *ptr_eig_vals = &eig_vals[0]
+        cdef complex *ptr_eig_vecs = &eig_vecs[0,0]
+        c_elsi_ev_complex(self.eh, ptr_h_matrix, ptr_s_matrix, ptr_eig_vals, ptr_eig_vecs)
+        return eig_vals, eig_vecs
 cdef class elsirw:
     cdef elsi_rw_t rwh
 
@@ -105,4 +148,47 @@ cdef class elsirw:
 
         return local_array, n_electrons, n_basis, n_lrow, n_lcol
 
+    def elsi_read_complex(self, str filename, int parallel_mode=0, int blacs_ctxt=-1, int block_size=0, comm = 0):
+        """read
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        """
+        cdef int rw_task = 0 # rw_task = 0 means read
+        cdef int n_basis = 0 # for initialization
+        cdef double n_electrons = 0.0 # for initialization
+        cdef int n_lrow = 1
+        cdef int n_lcol = 1
+        cdef int ictxt = 0
+
+        ##### encode string to char *
+        ##### https://groups.google.com/g/cython-users/c/E1E96mpS5cg
+        filename_byte_string = filename.encode('UTF-8')
+        cdef char* filename_c_string = filename_byte_string
+
+        c_elsi_init_rw(&(self.rwh), rw_task, parallel_mode, n_basis, n_electrons)
+
+        if (parallel_mode == 1): # parallel
+            if not isinstance(comm, MPI.Comm):
+                raise Exception("Parallel mode request. But we did not recieve MPI Communicator.")
+            c_elsi_set_rw_mpi(self.rwh, MPI_Comm_c2f(<MPI_Comm>(<MPI.Comm>comm).ob_mpi))
+            if blacs_ctxt==-1:
+                raise Exception("Parallel mode request. But we did not recieve BLACS ctxt")
+            if block_size<=0:
+                raise Exception("Parallel mode request. But illegal BLACS block size.")
+            ictxt = <int> blacs_ctxt
+            c_elsi_set_rw_blacs(self.rwh, ictxt, block_size)
+        print(filename)
+        print(filename_byte_string)
+
+        c_elsi_read_mat_dim(self.rwh, filename_c_string, &n_electrons, &n_basis, &n_lrow, &n_lcol)
+        cdef np.ndarray[complex, ndim=2] local_array = np.zeros((n_lrow, n_lcol), dtype=np.dtype("complex"))
+        cdef complex *ptr_local_array = &local_array[0,0]
+        c_elsi_read_mat_complex(self.rwh, filename_c_string, ptr_local_array)
+        c_elsi_finalize_rw(self.rwh)
+
+        return local_array, n_electrons, n_basis, n_lrow, n_lcol
 
