@@ -9,14 +9,14 @@ from elsi cimport *
 cdef class elsi:
     cdef elsi_t eh
 
-    cdef int solver 
+    cdef int solver
     cdef int parallel_mode
     cdef int matrix_format
     cdef int n_basis
     cdef double n_electron
     cdef int n_state
 
-    def __init__(self, int solver = 0, int parallel_mode = 0, int matrix_format = 0, 
+    def __init__(self, int solver = 0, int parallel_mode = 0, int matrix_format = 0,
                        int n_basis = 0, double n_electron = 0.0, int n_state = 0):
         self.solver = solver
         self.parallel_mode = parallel_mode
@@ -63,10 +63,10 @@ cdef class elsirw:
 
     def elsi_read_real(self, str filename, int parallel_mode=0, int blacs_ctxt=-1, int block_size=0, comm = 0):
         """read
-    
+
         Parameters
         ----------
-    
+
         Returns
         -------
         """
@@ -104,4 +104,5 @@ cdef class elsirw:
         c_elsi_finalize_rw(self.rwh)
 
         return local_array, n_electrons, n_basis, n_lrow, n_lcol
+
 
